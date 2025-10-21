@@ -2,8 +2,6 @@
 
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
-import { useRef } from 'react';
-import { animate } from 'motion';
 
 interface ButtonProps {
   children: React.ReactNode;
@@ -13,6 +11,7 @@ interface ButtonProps {
   onClick?: () => void;
   type?: 'button' | 'submit';
   bounce?: boolean;
+  disabled?: boolean;
 }
 
 export function Button({
@@ -22,45 +21,10 @@ export function Button({
   className,
   onClick,
   type = 'button',
-  bounce = false,
+  disabled = false,
 }: ButtonProps) {
-  const buttonRef = useRef<HTMLAnchorElement | HTMLButtonElement>(null);
 
-  const handleHover = () => {
-    if (!buttonRef.current) return;
-
-    if (bounce) {
-      // Animation bounce très subtile - un seul rebond
-      animate(
-        buttonRef.current,
-        {
-          y: [0, -2, 0],
-          scale: [1, 1.02, 1]
-        },
-        { duration: 0.4, easing: [0.34, 1.56, 0.64, 1] }
-      );
-    } else {
-      // Animation standard
-      animate(
-        buttonRef.current,
-        { scale: 1.05, y: -2 },
-        { duration: 0.2, easing: [0.22, 1, 0.36, 1] }
-      );
-    }
-  };
-
-  const handleHoverEnd = () => {
-    if (!buttonRef.current) return;
-    if (!bounce) {
-      animate(
-        buttonRef.current,
-        { scale: 1, y: 0 },
-        { duration: 0.2, easing: [0.22, 1, 0.36, 1] }
-      );
-    }
-  };
-
-  const baseStyles = 'relative inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-semibold overflow-hidden focus:outline-none focus:ring-2 focus:ring-offset-2 group';
+  const baseStyles = 'relative inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-semibold overflow-hidden focus:outline-none focus:ring-2 focus:ring-offset-2 group transition-transform duration-200 hover:scale-105';
 
   const variants = {
     primary: 'bg-gradient-to-r from-accent-blue to-blue-600 text-white shadow-lg shadow-blue-500/30 hover:shadow-xl hover:shadow-blue-500/40 focus:ring-accent-blue before:absolute before:inset-0 before:bg-gradient-to-r before:from-blue-600 before:to-accent-blue before:opacity-0 hover:before:opacity-100 before:transition-opacity',
@@ -73,11 +37,8 @@ export function Button({
   if (href) {
     return (
       <Link
-        ref={buttonRef as React.RefObject<HTMLAnchorElement>}
         href={href}
         className={classes}
-        onMouseEnter={handleHover}
-        onMouseLeave={handleHoverEnd}
       >
         <span className="relative z-10">{children}</span>
       </Link>
@@ -86,12 +47,10 @@ export function Button({
 
   return (
     <button
-      ref={buttonRef as React.RefObject<HTMLButtonElement>}
       type={type}
       onClick={onClick}
-      className={classes}
-      onMouseEnter={handleHover}
-      onMouseLeave={handleHoverEnd}
+      disabled={disabled}
+      className={cn(classes, disabled && 'opacity-50 cursor-not-allowed hover:scale-100')}
     >
       <span className="relative z-10">{children}</span>
     </button>

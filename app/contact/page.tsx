@@ -4,7 +4,6 @@ import { Container } from '@/components/ui/Container'
 import { Section } from '@/components/ui/Section'
 import { Button } from '@/components/ui/Button'
 import { ScrollReveal } from '@/components/ui/ScrollReveal'
-import type { Metadata } from 'next'
 import { useState } from 'react'
 
 const contactInfo = [

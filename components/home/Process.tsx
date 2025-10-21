@@ -3,8 +3,6 @@
 import { Container } from '@/components/ui/Container';
 import { Section } from '@/components/ui/Section';
 import { ScrollReveal } from '@/components/ui/ScrollReveal';
-import { useEffect, useRef } from 'react';
-import { inView, animate, stagger } from 'motion';
 
 const steps = [
   {
@@ -50,27 +48,6 @@ const steps = [
 ];
 
 export function Process() {
-  const stepsRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (!stepsRef.current) return;
-
-    const stepCards = stepsRef.current.querySelectorAll('.process-step');
-
-    const unsubscribe = inView(
-      stepsRef.current,
-      () => {
-        animate(
-          stepCards,
-          { opacity: [0, 1], y: [40, 0] },
-          { duration: 0.5, delay: stagger(0.15), easing: [0.22, 1, 0.36, 1] }
-        );
-      },
-      { amount: 0.2 }
-    );
-
-    return () => unsubscribe();
-  }, []);
 
   return (
     <Section>
@@ -87,13 +64,10 @@ export function Process() {
           </p>
         </ScrollReveal>
 
-        <div ref={stepsRef} className="mt-16 grid gap-8 md:grid-cols-2 lg:grid-cols-4">
+        <div className="mt-16 grid gap-8 md:grid-cols-2 lg:grid-cols-4">
           {steps.map((step, index) => (
-            <div
-              key={step.number}
-              className="process-step group relative"
-              style={{ opacity: 0 }}
-            >
+            <ScrollReveal key={step.number} delay={index * 0.1}>
+              <div className="process-step group relative">
               {/* Connector line (hidden on mobile) */}
               {index < steps.length - 1 && (
                 <div className="absolute left-1/2 top-12 hidden h-px w-full bg-gradient-to-r from-accent-blue/50 to-transparent lg:block" />
@@ -118,7 +92,8 @@ export function Process() {
                   {step.description}
                 </p>
               </div>
-            </div>
+              </div>
+            </ScrollReveal>
           ))}
         </div>
 

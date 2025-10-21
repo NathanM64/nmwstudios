@@ -1,13 +1,10 @@
 'use client';
 
-import Link from 'next/link';
 import { Container } from '@/components/ui/Container';
 import { Section } from '@/components/ui/Section';
 import { Button } from '@/components/ui/Button';
 import { TiltCard } from '@/components/ui/TiltCard';
 import { ScrollReveal } from '@/components/ui/ScrollReveal';
-import { useEffect, useRef } from 'react';
-import { inView, animate, stagger } from 'motion';
 
 const projects = [
   {
@@ -43,27 +40,6 @@ const projects = [
 ];
 
 export function ProjectsPreview() {
-  const projectsRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (!projectsRef.current) return;
-
-    const cards = projectsRef.current.querySelectorAll('.project-card');
-
-    const unsubscribe = inView(
-      projectsRef.current,
-      () => {
-        animate(
-          cards,
-          { opacity: [0, 1], y: [60, 0] },
-          { duration: 0.6, delay: stagger(0.2), easing: [0.22, 1, 0.36, 1] }
-        );
-      },
-      { amount: 0.1 }
-    );
-
-    return () => unsubscribe();
-  }, []);
 
   return (
     <Section>
@@ -79,13 +55,10 @@ export function ProjectsPreview() {
           </p>
         </ScrollReveal>
 
-        <div ref={projectsRef} className="mt-16 grid gap-8 md:grid-cols-2 [&>*:nth-child(3)]:md:col-span-2 [&>*:nth-child(3)]:md:mx-auto [&>*:nth-child(3)]:md:max-w-2xl">
-          {projects.map((project, index) => (
-            <TiltCard
-              key={project.title}
-              className="project-card group relative overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-lg transition-all hover:shadow-2xl dark:border-gray-800 dark:bg-gray-900"
-              style={{ opacity: 0 }}
-            >
+        <div className="mt-16 grid gap-8 md:grid-cols-2 [&>*:nth-child(3)]:md:col-span-2 [&>*:nth-child(3)]:md:mx-auto [&>*:nth-child(3)]:md:max-w-2xl">
+          {projects.map((project, i) => (
+            <ScrollReveal key={project.title} delay={i * 0.2}>
+              <TiltCard className="project-card group relative overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-lg transition-all hover:shadow-2xl dark:border-gray-800 dark:bg-gray-900">
               <div className="flex flex-col p-8">
                 {/* Image/Mockup placeholder */}
                 <div className="relative aspect-video w-full overflow-hidden rounded-lg">
@@ -148,7 +121,8 @@ export function ProjectsPreview() {
                   </div>
                 </div>
               </div>
-            </TiltCard>
+              </TiltCard>
+            </ScrollReveal>
           ))}
         </div>
 

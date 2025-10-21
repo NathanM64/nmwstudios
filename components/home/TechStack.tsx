@@ -3,8 +3,6 @@
 import { Container } from '@/components/ui/Container';
 import { Section } from '@/components/ui/Section';
 import { ScrollReveal } from '@/components/ui/ScrollReveal';
-import { useEffect, useRef } from 'react';
-import { inView, animate, stagger } from 'motion';
 
 const technologies = [
   {
@@ -26,27 +24,6 @@ const technologies = [
 ];
 
 export function TechStack() {
-  const categoriesRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (!categoriesRef.current) return;
-
-    const categories = categoriesRef.current.querySelectorAll('.tech-category');
-
-    const unsubscribe = inView(
-      categoriesRef.current,
-      () => {
-        animate(
-          categories,
-          { opacity: [0, 1], y: [30, 0] },
-          { duration: 0.5, delay: stagger(0.1), easing: [0.22, 1, 0.36, 1] }
-        );
-      },
-      { amount: 0.3 }
-    );
-
-    return () => unsubscribe();
-  }, []);
 
   return (
     <Section>
@@ -63,34 +40,36 @@ export function TechStack() {
           </p>
         </ScrollReveal>
 
-        <div ref={categoriesRef} className="mt-16 grid gap-8 md:grid-cols-2 lg:grid-cols-4">
-          {technologies.map((tech) => (
-            <div key={tech.category} className="tech-category" style={{ opacity: 0 }}>
-              <h3 className="text-sm font-bold uppercase tracking-wider text-accent-blue">
-                {tech.category}
-              </h3>
-              <ul className="mt-4 space-y-3">
-                {tech.items.map((item) => (
-                  <li
-                    key={item}
-                    className="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300"
-                  >
-                    <svg
-                      className="h-4 w-4 shrink-0 text-accent-blue"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
+        <div className="mt-16 grid gap-8 md:grid-cols-2 lg:grid-cols-4">
+          {technologies.map((tech, i) => (
+            <ScrollReveal key={tech.category} delay={i * 0.1}>
+              <div className="tech-category">
+                <h3 className="text-sm font-bold uppercase tracking-wider text-accent-blue">
+                  {tech.category}
+                </h3>
+                <ul className="mt-4 space-y-3">
+                  {tech.items.map((item) => (
+                    <li
+                      key={item}
+                      className="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300"
                     >
-                      <path
-                        fillRule="evenodd"
-                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                    {item}
-                  </li>
-                ))}
-              </ul>
-            </div>
+                      <svg
+                        className="h-4 w-4 shrink-0 text-accent-blue"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </ScrollReveal>
           ))}
         </div>
       </Container>

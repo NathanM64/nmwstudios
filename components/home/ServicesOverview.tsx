@@ -2,10 +2,7 @@
 
 import { Container } from '@/components/ui/Container';
 import { Section } from '@/components/ui/Section';
-import { Button } from '@/components/ui/Button';
 import { ScrollReveal } from '@/components/ui/ScrollReveal';
-import { useEffect, useRef } from 'react';
-import { inView, animate, stagger } from 'motion';
 
 const services = [
   {
@@ -53,27 +50,6 @@ const services = [
 ];
 
 export function ServicesOverview() {
-  const cardsRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (!cardsRef.current) return;
-
-    const cards = cardsRef.current.querySelectorAll('.service-card');
-
-    const unsubscribe = inView(
-      cardsRef.current,
-      () => {
-        animate(
-          cards,
-          { opacity: [0, 1], y: [40, 0] },
-          { duration: 0.5, delay: stagger(0.1), easing: [0.22, 1, 0.36, 1] }
-        );
-      },
-      { amount: 0.2 }
-    );
-
-    return () => unsubscribe();
-  }, []);
 
   return (
     <Section>
@@ -90,13 +66,10 @@ export function ServicesOverview() {
           </p>
         </ScrollReveal>
 
-        <div ref={cardsRef} className="mt-16 grid gap-8 md:grid-cols-2 [&>*:nth-child(3)]:md:col-span-2 [&>*:nth-child(3)]:md:mx-auto [&>*:nth-child(3)]:md:max-w-2xl">
-          {services.map((service) => (
-            <div
-              key={service.title}
-              className="service-card group rounded-2xl border border-gray-200 bg-white p-8 transition-all hover:border-accent-blue/50 hover:shadow-lg dark:border-gray-800 dark:bg-gray-900"
-              style={{ opacity: 0 }}
-            >
+        <div className="mt-16 grid gap-8 md:grid-cols-2 [&>*:nth-child(3)]:md:col-span-2 [&>*:nth-child(3)]:md:mx-auto [&>*:nth-child(3)]:md:max-w-2xl">
+          {services.map((service, i) => (
+            <ScrollReveal key={service.title} delay={i * 0.1}>
+              <div className="service-card group rounded-2xl border border-gray-200 bg-white p-8 transition-all hover:border-accent-blue/50 hover:shadow-lg dark:border-gray-800 dark:bg-gray-900">
               <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-accent-blue/10 text-accent-blue transition-transform group-hover:scale-110">
                 {service.icon}
               </div>
@@ -120,6 +93,7 @@ export function ServicesOverview() {
                 ))}
               </ul>
             </div>
+          </ScrollReveal>
           ))}
         </div>
 
