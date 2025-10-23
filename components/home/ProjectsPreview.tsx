@@ -1,46 +1,17 @@
-'use client';
+'use client'
 
-import { Container } from '@/components/ui/Container';
-import { Section } from '@/components/ui/Section';
-import { Button } from '@/components/ui/Button';
-import { TiltCard } from '@/components/ui/TiltCard';
-import { ScrollReveal } from '@/components/ui/ScrollReveal';
+import Image from 'next/image'
+import { Container } from '@/components/ui/Container'
+import { Section } from '@/components/ui/Section'
+import { Button } from '@/components/ui/Button'
+import { TiltCard } from '@/components/ui/TiltCard'
+import { ScrollReveal } from '@/components/ui/ScrollReveal'
+import { PROJECTS } from '@/lib/constants'
+import { ExternalLink, Github } from 'lucide-react'
 
-const projects = [
-  {
-    title: 'Nexus AI',
-    category: 'Landing page',
-    description: 'Landing page moderne pour une startup IA avec animations fluides et design system complet.',
-    objective: 'Maximiser les conversions',
-    result: '+40 % d\'inscriptions à la démo',
-    stack: ['Next.js', 'TypeScript', 'Tailwind CSS', 'Motion One'],
-    demoUrl: '#',
-    gradient: 'from-blue-500 to-purple-600',
-  },
-  {
-    title: 'Atelier Bois Massif',
-    category: 'Refonte',
-    description: 'Refonte complète d\'un site artisan vieillissant, modernisation et optimisation SEO locale.',
-    objective: 'Améliorer la visibilité et l\'image',
-    result: '+150 % de trafic organique',
-    stack: ['Next.js', 'TypeScript', 'Tailwind CSS'],
-    demoUrl: '#',
-    gradient: 'from-amber-500 to-orange-600',
-  },
-  {
-    title: 'TaskFlow',
-    category: 'Application',
-    description: 'Application de gestion interne intuitive avec filtres avancés et dark mode.',
-    objective: 'Simplifier la gestion d\'équipe',
-    result: 'Meilleure productivité et UX repensée',
-    stack: ['React', 'TypeScript', 'Tailwind CSS'],
-    demoUrl: '#',
-    gradient: 'from-emerald-500 to-teal-600',
-  },
-];
+const projects = PROJECTS
 
 export function ProjectsPreview() {
-
   return (
     <Section>
       <Container>
@@ -51,7 +22,8 @@ export function ProjectsPreview() {
             </span>
           </h2>
           <p className="mt-4 text-lg text-gray-600 dark:text-gray-400">
-            Chaque projet est une collaboration sur mesure avec ses propres défis et solutions
+            Chaque projet illustre une approche sur-mesure, entre design soigné,
+            performance technique et expérience utilisateur fluide.
           </p>
         </ScrollReveal>
 
@@ -59,68 +31,92 @@ export function ProjectsPreview() {
           {projects.map((project, i) => (
             <ScrollReveal key={project.title} delay={i * 0.2}>
               <TiltCard className="project-card group relative overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-lg transition-all hover:shadow-2xl dark:border-gray-800 dark:bg-gray-900">
-              <div className="flex flex-col p-8">
-                {/* Image/Mockup placeholder */}
-                <div className="relative aspect-video w-full overflow-hidden rounded-lg">
-                  <div className={`absolute inset-0 bg-gradient-to-br ${project.gradient} opacity-20`} />
-                  <div className="flex h-full items-center justify-center">
-                    <div className="text-center">
-                      <div className="text-3xl font-bold text-gray-900 dark:text-white">
-                        {project.title}
+                <div className="flex flex-col">
+                  {/* Screenshot */}
+                  <div className="relative aspect-video w-full overflow-hidden">
+                    <Image
+                      src={project.image}
+                      alt={`Screenshot de ${project.title}`}
+                      fill
+                      className="object-cover object-top transition-transform duration-500 group-hover:scale-105"
+                      sizes="(max-width: 768px) 100vw, 50vw"
+                    />
+                  </div>
+
+                  {/* Content */}
+                  <div className="p-8">
+                    <div className="inline-flex items-center gap-2">
+                      <span className="text-sm font-medium text-accent-blue">
+                        {project.category}
+                      </span>
+                      <span className="text-gray-400">•</span>
+                      <span className="text-sm text-gray-500 dark:text-gray-400">
+                        {project.year}
+                      </span>
+                    </div>
+
+                    <h3 className="mt-3 text-2xl font-bold text-gray-900 dark:text-white">
+                      {project.title}
+                    </h3>
+
+                    <p className="mt-3 text-gray-600 dark:text-gray-400">
+                      {project.description}
+                    </p>
+
+                    <div className="mt-6 space-y-3">
+                      <div>
+                        <span className="text-sm font-semibold text-gray-900 dark:text-white">
+                          Objectif :{' '}
+                        </span>
+                        <span className="text-sm text-gray-600 dark:text-gray-400">
+                          {project.objective}
+                        </span>
                       </div>
-                      <div className="mt-2 text-sm text-gray-600 dark:text-gray-400">
-                        Screenshot à venir
+                      <div>
+                        <span className="text-sm font-semibold text-gray-900 dark:text-white">
+                          Résultat :{' '}
+                        </span>
+                        <span className="text-sm text-gray-600 dark:text-gray-400">
+                          {project.result}
+                        </span>
                       </div>
+                    </div>
+
+                    {/* Stack */}
+                    <div className="mt-6 flex flex-wrap gap-2">
+                      {project.tags.map((tag) => (
+                        <span
+                          key={tag}
+                          className="rounded-full bg-gray-100 px-3 py-1 text-xs font-medium text-gray-700 dark:bg-gray-800 dark:text-gray-300"
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+
+                    {/* Links */}
+                    <div className="mt-6 flex gap-3">
+                      <a
+                        href={project.liveUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-2 rounded-lg bg-accent-blue px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700"
+                      >
+                        <ExternalLink className="h-4 w-4" />
+                        Voir le site
+                      </a>
+                      <a
+                        href={project.githubUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-2 rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800"
+                      >
+                        <Github className="h-4 w-4" />
+                        Code source
+                      </a>
                     </div>
                   </div>
                 </div>
-
-                {/* Content */}
-                <div className="mt-6">
-                  <div className="inline-flex items-center gap-2">
-                    <span className="text-sm font-medium text-accent-blue">
-                      {project.category}
-                    </span>
-                    <span className="text-gray-400">•</span>
-                    <span className="text-sm text-gray-500 dark:text-gray-400">
-                      {new Date().getFullYear()}
-                    </span>
-                  </div>
-
-                  <h3 className="mt-3 text-2xl font-bold text-gray-900 dark:text-white">
-                    {project.title}
-                  </h3>
-
-                  <p className="mt-3 text-gray-600 dark:text-gray-400">
-                    {project.description}
-                  </p>
-
-                  <div className="mt-6 space-y-3">
-                    <div>
-                      <span className="text-sm font-semibold text-gray-900 dark:text-white">
-                        Objectif :{' '}
-                      </span>
-                      <span className="text-sm text-gray-600 dark:text-gray-400">
-                        {project.objective}
-                      </span>
-                    </div>
-                    <div>
-                      <span className="text-sm font-semibold text-gray-900 dark:text-white">
-                        Résultat :{' '}
-                      </span>
-                      <span className="text-sm text-gray-600 dark:text-gray-400">
-                        {project.result}
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* Stack */}
-                  <div className="mt-6 text-sm text-gray-600 dark:text-gray-400">
-                    <span className="font-semibold text-gray-900 dark:text-white">Stack : </span>
-                    {project.stack.join(', ')}
-                  </div>
-                </div>
-              </div>
               </TiltCard>
             </ScrollReveal>
           ))}
@@ -133,5 +129,5 @@ export function ProjectsPreview() {
         </div>
       </Container>
     </Section>
-  );
+  )
 }
