@@ -21,30 +21,30 @@ export const PROJECTS = [
   {
     slug: 'nexus-ai',
     title: 'Nexus AI',
-    description: 'Plateforme IA moderne pour transformer vos données en insights actionnables. Landing page tech avec animations Motion One et design system custom.',
-    category: 'Landing Page',
+    description: 'Concept fictif — création d\'une landing page SaaS pour une plateforme de génération d\'insights par IA. Design tech moderne avec animations fluides et système d\'icônes dynamique.',
+    category: 'Landing Page SaaS',
     tags: ['Next.js 15', 'TypeScript', 'Tailwind CSS', 'Motion One', 'nmw-site-starter'],
     image: '/projects/nexus-ai-desktop.png',
     imageMobile: '/projects/nexus-ai-mobile.png',
     liveUrl: 'https://nexus-ai.nmwstudios.com',
     githubUrl: 'https://github.com/NathanM64/nexus-ai',
     year: '2025',
-    client: 'Projet démo',
-    objective: 'Démontrer la customisation complète du boilerplate nmw-site-starter avec une identité visuelle tech moderne (Indigo/Violet/Rose).',
-    result: 'Landing page complète avec 7 sections, animations au scroll, et intégration d\'icônes Lucide dynamiques.',
+    client: 'Projet concept créé pour démontrer mes compétences en design system et développement Next.js',
+    objective: 'Démontrer la customisation complète du boilerplate nmw-site-starter avec une identité visuelle tech moderne (palette Indigo/Violet/Rose) et des animations avancées.',
+    result: 'Landing page complète avec 7 sections optimisées, animations au scroll via Motion One, système d\'icônes Lucide dynamiques, et architecture scalable.',
     highlights: [
-      'Animations Motion One avec scroll reveals',
-      'Système d\'icônes Lucide dynamique',
+      'Animations Motion One avec scroll reveals et stagger',
+      'Système d\'icônes Lucide chargées dynamiquement',
       'Palette tech moderne (Indigo/Violet/Rose)',
-      '7 sections optimisées (Hero, Features, Pricing, etc.)',
-      'Dark mode avec next-themes',
-      'SEO et performance optimisés'
+      '7 sections optimisées (Hero, Features, Pricing, Testimonials, etc.)',
+      'Dark mode avec next-themes et persistance',
+      'Performance et SEO optimisés (scores Lighthouse 95+)'
     ]
   },
   {
     slug: 'atelier-bois',
     title: 'Atelier Bois',
-    description: 'Site vitrine artisanal pour un atelier de menuiserie. Design chaleureux avec typographie serif et palette naturelle.',
+    description: 'Concept fictif — création d\'un site vitrine pour un atelier artisanal de menuiserie. Design chaleureux avec typographie serif, palette naturelle et identité authentique.',
     category: 'Site Vitrine',
     tags: ['Next.js 15', 'TypeScript', 'Tailwind CSS', 'Merriweather', 'nmw-site-starter'],
     image: '/projects/atelier-bois-desktop.png',
@@ -52,22 +52,22 @@ export const PROJECTS = [
     liveUrl: 'https://atelier-bois.nmwstudios.com',
     githubUrl: 'https://github.com/NathanM64/atelier-bois',
     year: '2025',
-    client: 'Projet démo',
-    objective: 'Créer une identité artisanale authentique, complètement différente de Nexus AI, pour démontrer la flexibilité du boilerplate.',
-    result: 'Landing page one-page avec navigation par anchors, 8 sections, et identité visuelle chaleureuse.',
+    client: 'Projet concept créé pour démontrer la flexibilité de customisation du boilerplate',
+    objective: 'Créer une identité artisanale authentique et chaleureuse, radicalement différente de Nexus AI, pour illustrer la versatilité du boilerplate nmw-site-starter.',
+    result: 'Landing page one-page avec navigation smooth scroll, 8 sections complètes, identité visuelle cohérente (marron/crème/vert forêt), et galerie de réalisations.',
     highlights: [
-      'Identité artisanale (Marron/Crème/Vert forêt)',
-      'Typographie serif (Merriweather + Inter)',
-      'Navigation smooth scroll avec anchors',
-      '8 sections complètes (Hero, Services, Projects, etc.)',
-      'Animations subtiles avec Motion One',
-      'Galerie de projets avec badges catégories'
+      'Identité artisanale complète (Marron/Crème/Vert forêt)',
+      'Typographie serif (Merriweather) + sans-serif (Inter)',
+      'Navigation fluide par anchors avec smooth scroll',
+      '8 sections (Hero, Services, Projects, Testimonials, Contact, etc.)',
+      'Animations subtiles et naturelles avec Motion One',
+      'Galerie de projets avec catégories et badges'
     ]
   },
   {
     slug: 'taskflow',
     title: 'TaskFlow',
-    description: 'Dashboard SaaS moderne pour la gestion de tâches. CRUD complet avec visualisation de données et command palette.',
+    description: 'Concept fictif — création d\'un dashboard SaaS de gestion de tâches. CRUD complet, visualisation de données avec Recharts, et command palette pour navigation rapide.',
     category: 'Dashboard SaaS',
     tags: ['Next.js 15', 'TypeScript', 'Zustand', 'Recharts', 'nmw-app-starter'],
     image: '/projects/taskflow-desktop.png',
@@ -75,16 +75,16 @@ export const PROJECTS = [
     liveUrl: 'https://taskflow.nmwstudios.com',
     githubUrl: 'https://github.com/NathanM64/taskflow',
     year: '2025',
-    client: 'Projet démo',
-    objective: 'Démontrer les capacités dashboard/CRUD du boilerplate nmw-app-starter avec une application SaaS complète.',
-    result: 'Dashboard fonctionnel avec CRUD, graphiques, command palette, et persistance localStorage.',
+    client: 'Projet concept créé pour démontrer mes compétences en développement d\'applications SaaS',
+    objective: 'Démontrer les capacités dashboard/CRUD du boilerplate nmw-app-starter : gestion d\'état, persistance, visualisation de données, et UX moderne.',
+    result: 'Dashboard SaaS fonctionnel avec CRUD complet, graphiques interactifs Recharts, command palette (Ctrl+K), state management Zustand, et persistance localStorage.',
     highlights: [
-      'CRUD complet (Create, Read, Update, Delete)',
-      'Graphiques Recharts (statut, priorité)',
-      'Command Palette (Ctrl+K) avec navigation clavier',
-      'State management Zustand + localStorage',
+      'CRUD complet avec modal de création/édition',
+      'Graphiques Recharts interactifs (statut, priorité)',
+      'Command Palette (Ctrl+K) avec navigation clavier optimisée',
+      'State management Zustand + persistance localStorage',
       '5 options de tri (date, priorité, statut, nom, échéance)',
-      'Dark mode avec persistance'
+      'Dark mode avec persistance des préférences utilisateur'
     ]
   }
 ] as const;

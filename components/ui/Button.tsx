@@ -40,7 +40,7 @@ export function Button({
         href={href}
         className={classes}
       >
-        <span className="relative z-10">{children}</span>
+        <span className="relative z-10 inline-flex items-center gap-2">{children}</span>
       </Link>
     );
   }
@@ -52,7 +52,7 @@ export function Button({
       disabled={disabled}
       className={cn(classes, disabled && 'opacity-50 cursor-not-allowed hover:scale-100')}
     >
-      <span className="relative z-10">{children}</span>
+      <span className="relative z-10 inline-flex items-center gap-2">{children}</span>
     </button>
   );
 }

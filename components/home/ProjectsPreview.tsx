@@ -1,13 +1,14 @@
 'use client'
 
 import Image from 'next/image'
+import Link from 'next/link'
 import { Container } from '@/components/ui/Container'
 import { Section } from '@/components/ui/Section'
 import { Button } from '@/components/ui/Button'
 import { TiltCard } from '@/components/ui/TiltCard'
 import { ScrollReveal } from '@/components/ui/ScrollReveal'
 import { PROJECTS } from '@/lib/constants'
-import { ExternalLink, Github } from 'lucide-react'
+import { ExternalLink, Github, ArrowRight } from 'lucide-react'
 
 const projects = PROJECTS
 
@@ -55,9 +56,11 @@ export function ProjectsPreview() {
                       </span>
                     </div>
 
-                    <h3 className="mt-3 text-2xl font-bold text-gray-900 dark:text-white">
-                      {project.title}
-                    </h3>
+                    <Link href={`/projets/${project.slug}`}>
+                      <h3 className="mt-3 text-2xl font-bold text-gray-900 transition-colors hover:text-accent-blue dark:text-white dark:hover:text-accent-blue">
+                        {project.title}
+                      </h3>
+                    </Link>
 
                     <p className="mt-3 text-gray-600 dark:text-gray-400">
                       {project.description}
@@ -95,25 +98,37 @@ export function ProjectsPreview() {
                     </div>
 
                     {/* Links */}
-                    <div className="mt-6 flex gap-3">
-                      <a
-                        href={project.liveUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-2 rounded-lg bg-accent-blue px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700"
+                    <div className="mt-6 space-y-3">
+                      {/* Main CTA - Case Study */}
+                      <Link
+                        href={`/projets/${project.slug}`}
+                        className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-accent-blue px-6 py-3 text-sm font-semibold text-white transition-all hover:bg-blue-700 hover:shadow-lg"
                       >
-                        <ExternalLink className="h-4 w-4" />
-                        Voir le site
-                      </a>
-                      <a
-                        href={project.githubUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-2 rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800"
-                      >
-                        <Github className="h-4 w-4" />
-                        Code source
-                      </a>
+                        Voir le case study
+                        <ArrowRight className="h-4 w-4" />
+                      </Link>
+
+                      {/* Secondary CTAs */}
+                      <div className="flex gap-3">
+                        <a
+                          href={project.liveUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex flex-1 items-center justify-center gap-2 rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800"
+                        >
+                          <ExternalLink className="h-4 w-4" />
+                          Démo
+                        </a>
+                        <a
+                          href={project.githubUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex flex-1 items-center justify-center gap-2 rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800"
+                        >
+                          <Github className="h-4 w-4" />
+                          Code
+                        </a>
+                      </div>
                     </div>
                   </div>
                 </div>
