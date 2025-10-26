@@ -6,38 +6,32 @@ import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'Services',
-  description: 'Découvrez mes services de développement web : création de sites, MVP, dashboards et maintenance.',
+  description: 'Découvrez nos services de création web sur mesure : sites vitrines, MVP, dashboards et maintenance.',
 };
 
 const services = [
   {
     id: 'creation-web-mvp',
     title: 'Création de sites web et MVP',
-    description: 'Sites vitrines, landing pages ou MVP rapides pour tester vos idées. Après le lancement, je peux continuer à développer et ajouter des fonctionnalités selon vos besoins et votre budget.',
-    features: [
+    description: 'Nous concevons des sites vitrines, landing pages ou MVP pour valoriser votre activité et tester vos idées. Chaque projet est pensé pour être rapide, fluide et facilement évolutif.',
+    offerings: [
       {
-        title: 'Sites vitrine professionnels',
-        description: 'Site moderne pour présenter votre activité, vos services et générer des leads qualifiés.',
-        deliverables: ['Design responsive', 'SEO optimisé', 'Formulaire de contact', 'Analytics intégré'],
+        title: 'Sites vitrines professionnels',
+        description: 'Présentez votre activité et générez des contacts qualifiés.',
       },
       {
-        title: 'Landing pages haute conversion',
-        description: 'Page unique optimisée pour convertir vos visiteurs en clients ou leads.',
-        deliverables: ['A/B testing ready', 'Animations engageantes', 'CTA optimisés', 'Performance maximale'],
+        title: 'Landing pages optimisées',
+        description: 'Conçues pour convertir vos visiteurs en clients.',
       },
       {
-        title: 'MVP (Minimum Viable Product)',
-        description: 'Version simplifiée de votre produit pour tester le marché rapidement et à moindre coût.',
-        deliverables: ['Fonctionnalités essentielles', 'Itération rapide', 'Feedback utilisateurs', 'Évolution progressive'],
+        title: 'MVP rapide',
+        description: 'Testez vos idées sur le marché avant de les développer pleinement.',
       },
     ],
-    technologies: ['Next.js 15', 'React 18+', 'TypeScript', 'Tailwind CSS', 'Motion One'],
-    process: [
-      'Échange initial pour comprendre vos objectifs',
-      'Proposition de maquettes et architecture technique',
-      'Développement itératif avec feedback régulier',
-      'Tests, optimisations et mise en production',
-      'Formation et documentation si nécessaire',
+    results: [
+      'Design moderne et responsive',
+      'Performance et référencement optimisés',
+      'Solutions pensées pour vos objectifs et votre audience',
     ],
     icon: (
       <svg className="h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -47,32 +41,26 @@ const services = [
   },
   {
     id: 'dashboards-admin',
-    title: 'Outils d\'administration / Dashboards',
-    description: 'Création d\'outils d\'administration et de dashboards pour gérer vos contenus et vos données internes.',
-    features: [
+    title: 'Outils d\'administration et dashboards',
+    description: 'Développons des interfaces sur mesure pour gérer facilement vos contenus, utilisateurs ou données, et vous permettre de piloter votre activité efficacement.',
+    offerings: [
       {
         title: 'Back-office sur mesure',
-        description: 'Interface d\'administration adaptée à vos processus métier et vos besoins spécifiques.',
-        deliverables: ['CRUD complet', 'Gestion des rôles', 'Interface intuitive', 'Validation des données'],
+        description: 'Interface intuitive adaptée à vos besoins.',
       },
       {
         title: 'Dashboards analytiques',
-        description: 'Visualisation de données pour suivre vos KPIs et prendre les bonnes décisions.',
-        deliverables: ['Graphiques interactifs', 'Filtres avancés', 'Export de données', 'Temps réel possible'],
+        description: 'Suivi clair de vos indicateurs clés.',
       },
       {
-        title: 'Intégrations API',
-        description: 'Connexion avec vos outils existants (CRM, ERP, services tiers).',
-        deliverables: ['APIs REST/GraphQL', 'Webhooks', 'Synchronisation', 'Gestion d\'erreurs'],
+        title: 'Intégrations avec vos outils existants',
+        description: 'CRM, ERP, services tiers.',
       },
     ],
-    technologies: ['React', 'TypeScript', 'Tailwind CSS', 'Node.js', 'PostgreSQL', 'MongoDB', 'Supabase'],
-    process: [
-      'Audit de vos besoins et processus actuels',
-      'Conception de l\'architecture et des interfaces',
-      'Développement par module avec tests unitaires',
-      'Déploiement sécurisé et monitoring',
-      'Support et évolutions continues',
+    results: [
+      'Gestion simplifiée et sécurisée',
+      'Prise de décision facilitée',
+      'Évolutivité et maintenance faciles',
     ],
     icon: (
       <svg className="h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -82,32 +70,26 @@ const services = [
   },
   {
     id: 'maintenance-hebergement',
-    title: 'Maintenance & Hébergement',
-    description: 'Suivi, mises à jour et évolutions de vos projets existants. Je peux gérer l\'hébergement et le déploiement (Vercel, OVH ou autre infrastructure) pour que tout fonctionne correctement et en toute sécurité.',
-    features: [
+    title: 'Maintenance et hébergement',
+    description: 'Nous assurons le suivi technique et la sécurité de vos projets pour garantir leur stabilité et performance à long terme.',
+    offerings: [
       {
         title: 'Maintenance corrective',
-        description: 'Correction rapide des bugs et problèmes techniques rencontrés.',
-        deliverables: ['Hotfixes prioritaires', 'Tests de régression', 'Documentation des corrections', 'Support réactif'],
+        description: 'Résolution rapide de tout problème technique.',
       },
       {
         title: 'Maintenance évolutive',
-        description: 'Ajout de nouvelles fonctionnalités et amélioration continue de votre application.',
-        deliverables: ['Nouvelles features', 'Optimisations UX', 'Mise à jour des dépendances', 'Refactoring'],
+        description: 'Ajout de nouvelles fonctionnalités et amélioration continue.',
       },
       {
         title: 'Hébergement et monitoring',
-        description: 'Gestion de l\'infrastructure, déploiements et surveillance de la performance.',
-        deliverables: ['Déploiement continu', 'Monitoring 24/7', 'Sauvegardes régulières', 'Alertes automatiques'],
+        description: 'Gestion complète de l\'infrastructure et surveillance permanente.',
       },
     ],
-    technologies: ['Vercel', 'OVH', 'Git', 'Monitoring tools', 'CI/CD'],
-    process: [
-      'Audit de l\'existant et état des lieux',
-      'Mise en place des outils de monitoring',
-      'Plan de maintenance personnalisé',
-      'Interventions régulières ou à la demande',
-      'Rapports mensuels de performance',
+    results: [
+      'Tranquillité d\'esprit',
+      'Performances et sécurité optimales',
+      'Support réactif et suivi régulier',
     ],
     icon: (
       <svg className="h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -127,12 +109,12 @@ export default function ServicesPage() {
             <h1 className="text-4xl font-bold tracking-tight text-gray-900 dark:text-white md:text-6xl">
               Services de{' '}
               <span className="bg-gradient-to-r from-accent-blue to-purple-500 bg-clip-text text-transparent">
-                développement web
+                création web sur mesure
               </span>
             </h1>
             <p className="mt-6 text-lg text-gray-600 dark:text-gray-400 md:text-xl">
-              Du site vitrine au dashboard complexe, je vous accompagne dans tous vos projets web
-              avec rigueur et transparence.
+              Du site vitrine au tableau de bord complet, NMW Studios accompagne ses clients dans tous leurs projets web
+              avec rigueur, transparence et solutions adaptées à leurs besoins.
             </p>
           </ScrollReveal>
         </Container>
@@ -143,7 +125,7 @@ export default function ServicesPage() {
         <Section key={service.id} className={index % 2 === 1 ? 'bg-gray-50 dark:bg-gray-950' : ''}>
           <Container>
             <div className="grid gap-12 lg:grid-cols-2 lg:gap-16">
-              {/* Left: Icon + Description */}
+              {/* Left: Icon + Description + Results */}
               <ScrollReveal>
                 <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-accent-blue/10 text-accent-blue">
                   {service.icon}
@@ -155,62 +137,38 @@ export default function ServicesPage() {
                   {service.description}
                 </p>
 
-                {/* Technologies */}
+                {/* Résultat pour vous */}
                 <div className="mt-8">
                   <h3 className="text-sm font-semibold uppercase tracking-wider text-accent-blue">
-                    Technologies utilisées
-                  </h3>
-                  <div className="mt-3 flex flex-wrap gap-2">
-                    {service.technologies.map((tech) => (
-                      <span
-                        key={tech}
-                        className="rounded-full bg-gray-100 px-3 py-1 text-sm text-gray-700 dark:bg-gray-800 dark:text-gray-300"
-                      >
-                        {tech}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Process */}
-                <div className="mt-8">
-                  <h3 className="text-sm font-semibold uppercase tracking-wider text-accent-blue">
-                    Processus
+                    Résultat pour vous
                   </h3>
                   <ul className="mt-3 space-y-2">
-                    {service.process.map((step, i) => (
-                      <li key={i} className="flex items-start gap-3 text-sm text-gray-600 dark:text-gray-400">
-                        <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-accent-blue/10 text-xs font-semibold text-accent-blue">
-                          {i + 1}
-                        </span>
-                        {step}
+                    {service.results.map((result) => (
+                      <li key={result} className="flex items-start gap-3 text-sm text-gray-600 dark:text-gray-400">
+                        <svg className="mt-0.5 h-5 w-5 shrink-0 text-accent-blue" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                        </svg>
+                        {result}
                       </li>
                     ))}
                   </ul>
                 </div>
               </ScrollReveal>
 
-              {/* Right: Features */}
+              {/* Right: Ce que vous obtenez */}
               <div className="space-y-6">
-                {service.features.map((feature, i) => (
+                <h3 className="text-sm font-semibold uppercase tracking-wider text-accent-blue">
+                  Ce que vous obtenez
+                </h3>
+                {service.offerings.map((offering, i) => (
                   <ScrollReveal key={i} delay={i * 0.1}>
                     <div className="rounded-xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-gray-900">
-                      <h3 className="text-lg font-bold text-gray-900 dark:text-white">
-                        {feature.title}
-                      </h3>
+                      <h4 className="text-lg font-bold text-gray-900 dark:text-white">
+                        {offering.title}
+                      </h4>
                       <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
-                        {feature.description}
+                        {offering.description}
                       </p>
-                      <ul className="mt-4 space-y-2">
-                        {feature.deliverables.map((item) => (
-                          <li key={item} className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
-                            <svg className="h-4 w-4 shrink-0 text-accent-blue" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                            </svg>
-                            {item}
-                          </li>
-                        ))}
-                      </ul>
                     </div>
                   </ScrollReveal>
                 ))}
@@ -225,10 +183,10 @@ export default function ServicesPage() {
         <Container>
           <ScrollReveal className="mx-auto max-w-2xl text-center">
             <h2 className="text-3xl font-bold text-white md:text-4xl">
-              Un projet en tête ?
+              Vous avez un projet web ?
             </h2>
             <p className="mt-4 text-lg text-blue-100">
-              Discutons de vos besoins et je vous proposerai une solution adaptée à votre budget et vos objectifs.
+              Parlons de vos besoins et voyons ensemble comment NMW Studios peut créer un site ou une application qui reflète votre identité et vos ambitions.
             </p>
             <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:justify-center">
               <Button
@@ -245,7 +203,7 @@ export default function ServicesPage() {
                 className="border-white text-white hover:bg-white/10"
                 bounce
               >
-                Voir mes réalisations
+                Voir nos réalisations
               </Button>
             </div>
           </ScrollReveal>

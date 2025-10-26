@@ -70,19 +70,19 @@ export default function ContactPage() {
     const newErrors: Record<string, string> = {}
 
     if (!formData.name.trim()) {
-      newErrors.name = 'Le nom est requis'
+      newErrors.name = 'Nom requis'
     }
 
     if (!formData.email.trim()) {
-      newErrors.email = "L'email est requis"
+      newErrors.email = 'Email requis'
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
       newErrors.email = 'Email invalide'
     }
 
     if (!formData.message.trim()) {
-      newErrors.message = 'Le message est requis'
+      newErrors.message = 'Message requis'
     } else if (formData.message.trim().length < 10) {
-      newErrors.message = 'Le message doit contenir au moins 10 caractères'
+      newErrors.message = 'Minimum 10 caractères'
     }
 
     setErrors(newErrors)
@@ -147,12 +147,12 @@ export default function ContactPage() {
             <h1 className="text-4xl font-bold tracking-tight text-gray-900 dark:text-white md:text-6xl">
               Discutons de{' '}
               <span className="bg-gradient-to-r from-accent-blue to-purple-500 bg-clip-text text-transparent">
-                votre projet
+                votre projet web
               </span>
             </h1>
             <p className="mt-6 text-lg text-gray-600 dark:text-gray-400 md:text-xl">
-              Vous avez un projet en tête ? Décrivez-moi votre besoin et je vous
-              répondrai dans les plus brefs délais avec un devis gratuit et sans
+              Vous avez une idée ou un projet digital ? Décrivez vos besoins, et
+              nous vous répondrons sous 24h avec un devis gratuit et sans
               engagement.
             </p>
           </ScrollReveal>
@@ -202,16 +202,16 @@ export default function ContactPage() {
             <ScrollReveal>
               <div className="rounded-2xl border border-gray-200 bg-white p-8 dark:border-gray-800 dark:bg-gray-900 md:p-12">
                 <h2 className="text-2xl font-bold text-gray-900 dark:text-white md:text-3xl">
-                  Formulaire de contact
+                  Envoyez-nous un message
                 </h2>
                 <p className="mt-2 text-gray-600 dark:text-gray-400">
-                  Remplissez le formulaire ci-dessous et je vous répondrai dans les
-                  24h.
+                  Remplissez le formulaire ci-dessous et nous reviendrons vers vous
+                  rapidement pour discuter de votre projet et de vos objectifs.
                 </p>
 
                 {submitSuccess && (
                   <div className="mt-6 rounded-lg bg-green-500/10 p-4 text-green-600 dark:text-green-400">
-                    ✓ Message envoyé avec succès ! Je vous répondrai très bientôt.
+                    ✓ Votre message a été envoyé avec succès ! Nous reviendrons vers vous très bientôt.
                   </div>
                 )}
 
@@ -416,11 +416,11 @@ export default function ContactPage() {
         <Container>
           <ScrollReveal className="mx-auto max-w-2xl text-center">
             <h2 className="text-3xl font-bold text-gray-900 dark:text-white md:text-4xl">
-              Préférez un contact direct ?
+              Vous préférez un contact direct ?
             </h2>
             <p className="mt-4 text-lg text-gray-600 dark:text-gray-400">
-              Vous pouvez aussi me contacter directement par email pour échanger
-              sur votre projet.
+              Vous pouvez nous écrire directement par email pour échanger sur
+              votre projet.
             </p>
             <div className="mt-8">
               <Button

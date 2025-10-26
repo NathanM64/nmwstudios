@@ -3,7 +3,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { TiltCard } from '@/components/ui/TiltCard'
-import { ExternalLink, Github, ArrowRight } from 'lucide-react'
+import { ExternalLink, ArrowRight } from 'lucide-react'
 
 interface ProjectCardProps {
   slug: string
@@ -120,36 +120,25 @@ export function ProjectCard({ project }: { project: ProjectCardProps }) {
 
           {/* Links - CTA bien visible */}
           <div className="mt-6 space-y-3">
-            {/* Main CTA - Case Study */}
+            {/* Main CTA - Project Details */}
             <Link
               href={`/projets/${project.slug}`}
               className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-accent-blue px-6 py-3 text-sm font-semibold text-white transition-all hover:bg-blue-700 hover:shadow-lg"
             >
-              Voir le case study
+              Découvrir le projet
               <ArrowRight className="h-4 w-4" />
             </Link>
 
-            {/* Secondary CTAs */}
-            <div className="flex gap-3">
-              <a
-                href={project.liveUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex flex-1 items-center justify-center gap-2 rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800"
-              >
-                <ExternalLink className="h-4 w-4" />
-                Démo
-              </a>
-              <a
-                href={project.githubUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex flex-1 items-center justify-center gap-2 rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800"
-              >
-                <Github className="h-4 w-4" />
-                Code
-              </a>
-            </div>
+            {/* Secondary CTA - Live Demo */}
+            <a
+              href={project.liveUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex w-full items-center justify-center gap-2 rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800"
+            >
+              <ExternalLink className="h-4 w-4" />
+              Voir la démo
+            </a>
           </div>
         </div>
       </div>

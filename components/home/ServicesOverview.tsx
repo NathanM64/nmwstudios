@@ -7,11 +7,11 @@ import { ScrollReveal } from '@/components/ui/ScrollReveal';
 const services = [
   {
     title: 'Création de sites web et MVP',
-    description: 'Sites vitrines, landing pages ou MVP rapides pour tester vos idées. Après le lancement, je peux continuer à développer et ajouter des fonctionnalités selon vos besoins et votre budget.',
+    description: 'Sites vitrines, landing pages ou MVP rapides pour tester vos idées et valoriser votre activité. Chaque projet est conçu pour être rapide, fluide et facile à faire évoluer.',
     benefits: [
       'Design moderne et responsive',
-      'Performance optimisée (Lighthouse 90+)',
-      'SEO intégré dès le départ',
+      'Optimisation des performances et du référencement',
+      'Conception pensée pour vos objectifs',
     ],
     icon: (
       <svg className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -21,11 +21,11 @@ const services = [
   },
   {
     title: 'Outils d\'administration / Dashboards',
-    description: 'Création d\'outils d\'administration et de dashboards pour gérer vos contenus et vos données internes.',
+    description: 'Développement d\'interfaces sur mesure pour gérer simplement vos contenus, utilisateurs ou données internes.',
     benefits: [
-      'Interfaces claires et adaptées à vos besoins',
-      'Intégrations API si nécessaire',
-      'Déploiement et hébergement possibles sous ma supervision',
+      'Expérience claire et intuitive',
+      'Intégrations possibles avec vos outils existants',
+      'Hébergement et déploiement inclus si besoin',
     ],
     icon: (
       <svg className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -35,11 +35,11 @@ const services = [
   },
   {
     title: 'Maintenance & Hébergement',
-    description: 'Suivi, mises à jour et évolutions de vos projets existants. Je peux gérer l\'hébergement et le déploiement (Vercel, OVH ou autre infrastructure) pour que tout fonctionne correctement et en toute sécurité.',
+    description: 'Nous assurons le suivi technique et les mises à jour pour garantir stabilité, sécurité et performance à long terme. Un partenaire fiable pour faire évoluer votre projet à votre rythme.',
     benefits: [
-      'Monitoring et mises à jour',
-      'Hébergement géré',
-      'Support technique',
+      'Suivi continu et monitoring',
+      'Hébergement géré selon vos besoins',
+      'Support technique réactif',
     ],
     icon: (
       <svg className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -56,20 +56,23 @@ export function ServicesOverview() {
       <Container>
         <ScrollReveal className="mx-auto max-w-3xl text-center">
           <h2 className="text-3xl font-bold text-gray-900 dark:text-white md:text-5xl">
-            Comment je{' '}
+            Comment nous{' '}
             <span className="bg-gradient-to-r from-accent-blue to-purple-500 bg-clip-text text-transparent">
-              transforme vos projets
+              transformons vos projets
             </span>
           </h2>
           <p className="mt-4 text-lg text-gray-600 dark:text-gray-400">
-            Des solutions techniques adaptées à vos ambitions, du MVP à l&apos;application d&apos;entreprise
+            Des solutions web pensées pour vos besoins réels — du site vitrine au produit digital complet
+          </p>
+          <p className="mt-3 text-base text-gray-600 dark:text-gray-400">
+            Chaque service est pensé pour s&apos;adapter à la taille de votre projet, vos objectifs et votre budget.
           </p>
         </ScrollReveal>
 
         <div className="mt-16 grid gap-8 md:grid-cols-2 [&>*:nth-child(3)]:md:col-span-2 [&>*:nth-child(3)]:md:mx-auto [&>*:nth-child(3)]:md:max-w-2xl">
           {services.map((service, i) => (
             <ScrollReveal key={service.title} delay={i * 0.1}>
-              <div className="service-card group rounded-2xl border border-gray-200 bg-white p-8 transition-all hover:border-accent-blue/50 hover:shadow-lg dark:border-gray-800 dark:bg-gray-900">
+              <div className="service-card group h-full rounded-2xl border border-gray-200 bg-white p-8 transition-all hover:border-accent-blue/50 hover:shadow-lg dark:border-gray-800 dark:bg-gray-900">
               <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-accent-blue/10 text-accent-blue transition-transform group-hover:scale-110">
                 {service.icon}
               </div>
@@ -99,7 +102,7 @@ export function ServicesOverview() {
 
         <ScrollReveal delay={0.4} className="mt-12 rounded-xl border border-gray-200 bg-white/50 p-6 text-center dark:border-gray-800 dark:bg-gray-900/50">
           <p className="text-sm text-gray-600 dark:text-gray-400">
-            Disponibilité limitée pour garantir qualité et suivi. Délais réalistes adaptés à chaque projet.
+            Disponibilité limitée pour garantir un accompagnement personnalisé et une qualité constante.
           </p>
         </ScrollReveal>
       </Container>

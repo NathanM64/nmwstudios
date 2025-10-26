@@ -7,63 +7,74 @@ import type { Metadata } from 'next'
 export const metadata: Metadata = {
   title: 'À propos',
   description:
-    'Développeur web freelance passionné, je crée des solutions web modernes et performantes adaptées à vos besoins.',
+    'NMW Studios, agence web indépendante, conçoit des sites et applications sur mesure alliant design, performance et fiabilité technique.',
 }
 
 const values = [
   {
     title: 'Transparence',
     description:
-      'Délais réalistes, tarifs clairs et communication honnête à chaque étape du projet.',
+      'Délais réalistes, communication honnête et suivi constant à chaque étape du projet.',
   },
   {
     title: 'Qualité',
     description:
-      'Code propre, performances optimisées et respect des bonnes pratiques pour des projets durables.',
+      'Conception web moderne, code maintenable, performances optimisées et solutions évolutives.',
   },
   {
     title: 'Accompagnement',
     description:
-      "Je reste disponible après la livraison pour assurer le suivi et l'évolution de votre projet.",
+      'Support technique et conseils après la livraison pour assurer la réussite de votre projet sur le long terme.',
   },
 ]
 
-const timeline = [
+const methodology = [
   {
-    year: "2024 - Aujourd'hui",
-    title: 'Lead Developer - Handddle',
+    number: '01',
+    title: 'Échange & Compréhension',
     description:
-      "Gestion complète de l'application web, déploiement et infrastructure DevOps. Pilotage technique de la plateforme de gestion d'impressions 3D en temps réel avec connexion directe aux machines. Refonte et évolution de l'architecture.",
-    stack:
-      'React, API Platform, MySQL, DevOps, CI/CD, Systèmes embarqués, Python',
+      'Analyse de vos besoins, objectifs et contraintes pour définir la meilleure solution technique et fonctionnelle.',
   },
   {
-    year: '2024',
-    title: 'Consultant Développeur Web - AWS via Solutec',
+    number: '02',
+    title: 'Conception & Maquettes',
     description:
-      'Automatisation de la modernisation de code legacy (COBOL, PL/I) vers Java Spring et Angular. Gestion des dépendances mainframe, résolution de cas de test et création de CI avec AWS.',
-    stack: 'Java Spring, Angular, AWS, CI/CD',
+      'Création de maquettes et architecture technique validées avec vous avant tout développement.',
   },
   {
-    year: '2023-2024',
-    title: 'Développeur Fullstack - Monsieur Tshirt',
+    number: '03',
+    title: 'Développement & Tests',
     description:
-      'Conception de nouvelles features (backoffice, système de règles de promotion, app React Native/Electron sur Raspberry, e-commerce). Tests end-to-end avec Cypress.',
-    stack: 'ReactJS, NodeJS, GraphQL, PostgreSQL, AWS, Cypress',
+      'Développement itératif avec feedback régulier, tests et optimisation pour garantir performance et qualité.',
   },
   {
-    year: '2021-2023',
-    title: 'Développeur Fullstack - Akigora',
+    number: '04',
+    title: 'Mise en ligne & Suivi',
     description:
-      'Développement de features variées (jobboard, Power BI, système de paiement, agenda, facturation, messagerie, notifications push, refonte parcours inscription). Maintenance plateforme globale.',
-    stack: 'NodeJS, VueJS, MongoDB',
+      'Livraison du projet, accompagnement à la prise en main, suivi et évolutions possibles sur le long terme.',
+  },
+]
+
+const techStack = [
+  {
+    category: 'Frontend',
+    technologies: ['React', 'Next.js', 'VueJS', 'TypeScript', 'Tailwind CSS'],
   },
   {
-    year: '2020-2021',
-    title: 'Développeur Fullstack - Handddle',
-    description:
-      "Gestion des impressions 3D en temps réel, gestion d'inventaires, connexion avec systèmes embarqués. Refonte complète de l'application de PHP/jQuery vers React/API Platform.",
-    stack: 'React, API Platform, MySQL, PHP, jQuery',
+    category: 'Backend',
+    technologies: ['Node.js', 'NestJS'],
+  },
+  {
+    category: 'Bases de données',
+    technologies: ['PostgreSQL', 'MongoDB', 'MySQL'],
+  },
+  {
+    category: 'DevOps & Cloud',
+    technologies: ['Docker', 'AWS', 'CI/CD', 'Vercel'],
+  },
+  {
+    category: 'Autres outils',
+    technologies: ['GraphQL', 'React Native', 'Cypress'],
   },
 ]
 
@@ -73,63 +84,39 @@ export default function AProposPage() {
       {/* Hero Section */}
       <Section className="pt-24 md:pt-32">
         <Container>
-          <div className="grid gap-12 md:grid-cols-2 md:items-center">
-            {/* Texte */}
-            <ScrollReveal>
-              <h1 className="text-4xl font-bold tracking-tight text-gray-900 dark:text-white md:text-6xl">
-                Développeur web{' '}
-                <span className="bg-gradient-to-r from-accent-blue to-purple-500 bg-clip-text text-transparent">
-                  passionné et disponible
-                </span>
-              </h1>
-              <p className="mt-6 text-lg text-gray-600 dark:text-gray-400 md:text-xl">
-                Derrière NMW Studios, il y a <strong>Nathan Marimbordes</strong>
-                , développeur web fullstack avec{' '}
-                <strong>5 ans d&apos;expérience</strong> en entreprise et
-                freelance.
-              </p>
-              <p className="mt-4 text-lg text-gray-600 dark:text-gray-400">
-                Passionné par la qualité du code et la création de solutions
-                robustes, je me suis spécialisé dans le développement
-                d&apos;applications web modernes, scalables et performantes.
-              </p>
-              <p className="mt-4 text-lg text-gray-600 dark:text-gray-400">
-                Aujourd&apos;hui, je mets cette expertise au service des
-                entrepreneurs, PME et startups qui cherchent un partenaire
-                technique fiable pour concrétiser leurs projets.
-              </p>
-            </ScrollReveal>
-
-            {/* Image placeholder / Avatar */}
-            <ScrollReveal delay={0.2}>
-              <div className="relative mx-auto aspect-square w-full max-w-md overflow-hidden rounded-2xl border border-gray-200 bg-gradient-to-br from-accent-blue/20 to-purple-500/20 dark:border-gray-800">
-                <div className="flex h-full items-center justify-center p-8">
-                  <div className="text-center">
-                    <div className="text-6xl font-bold text-gray-900 dark:text-white">
-                      NMW
-                    </div>
-                    <div className="mt-4 text-sm text-gray-600 dark:text-gray-400">
-                      Photo à venir
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </ScrollReveal>
-          </div>
+          <ScrollReveal className="mx-auto max-w-4xl text-center">
+            <h1 className="text-4xl font-bold tracking-tight text-gray-900 dark:text-white md:text-6xl">
+              <span className="bg-gradient-to-r from-accent-blue to-purple-500 bg-clip-text text-transparent">
+                NMW Studios
+              </span>{' '}
+              — Votre partenaire web fiable et sur mesure
+            </h1>
+            <p className="mt-6 text-lg text-gray-600 dark:text-gray-400 md:text-xl">
+              NMW Studios accompagne les entreprises et indépendants dans la
+              conception et le développement de solutions web performantes,
+              modernes et évolutives.
+            </p>
+            <p className="mt-4 text-lg text-gray-600 dark:text-gray-400">
+              Du site vitrine au produit digital complet, notre mission est de
+              transformer vos idées en expériences digitales concrètes et
+              efficaces.
+            </p>
+          </ScrollReveal>
         </Container>
       </Section>
 
-      {/* Mon approche */}
+      {/* Notre approche */}
       <Section>
         <Container>
           <ScrollReveal className="mx-auto max-w-3xl text-center">
             <h2 className="text-3xl font-bold text-gray-900 dark:text-white md:text-4xl">
-              Mon approche
+              Notre approche
             </h2>
             <p className="mt-4 text-lg text-gray-600 dark:text-gray-400">
-              En freelance, je privilégie une collaboration directe, sans
-              intermédiaire. Cela me permet d&apos;être réactif, transparent et
-              pleinement investi dans votre projet.
+              Chez NMW Studios, chaque projet est unique. Nous privilégions une
+              collaboration claire, directe et transparente, pour vous garantir
+              des solutions adaptées à vos besoins réels et une expérience
+              client fluide.
             </p>
           </ScrollReveal>
 
@@ -150,119 +137,63 @@ export default function AProposPage() {
         </Container>
       </Section>
 
-      {/* Parcours */}
+      {/* Qui se cache derrière NMW Studios */}
       <Section className="bg-gray-50 dark:bg-gray-950">
         <Container>
-          <ScrollReveal className="mx-auto max-w-3xl text-center">
-            <h2 className="text-3xl font-bold text-gray-900 dark:text-white md:text-4xl">
-              Mon parcours professionnel
-            </h2>
-            <p className="mt-4 text-lg text-gray-600 dark:text-gray-400">
-              5 ans d&apos;expérience en développement web, de l&apos;alternance
-              au poste de consultant, avec des projets variés et challengeants.
-            </p>
-          </ScrollReveal>
+          <div className="mx-auto max-w-3xl">
+            <ScrollReveal className="text-center">
+              <h2 className="text-3xl font-bold text-gray-900 dark:text-white md:text-4xl">
+                Qui se cache derrière NMW Studios ?
+              </h2>
+            </ScrollReveal>
 
-          <div className="mx-auto mt-16 max-w-4xl space-y-8">
-            {timeline.map((item, i) => (
-              <ScrollReveal key={item.year} delay={i * 0.1}>
-                <div className="rounded-xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-gray-900">
-                  {/* Année en badge */}
-                  <div className="mb-4">
-                    <span className="inline-block rounded-full bg-accent-blue px-4 py-1.5 text-xs font-bold text-white">
-                      {item.year}
-                    </span>
-                  </div>
-
-                  {/* Contenu */}
-                  <h3 className="text-lg font-bold text-gray-900 dark:text-white">
-                    {item.title}
-                  </h3>
-                  <p className="mt-3 text-gray-600 dark:text-gray-400">
-                    {item.description}
-                  </p>
-                  <div className="mt-4">
-                    <span className="text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-500">
-                      Stack :{' '}
-                    </span>
-                    <span className="text-sm text-gray-600 dark:text-gray-400">
-                      {item.stack}
-                    </span>
-                  </div>
-                </div>
-              </ScrollReveal>
-            ))}
+            <ScrollReveal delay={0.2}>
+              <div className="mt-12 rounded-2xl border border-gray-200 bg-white p-8 text-center dark:border-gray-800 dark:bg-gray-900">
+                <p className="text-lg text-gray-600 dark:text-gray-400">
+                  L&apos;agence est dirigée par{' '}
+                  <strong className="text-gray-900 dark:text-white">
+                    Nathan Marimbordes
+                  </strong>
+                  , développeur web fullstack avec plusieurs années
+                  d&apos;expérience en entreprise et freelance. Son expertise
+                  technique garantit que chaque projet est conçu avec rigueur,
+                  fiabilité et créativité.
+                </p>
+              </div>
+            </ScrollReveal>
           </div>
         </Container>
       </Section>
 
-      {/* Formation */}
+      {/* Méthodologie */}
       <Section>
         <Container>
           <ScrollReveal className="mx-auto max-w-3xl text-center">
             <h2 className="text-3xl font-bold text-gray-900 dark:text-white md:text-4xl">
-              Formation
+              Comment nous travaillons
             </h2>
             <p className="mt-4 text-lg text-gray-600 dark:text-gray-400">
-              Un parcours de formation solide en développement web et
-              informatique.
+              Un processus structuré pour garantir que vos projets aboutissent
+              dans les meilleures conditions
             </p>
           </ScrollReveal>
 
-          <div className="mx-auto mt-16 max-w-3xl space-y-6">
-            <ScrollReveal delay={0.1}>
-              <div className="rounded-xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-gray-900">
-                <div className="flex items-start justify-between">
-                  <div>
-                    <h3 className="text-lg font-bold text-gray-900 dark:text-white">
-                      Master Expert Développement Web
-                    </h3>
-                    <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
-                      Ynov - Bordeaux
-                    </p>
+          <div className="mt-16 grid gap-8 md:grid-cols-2">
+            {methodology.map((step, i) => (
+              <ScrollReveal key={step.number} delay={i * 0.1}>
+                <div className="rounded-2xl border border-gray-200 bg-white p-8 dark:border-gray-800 dark:bg-gray-900">
+                  <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-accent-blue/10 text-xl font-bold text-accent-blue">
+                    {step.number}
                   </div>
-                  <span className="text-sm font-medium text-accent-blue">
-                    2021 - 2023
-                  </span>
+                  <h3 className="text-xl font-bold text-gray-900 dark:text-white">
+                    {step.title}
+                  </h3>
+                  <p className="mt-3 text-gray-600 dark:text-gray-400">
+                    {step.description}
+                  </p>
                 </div>
-              </div>
-            </ScrollReveal>
-
-            <ScrollReveal delay={0.2}>
-              <div className="rounded-xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-gray-900">
-                <div className="flex items-start justify-between">
-                  <div>
-                    <h3 className="text-lg font-bold text-gray-900 dark:text-white">
-                      Bachelor Développement Web
-                    </h3>
-                    <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
-                      Ynov - Bordeaux
-                    </p>
-                  </div>
-                  <span className="text-sm font-medium text-accent-blue">
-                    2020 - 2021
-                  </span>
-                </div>
-              </div>
-            </ScrollReveal>
-
-            <ScrollReveal delay={0.3}>
-              <div className="rounded-xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-gray-900">
-                <div className="flex items-start justify-between">
-                  <div>
-                    <h3 className="text-lg font-bold text-gray-900 dark:text-white">
-                      DUT Informatique
-                    </h3>
-                    <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
-                      IUT de Bayonne et du Pays Basque
-                    </p>
-                  </div>
-                  <span className="text-sm font-medium text-accent-blue">
-                    2018 - 2020
-                  </span>
-                </div>
-              </div>
-            </ScrollReveal>
+              </ScrollReveal>
+            ))}
           </div>
         </Container>
       </Section>
@@ -272,139 +203,34 @@ export default function AProposPage() {
         <Container>
           <ScrollReveal className="mx-auto max-w-3xl text-center">
             <h2 className="text-3xl font-bold text-gray-900 dark:text-white md:text-4xl">
-              Technologies que j&apos;utilise
+              Des outils modernes pour des résultats durables
             </h2>
             <p className="mt-4 text-lg text-gray-600 dark:text-gray-400">
-              Je travaille avec des outils modernes et éprouvés pour garantir
-              performance, maintenabilité et évolutivité.
+              Nous travaillons avec des technologies web éprouvées pour garantir
+              fiabilité, performance et évolutivité.
             </p>
           </ScrollReveal>
 
           <div className="mt-16 grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-            <ScrollReveal delay={0.1}>
-              <div className="rounded-2xl border border-gray-200 bg-white p-8 dark:border-gray-800 dark:bg-gray-900">
-                <h3 className="text-xl font-bold text-gray-900 dark:text-white">
-                  Frontend (Maîtrisé)
-                </h3>
-                <div className="mt-4 flex flex-wrap gap-2">
-                  {[
-                    'React',
-                    'Next.js',
-                    'VueJS',
-                    'TypeScript',
-                    'GraphQL',
-                    'jQuery',
-                  ].map((tech) => (
-                    <span
-                      key={tech}
-                      className="rounded-lg bg-accent-blue/10 px-3 py-1 text-sm font-medium text-accent-blue"
-                    >
-                      {tech}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            </ScrollReveal>
-
-            <ScrollReveal delay={0.2}>
-              <div className="rounded-2xl border border-gray-200 bg-white p-8 dark:border-gray-800 dark:bg-gray-900">
-                <h3 className="text-xl font-bold text-gray-900 dark:text-white">
-                  Backend (Maîtrisé)
-                </h3>
-                <div className="mt-4 flex flex-wrap gap-2">
-                  {[
-                    'Node.js',
-                    'NestJS',
-                    'Symfony',
-                    'API Platform',
-                    'Java Spring',
-                  ].map((tech) => (
-                    <span
-                      key={tech}
-                      className="rounded-lg bg-accent-blue/10 px-3 py-1 text-sm font-medium text-accent-blue"
-                    >
-                      {tech}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            </ScrollReveal>
-
-            <ScrollReveal delay={0.3}>
-              <div className="rounded-2xl border border-gray-200 bg-white p-8 dark:border-gray-800 dark:bg-gray-900">
-                <h3 className="text-xl font-bold text-gray-900 dark:text-white">
-                  Bases de données
-                </h3>
-                <div className="mt-4 flex flex-wrap gap-2">
-                  {['PostgreSQL', 'MongoDB', 'MySQL'].map((tech) => (
-                    <span
-                      key={tech}
-                      className="rounded-lg bg-accent-blue/10 px-3 py-1 text-sm font-medium text-accent-blue"
-                    >
-                      {tech}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            </ScrollReveal>
-
-            <ScrollReveal delay={0.4}>
-              <div className="rounded-2xl border border-gray-200 bg-white p-8 dark:border-gray-800 dark:bg-gray-900">
-                <h3 className="text-xl font-bold text-gray-900 dark:text-white">
-                  DevOps & Cloud
-                </h3>
-                <div className="mt-4 flex flex-wrap gap-2">
-                  {['Docker', 'AWS', 'CI/CD', 'Git', 'Vercel'].map((tech) => (
-                    <span
-                      key={tech}
-                      className="rounded-lg bg-accent-blue/10 px-3 py-1 text-sm font-medium text-accent-blue"
-                    >
-                      {tech}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            </ScrollReveal>
-
-            <ScrollReveal delay={0.5}>
-              <div className="rounded-2xl border border-gray-200 bg-white p-8 dark:border-gray-800 dark:bg-gray-900">
-                <h3 className="text-xl font-bold text-gray-900 dark:text-white">
-                  Autres technologies
-                </h3>
-                <div className="mt-4 flex flex-wrap gap-2">
-                  {['Angular', 'React Native', 'Cypress', 'Electron'].map(
-                    (tech) => (
+            {techStack.map((stack, i) => (
+              <ScrollReveal key={stack.category} delay={i * 0.1}>
+                <div className="rounded-2xl border border-gray-200 bg-white p-8 dark:border-gray-800 dark:bg-gray-900">
+                  <h3 className="text-xl font-bold text-gray-900 dark:text-white">
+                    {stack.category}
+                  </h3>
+                  <div className="mt-4 flex flex-wrap gap-2">
+                    {stack.technologies.map((tech) => (
                       <span
                         key={tech}
-                        className="rounded-lg bg-purple-500/10 px-3 py-1 text-sm font-medium text-purple-600 dark:text-purple-400"
+                        className="rounded-lg bg-accent-blue/10 px-3 py-1 text-sm font-medium text-accent-blue"
                       >
                         {tech}
                       </span>
-                    )
-                  )}
+                    ))}
+                  </div>
                 </div>
-              </div>
-            </ScrollReveal>
-
-            <ScrollReveal delay={0.6}>
-              <div className="rounded-2xl border border-gray-200 bg-white p-8 dark:border-gray-800 dark:bg-gray-900">
-                <h3 className="text-xl font-bold text-gray-900 dark:text-white">
-                  Méthodologies
-                </h3>
-                <div className="mt-4 flex flex-wrap gap-2">
-                  {['Scrum', 'Gitflow', 'Clean Code', 'Tests E2E'].map(
-                    (tech) => (
-                      <span
-                        key={tech}
-                        className="rounded-lg bg-emerald-500/10 px-3 py-1 text-sm font-medium text-emerald-600 dark:text-emerald-400"
-                      >
-                        {tech}
-                      </span>
-                    )
-                  )}
-                </div>
-              </div>
-            </ScrollReveal>
+              </ScrollReveal>
+            ))}
           </div>
         </Container>
       </Section>
@@ -414,11 +240,12 @@ export default function AProposPage() {
         <Container>
           <ScrollReveal className="mx-auto max-w-2xl text-center">
             <h2 className="text-3xl font-bold text-white md:text-4xl">
-              Prêt à démarrer un projet ensemble ?
+              Prêt à concrétiser votre projet web ?
             </h2>
             <p className="mt-4 text-lg text-blue-100">
-              Je suis disponible pour discuter de vos besoins et voir comment je
-              peux vous aider à concrétiser votre projet.
+              Discutons de vos besoins et voyons comment NMW Studios peut
+              concevoir un site ou une application qui reflète votre identité et
+              soutient vos ambitions.
             </p>
             <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:justify-center">
               <Button
@@ -427,14 +254,15 @@ export default function AProposPage() {
                 className="bg-white text-accent-blue hover:bg-gray-100"
                 bounce
               >
-                Me contacter
+                Demander un devis
               </Button>
               <Button
-                href="/tarifs"
+                href="/services"
                 variant="outline"
                 className="border-white text-white hover:bg-white/10"
+                bounce
               >
-                Voir les tarifs
+                Voir nos services
               </Button>
             </div>
           </ScrollReveal>

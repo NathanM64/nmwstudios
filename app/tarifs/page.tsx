@@ -7,44 +7,43 @@ import type { Metadata } from 'next'
 export const metadata: Metadata = {
   title: 'Tarifs',
   description:
-    'Tarifs transparents pour mes services de développement web. Devis personnalisé gratuit.',
+    'Tarifs transparents pour nos services de développement web et accompagnement digital. Devis personnalisé gratuit.',
 }
 
 const pricingOptions = [
   {
     name: 'Landing page / MVP',
-    description: 'Page unique ou MVP rapide pour tester une idée',
-    startingPrice: 'À partir de 500 €',
+    description: 'Page unique ou MVP rapide pour présenter votre activité ou tester une idée.',
+    startingPrice: 'À partir de 1 500 €',
     features: [
-      'Pages optimisées pour convertir',
-      'Animations et micro-interactions légères',
-      'Optimisation performance',
-      "Possibilité d'ajouter des intégrations simples",
+      'Design moderne et responsive',
+      'Optimisation performance et SEO',
+      'Structure pensée pour évoluer facilement',
     ],
     highlight: true,
   },
   {
     name: 'Site vitrine',
-    description: 'Site professionnel pour présenter votre activité',
-    startingPrice: 'À partir de 1 000 €',
+    description: 'Site complet pour présenter votre activité et générer des leads qualifiés.',
+    startingPrice: 'À partir de 2 500 €',
     features: [
-      "Jusqu'à 5 pages",
+      "Jusqu'à 5 pages personnalisées",
       'Design moderne et responsive',
       'Formulaire de contact et SEO de base',
-      'Analytics intégré',
+      'Analytics intégrés',
     ],
     highlight: false,
   },
   {
     name: 'Dashboard / Application sur mesure',
     description:
-      "Outil d'administration ou application web pour gérer vos contenus ou données internes",
+      "Outil d'administration, dashboard ou application web complète adaptée à vos besoins métier.",
     startingPrice: 'Sur devis',
+    startingPriceDetail: '(à partir de 4 500 €)',
     features: [
-      'Analyse des besoins et architecture adaptée',
-      'Développement modulaire et tests unitaires',
-      'Déploiement sécurisé',
-      'Maintenance initiale incluse (1 à 2 mois)',
+      'Analyse complète et architecture adaptée',
+      'Développement sur mesure et modulable',
+      'Déploiement sécurisé et support initial inclus',
     ],
     highlight: false,
   },
@@ -53,34 +52,33 @@ const pricingOptions = [
 const maintenanceOptions = [
   {
     name: 'Maintenance minimale',
-    price: '20 €/mois',
+    price: '50 €/mois',
     description: 'Vérifications ponctuelles et backups simples',
     features: [
-      'Vérifications ponctuelles et backups simples',
-      'Support uniquement par email',
-      'Aucune intervention proactive si tout fonctionne bien',
+      'Vérifications régulières',
+      'Support par email',
+      'Intervention si problème constaté',
     ],
   },
   {
-    name: 'Maintenance basique',
-    price: '50 €/mois',
-    description: 'Vérifications régulières et mises à jour légères',
+    name: 'Maintenance standard',
+    price: '100 €/mois',
+    description: 'Maintenance proactive avec mises à jour régulières et suivi léger.',
     features: [
-      'Vérifications régulières, mises à jour légères',
-      'Support email réactif',
-      'Monitoring léger',
+      'Mise à jour des contenus et plugins',
+      'Monitoring léger et corrections ponctuelles',
+      'Support prioritaire',
     ],
     highlight: true,
   },
   {
     name: 'Maintenance complète',
-    price: '100–150 €/mois',
-    description: 'Monitoring et support prioritaire avec optimisations',
+    price: '200 €/mois',
+    description: 'Monitoring avancé, optimisation et support prioritaire pour garantir un fonctionnement optimal à long terme.',
     features: [
-      'Monitoring régulier, corrections ponctuelles',
-      'Optimisations mineures et mises à jour',
-      'Support prioritaire',
-      'Hébergement optionnel inclus',
+      'Hébergement et déploiement inclus si besoin',
+      'Optimisations régulières et mises à jour complètes',
+      'Support prioritaire et intervention rapide',
     ],
   },
 ]
@@ -89,32 +87,32 @@ const faqs = [
   {
     question: "Les tarifs incluent-ils l'hébergement ?",
     answer:
-      "Pour les sites statiques, l'hébergement peut être inclus gratuitement (Vercel, Netlify). Pour les sites plus complexes, comptez 10 € à 30 €/mois selon le trafic. L'hébergement est optionnellement inclus dans la formule Maintenance complète.",
+      "Pour les sites simples, l'hébergement peut être inclus. Pour les projets complexes, nous pouvons gérer l'hébergement dans le cadre de la maintenance complète.",
   },
   {
     question: 'Proposez-vous des paiements échelonnés ?',
     answer:
-      'Oui, pour les projets >1 000 €, possibilité de paiement en 2 ou 3 fois.',
+      'Oui, pour les projets supérieurs à 1 000 €, possibilité de paiement en 2 ou 3 fois.',
   },
   {
     question: 'Quels sont les délais de réalisation ?',
     answer:
-      'Landing page : 1 à 2 semaines. Site vitrine : 2 à 4 semaines. Dashboard / MVP : 3 à 6 semaines selon la complexité.',
+      'Landing page : 1 à 2 semaines. Site vitrine : 2 à 4 semaines. Dashboard / Application sur mesure : 3 à 6 semaines.',
   },
   {
     question: 'Puis-je modifier mon site après livraison ?',
     answer:
-      'Oui, formation à la gestion de contenu incluse. Pour des fonctionnalités supplémentaires, maintenance ponctuelle ou mensuelle possible.',
+      'Oui, la prise en main est incluse. Des fonctionnalités supplémentaires peuvent être ajoutées via maintenance ou nouveaux devis.',
   },
   {
     question: 'Travaillez-vous avec des frameworks spécifiques ?',
     answer:
-      'Next.js, React, TypeScript pour le frontend, Node.js ou autre framework pour le backend.',
+      'Nous utilisons des technologies éprouvées du marché (Next.js, React, TypeScript) qui garantissent des sites performants et pérennes, sans dépendance à des solutions propriétaires.',
   },
   {
     question: 'Proposez-vous des refontes de sites existants ?',
     answer:
-      'Oui, je peux moderniser votre site ou le migrer vers une stack récente. Tarif selon la complexité.',
+      'Oui, modernisation et migration possibles selon vos besoins. Tarif sur devis.',
   },
 ]
 
@@ -128,12 +126,11 @@ export default function TarifsPage() {
             <h1 className="text-4xl font-bold tracking-tight text-gray-900 dark:text-white md:text-6xl">
               Tarifs{' '}
               <span className="bg-gradient-to-r from-accent-blue to-purple-500 bg-clip-text text-transparent">
-                transparents et adaptables
+                clairs et adaptés à votre projet
               </span>
             </h1>
             <p className="mt-6 text-lg text-gray-600 dark:text-gray-400 md:text-xl">
-              Chaque projet est unique. Les montants ci-dessous sont à titre
-              indicatif et seront ajustés selon vos besoins réels.
+              Chaque projet est unique. Les tarifs ci-dessous sont indicatifs et peuvent évoluer selon vos besoins et ambitions.
             </p>
           </ScrollReveal>
         </Container>
@@ -144,10 +141,10 @@ export default function TarifsPage() {
         <Container>
           <ScrollReveal className="mb-12 text-center">
             <h2 className="text-3xl font-bold text-gray-900 dark:text-white md:text-4xl">
-              Création de projets
+              Création de projets web
             </h2>
             <p className="mt-3 text-gray-600 dark:text-gray-400">
-              Tarifs de départ pour les projets les plus courants
+              Nos tarifs de départ pour vos projets les plus fréquents
             </p>
           </ScrollReveal>
 
@@ -184,6 +181,11 @@ export default function TarifsPage() {
                       <span className="ml-2 text-sm text-gray-500 dark:text-gray-400">
                         HT
                       </span>
+                    )}
+                    {option.startingPriceDetail && (
+                      <div className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                        {option.startingPriceDetail}
+                      </div>
                     )}
                   </div>
 
@@ -233,10 +235,10 @@ export default function TarifsPage() {
         <Container>
           <ScrollReveal className="mb-12 text-center">
             <h2 className="text-3xl font-bold text-gray-900 dark:text-white md:text-4xl">
-              Maintenance & Support
+              Maintenance & support technique
             </h2>
             <p className="mt-3 text-gray-600 dark:text-gray-400">
-              Gardez votre projet à jour et performant
+              Assurez la performance et la sécurité de vos projets web
             </p>
           </ScrollReveal>
 
@@ -306,7 +308,7 @@ export default function TarifsPage() {
         <Container>
           <ScrollReveal className="mb-12 text-center">
             <h2 className="text-3xl font-bold text-gray-900 dark:text-white md:text-4xl">
-              Questions fréquentes
+              FAQ – Questions courantes
             </h2>
           </ScrollReveal>
 
@@ -332,10 +334,10 @@ export default function TarifsPage() {
         <Container>
           <ScrollReveal className="mx-auto max-w-2xl text-center">
             <h2 className="text-3xl font-bold text-white md:text-4xl">
-              Besoin d&apos;un devis personnalisé ?
+              Un projet en tête ?
             </h2>
             <p className="mt-4 text-lg text-blue-100">
-              Chaque projet est unique. Discutons de vos besoins pour établir un
+              Chaque projet est unique. Discutons ensemble de vos besoins pour établir un
               devis précis et adapté.
             </p>
             <div className="mt-8">

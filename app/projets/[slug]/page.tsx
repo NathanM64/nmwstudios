@@ -6,7 +6,7 @@ import { Section } from '@/components/ui/Section'
 import { Button } from '@/components/ui/Button'
 import { ScrollReveal } from '@/components/ui/ScrollReveal'
 import { PROJECTS } from '@/lib/constants'
-import { ExternalLink, Github, ArrowLeft, ArrowRight } from 'lucide-react'
+import { ExternalLink, ArrowLeft, ArrowRight } from 'lucide-react'
 import type { Metadata } from 'next'
 
 interface PageProps {
@@ -73,8 +73,8 @@ export default async function ProjectPage({ params }: PageProps) {
                 {project.description}
               </p>
 
-              {/* CTA Buttons - Very Visible */}
-              <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:justify-center">
+              {/* CTA Button - Live Demo */}
+              <div className="mt-8 flex justify-center">
                 <a
                   href={project.liveUrl}
                   target="_blank"
@@ -83,15 +83,6 @@ export default async function ProjectPage({ params }: PageProps) {
                 >
                   <ExternalLink className="h-5 w-5" />
                   Explorer la démo
-                </a>
-                <a
-                  href={project.githubUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center justify-center gap-2 rounded-lg border-2 border-gray-300 bg-white px-8 py-4 text-base font-semibold text-gray-700 transition-colors hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 dark:hover:bg-gray-800"
-                >
-                  <Github className="h-5 w-5" />
-                  Consulter le code sur GitHub
                 </a>
               </div>
             </div>

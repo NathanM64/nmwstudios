@@ -9,11 +9,10 @@ export function FinalCTA() {
       <Container>
         <ScrollReveal className="mx-auto max-w-3xl text-center">
           <h2 className="text-3xl font-bold text-white md:text-5xl">
-            Prêt à donner vie à votre projet ?
+            Donnez vie à votre idée dès maintenant
           </h2>
           <p className="mt-6 text-lg text-blue-100">
-            Que vous ayez besoin d&apos;un site vitrine, d&apos;une refonte technique ou
-            d&apos;une application sur mesure, je suis là pour transformer vos idées en réalité.
+            Parlons de vos besoins et voyons comment NMW Studios peut concevoir un site qui reflète votre identité et soutient vos ambitions.
           </p>
 
           <div className="mt-10 flex flex-col gap-4 sm:flex-row sm:justify-center">
@@ -35,7 +34,7 @@ export function FinalCTA() {
             </Button>
           </div>
 
-          <div className="mt-12 flex items-center justify-center gap-8 text-sm text-blue-100">
+          <div className="mt-12 flex flex-wrap items-center justify-center gap-6 text-sm text-blue-100">
             <div className="flex items-center gap-2">
               <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
@@ -46,7 +45,13 @@ export function FinalCTA() {
               <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
               </svg>
-              <span>Devis personnalisé</span>
+              <span>Devis gratuit et personnalisé</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+              </svg>
+              <span>Sans engagement</span>
             </div>
           </div>
         </ScrollReveal>

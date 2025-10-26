@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/Button'
 import { TiltCard } from '@/components/ui/TiltCard'
 import { ScrollReveal } from '@/components/ui/ScrollReveal'
 import { PROJECTS } from '@/lib/constants'
-import { ExternalLink, Github, ArrowRight } from 'lucide-react'
+import { ExternalLink, ArrowRight } from 'lucide-react'
 
 const projects = PROJECTS
 
@@ -19,12 +19,11 @@ export function ProjectsPreview() {
         <ScrollReveal className="mx-auto max-w-3xl text-center">
           <h2 className="text-3xl font-bold text-gray-900 dark:text-white md:text-5xl">
             <span className="bg-gradient-to-r from-accent-blue to-purple-500 bg-clip-text text-transparent">
-              Projets récents
+              Nos réalisations récentes
             </span>
           </h2>
           <p className="mt-4 text-lg text-gray-600 dark:text-gray-400">
-            Chaque projet illustre une approche sur-mesure, entre design soigné,
-            performance technique et expérience utilisateur fluide.
+            Découvrez une sélection de projets conçus avec soin pour nos clients, du site vitrine à l&apos;application web complète
           </p>
         </ScrollReveal>
 
@@ -99,36 +98,25 @@ export function ProjectsPreview() {
 
                     {/* Links */}
                     <div className="mt-6 space-y-3">
-                      {/* Main CTA - Case Study */}
+                      {/* Main CTA - Project Details */}
                       <Link
                         href={`/projets/${project.slug}`}
                         className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-accent-blue px-6 py-3 text-sm font-semibold text-white transition-all hover:bg-blue-700 hover:shadow-lg"
                       >
-                        Voir le case study
+                        Découvrir le projet
                         <ArrowRight className="h-4 w-4" />
                       </Link>
 
-                      {/* Secondary CTAs */}
-                      <div className="flex gap-3">
-                        <a
-                          href={project.liveUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="inline-flex flex-1 items-center justify-center gap-2 rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800"
-                        >
-                          <ExternalLink className="h-4 w-4" />
-                          Démo
-                        </a>
-                        <a
-                          href={project.githubUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="inline-flex flex-1 items-center justify-center gap-2 rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800"
-                        >
-                          <Github className="h-4 w-4" />
-                          Code
-                        </a>
-                      </div>
+                      {/* Secondary CTA - Live Demo */}
+                      <a
+                        href={project.liveUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex w-full items-center justify-center gap-2 rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800"
+                      >
+                        <ExternalLink className="h-4 w-4" />
+                        Voir la démo
+                      </a>
                     </div>
                   </div>
                 </div>

@@ -30,13 +30,12 @@ export function TechStack() {
       <Container>
         <ScrollReveal className="mx-auto max-w-3xl text-center">
           <h2 className="text-3xl font-bold text-gray-900 dark:text-white md:text-5xl">
-            Stack technique{' '}
             <span className="bg-gradient-to-r from-accent-blue to-purple-500 bg-clip-text text-transparent">
-              moderne
+              Des outils modernes pour des résultats durables
             </span>
           </h2>
           <p className="mt-4 text-lg text-gray-600 dark:text-gray-400">
-            Les technologies que je maîtrise pour créer des applications web performantes
+            Nous utilisons des technologies modernes, reconnues pour leur stabilité et leur évolutivité — sans complexité inutile pour nos clients.
           </p>
         </ScrollReveal>
 
