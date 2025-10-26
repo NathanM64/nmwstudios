@@ -15,6 +15,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://nmwstudios.com'),
   title: {
     default: 'NMW Studios | Développement Web Moderne',
     template: '%s | NMW Studios',
