@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
+import { LoadingAnimation } from "@/components/LoadingAnimation";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -26,6 +27,14 @@ export const metadata: Metadata = {
     locale: 'fr_FR',
     url: 'https://nmwstudios.com',
     siteName: 'NMW Studios',
+    images: [
+      {
+        url: '/logo_nmw.png',
+        width: 1200,
+        height: 630,
+        alt: 'NMW Studios',
+      },
+    ],
   },
 };
 
@@ -39,6 +48,8 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} relative overflow-x-hidden bg-white dark:bg-black antialiased`}
       >
+        <LoadingAnimation />
+
         {/* Animated gradient blobs - fixed background */}
         <div className="pointer-events-none fixed inset-0 -z-10">
           <div className="absolute -left-40 top-0 h-96 w-96 animate-blob rounded-full bg-gradient-to-r from-accent-blue/30 to-purple-500/30 opacity-70 blur-3xl dark:opacity-40" />

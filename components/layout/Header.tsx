@@ -1,26 +1,35 @@
-'use client';
+'use client'
 
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import { Container } from '@/components/ui/Container';
-import { ThemeToggle } from './ThemeToggle';
-import { NAV_LINKS, SITE_CONFIG } from '@/lib/constants';
-import { cn } from '@/lib/utils';
-import { useState } from 'react';
+import Link from 'next/link'
+import Image from 'next/image'
+import { usePathname } from 'next/navigation'
+import { Container } from '@/components/ui/Container'
+import { ThemeToggle } from './ThemeToggle'
+import { NAV_LINKS, SITE_CONFIG } from '@/lib/constants'
+import { cn } from '@/lib/utils'
+import { useState } from 'react'
 
 export function Header() {
-  const pathname = usePathname();
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const pathname = usePathname()
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
   return (
     <header className="sticky top-0 z-50 border-b border-gray-200 bg-white dark:border-gray-800 dark:bg-black">
       <Container>
         <nav className="flex h-16 items-center justify-between">
-          <Link
-            href="/"
-            className="text-xl font-bold text-gray-900 dark:text-white"
-          >
-            {SITE_CONFIG.name}
+          <Link href="/" className="flex items-center gap-2">
+            <Image
+              src="/logo_nmw.png"
+              alt="NMW Studios Logo"
+              width={400}
+              height={400}
+              className="h-12 w-auto object-contain rounded-lg"
+              priority
+              quality={100}
+            />
+            <span className="text-xl font-bold text-gray-900 dark:text-white">
+              {SITE_CONFIG.name}
+            </span>
           </Link>
 
           {/* Desktop Navigation */}
@@ -107,5 +116,5 @@ export function Header() {
         )}
       </Container>
     </header>
-  );
+  )
 }
