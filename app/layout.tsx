@@ -22,6 +22,9 @@ export const metadata: Metadata = {
     template: '%s | NMW Studios',
   },
   description: 'Studio web indépendant spécialisé dans le développement d\'applications web modernes et performantes.',
+  alternates: {
+    canonical: "https://nmwstudios.com",
+  },
   openGraph: {
     type: 'website',
     locale: 'fr_FR',
