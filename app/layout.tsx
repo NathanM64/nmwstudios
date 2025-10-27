@@ -1,19 +1,19 @@
-import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-import { Header } from "@/components/layout/Header";
-import { Footer } from "@/components/layout/Footer";
-import { LoadingAnimation } from "@/components/LoadingAnimation";
-import "./globals.css";
+import type { Metadata } from 'next'
+import { Geist, Geist_Mono } from 'next/font/google'
+import { Header } from '@/components/layout/Header'
+import { Footer } from '@/components/layout/Footer'
+import { LoadingAnimation } from '@/components/LoadingAnimation'
+import './globals.css'
 
 const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
+  variable: '--font-geist-sans',
+  subsets: ['latin'],
+})
 
 const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+  variable: '--font-geist-mono',
+  subsets: ['latin'],
+})
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://nmwstudios.com'),
@@ -21,7 +21,8 @@ export const metadata: Metadata = {
     default: 'NMW Studios | Développement Web Moderne',
     template: '%s | NMW Studios',
   },
-  description: 'Studio web indépendant spécialisé dans le développement d\'applications web modernes et performantes.',
+  description:
+    "Studio web indépendant spécialisé dans le développement d'applications web modernes et performantes.",
   alternates: {
     canonical: 'https://nmwstudios.com',
   },
@@ -39,12 +40,12 @@ export const metadata: Metadata = {
       },
     ],
   },
-};
+}
 
 export default function RootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode;
+  children: React.ReactNode
 }>) {
   return (
     <html lang="fr" suppressHydrationWarning>
@@ -65,5 +66,5 @@ export default function RootLayout({
         <Footer />
       </body>
     </html>
-  );
+  )
 }
