@@ -34,6 +34,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return {
     title: `${project.title} - Case Study`,
     description: project.description,
+    alternates: {
+      canonical: `/projets/${slug}`,
+    },
     openGraph: {
       title: `${project.title} - Case Study | NMW Studios`,
       description: project.description,

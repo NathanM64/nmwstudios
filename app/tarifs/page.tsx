@@ -8,6 +8,15 @@ export const metadata: Metadata = {
   title: 'Tarifs',
   description:
     'Tarifs transparents pour nos services de développement web et accompagnement digital. Devis personnalisé gratuit.',
+  alternates: {
+    canonical: '/tarifs',
+  },
+  openGraph: {
+    title: 'Tarifs | NMW Studios',
+    description: 'Tarifs transparents pour nos services de développement web et accompagnement digital. Devis personnalisé gratuit.',
+    url: '/tarifs',
+    type: 'website',
+  },
 }
 
 const pricingOptions = [

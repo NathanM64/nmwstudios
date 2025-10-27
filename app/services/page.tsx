@@ -7,6 +7,15 @@ import type { Metadata } from 'next';
 export const metadata: Metadata = {
   title: 'Services',
   description: 'Découvrez nos services de création web sur mesure : sites vitrines, MVP, dashboards et maintenance.',
+  alternates: {
+    canonical: '/services',
+  },
+  openGraph: {
+    title: 'Services | NMW Studios',
+    description: 'Découvrez nos services de création web sur mesure : sites vitrines, MVP, dashboards et maintenance.',
+    url: '/services',
+    type: 'website',
+  },
 };
 
 const services = [

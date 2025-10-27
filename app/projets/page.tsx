@@ -9,6 +9,15 @@ import type { Metadata } from 'next'
 export const metadata: Metadata = {
   title: 'Projets',
   description: 'Découvrez nos réalisations en développement web : landing pages, sites vitrines et dashboards SaaS.',
+  alternates: {
+    canonical: '/projets',
+  },
+  openGraph: {
+    title: 'Projets | NMW Studios',
+    description: 'Découvrez nos réalisations en développement web : landing pages, sites vitrines et dashboards SaaS.',
+    url: '/projets',
+    type: 'website',
+  },
 }
 
 export default function ProjetsPage() {
