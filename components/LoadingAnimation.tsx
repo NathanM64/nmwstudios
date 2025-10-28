@@ -10,12 +10,12 @@ export function LoadingAnimation() {
     // Play animation for 5 seconds
     const timer = setTimeout(() => {
       setIsLoading(false)
-    }, 5000)
+    }, 3000)
 
     // Fade out animation
     const fadeOutTimer = setTimeout(() => {
       setIsVisible(false)
-    }, 5300)
+    }, 3300)
 
     return () => {
       clearTimeout(timer)
