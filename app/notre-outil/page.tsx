@@ -2,7 +2,6 @@ import { Container } from '@/components/ui/Container'
 import { Section } from '@/components/ui/Section'
 import { Button } from '@/components/ui/Button'
 import { ScrollReveal } from '@/components/ui/ScrollReveal'
-import Image from 'next/image'
 import type { Metadata } from 'next'
 import { Check, Command, BarChart3, FileText, Users, FolderKanban, Bell, Zap } from 'lucide-react'
 
@@ -115,7 +114,6 @@ export default function NotreOutilPage() {
               <Button
                 href="#waitlist"
                 variant="primary"
-                size="lg"
                 bounce
                 className="bg-green-600 hover:bg-green-700"
               >
@@ -125,7 +123,6 @@ export default function NotreOutilPage() {
               <Button
                 href="#features"
                 variant="outline"
-                size="lg"
                 bounce
               >
                 Découvrir les fonctionnalités
@@ -387,10 +384,10 @@ export default function NotreOutilPage() {
               Dashboard interne, SaaS, plateforme métier : je conçois des outils web modernes et sur mesure.
             </p>
             <div className="mt-10 flex flex-col gap-4 sm:flex-row sm:justify-center">
-              <Button href="/services" variant="primary" size="lg" bounce>
+              <Button href="/services" variant="primary" bounce>
                 Découvrir mes services
               </Button>
-              <Button href="/projets" variant="outline" size="lg" bounce>
+              <Button href="/projets" variant="outline" bounce>
                 Voir mes autres projets
               </Button>
             </div>

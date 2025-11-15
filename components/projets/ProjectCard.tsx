@@ -13,7 +13,7 @@ interface ProjectCardProps {
   tags: readonly string[]
   image: string
   liveUrl: string
-  githubUrl: string
+  githubUrl: string | null
   year: string
   objective: string
   result: string
