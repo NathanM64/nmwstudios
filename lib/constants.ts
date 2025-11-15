@@ -11,6 +11,7 @@ export const SITE_CONFIG = {
 export const NAV_LINKS = [
   { href: '/', label: 'Accueil' },
   { href: '/projets', label: 'Projets' },
+  { href: '/notre-outil', label: 'Notre outil' },
   { href: '/services', label: 'Services' },
   { href: '/tarifs', label: 'Tarifs' },
   { href: '/a-propos', label: 'À propos' },
@@ -18,6 +19,31 @@ export const NAV_LINKS = [
 ] as const;
 
 export const PROJECTS = [
+  {
+    slug: 'nmw-dashboard',
+    title: 'NMW Dashboard',
+    description: 'Dashboard professionnel multi-tenant pour la gestion d\'activité freelance. Gestion clients, devis, factures, projets avec génération PDF, envoi d\'emails automatiques et analytics avancés.',
+    category: 'SaaS Multi-Tenant',
+    tags: ['Next.js 15', 'TypeScript', 'Prisma', 'Supabase', 'NextAuth', 'React-PDF'],
+    image: '/projects/nmw-dashboard-desktop.png',
+    imageMobile: '/projects/nmw-dashboard-mobile.png',
+    liveUrl: 'https://app.nmwstudios.com',
+    githubUrl: null,
+    year: '2024',
+    client: 'NMW Studios (Usage interne)',
+    objective: 'Créer un outil de gestion complet et moderne pour remplacer les solutions existantes trop chères ou obsolètes, et démontrer la capacité du studio à construire des SaaS production-ready.',
+    result: 'Un dashboard multi-tenant complet utilisé quotidiennement en production pour gérer l\'activité de l\'agence. 6 modules fonctionnels, système de permissions avancé, espace client dédié, et notifications automatisées.',
+    highlights: [
+      'Gestion clients avec recherche instantanée et historique',
+      'Devis & Factures avec génération PDF et envoi email',
+      'Dashboard analytics avec comparaison N vs N-1',
+      'Command Palette (⌘K) pour navigation rapide',
+      'Notifications automatiques (relances, rappels)',
+      'Architecture multi-tenant avec isolation des données',
+      'Espace client pour consultation et signature',
+      'Système de permissions RBAC dynamique'
+    ]
+  },
   {
     slug: 'nexus-ai',
     title: 'Nexus AI',

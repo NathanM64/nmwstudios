@@ -10,12 +10,12 @@ export const metadata: Metadata = {
   title: 'Projets',
   description: 'Découvrez nos réalisations en développement web : landing pages, sites vitrines et dashboards SaaS.',
   alternates: {
-    canonical: '/projets',
+    canonical: 'https://nmwstudios.com/projets',
   },
   openGraph: {
     title: 'Projets | NMW Studios',
     description: 'Découvrez nos réalisations en développement web : landing pages, sites vitrines et dashboards SaaS.',
-    url: '/projets',
+    url: 'https://nmwstudios.com/projets',
     type: 'website',
   },
 }

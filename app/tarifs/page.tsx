@@ -9,12 +9,12 @@ export const metadata: Metadata = {
   description:
     'Tarifs transparents pour nos services de développement web et accompagnement digital. Devis personnalisé gratuit.',
   alternates: {
-    canonical: '/tarifs',
+    canonical: 'https://nmwstudios.com/tarifs',
   },
   openGraph: {
     title: 'Tarifs | NMW Studios',
     description: 'Tarifs transparents pour nos services de développement web et accompagnement digital. Devis personnalisé gratuit.',
-    url: '/tarifs',
+    url: 'https://nmwstudios.com/tarifs',
     type: 'website',
   },
 }

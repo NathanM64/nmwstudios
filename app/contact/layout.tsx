@@ -4,12 +4,12 @@ export const metadata: Metadata = {
   title: 'Contact',
   description: 'Contactez NMW Studios pour discuter de votre projet web. Devis gratuit et réponse sous 24h.',
   alternates: {
-    canonical: '/contact',
+    canonical: 'https://nmwstudios.com/contact',
   },
   openGraph: {
     title: 'Contact | NMW Studios',
     description: 'Contactez NMW Studios pour discuter de votre projet web. Devis gratuit et réponse sous 24h.',
-    url: '/contact',
+    url: 'https://nmwstudios.com/contact',
     type: 'website',
   },
 };

@@ -9,12 +9,12 @@ export const metadata: Metadata = {
   description:
     'NMW Studios, agence web indépendante, conçoit des sites et applications sur mesure alliant design, performance et fiabilité technique.',
   alternates: {
-    canonical: '/a-propos',
+    canonical: 'https://nmwstudios.com/a-propos',
   },
   openGraph: {
     title: 'À propos | NMW Studios',
     description: 'NMW Studios, agence web indépendante, conçoit des sites et applications sur mesure alliant design, performance et fiabilité technique.',
-    url: '/a-propos',
+    url: 'https://nmwstudios.com/a-propos',
     type: 'website',
   },
 }

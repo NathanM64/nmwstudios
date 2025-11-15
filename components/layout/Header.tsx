@@ -61,7 +61,7 @@ export function Header() {
             >
               {mobileMenuOpen ? (
                 <svg
-                  className="h-6 w-6"
+                  className="h-6 w-6 text-gray-900 dark:text-white"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -75,7 +75,7 @@ export function Header() {
                 </svg>
               ) : (
                 <svg
-                  className="h-6 w-6"
+                  className="h-6 w-6 text-gray-900 dark:text-white"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
