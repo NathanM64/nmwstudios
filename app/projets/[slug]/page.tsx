@@ -35,11 +35,12 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     title: `${project.title} - Case Study`,
     description: project.description,
     alternates: {
-      canonical: `/projets/${slug}`,
+      canonical: `https://nmwstudios.com/projets/${slug}`,
     },
     openGraph: {
       title: `${project.title} - Case Study | NMW Studios`,
       description: project.description,
+      url: `https://nmwstudios.com/projets/${slug}`,
       images: [project.image],
     },
   }
