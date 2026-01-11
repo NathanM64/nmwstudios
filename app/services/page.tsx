@@ -5,14 +5,14 @@ import { ScrollReveal } from '@/components/ui/ScrollReveal';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Services',
-  description: 'Découvrez nos services de création web sur mesure : sites vitrines, MVP, dashboards et maintenance.',
+  title: 'Services Création Web Bordeaux - Sites Vitrines & Applications',
+  description: 'Services de création web sur mesure : sites vitrines, landing pages, MVP, dashboards SaaS et maintenance. Agence web Bordeaux spécialisée Next.js & React.',
   alternates: {
     canonical: 'https://nmwstudios.com/services',
   },
   openGraph: {
-    title: 'Services | NMW Studios',
-    description: 'Découvrez nos services de création web sur mesure : sites vitrines, MVP, dashboards et maintenance.',
+    title: 'Services Création Web | NMW Studios Bordeaux',
+    description: 'Services de création web sur mesure : sites vitrines, landing pages, MVP, dashboards SaaS et maintenance. Agence web spécialisée Next.js & React.',
     url: 'https://nmwstudios.com/services',
     type: 'website',
   },

@@ -5,15 +5,15 @@ import { ScrollReveal } from '@/components/ui/ScrollReveal'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Tarifs',
+  title: 'Tarifs Création Site Web - Agence Web Bordeaux',
   description:
-    'Tarifs transparents pour nos services de développement web et accompagnement digital. Devis personnalisé gratuit.',
+    'Tarifs clairs pour création de site web : landing page dès 1500€, site vitrine dès 2500€, dashboard sur devis. Agence web à Bordeaux, devis gratuit.',
   alternates: {
     canonical: 'https://nmwstudios.com/tarifs',
   },
   openGraph: {
-    title: 'Tarifs | NMW Studios',
-    description: 'Tarifs transparents pour nos services de développement web et accompagnement digital. Devis personnalisé gratuit.',
+    title: 'Tarifs Création Site Web | NMW Studios',
+    description: 'Tarifs clairs pour création de site web : landing page dès 1500€, site vitrine dès 2500€, dashboard sur devis. Agence web, devis gratuit.',
     url: 'https://nmwstudios.com/tarifs',
     type: 'website',
   },

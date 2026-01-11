@@ -6,14 +6,14 @@ import type { Metadata } from 'next'
 import { Check, Command, BarChart3, FileText, Users, FolderKanban, Bell, Zap } from 'lucide-react'
 
 export const metadata: Metadata = {
-  title: 'NMW Dashboard - Notre Outil',
-  description: 'Le dashboard que j\'utilise pour gérer mon activité freelance. Clients, devis, factures, projets : tout en un seul endroit.',
+  title: 'NMW Dashboard - Outil Gestion Freelance & Micro-Entrepreneur',
+  description: 'Dashboard de gestion pour freelances et micro-entrepreneurs : clients, devis, factures, projets, comptabilité URSSAF. Développé avec Next.js, bientôt disponible en SaaS.',
   alternates: {
     canonical: 'https://nmwstudios.com/notre-outil',
   },
   openGraph: {
-    title: 'NMW Dashboard - Notre Outil | NMW Studios',
-    description: 'Le dashboard que j\'utilise pour gérer mon activité freelance. Bientôt disponible en SaaS.',
+    title: 'NMW Dashboard - Outil Gestion Freelance | NMW Studios',
+    description: 'Dashboard de gestion pour freelances : clients, devis, factures, projets, comptabilité. Bientôt disponible en SaaS.',
     url: 'https://nmwstudios.com/notre-outil',
     type: 'website',
   },

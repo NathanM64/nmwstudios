@@ -5,15 +5,15 @@ import { ScrollReveal } from '@/components/ui/ScrollReveal'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'À propos',
+  title: 'À propos - Agence Web Bordeaux',
   description:
-    'NMW Studios, agence web indépendante, conçoit des sites et applications sur mesure alliant design, performance et fiabilité technique.',
+    'NMW Studios, agence web à Bordeaux. Création de sites et applications sur mesure avec Next.js, React et TypeScript. Expertise, transparence et accompagnement.',
   alternates: {
     canonical: 'https://nmwstudios.com/a-propos',
   },
   openGraph: {
-    title: 'À propos | NMW Studios',
-    description: 'NMW Studios, agence web indépendante, conçoit des sites et applications sur mesure alliant design, performance et fiabilité technique.',
+    title: 'À propos | NMW Studios - Agence Web Bordeaux',
+    description: 'NMW Studios, agence web à Bordeaux. Création de sites et applications sur mesure avec Next.js, React et TypeScript.',
     url: 'https://nmwstudios.com/a-propos',
     type: 'website',
   },

@@ -7,14 +7,14 @@ import { PROJECTS } from '@/lib/constants'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Projets',
-  description: 'Découvrez nos réalisations en développement web : landing pages, sites vitrines et dashboards SaaS.',
+  title: 'Portfolio & Réalisations Web - Agence Web Bordeaux',
+  description: 'Découvrez nos réalisations : landing pages modernes, sites vitrines professionnels et dashboards SaaS. Projets Next.js, React et TypeScript par notre agence web.',
   alternates: {
     canonical: 'https://nmwstudios.com/projets',
   },
   openGraph: {
-    title: 'Projets | NMW Studios',
-    description: 'Découvrez nos réalisations en développement web : landing pages, sites vitrines et dashboards SaaS.',
+    title: 'Portfolio & Réalisations | NMW Studios',
+    description: 'Découvrez nos réalisations : landing pages modernes, sites vitrines professionnels et dashboards SaaS. Projets Next.js, React et TypeScript.',
     url: 'https://nmwstudios.com/projets',
     type: 'website',
   },
