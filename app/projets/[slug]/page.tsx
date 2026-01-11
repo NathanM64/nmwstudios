@@ -222,18 +222,20 @@ export default async function ProjectPage({ params }: PageProps) {
               </p>
             </ScrollReveal>
 
-            {/* Mobile Screenshot */}
-            <ScrollReveal delay={0.2}>
-              <div className="relative mx-auto mt-12 max-w-sm overflow-hidden rounded-2xl border border-gray-200 shadow-xl dark:border-gray-800">
-                <Image
-                  src={project.imageMobile}
-                  alt={`Screenshot mobile de ${project.title}`}
-                  width={375}
-                  height={812}
-                  className="w-full"
-                />
-              </div>
-            </ScrollReveal>
+            {/* Mobile Screenshot - Only show if project has mobile image */}
+            {project.imageMobile && (
+              <ScrollReveal delay={0.2}>
+                <div className="relative mx-auto mt-12 max-w-sm overflow-hidden rounded-2xl border border-gray-200 shadow-xl dark:border-gray-800">
+                  <Image
+                    src={project.imageMobile}
+                    alt={`Screenshot mobile de ${project.title}`}
+                    width={375}
+                    height={812}
+                    className="w-full"
+                  />
+                </div>
+              </ScrollReveal>
+            )}
           </div>
         </Container>
       </Section>

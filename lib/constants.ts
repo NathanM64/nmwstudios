@@ -22,26 +22,28 @@ export const PROJECTS = [
   {
     slug: 'nmw-dashboard',
     title: 'NMW Dashboard',
-    description: 'Dashboard professionnel multi-tenant pour la gestion d\'activité freelance. Gestion clients, devis, factures, projets avec génération PDF, envoi d\'emails automatiques et analytics avancés.',
+    description: 'Dashboard professionnel multi-tenant pour la gestion d\'activité freelance et micro-entrepreneur. Gestion clients, devis, factures, projets, comptabilité avec suivi URSSAF, génération PDF et notifications automatiques.',
     category: 'SaaS Multi-Tenant',
-    tags: ['Next.js 15', 'TypeScript', 'Prisma', 'Supabase', 'NextAuth', 'React-PDF'],
+    tags: ['Next.js 15', 'TypeScript', 'Prisma', 'Supabase', 'NextAuth', 'React-PDF', 'Resend'],
     image: '/projects/nmw-dashboard-desktop.png',
-    imageMobile: '/projects/nmw-dashboard-mobile.png',
+    imageMobile: null,
     liveUrl: 'https://app.nmwstudios.com',
     githubUrl: null,
-    year: '2024',
+    year: '2024-2025',
     client: 'NMW Studios (Usage interne)',
     objective: 'Créer un outil de gestion complet et moderne pour remplacer les solutions existantes trop chères ou obsolètes, et démontrer la capacité du studio à construire des SaaS production-ready.',
-    result: 'Un dashboard multi-tenant complet utilisé quotidiennement en production pour gérer l\'activité de l\'agence. 6 modules fonctionnels, système de permissions avancé, espace client dédié, et notifications automatisées.',
+    result: 'Un dashboard multi-tenant complet utilisé quotidiennement en production. 8 modules fonctionnels incluant un module comptabilité complet pour micro-entrepreneurs, système RBAC avancé, portail client dédié et notifications automatisées.',
     highlights: [
       'Gestion clients avec recherche instantanée et historique',
       'Devis & Factures avec génération PDF et envoi email',
-      'Dashboard analytics avec comparaison N vs N-1',
-      'Command Palette (⌘K) pour navigation rapide',
-      'Notifications automatiques (relances, rappels)',
+      'Module comptabilité micro-entrepreneur (URSSAF, charges, trimestres retraite)',
+      'Suivi dépenses professionnelles avec 14 catégories',
+      'Dashboard analytics avec KPIs et graphiques interactifs',
+      'Gestion d\'équipe avec système RBAC complet',
       'Architecture multi-tenant avec isolation des données',
-      'Espace client pour consultation et signature',
-      'Système de permissions RBAC dynamique'
+      'Portail client pour consultation et signature de devis',
+      'Notifications automatiques (relances, rappels)',
+      'Command Palette (⌘K) pour navigation rapide'
     ]
   },
   {
