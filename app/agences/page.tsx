@@ -1,31 +1,21 @@
-import { cookies } from 'next/headers'
 import { Container } from '@/components/ui/Container'
 import { Section } from '@/components/ui/Section'
 import { Dock } from '@/components/shell/Dock'
 import { ThemeToggle } from '@/components/shell/ThemeToggle'
 import { AudienceSwitch } from '@/components/shell/AudienceSwitch'
-import { AUDIENCE_COOKIE } from '@/lib/shell/audience'
 import { SECTIONS } from '@/lib/shell/sections'
 
-export default async function Page() {
-  const rappelAgence = (await cookies()).get(AUDIENCE_COOKIE)?.value === 'agence'
+export const metadata = { title: 'Pour les agences' }
 
+export default function Page() {
   return (
     <>
       <Dock />
       <main className="pb-28 sm:pb-0 sm:pt-24">
         <Container className="flex items-center justify-between gap-4">
-          <AudienceSwitch current="entreprise" />
+          <AudienceSwitch current="agence" />
           <ThemeToggle />
         </Container>
-
-        {rappelAgence && (
-          <Container>
-            <a href="/agences" className="mt-4 inline-block text-sm text-muted-foreground underline">
-              Revenir à la version agence
-            </a>
-          </Container>
-        )}
 
         {SECTIONS.map(({ id, label }) => (
           <Section key={id} id={id}>
