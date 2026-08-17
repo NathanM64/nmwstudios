@@ -1,3 +1,4 @@
+import { readFileSync } from 'node:fs'
 import { describe, expect, it } from 'vitest'
 import { composite, contrastRatio, parseColor } from '@/lib/color/contrast'
 import { readTokens } from './tokens'
@@ -52,8 +53,17 @@ describe('jetons du thème sombre', () => {
     expect(contrastRatio(solid('--color-accent'), surfaceOverCanvas('--color-surface'))).toBeGreaterThanOrEqual(4.5)
   })
 
-  it("n'anime jamais le rayon de flou", () => {
+  it('déclare le flou du verre dans un jeton statique', () => {
     const css = readTokens('app/globals.css', ':root')
     expect(css['--glass']).toMatch(/blur\(28px\)/)
+  })
+
+  it("n'anime ni le flou ni aucun filtre", () => {
+    const css = readFileSync('app/globals.css', 'utf8')
+    const animations = [...css.matchAll(/(transition|animation)(-property|-name)?\s*:\s*([^;]+);/g)]
+
+    for (const [, propriete, , valeur] of animations) {
+      expect(valeur, `${propriete} vise un filtre : ${valeur}`).not.toMatch(/filter|\ball\b/)
+    }
   })
 })
