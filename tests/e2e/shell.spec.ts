@@ -36,6 +36,21 @@ test('aucune violation axe sérieuse dans les deux thèmes', async ({ page }) =>
   }
 })
 
+test('la page se charge sans erreur ni avertissement de console', async ({ page }) => {
+  const bruit: string[] = []
+  page.on('console', (message) => {
+    if (message.type() === 'error' || message.type() === 'warning') {
+      bruit.push(`${message.type()} : ${message.text()}`)
+    }
+  })
+  page.on('pageerror', (erreur) => bruit.push(`pageerror : ${erreur.message}`))
+
+  await page.goto('/')
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark')
+
+  expect(bruit, bruit.join('\n')).toEqual([])
+})
+
 test.describe('préférence système claire', () => {
   test.use({ colorScheme: 'light' })
 
