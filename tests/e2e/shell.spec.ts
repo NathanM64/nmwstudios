@@ -16,7 +16,7 @@ test('le cookie impose le thème clair dès la première image', async ({ page, 
 
 test('la bascule de thème persiste après rechargement', async ({ page }) => {
   await page.goto('/')
-  await page.getByRole('button', { name: /thème clair/i }).click()
+  await page.getByRole('button', { name: /changer de thème/i }).click()
   await expect(page.locator('html')).toHaveAttribute('data-theme', 'light')
   await page.reload()
   await expect(page.locator('html')).toHaveAttribute('data-theme', 'light')
