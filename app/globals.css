@@ -1,0 +1,72 @@
+@import 'tailwindcss';
+
+/* Direction « Verre » du dashboard. Sombre par défaut, le clair surcharge les mêmes noms. */
+@theme {
+  --color-canvas: #0a0a0f;
+  --color-surface: rgba(255, 255, 255, 0.045);
+  --color-surface-raised: rgba(255, 255, 255, 0.07);
+  --color-foreground: #f4f4f7;
+  --color-muted-foreground: #a3a3ae;
+  --color-accent: #7aa2ff;
+  --color-accent-2: #a878ff;
+  --color-border: rgba(255, 255, 255, 0.09);
+  --color-border-strong: rgba(255, 255, 255, 0.14);
+
+  --radius-sm: 0.5rem;
+  --radius-md: 0.6875rem;
+  --radius-lg: 1.125rem;
+
+  --font-sans: var(--font-manrope), system-ui, sans-serif;
+  --font-mono: var(--font-plex-mono), ui-monospace, monospace;
+
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --dur-micro: 120ms;
+  --dur-std: 220ms;
+  --dur-page: 320ms;
+}
+
+:root {
+  /* Liseré-lentille : le rebond du bas est ce qui fait lire l'épaisseur. */
+  --panel-edge-lit: rgba(255, 255, 255, 0.3);
+  --panel-edge-side: rgba(255, 255, 255, 0.15);
+  --panel-edge-dim: rgba(255, 255, 255, 0.05);
+  --panel-edge-bounce: rgba(255, 255, 255, 0.13);
+
+  --shadow-panel: 0 24px 60px -28px rgba(0, 0, 0, 0.95),
+    0 2px 10px -6px rgba(0, 0, 0, 0.7),
+    inset 0 1px 0 rgba(255, 255, 255, 0.09),
+    inset 4px 4px 14px -10px rgba(255, 255, 255, 0.75),
+    inset 0 -4px 12px -10px rgba(255, 255, 255, 0.45);
+
+  /* ⚠️ Pas de `-webkit-backdrop-filter` manuel : Lightning CSS ne garde que la
+     dernière déclaration et le flou meurt en Chrome. Rayon figé. */
+  --glass: blur(28px) saturate(180%) brightness(1.06);
+
+  --ambient:
+    radial-gradient(900px 520px at 12% -10%, rgba(122, 162, 255, 0.22), transparent 60%),
+    radial-gradient(760px 460px at 92% 2%, rgba(168, 120, 255, 0.18), transparent 58%),
+    radial-gradient(680px 520px at 78% 60%, rgba(96, 214, 214, 0.09), transparent 62%),
+    radial-gradient(720px 560px at 6% 92%, rgba(168, 120, 255, 0.1), transparent 60%);
+}
+
+html {
+  background-color: var(--color-canvas);
+  color-scheme: dark;
+}
+
+body {
+  min-height: 100dvh;
+  background-image: var(--ambient);
+  background-attachment: fixed;
+  color: var(--color-foreground);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+.panel {
+  background-color: var(--color-surface);
+  backdrop-filter: var(--glass);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-panel);
+}
