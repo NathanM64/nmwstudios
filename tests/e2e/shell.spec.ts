@@ -35,3 +35,12 @@ test('aucune violation axe sérieuse dans les deux thèmes', async ({ page }) =>
     expect(serious, `violations en thème ${theme} : ${JSON.stringify(serious, null, 2)}`).toEqual([])
   }
 })
+
+test.describe('préférence système claire', () => {
+  test.use({ colorScheme: 'light' })
+
+  test("le thème clair est posé sans cookie quand le système le demande", async ({ page }) => {
+    await page.goto('/')
+    await expect(page.locator('html')).toHaveAttribute('data-theme', 'light')
+  })
+})
