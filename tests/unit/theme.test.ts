@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it } from 'vitest'
+import { describe, expect, it } from 'vitest'
 import { JSDOM } from 'jsdom'
 import { THEME_COOKIE, themeInitScript } from '@/lib/theme/theme'
 
@@ -24,17 +24,22 @@ describe('themeInitScript', () => {
     expect(boot({ prefersLight: false })).toBe('dark')
   })
 
-  it('respecte une preference systeme claire', () => {
+  it('respecte une préférence système claire', () => {
     expect(boot({ prefersLight: true })).toBe('light')
   })
 
-  it('fait primer le cookie sur la preference systeme', () => {
+  it('fait primer le cookie sur la préférence système', () => {
     expect(boot({ cookie: `${THEME_COOKIE}=dark`, prefersLight: true })).toBe('dark')
     expect(boot({ cookie: `${THEME_COOKIE}=light`, prefersLight: false })).toBe('light')
   })
 
-  it('ignore une valeur de cookie invalide et retombe sur le defaut', () => {
+  it('ignore une valeur de cookie invalide et retombe sur le défaut', () => {
     expect(boot({ cookie: `${THEME_COOKIE}=fuchsia`, prefersLight: false })).toBe('dark')
+  })
+
+  it('ignore une valeur qui commence par un thème valide sans en être un', () => {
+    expect(boot({ cookie: `${THEME_COOKIE}=darkish`, prefersLight: true })).toBe('light')
+    expect(boot({ cookie: `${THEME_COOKIE}=lighthouse`, prefersLight: false })).toBe('dark')
   })
 
   it('tient sur une seule ligne, sans saut, pour etre injecte en attribut', () => {
