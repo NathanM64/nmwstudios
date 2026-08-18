@@ -13,7 +13,7 @@ export default function Page() {
 
           <section className="space-y-1">
             <h2 className="font-mono text-xs uppercase tracking-[0.08em] text-accent">Éditeur</h2>
-            <p>{LEGAL.denomination} — {LEGAL.formeJuridique}</p>
+            <p>{LEGAL.denomination}, {LEGAL.formeJuridique}</p>
             <p>{LEGAL.adresse}</p>
             <p>SIRET : {LEGAL.siret}</p>
             <p>TVA : {LEGAL.tva}</p>
