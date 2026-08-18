@@ -60,6 +60,10 @@ describe('decoder', () => {
     expect(decoder('redaction=999')).toEqual({ redaction: 15 })
   })
 
+  it('ramène à un une quantité sur une option non quantifiable', () => {
+    expect(decoder('blog=3')).toEqual({ blog: 1 })
+  })
+
   it('fait l’aller-retour sans perte', () => {
     const config = { pages: 2, blog: 1, seo: 1, essentiel: 1 }
     expect(decoder(encoder(config))).toEqual(config)

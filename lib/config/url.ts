@@ -15,7 +15,8 @@ export function decoder(recherche: string): Configuration {
     if (!option) continue
     const n = valeur === '' ? 1 : Number(valeur)
     if (!Number.isInteger(n) || n <= 0) continue
-    config[cle] = option.quantifiable ? Math.min(n, option.quantifiable.max) : n
+    // Une option non quantifiable vaut toujours un : sinon un lien trafiqué affiche un delta que le moteur ne facture pas.
+    config[cle] = option.quantifiable ? Math.min(n, option.quantifiable.max) : 1
   }
 
   return config

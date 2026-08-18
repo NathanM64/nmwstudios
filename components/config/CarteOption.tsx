@@ -36,8 +36,7 @@ export function CarteOption({
       <span className="flex flex-col gap-1">
         <span id={titreId} className="text-sm">
           {option.libelle}
-          {/* Non bornée par lib/config/url.ts pour les options non quantifiables :
-              une quantité résiduelle ne doit jamais s'afficher comme un choix. */}
+          {/* lib/config/url.ts ramène toute option non quantifiable à un : le multiplicateur ne concerne que les quantifiables. */}
           {option.quantifiable && quantite > 1 && ` × ${quantite}`}
         </span>
         <span id={descId} className="text-xs text-muted-foreground">

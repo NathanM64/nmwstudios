@@ -30,10 +30,14 @@ export function PanneauOptions({
   return (
     <div className="flex flex-col gap-12">
       {GROUPES.map((groupe) => (
-        <fieldset key={groupe.id} className="border-0 p-0">
-          <legend className="font-mono text-xs uppercase tracking-[0.08em] text-accent">
+        <fieldset key={groupe.id} className="border-0 p-0" aria-labelledby={`legende-${groupe.id}`}>
+          <div
+            id={`legende-${groupe.id}`}
+            data-testid={`legende-${groupe.id}`}
+            className="sticky top-0 z-10 -mx-1 bg-canvas/85 px-1 py-2 font-mono text-xs uppercase tracking-[0.08em] text-accent backdrop-blur-sm"
+          >
             {groupe.titre}
-          </legend>
+          </div>
           <p className="mt-2 max-w-prose text-sm text-muted-foreground">{groupe.intro}</p>
 
           <div className="mt-4 flex flex-col gap-2">
