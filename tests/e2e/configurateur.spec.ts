@@ -81,6 +81,11 @@ test('le delta annonce le montant ajouté', async ({ page }) => {
   await expect(page.getByTestId('delta')).toHaveText('+700 €')
 })
 
+test('ouvrir un lien de configuration partagé n’affiche aucun delta fantôme', async ({ page }) => {
+  await page.goto('/configurateur?blog&pages=2')
+  await expect(page.getByTestId('delta')).toHaveCount(0)
+})
+
 test('la barre reste visible sans défilement', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 })
   await page.goto('/configurateur')

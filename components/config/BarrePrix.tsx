@@ -3,21 +3,30 @@
 import { useEffect, useRef, useState } from 'react'
 import { calculer, formaterEuros, type Configuration } from '@/lib/config/devis'
 
-export function BarrePrix({ config }: { config: Configuration }) {
+export function BarrePrix({ config, pret }: { config: Configuration; pret: boolean }) {
   const devis = calculer(config)
   const precedent = useRef(devis.total)
+  const armee = useRef(false)
   const [delta, setDelta] = useState<{ montant: number; cle: number } | null>(null)
 
   // Le minuteur démonte le delta y compris sous `prefers-reduced-motion`,
   // où `animation: none` ne déclenche jamais `onAnimationEnd`.
   useEffect(() => {
+    if (!pret) return
+    if (!armee.current) {
+      // Première passe une fois l'URL lue : pose la référence sans animer, sinon
+      // la configuration d'un lien partagé s'afficherait comme un delta de l'utilisateur.
+      armee.current = true
+      precedent.current = devis.total
+      return
+    }
     const ecart = devis.total - precedent.current
     precedent.current = devis.total
     if (ecart === 0) return
     setDelta({ montant: ecart, cle: Date.now() })
     const minuteur = setTimeout(() => setDelta(null), 1800)
     return () => clearTimeout(minuteur)
-  }, [devis.total])
+  }, [devis.total, pret])
 
   return (
     <div className="panel fixed inset-x-0 bottom-0 z-40 border-t border-border px-5 py-3 sm:px-8">

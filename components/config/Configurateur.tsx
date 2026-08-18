@@ -17,6 +17,9 @@ export const CONFIG_DEPART: Configuration = { essentiel: 1 }
 export function Configurateur() {
   const [config, setConfig] = useState<Configuration>(CONFIG_DEPART)
   const [scene, setScene] = useState<SceneId>('site')
+  // Faux tant que l'URL n'a pas été lue : la barre de prix s'en sert pour ne pas
+  // animer un delta sur la configuration initiale d'un lien partagé.
+  const [pret, setPret] = useState(false)
 
   // Lu au montage, pas via `searchParams` : ce dernier rend la page dynamique et
   // Next n'y émet plus les préchargements de police dans le `<head>`.
@@ -24,6 +27,7 @@ export function Configurateur() {
     const lue = decoder(location.search)
     // eslint-disable-next-line react-hooks/set-state-in-effect -- lecture ponctuelle de l'URL au montage, pas de resynchronisation en boucle.
     if (Object.keys(lue).length > 0) setConfig(lue)
+    setPret(true)
   }, [])
 
   useEffect(() => {
@@ -70,7 +74,7 @@ export function Configurateur() {
         </div>
       </div>
 
-      <BarrePrix config={config} />
+      <BarrePrix config={config} pret={pret} />
     </main>
   )
 }
