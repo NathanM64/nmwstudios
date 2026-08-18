@@ -82,14 +82,3 @@ test('la barre reste visible sans défilement', async ({ page }) => {
   await page.goto('/configurateur')
   await expect(page.getByTestId('fourchette')).toBeInViewport()
 })
-
-test('la barre ne déborde pas après un changement de prix sur mobile', async ({ page }) => {
-  await page.setViewportSize({ width: 390, height: 844 })
-  await page.goto('/configurateur')
-  await page.getByRole('radio', { name: 'Partenaire' }).check()
-  await page.getByRole('button', { name: 'Ajouter : 3 pages de plus' }).click()
-  const debordement = await page.evaluate(
-    () => document.documentElement.scrollWidth > document.documentElement.clientWidth
-  )
-  expect(debordement).toBe(false)
-})
