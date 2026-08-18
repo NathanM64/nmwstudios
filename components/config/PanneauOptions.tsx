@@ -46,9 +46,12 @@ export function PanneauOptions({
                   <div key={option.id} className="flex items-center justify-between text-sm">
                     <div className="flex items-center gap-2">
                       {option.libelle}
-                      <span onClick={() => onScene(sceneDeOption(option.id))}>
-                        <Infobulle id={option.id} libelle={option.libelle} texte={option.explication} />
-                      </span>
+                      <Infobulle
+                        id={option.id}
+                        libelle={option.libelle}
+                        texte={option.explication}
+                        onOuvrir={() => onScene(sceneDeOption(option.id))}
+                      />
                     </div>
                     <span className="font-mono text-muted-foreground">{formaterEuros(option.prix)}</span>
                   </div>
@@ -60,9 +63,12 @@ export function PanneauOptions({
                   <div key={option.id} className="flex items-center justify-between gap-3 text-sm">
                     <div className="flex items-center gap-2">
                       {option.libelle}
-                      <span onClick={() => onScene(sceneDeOption(option.id))}>
-                        <Infobulle id={option.id} libelle={option.libelle} texte={option.explication} />
-                      </span>
+                      <Infobulle
+                        id={option.id}
+                        libelle={option.libelle}
+                        texte={option.explication}
+                        onOuvrir={() => onScene(sceneDeOption(option.id))}
+                      />
                     </div>
                     <span className="flex items-center gap-2">
                       <button
@@ -122,9 +128,12 @@ export function PanneauOptions({
                       />
                       {option.libelle}
                     </label>
-                    <span onClick={() => onScene(sceneDeOption(option.id))}>
-                      <Infobulle id={option.id} libelle={option.libelle} texte={option.explication} />
-                    </span>
+                    <Infobulle
+                      id={option.id}
+                      libelle={option.libelle}
+                      texte={option.explication}
+                      onOuvrir={() => onScene(sceneDeOption(option.id))}
+                    />
                   </div>
                   <span className="font-mono text-muted-foreground">{suffixePrix(option)}</span>
                 </div>
