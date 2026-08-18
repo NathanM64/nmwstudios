@@ -200,10 +200,16 @@ test('le ratio de contraste est remesuré au changement de thème', async ({ pag
 test('le contraste mesuré ne s’affiche que si l’accessibilité est retenue', async ({ page }) => {
   await page.goto('/configurateur')
   await page.getByTestId('onglet-preuve').click()
-  await expect(page.getByTestId('apercu-a11y')).toHaveCount(0)
 
-  await page.getByRole('checkbox', { name: 'Accessibilité RGAA', exact: true }).check()
+  const a11y = page.getByRole('checkbox', { name: 'Accessibilité RGAA', exact: true })
+
+  // L'assertion négative vient après une apparition constatée : sans cela, on
+  // mesurerait l'absence d'un rendu pas encore arrivé, pas celle de la condition.
+  await a11y.check()
   await expect(page.getByTestId('apercu-a11y')).toBeVisible()
+
+  await a11y.uncheck()
+  await expect(page.getByTestId('apercu-a11y')).toHaveCount(0)
 })
 
 test('le SEO affiche l’extrait de résultat de recherche', async ({ page }) => {
