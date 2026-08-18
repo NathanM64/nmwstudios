@@ -1,57 +1,81 @@
-# NMW Studios - Portfolio
+# NMW Studios — site vitrine
 
-Portfolio professionnel développeur web freelance.
+Site vitrine de NMW Studios, studio web indépendant à Bordeaux. Refonte en
+cours autour d'un langage « Verre » à deux portes (entreprise / agence), un
+dock de navigation et deux thèmes.
 
-## Stack Technique
+## Stack
 
-- **Framework**: Next.js 15 (App Router)
-- **Language**: TypeScript
-- **Styling**: Tailwind CSS v4
-- **Animations**: Motion One
-- **Deployment**: Vercel
+- Next.js 16 (App Router, Turbopack)
+- React 19
+- TypeScript
+- Tailwind CSS v4
+- Vitest (tests unitaires) et Playwright + axe-core (tests e2e et accessibilité)
+- Déploiement : Vercel
+- Gestionnaire de paquets : **yarn uniquement** — aucun `package-lock.json` ne doit exister
 
-## Développement
+## Commandes
 
 ```bash
-# Installer les dépendances
-npm install
+yarn install      # dépendances
 
-# Lancer le serveur de développement
-npm run dev
+yarn dev          # serveur de développement, http://localhost:3000
+yarn build        # build de production
+yarn start        # sert le build de production
 
-# Build production
-npm run build
-
-# Lancer en production
-npm start
+yarn lint         # ESLint
+yarn test         # tests unitaires (Vitest)
+yarn test:e2e     # tests bout en bout (Playwright), servis sur le port 3100
+yarn budget       # mesure le JavaScript de première charge sur /agences
 ```
 
-Le site sera accessible sur [http://localhost:3000](http://localhost:3000).
+`yarn test:e2e` construit et démarre son propre serveur sur le port 3100,
+pas 3000 : ce dernier est souvent occupé par un autre projet, et réutiliser
+un serveur étranger ferait tourner la suite sur la mauvaise application.
 
-## Structure du Projet
+## État actuel
 
-```
-portfolio/
-├── app/                    # Pages Next.js (App Router)
-├── components/
-│   ├── layout/            # Header, Footer, ThemeToggle
-│   ├── ui/                # Composants UI réutilisables
-│   ├── home/              # Composants spécifiques homepage
-│   ├── projets/           # Composants projets
-│   └── contact/           # Formulaire contact
-├── lib/                   # Utilitaires et constantes
-├── content/projets/       # Case studies Markdown
-└── public/                # Assets statiques
-```
+En place :
 
-## Features
+- deux portes réelles, `/` (entreprise) et `/agences` (agence), avec
+  commutateur d'audience et mémorisation du choix en cookie ;
+- un dock de navigation, lisible sur mobile ;
+- deux thèmes (sombre par défaut, clair complet), posés sans flash et sans
+  dépendre de JavaScript côté client pour le premier rendu ;
+- transitions inter-documents natives entre les deux portes ;
+- un repli logo en WebP 96×96 (le SVG reste dû par le propriétaire du projet).
 
-- Dark mode persistant (localStorage)
-- Responsive mobile-first
-- Accessibilité WCAG AA
-- SEO optimisé
-- Performance Lighthouse 90+
+Reste à faire, connu :
 
-## Design System
+- **pages légales absentes** : `/mentions-legales` et `/confidentialite`
+  n'existent pas. Elles exigent des données que seul le propriétaire du
+  projet détient (SIRET, forme juridique, adresse, directeur de publication,
+  TVA) ;
+- **contenu commercial absent** : ce lot ne pose que la coquille, sans texte
+  commercial. Il fait l'objet du lot 1.
 
-Voir `/PROJECT.md` à la racine pour les specs complètes du design system.
+## Contraintes du projet
+
+- yarn uniquement.
+- Aucune librairie d'animation : CSS natif (`animation-timeline`,
+  `@view-transition`).
+- Le rayon de `blur()` ne s'anime jamais ; les animations continues ne
+  portent que sur `opacity` et `transform` (une transition discrète de
+  couleur au survol y échappe).
+- Contraste ≥ 4,5:1 dans les deux thèmes, vérifié par test.
+- Aucun texte long sur une surface de verre.
+- Aucun chiffre affiché qui ne soit mesuré. Aucun client, avis ou référence
+  inventé.
+- Pas de plafond de JavaScript imposé : `yarn budget` mesure et rapporte le
+  poids de la première charge, sans jamais faire échouer la commande.
+  Référence actuelle : 131,3 ko gzip sur `/agences`, plancher constaté de
+  Next 16 avec React 19 sur une page vide, polyfills exclus.
+- Messages de commit en français, sans `Co-Authored-By`.
+
+## Pointeurs
+
+- Spec design : `docs/superpowers/specs/2026-08-17-refonte-vitrine-design.md`
+- Plan du lot 0 : `docs/superpowers/plans/2026-08-17-refonte-vitrine-lot0.md`
+
+Ces deux fichiers ne sont pas suivis par git (`.gitignore` exclut les `.md`
+autres que `README.md` et `CLAUDE.md`) : ils n'existent que localement.
