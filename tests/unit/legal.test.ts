@@ -11,11 +11,13 @@ describe('mentions légales', () => {
       'directeurPublication',
       'tva',
       'email',
+      'telephone',
     ] as const) {
       expect(LEGAL[champ], `mention obligatoire vide : ${champ}`).toBeTruthy()
     }
     expect(LEGAL.hebergeur.nom).toBeTruthy()
     expect(LEGAL.hebergeur.adresse).toBeTruthy()
+    expect(LEGAL.hebergeur.telephone).toBeTruthy()
   })
 
   it('porte un SIRET à quatorze chiffres', () => {

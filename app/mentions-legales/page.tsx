@@ -18,13 +18,15 @@ export default function Page() {
             <p>SIRET : {LEGAL.siret}</p>
             <p>TVA : {LEGAL.tva}</p>
             <p>Directeur de la publication : {LEGAL.directeurPublication}</p>
-            <p>Contact : {LEGAL.email}</p>
+            <p>Contact : <a href={`mailto:${LEGAL.email}`} className="hover:text-foreground">{LEGAL.email}</a></p>
+            <p>Téléphone : <a href="tel:+33689801589" className="hover:text-foreground">{LEGAL.telephone}</a></p>
           </section>
 
           <section className="space-y-1">
             <h2 className="font-mono text-xs uppercase tracking-[0.08em] text-accent">Hébergeur</h2>
             <p>{LEGAL.hebergeur.nom}</p>
             <p>{LEGAL.hebergeur.adresse}</p>
+            <p>Téléphone : {LEGAL.hebergeur.telephone}</p>
           </section>
         </Container>
       </main>

@@ -17,3 +17,9 @@ test('le pied de page renvoie vers les deux pages depuis les deux portes', async
     await expect(page.getByRole('link', { name: /confidentialité/i })).toBeVisible()
   }
 })
+
+test('le lien Accueil du pied de page ramène depuis les mentions légales', async ({ page }) => {
+  await page.goto('/mentions-legales')
+  await page.getByRole('link', { name: 'Accueil' }).click()
+  await expect(page).toHaveURL('/')
+})
