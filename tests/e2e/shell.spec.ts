@@ -91,3 +91,10 @@ test('la page d’accueil précharge ses polices dans le HTML servi', async ({ r
   expect(agences).toContain('as="font"')
   expect(accueil).toContain('as="font"')
 })
+
+test('la police du site est réellement appliquée, pas celle de secours', async ({ page }) => {
+  await page.goto('/')
+  const police = await page.evaluate(() => getComputedStyle(document.body).fontFamily)
+  expect(police).toContain('Manrope')
+  expect(await page.evaluate(() => document.fonts.check('16px Manrope'))).toBe(true)
+})

@@ -19,11 +19,11 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="fr" suppressHydrationWarning>
+    <html lang="fr" className={`${manrope.variable} ${plexMono.variable}`} suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeInitScript() }} />
       </head>
-      <body className={`${manrope.variable} ${plexMono.variable}`}>{children}</body>
+      <body>{children}</body>
     </html>
   )
 }
