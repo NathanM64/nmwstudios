@@ -1,5 +1,7 @@
 import { expect, test } from '@playwright/test'
 import { contrastRatio, parseColor } from '../../lib/color/contrast'
+import { GROUPES, OPTIONS, SOCLE_ID } from '../../lib/config/catalogue'
+import { SCENES, sceneDeOption } from '../../lib/config/scenes'
 
 test('la route du configurateur répond et s’annonce', async ({ page }) => {
   await page.goto('/configurateur')
@@ -312,6 +314,40 @@ test('la scène technique ne montre perf et domaine qu’une fois achetés, chac
   await expect(page.getByTestId('apercu-perf')).toHaveCount(0)
 })
 
+test('le référencement local affiche une fiche d’établissement, sans contredire le SEO', async ({ page }) => {
+  await page.goto('/configurateur')
+  await page.getByRole('button', { name: 'Dans Google', exact: true }).click()
+  await expect(page.getByTestId('apercu-recherche-vide')).toBeVisible()
+  await page.getByRole('checkbox', { name: 'Référencement local' }).check()
+  await expect(page.getByTestId('apercu-seo-local')).toContainText('Bègles')
+  await expect(page.getByTestId('apercu-recherche-vide')).toHaveCount(0)
+})
+
+test('la migration affiche la redirection des adresses de l’ancien site', async ({ page }) => {
+  await page.goto('/configurateur')
+  await page.getByRole('button', { name: 'Technique', exact: true }).click()
+  await expect(page.getByTestId('apercu-technique-vide')).toBeVisible()
+  await page.getByRole('checkbox', { name: 'Migration de votre site actuel' }).check()
+  await expect(page.getByTestId('apercu-migration')).toContainText('redirigées')
+  await expect(page.getByTestId('apercu-technique-vide')).toHaveCount(0)
+})
+
+test('le RGPD affiche une bannière de consentement dans la scène conformité', async ({ page }) => {
+  await page.goto('/configurateur')
+  await page.getByRole('button', { name: 'Conformité', exact: true }).click()
+  await expect(page.getByTestId('apercu-rgpd')).toHaveCount(0)
+  await page.getByRole('checkbox', { name: 'Conformité RGPD' }).check()
+  await expect(page.getByTestId('apercu-rgpd')).toBeVisible()
+})
+
+test('les mentions légales affichent une ligne de pied de page', async ({ page }) => {
+  await page.goto('/configurateur')
+  await page.getByRole('button', { name: 'Conformité', exact: true }).click()
+  await expect(page.getByTestId('apercu-legal')).toHaveCount(0)
+  await page.getByRole('checkbox', { name: 'Mentions légales et CGV' }).check()
+  await expect(page.getByTestId('apercu-legal')).toContainText('Mentions légales')
+})
+
 test('la vignette « Déroulé » atteint la scène de planification sans rien cocher', async ({ page }) => {
   await page.goto('/configurateur')
   await page.getByRole('button', { name: 'Déroulé', exact: true }).click()
@@ -443,4 +479,42 @@ test('la page dit ce qui n’est jamais inclus', async ({ page }) => {
   const bloc = page.getByTestId('jamais-inclus')
   await expect(bloc).toContainText('photographie')
   await expect(bloc).toContainText('logo')
+})
+
+// Options sans traduction visuelle dans l’aperçu aujourd’hui, chacune pour une raison précise.
+const SANS_RENDU = new Set([
+  SOCLE_ID, // acquis d’office, aucun contrôle à cocher
+  'redaction', 'reprise', 'photos', 'visuels', // le contenu réel n’est pas simulé, le gabarit reste fixe
+  'formulaire', 'newsletter', 'paiement', // aucune traduction dans la scène « site » aujourd’hui
+  'article', // se lit sur le blog publié, pas dans cet aperçu
+  'a11y', // le ratio s’affiche dès la scène conformité, indépendamment de l’achat
+  'cadrage', 'formation', 'express', // scène planning : texte fixe, rien ne s’y voit par construction
+])
+
+test('basculer sur sa scène et cocher une option change l’aperçu, pour tout le catalogue', async ({ page }) => {
+  for (const option of OPTIONS.filter((o) => !SANS_RENDU.has(o.id))) {
+    await page.goto(option.id === 'essentiel' ? '/configurateur?blog' : '/configurateur')
+
+    const scene = sceneDeOption(option.id)
+    const libelleScene = SCENES.find((s) => s.id === scene)!.libelle
+    await page.getByRole('button', { name: libelleScene, exact: true }).click()
+
+    // Le ratio de contraste se mesure de façon asynchrone : on le laisse se poser avant
+    // de figer l’état « avant », sinon son apparition seule fausserait le constat.
+    if (scene === 'conformite') await expect(page.getByTestId('apercu-a11y')).toBeVisible()
+
+    const avant = await page.getByTestId('apercu').innerHTML()
+
+    const exclusif = GROUPES.find((g) => g.id === option.groupe)?.exclusif === true
+    if (option.quantifiable) {
+      await page.getByRole('button', { name: `Ajouter : ${option.libelle}` }).click()
+    } else if (exclusif) {
+      await page.getByRole('radio', { name: option.libelle }).check()
+    } else {
+      await page.getByRole('checkbox', { name: option.libelle }).check()
+    }
+
+    const apres = await page.getByTestId('apercu').innerHTML()
+    expect(apres, `« ${option.libelle} » ne change rien dans l’aperçu`).not.toBe(avant)
+  }
 })

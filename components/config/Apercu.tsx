@@ -50,7 +50,7 @@ export function Apercu({ config, scene }: { config: Configuration; scene: SceneI
   const libelles = langue === 'en' ? [...NAV_EN, ...PAGES_SUP.slice(0, tranches * 3)] : pages
 
   return (
-    <div className="panel flex min-h-[26rem] w-full flex-col overflow-hidden">
+    <div data-testid="apercu" className="panel flex min-h-[26rem] w-full flex-col overflow-hidden">
       {scene === 'site' && (
         <div className="animate-apparait flex flex-1 flex-col">
           <header className="flex items-center justify-between gap-3 border-b border-border px-4 py-3">
@@ -108,14 +108,22 @@ export function Apercu({ config, scene }: { config: Configuration; scene: SceneI
       )}
 
       {scene === 'recherche' && (
-        <div className="flex flex-1 items-center p-4">
-          {(config.seo ?? 0) > 0 ? (
+        <div className="flex flex-1 flex-col justify-center gap-2 p-4">
+          {(config.seo ?? 0) > 0 && (
             <div data-testid="apercu-seo" className="animate-apparait w-full rounded-sm border border-border p-2">
               <p className="text-[0.5rem] text-accent">votre-nom.fr</p>
               <p className="text-[0.5rem] text-foreground">Votre métier à Bègles · devis gratuit</p>
               <p className="text-[0.5rem] text-muted-foreground">Description reprise de votre page d’accueil.</p>
             </div>
-          ) : (
+          )}
+          {(config['seo-local'] ?? 0) > 0 && (
+            <div data-testid="apercu-seo-local" className="animate-apparait w-full rounded-sm border border-border p-2">
+              <p className="text-[0.5rem] text-accent">votre-nom.fr</p>
+              <p className="text-[0.5rem] text-foreground">Bègles</p>
+              <p className="text-[0.5rem] text-muted-foreground">Horaires d’ouverture renseignés</p>
+            </div>
+          )}
+          {(config.seo ?? 0) === 0 && (config['seo-local'] ?? 0) === 0 && (
             <p data-testid="apercu-recherche-vide" className="animate-apparait text-[0.5rem] text-muted-foreground">
               Rien à montrer dans les résultats de recherche pour l’instant.
             </p>
@@ -123,11 +131,23 @@ export function Apercu({ config, scene }: { config: Configuration; scene: SceneI
         </div>
       )}
 
-      {scene === 'conformite' && ratio !== null && (
-        <div className="flex flex-1 items-center p-4">
-          <p data-testid="apercu-a11y" className="animate-apparait text-[0.5rem] text-accent">
-            Contraste mesuré : {ratio.toFixed(2)}:1 · {ratio >= 4.5 ? 'conforme AA' : 'sous le seuil AA'}
-          </p>
+      {scene === 'conformite' && (
+        <div className="flex flex-1 flex-col justify-center gap-2 p-4">
+          {ratio !== null && (
+            <p data-testid="apercu-a11y" className="animate-apparait text-[0.5rem] text-accent">
+              Contraste mesuré : {ratio.toFixed(2)}:1 · {ratio >= 4.5 ? 'conforme AA' : 'sous le seuil AA'}
+            </p>
+          )}
+          {(config.rgpd ?? 0) > 0 && (
+            <p data-testid="apercu-rgpd" className="animate-apparait w-fit rounded-sm border border-border px-2 py-1 text-[0.5rem] text-muted-foreground">
+              Bannière de consentement aux cookies
+            </p>
+          )}
+          {(config.legal ?? 0) > 0 && (
+            <p data-testid="apercu-legal" className="animate-apparait text-[0.5rem] text-muted-foreground">
+              Pied de page · Mentions légales
+            </p>
+          )}
         </div>
       )}
 
@@ -143,7 +163,12 @@ export function Apercu({ config, scene }: { config: Configuration; scene: SceneI
               votre-nom.fr · domaine réservé
             </p>
           )}
-          {(config.perf ?? 0) === 0 && (config.domaine ?? 0) === 0 && (
+          {(config.migration ?? 0) > 0 && (
+            <p data-testid="apercu-migration" className="animate-apparait text-[0.5rem] text-muted-foreground">
+              Adresses de l’ancien site redirigées
+            </p>
+          )}
+          {(config.perf ?? 0) === 0 && (config.domaine ?? 0) === 0 && (config.migration ?? 0) === 0 && (
             <p data-testid="apercu-technique-vide" className="animate-apparait text-[0.5rem] text-muted-foreground">
               Rien de technique retenu pour l’instant.
             </p>
