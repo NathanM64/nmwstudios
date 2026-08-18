@@ -5,29 +5,30 @@ import { join } from 'node:path'
 import { describe, expect, it } from 'vitest'
 import { readFirstLoadBytes } from '@/scripts/check-js-budget.mjs'
 
-function fixture(contents: string) {
-  const root = mkdtempSync(join(tmpdir(), 'budget-'))
-  const staticDir = join(root, 'static', 'chunks')
-  mkdirSync(staticDir, { recursive: true })
-  writeFileSync(join(staticDir, 'a.js'), contents)
-  writeFileSync(
-    join(root, 'app-build-manifest.json'),
-    JSON.stringify({ pages: { '/page': ['static/chunks/a.js'] } })
-  )
-  return root
+function fixture(html: string, code: string) {
+  const racine = mkdtempSync(join(tmpdir(), 'poids-'))
+  mkdirSync(join(racine, 'static', 'chunks'), { recursive: true })
+  writeFileSync(join(racine, 'static', 'chunks', 'a.js'), code)
+  writeFileSync(join(racine, 'page.html'), html)
+  return racine
 }
 
 describe('readFirstLoadBytes', () => {
-  it('mesure la taille gzip des fichiers de la route', () => {
-    const root = fixture('console.log("bonjour")')
-    const expected = gzipSync(Buffer.from('console.log("bonjour")')).byteLength
-    expect(readFirstLoadBytes(join(root, 'app-build-manifest.json'), root, '/page')).toBe(expected)
+  it('mesure la taille gzip des scripts injectés', () => {
+    const code = 'console.log("bonjour")'
+    const racine = fixture('<script src="/_next/static/chunks/a.js" async=""></script>', code)
+    expect(readFirstLoadBytes(join(racine, 'page.html'), racine)).toBe(
+      gzipSync(Buffer.from(code)).byteLength
+    )
   })
 
-  it('échoue bruyamment si la route est absente du manifeste', () => {
-    const root = fixture('const x = 1')
-    expect(() => readFirstLoadBytes(join(root, 'app-build-manifest.json'), root, '/inconnue')).toThrow(
-      /route absente du manifeste/i
-    )
+  it('ignore les scripts noModule, que les navigateurs modernes ne chargent pas', () => {
+    const racine = fixture('<script src="/_next/static/chunks/a.js" noModule=""></script>', 'const x = 1')
+    expect(() => readFirstLoadBytes(join(racine, 'page.html'), racine)).toThrow(/aucun script/i)
+  })
+
+  it('échoue bruyamment si le format du rendu a changé', () => {
+    const racine = fixture('<p>rien</p>', 'x')
+    expect(() => readFirstLoadBytes(join(racine, 'page.html'), racine)).toThrow(/aucun script/i)
   })
 })

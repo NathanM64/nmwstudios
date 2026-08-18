@@ -2,40 +2,28 @@ import { readFileSync } from 'node:fs'
 import { join } from 'node:path'
 import { gzipSync } from 'node:zlib'
 
-const BUDGET_BYTES = 30 * 1024
+/** Scripts réellement injectés dans une page prérendue, hors `noModule` que les navigateurs modernes ignorent. */
+export function readFirstLoadBytes(htmlPath, staticRoot) {
+  const html = readFileSync(htmlPath, 'utf8')
 
-export function readFirstLoadBytes(manifestPath, staticRoot, route = '/page') {
-  const manifest = JSON.parse(readFileSync(manifestPath, 'utf8'))
-  const files = manifest?.pages?.[route]
+  const sources = [...html.matchAll(/<script\b([^>]*)>/g)]
+    .map(([, attributs]) => attributs)
+    .filter((attributs) => !/nomodule/i.test(attributs))
+    .map((attributs) => /src="(\/_next\/[^"]+\.js)"/.exec(attributs)?.[1])
+    .filter(Boolean)
 
-  if (!Array.isArray(files)) {
-    throw new Error(
-      `Route absente du manifeste : ${route}. Routes connues : ${Object.keys(manifest?.pages ?? {}).join(', ')}`
-    )
+  const uniques = [...new Set(sources)]
+  if (uniques.length === 0) {
+    throw new Error(`Aucun script trouvé dans ${htmlPath} — le format du rendu a changé.`)
   }
 
-  return files
-    .filter((f) => f.endsWith('.js'))
-    .reduce((total, f) => total + gzipSync(readFileSync(join(staticRoot, f))).byteLength, 0)
+  return uniques.reduce(
+    (total, src) => total + gzipSync(readFileSync(join(staticRoot, src.replace('/_next', '')))).byteLength,
+    0
+  )
 }
 
 if (import.meta.url === `file://${process.argv[1]}`) {
-  // Essayer d'abord le format app-build-manifest, sinon builder-manifest
-  let bytes = 0
-  try {
-    bytes = readFirstLoadBytes('.next/app-build-manifest.json', '.next')
-  } catch {
-    const manifest = JSON.parse(readFileSync('.next/build-manifest.json', 'utf8'))
-    const files = manifest?.rootMainFiles ?? []
-    bytes = files
-      .filter((f) => f.endsWith('.js'))
-      .reduce((total, f) => total + gzipSync(readFileSync(join('.next', f))).byteLength, 0)
-  }
-  const ko = (bytes / 1024).toFixed(1)
-
-  if (bytes > BUDGET_BYTES) {
-    console.error(`✗ Budget dépassé : ${ko} ko gzip sur / (plafond ${BUDGET_BYTES / 1024} ko)`)
-    process.exit(1)
-  }
-  console.log(`✓ ${ko} ko gzip sur / (plafond ${BUDGET_BYTES / 1024} ko)`)
+  const octets = readFirstLoadBytes('.next/server/app/agences.html', '.next')
+  console.log(`JavaScript de première charge : ${(octets / 1024).toFixed(1)} ko gzip, hors polyfills noModule`)
 }

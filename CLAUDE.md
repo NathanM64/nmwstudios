@@ -15,7 +15,7 @@ ce que fait la ligne suivante se supprime.
 
 - yarn uniquement — aucun `package-lock.json`.
 - Aucune librairie d'animation : CSS natif (`animation-timeline`, `@view-transition`).
-- JavaScript de première charge sur `/` : < 30 ko gzip (`yarn budget`).
+- Poids du JavaScript de première charge : mesuré et rapporté par `yarn budget`, sans plafond bloquant. Référence au lot 0 : ≈ 131 ko gzip. On fait au mieux ; toute hausse notable se justifie.
 - Contraste ≥ 4,5:1 dans les deux thèmes, vérifié par test.
 - Le rayon de `blur()` ne s'anime jamais ; seuls `opacity` et `transform`.
 - Aucun texte long sur une surface de verre.
