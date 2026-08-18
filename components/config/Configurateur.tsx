@@ -1,0 +1,29 @@
+'use client'
+
+import { useState } from 'react'
+import { Container } from '@/components/ui/Container'
+import { ThemeToggle } from '@/components/shell/ThemeToggle'
+import { CONFIG_VIDE, type Configuration } from '@/lib/config/devis'
+
+export function Configurateur() {
+  const [config, setConfig] = useState<Configuration>(CONFIG_VIDE)
+
+  return (
+    <main className="pb-40 sm:pt-24">
+      <Container className="flex items-center justify-between gap-4">
+        <h1 className="text-2xl font-semibold tracking-tight">Configurez votre site</h1>
+        <ThemeToggle />
+      </Container>
+
+      <Container className="mt-8 grid gap-8 lg:grid-cols-[1fr_22rem]">
+        <div>
+          <div className="glass aspect-[4/3] w-full" />
+          <p className="mt-2 font-mono text-xs uppercase tracking-[0.08em] text-muted-foreground">
+            aperçu — pas votre futur site
+          </p>
+        </div>
+        <div data-config={Object.keys(config).length} />
+      </Container>
+    </main>
+  )
+}
