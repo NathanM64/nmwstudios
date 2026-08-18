@@ -320,7 +320,8 @@ test('la vignette « Déroulé » atteint la scène de planification sans rien c
 })
 
 test('la scène « Au quotidien » propose un repli sans rien cocher, puis la carte de l’auto-gestion', async ({ page }) => {
-  await page.goto('/configurateur')
+  // Le défaut « essentiel » ne s’applique qu’en l’absence de configuration dans l’URL.
+  await page.goto('/configurateur?blog')
   await page.getByRole('button', { name: 'Au quotidien', exact: true }).click()
   await expect(page.getByTestId('apercu-exploitation-vide')).toBeVisible()
   await expect(page.getByTestId('carte-etat')).toHaveCount(0)
@@ -392,4 +393,38 @@ test('le configurateur est utilisable au clavier seul', async ({ page }) => {
   await page.getByRole('checkbox', { name: 'Un blog' }).focus()
   await page.keyboard.press('Space')
   await expect(page.getByRole('checkbox', { name: 'Un blog' })).toBeChecked()
+})
+
+test('la formule Essentiel est retenue par défaut', async ({ page }) => {
+  await page.goto('/configurateur')
+  await expect(page.getByRole('radio', { name: 'Essentiel' })).toBeChecked()
+  await expect(page.getByTestId('mensuel')).toContainText('90')
+})
+
+test('le suivi mensuel se refuse sans quitter la page', async ({ page }) => {
+  await page.goto('/configurateur')
+  // Le défaut est déjà à 90 € : sans ce constat, décocher ne prouverait rien, le compteur partirait déjà de 0.
+  await expect(page.getByTestId('mensuel')).toContainText('90')
+  await page.getByRole('radio', { name: 'Je m’en occupe moi-même' }).check()
+  await expect(page.getByTestId('mensuel')).toContainText('0 €')
+})
+
+test('une URL explicite prime sur le défaut', async ({ page }) => {
+  await page.goto('/configurateur?blog')
+  await expect(page.getByRole('radio', { name: 'Essentiel' })).not.toBeChecked()
+})
+
+test('le bouton de partage copie l’adresse de la configuration', async ({ page, context }) => {
+  await context.grantPermissions(['clipboard-read', 'clipboard-write'])
+  await page.goto('/configurateur?blog')
+  await page.getByRole('button', { name: 'Copier le lien' }).click()
+  const copie = await page.evaluate(() => navigator.clipboard.readText())
+  expect(copie).toContain('blog')
+})
+
+test('la page dit ce qui n’est jamais inclus', async ({ page }) => {
+  await page.goto('/configurateur')
+  const bloc = page.getByTestId('jamais-inclus')
+  await expect(bloc).toContainText('photographie')
+  await expect(bloc).toContainText('logo')
 })

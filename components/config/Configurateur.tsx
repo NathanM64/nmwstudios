@@ -6,12 +6,16 @@ import { BarrePrix } from '@/components/config/BarrePrix'
 import { Apercu } from '@/components/config/Apercu'
 import { VignettesScene } from '@/components/config/VignettesScene'
 import { Recapitulatif } from '@/components/config/Recapitulatif'
-import { CONFIG_VIDE, type Configuration } from '@/lib/config/devis'
+import { JamaisInclus } from '@/components/config/JamaisInclus'
+import type { Configuration } from '@/lib/config/devis'
 import { decoder, encoder } from '@/lib/config/url'
 import type { SceneId } from '@/lib/config/scenes'
 
+/** Le suivi mensuel est proposé d’emblée, et se refuse par « Je m’en occupe moi-même ». */
+export const CONFIG_DEPART: Configuration = { essentiel: 1 }
+
 export function Configurateur() {
-  const [config, setConfig] = useState<Configuration>(CONFIG_VIDE)
+  const [config, setConfig] = useState<Configuration>(CONFIG_DEPART)
   const [scene, setScene] = useState<SceneId>('site')
 
   // Lu au montage, pas via `searchParams` : ce dernier rend la page dynamique et
@@ -52,8 +56,17 @@ export function Configurateur() {
                     className="rounded-md border border-border px-3 py-1.5 text-sm">
               Recevoir le récapitulatif
             </button>
+            <button
+              type="button"
+              onClick={() => navigator.clipboard.writeText(location.href)}
+              className="rounded-md border border-border px-3 py-1.5 text-sm"
+            >
+              Copier le lien
+            </button>
           </div>
           <Recapitulatif config={config} />
+
+          <JamaisInclus />
         </div>
       </div>
 
