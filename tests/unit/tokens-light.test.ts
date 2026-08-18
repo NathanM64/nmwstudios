@@ -22,6 +22,10 @@ describe('jetons du thème clair', () => {
     expect(contrastRatio(solid(light, '--color-muted-foreground'), fondDePage)).toBeGreaterThanOrEqual(4.5)
   })
 
+  it("tient 4,5:1 pour l'accent sur le fond de page", () => {
+    expect(contrastRatio(solid(light, '--color-accent'), fondDePage)).toBeGreaterThanOrEqual(4.5)
+  })
+
   it('tient 4,5:1 pour le texte courant posé sur un panneau de verre', () => {
     expect(
       contrastRatio(solid(light, '--color-foreground'), surfaceOverCanvas(light, '--color-surface', ambient))

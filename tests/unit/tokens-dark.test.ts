@@ -32,6 +32,10 @@ describe('jetons du thème sombre', () => {
     expect(contrastRatio(solid(dark, '--color-muted-foreground'), fondDePage)).toBeGreaterThanOrEqual(4.5)
   })
 
+  it("tient 4,5:1 pour l'accent sur le fond de page", () => {
+    expect(contrastRatio(solid(dark, '--color-accent'), fondDePage)).toBeGreaterThanOrEqual(4.5)
+  })
+
   it('tient 4,5:1 pour le texte courant posé sur un panneau de verre', () => {
     expect(
       contrastRatio(solid(dark, '--color-foreground'), surfaceOverCanvas(dark, '--color-surface', ambient))
