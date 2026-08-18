@@ -16,8 +16,6 @@ export type Option = {
   groupe: GroupeId
   /** Options répétables : tranches de pages, articles, langues. */
   quantifiable?: { max: number; suffixe: string }
-  /** Effet déclenché sur l'aperçu vivant ; voir components/config/Apercu.tsx. */
-  apercu?: string
 }
 
 export const SOCLE_ID = 'socle'
@@ -45,15 +43,15 @@ export const GROUPES: readonly Groupe[] = [
 
 export const OPTIONS: readonly Option[] = [
   { id: SOCLE_ID, libelle: '1 à 3 pages, formulaire de contact', prix: 1500, unite: 'forfait', groupe: 'socle',
-    explication: 'Le socle : trois pages, un formulaire qui envoie un e-mail, aucune base de données.', apercu: 'socle' },
+    explication: 'Le socle : trois pages, un formulaire qui envoie un e-mail, aucune base de données.' },
 
   { id: 'pages', libelle: '3 pages de plus', prix: 600, unite: 'forfait', groupe: 'volume',
-    quantifiable: { max: 4, suffixe: 'tranche' }, apercu: 'pages',
+    quantifiable: { max: 4, suffixe: 'tranche' },
     explication: 'Chaque tranche ajoute trois pages : services, tarifs, réalisations, à vous de voir.' },
-  { id: 'blog', libelle: 'Un blog', prix: 700, unite: 'forfait', groupe: 'volume', apercu: 'blog',
+  { id: 'blog', libelle: 'Un blog', prix: 700, unite: 'forfait', groupe: 'volume',
     explication: 'Une section actualités que vous alimentez vous-même.' },
   { id: 'langue', libelle: 'Une langue de plus', prix: 800, unite: 'forfait', groupe: 'volume',
-    quantifiable: { max: 3, suffixe: 'langue' }, apercu: 'langue',
+    quantifiable: { max: 3, suffixe: 'langue' },
     explication: 'Le site entier dans une langue supplémentaire, avec un sélecteur.' },
 
   { id: 'redaction', libelle: 'J’écris vos textes', prix: 150, unite: 'forfait', groupe: 'contenu',
@@ -66,18 +64,18 @@ export const OPTIONS: readonly Option[] = [
   { id: 'visuels', libelle: 'Visuels sous licence', prix: 150, unite: 'forfait', groupe: 'contenu',
     explication: 'Sélection d’images libres de droits quand vous n’avez pas les vôtres.' },
 
-  { id: 'formulaire', libelle: 'Formulaire avancé', prix: 400, unite: 'forfait', groupe: 'fonctionnel', apercu: 'formulaire',
+  { id: 'formulaire', libelle: 'Formulaire avancé', prix: 400, unite: 'forfait', groupe: 'fonctionnel',
     explication: 'Plusieurs étapes, pièces jointes, champs conditionnels.' },
-  { id: 'rdv', libelle: 'Prise de rendez-vous', prix: 900, unite: 'forfait', groupe: 'fonctionnel', apercu: 'rdv',
+  { id: 'rdv', libelle: 'Prise de rendez-vous', prix: 900, unite: 'forfait', groupe: 'fonctionnel',
     explication: 'Vos clients réservent un créneau en ligne.' },
   { id: 'newsletter', libelle: 'Newsletter', prix: 500, unite: 'forfait', groupe: 'fonctionnel',
     explication: 'Collecte des adresses et envoi des campagnes.' },
   { id: 'paiement', libelle: 'Paiement en ligne', prix: 1200, unite: 'forfait', groupe: 'fonctionnel',
     explication: 'Encaissement par carte, sans passer par une boutique complète.' },
-  { id: 'membre', libelle: 'Espace membre', prix: 1500, unite: 'forfait', groupe: 'fonctionnel', apercu: 'membre',
+  { id: 'membre', libelle: 'Espace membre', prix: 1500, unite: 'forfait', groupe: 'fonctionnel',
     explication: 'Vos clients se connectent pour accéder à un contenu réservé.' },
 
-  { id: 'seo', libelle: 'Fondations SEO', prix: 600, unite: 'forfait', groupe: 'visibilite', apercu: 'seo',
+  { id: 'seo', libelle: 'Fondations SEO', prix: 600, unite: 'forfait', groupe: 'visibilite',
     explication: 'Structure, métadonnées, données structurées, Search Console.' },
   { id: 'seo-local', libelle: 'Référencement local', prix: 800, unite: 'forfait', groupe: 'visibilite',
     explication: 'Fiche Google, pages par ville, citations locales.' },
@@ -89,14 +87,14 @@ export const OPTIONS: readonly Option[] = [
     explication: 'Rédigées pour votre activité, pas copiées d’un modèle.' },
   { id: 'rgpd', libelle: 'Conformité RGPD', prix: 400, unite: 'forfait', groupe: 'conformite',
     explication: 'Bannière conforme, registre des traitements, politique de confidentialité.' },
-  { id: 'a11y', libelle: 'Accessibilité RGAA', prix: 1200, unite: 'forfait', groupe: 'conformite', apercu: 'a11y',
+  { id: 'a11y', libelle: 'Accessibilité RGAA', prix: 1200, unite: 'forfait', groupe: 'conformite',
     explication: 'Mise en conformité et déclaration. Obligatoire au-delà de 10 salariés et 2 M€ de chiffre d’affaires sur un service grand public, pas en dessous.' },
 
   { id: 'migration', libelle: 'Migration de votre site actuel', prix: 600, unite: 'forfait', groupe: 'technique',
     explication: 'Reprise des contenus et redirections, pour ne rien perdre de votre référencement.' },
   { id: 'domaine', libelle: 'Domaine et e-mails professionnels', prix: 200, unite: 'forfait', groupe: 'technique',
     explication: 'Nom de domaine réservé et adresses configurées.' },
-  { id: 'perf', libelle: 'Optimisation de la vitesse', prix: 500, unite: 'forfait', groupe: 'technique', apercu: 'perf',
+  { id: 'perf', libelle: 'Optimisation de la vitesse', prix: 500, unite: 'forfait', groupe: 'technique',
     explication: 'Mesures avant et après, chiffres à l’appui.' },
   { id: 'express', libelle: 'Livraison accélérée', prix: 30, unite: 'pourcentage', groupe: 'technique',
     explication: 'Votre projet passe devant les autres.' },
@@ -108,13 +106,13 @@ export const OPTIONS: readonly Option[] = [
 
   { id: 'sans-suivi', libelle: 'Je m’en occupe moi-même', prix: 0, unite: 'mensuel', groupe: 'recurrent',
     explication: 'Vous gardez la main sur l’hébergement et les mises à jour. Le site vous appartient de toute façon.' },
-  { id: 'heberg', libelle: 'Hébergement et domaine', prix: 35, unite: 'mensuel', groupe: 'recurrent', apercu: 'heberg',
+  { id: 'heberg', libelle: 'Hébergement et domaine', prix: 35, unite: 'mensuel', groupe: 'recurrent',
     explication: 'Je m’occupe de l’hébergement, du domaine et du certificat.' },
-  { id: 'essentiel', libelle: 'Essentiel', prix: 90, unite: 'mensuel', groupe: 'recurrent', apercu: 'essentiel',
+  { id: 'essentiel', libelle: 'Essentiel', prix: 90, unite: 'mensuel', groupe: 'recurrent',
     explication: 'Hébergement, mises à jour, sauvegardes quotidiennes, surveillance, correctifs.' },
-  { id: 'serenite', libelle: 'Sérénité', prix: 190, unite: 'mensuel', groupe: 'recurrent', apercu: 'serenite',
+  { id: 'serenite', libelle: 'Sérénité', prix: 190, unite: 'mensuel', groupe: 'recurrent',
     explication: 'Essentiel, plus une heure de modifications par mois et une intervention sous 4 h.' },
-  { id: 'partenaire', libelle: 'Partenaire', prix: 390, unite: 'mensuel', groupe: 'recurrent', apercu: 'partenaire',
+  { id: 'partenaire', libelle: 'Partenaire', prix: 390, unite: 'mensuel', groupe: 'recurrent',
     explication: 'Sérénité, plus les évolutions, le suivi d’audience et un rapport mensuel.' },
 ] as const
 
