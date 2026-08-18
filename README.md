@@ -49,9 +49,10 @@ Reste à faire, connu :
 
 - **contenu commercial absent** : ce lot ne pose que la coquille, sans texte
   commercial. Il fait l'objet du lot 1 ;
-- **logo non intégré** : `public/logo.webp` (96×96) a été produit en repli du
-  PNG d'origine, mais aucun composant ne l'affiche — il n'y a pas encore
-  d'en-tête. Le SVG reste dû par le propriétaire du projet.
+- **logo affiché nulle part dans la page** : `public/logo.svg` existe —
+  vectorisé depuis le PNG d'origine, il hérite de la couleur du texte et reste
+  donc lisible dans les deux thèmes — et sert de favicon via `app/icon.svg`.
+  Mais aucun composant ne l'affiche : il n'y a pas encore d'en-tête.
 - **compaction mobile du dock non implémentée** : la spec prévoit qu'il se
   compacte au défilement vers le bas et se rappelle vers le haut. Le dock est
   aujourd'hui simplement fixe en bas d'écran. Son réglage demande du contenu
