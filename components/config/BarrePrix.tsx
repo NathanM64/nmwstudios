@@ -3,7 +3,15 @@
 import { useEffect, useRef, useState } from 'react'
 import { calculer, formaterEuros, type Configuration } from '@/lib/config/devis'
 
-export function BarrePrix({ config, pret }: { config: Configuration; pret: boolean }) {
+export function BarrePrix({
+  config,
+  pret,
+  masquee,
+}: {
+  config: Configuration
+  pret: boolean
+  masquee: boolean
+}) {
   const devis = calculer(config)
   const precedent = useRef({ total: devis.total, mensuel: devis.mensuel })
   const armee = useRef(false)
@@ -34,7 +42,10 @@ export function BarrePrix({ config, pret }: { config: Configuration; pret: boole
   }, [devis.total, devis.mensuel, pret])
 
   return (
-    <div className="fixed inset-x-0 bottom-0 z-40 border-t border-border bg-canvas px-5 py-3 sm:px-8 lg:static lg:shrink-0 lg:bg-transparent">
+    <div
+      data-testid="barre-prix"
+      className={`fixed inset-x-0 bottom-0 z-40 border-t border-border bg-canvas px-5 py-3 sm:px-8 lg:static lg:shrink-0 lg:bg-transparent${masquee ? ' hidden' : ''}`}
+    >
       <div className="mx-auto flex w-full max-w-5xl items-baseline justify-between gap-4">
         <p className="flex min-w-0 flex-wrap items-baseline gap-x-3">
           <span data-testid="fourchette" aria-live="polite" className="font-mono text-lg tabular-nums">

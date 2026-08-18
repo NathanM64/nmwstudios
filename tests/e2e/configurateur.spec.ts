@@ -446,14 +446,15 @@ test('le dock des sections d’accueil n’apparaît pas sur le configurateur', 
 test('aucune adresse n’est jamais demandée, le récapitulatif s’envoie par la messagerie du visiteur', async ({ page }) => {
   await page.goto('/configurateur')
   await expect(page.getByTestId('fourchette')).toBeVisible()
-  await page.getByRole('button', { name: 'Recevoir le récapitulatif' }).click()
+  // .first() : le récapitulatif final de fin de panneau reprend aussi ce bouton.
+  await page.getByRole('button', { name: 'Recevoir le récapitulatif' }).first().click()
   await expect(page.getByRole('textbox', { name: /adresse e-mail/i })).toHaveCount(0)
   await expect(page.getByRole('checkbox', { name: /j’accepte/i })).toHaveCount(0)
 })
 
 test('le récapitulatif n’affiche jamais de montant en euros pour une majoration en pourcentage', async ({ page }) => {
   await page.goto('/configurateur?express')
-  await page.getByRole('button', { name: 'Recevoir le récapitulatif' }).click()
+  await page.getByRole('button', { name: 'Recevoir le récapitulatif' }).first().click()
   const recap = page.getByTestId('recapitulatif')
   await expect(recap).toContainText('+30 %')
   await expect(recap).not.toContainText('30 €')
@@ -461,7 +462,7 @@ test('le récapitulatif n’affiche jamais de montant en euros pour une majorati
 
 test('le récapitulatif multiplie le prix d’une option quantifiable par sa quantité', async ({ page }) => {
   await page.goto('/configurateur?pages=3')
-  await page.getByRole('button', { name: 'Recevoir le récapitulatif' }).click()
+  await page.getByRole('button', { name: 'Recevoir le récapitulatif' }).first().click()
   const recap = page.getByTestId('recapitulatif')
   await expect(recap).toContainText('1 800 €')
   await expect(recap).not.toContainText('600 €')
@@ -469,7 +470,7 @@ test('le récapitulatif multiplie le prix d’une option quantifiable par sa qua
 
 test('le récapitulatif liste les options retenues, et seulement celles-ci', async ({ page }) => {
   await page.goto('/configurateur?blog&seo')
-  await page.getByRole('button', { name: 'Recevoir le récapitulatif' }).click()
+  await page.getByRole('button', { name: 'Recevoir le récapitulatif' }).first().click()
   const recap = page.getByTestId('recapitulatif')
   await expect(recap).toContainText('Un blog')
   await expect(recap).toContainText('Fondations SEO')
@@ -478,7 +479,7 @@ test('le récapitulatif liste les options retenues, et seulement celles-ci', asy
 
 test('le récapitulatif propose un lien mailto qui reprend la configuration', async ({ page }) => {
   await page.goto('/configurateur?blog')
-  await page.getByRole('button', { name: 'Recevoir le récapitulatif' }).click()
+  await page.getByRole('button', { name: 'Recevoir le récapitulatif' }).first().click()
   const lien = page.getByRole('link', { name: /envoyer par e-mail/i })
   await expect(lien).toBeVisible()
   const href = await lien.getAttribute('href')
@@ -535,7 +536,8 @@ test('une URL explicite prime sur le défaut', async ({ page }) => {
 test('le bouton de partage copie l’adresse de la configuration', async ({ page, context }) => {
   await context.grantPermissions(['clipboard-read', 'clipboard-write'])
   await page.goto('/configurateur?blog')
-  await page.getByRole('button', { name: 'Copier le lien' }).click()
+  // .first() : le récapitulatif final de fin de panneau reprend aussi ce bouton.
+  await page.getByRole('button', { name: 'Copier le lien' }).first().click()
   const copie = await page.evaluate(() => navigator.clipboard.readText())
   expect(copie).toContain('blog')
 })
@@ -543,8 +545,8 @@ test('le bouton de partage copie l’adresse de la configuration', async ({ page
 test('copier le lien affiche une confirmation brève', async ({ page, context }) => {
   await context.grantPermissions(['clipboard-read', 'clipboard-write'])
   await page.goto('/configurateur')
-  await page.getByRole('button', { name: 'Copier le lien' }).click()
-  await expect(page.getByRole('button', { name: 'Lien copié' })).toBeVisible()
+  await page.getByRole('button', { name: 'Copier le lien' }).first().click()
+  await expect(page.getByRole('button', { name: 'Lien copié' }).first()).toBeVisible()
 })
 
 test('l’échec de la copie est signalé, pas silencieux', async ({ page }) => {
@@ -555,8 +557,8 @@ test('l’échec de la copie est signalé, pas silencieux', async ({ page }) => 
       configurable: true,
     })
   })
-  await page.getByRole('button', { name: 'Copier le lien' }).click()
-  await expect(page.getByRole('button', { name: /échec/i })).toBeVisible()
+  await page.getByRole('button', { name: 'Copier le lien' }).first().click()
+  await expect(page.getByRole('button', { name: /échec/i }).first()).toBeVisible()
 })
 
 test('la page dit ce qui n’est jamais inclus', async ({ page }) => {
@@ -670,4 +672,16 @@ test('le défilement au clavier fonctionne toujours dans le panneau', async ({ p
   const avant = await panneau.evaluate((el) => el.scrollTop)
   await page.keyboard.press('PageDown')
   await expect.poll(() => panneau.evaluate((el) => el.scrollTop)).toBeGreaterThan(avant)
+})
+
+test('en bas du panneau, le récapitulatif final remplace la barre fixe, et l’inverse en haut', async ({ page }) => {
+  await page.setViewportSize({ width: 1600, height: 900 })
+  await page.goto('/configurateur')
+
+  await expect(page.getByTestId('barre-prix')).toBeVisible()
+  await expect(page.getByTestId('recapitulatif-final')).not.toBeInViewport()
+
+  await page.getByTestId('recapitulatif-final').scrollIntoViewIfNeeded()
+  await expect(page.getByTestId('recapitulatif-final')).toBeInViewport()
+  await expect(page.getByTestId('barre-prix')).toBeHidden()
 })

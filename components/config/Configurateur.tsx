@@ -6,6 +6,8 @@ import { BarrePrix } from '@/components/config/BarrePrix'
 import { Apercu } from '@/components/config/Apercu'
 import { VignettesScene } from '@/components/config/VignettesScene'
 import { Recapitulatif } from '@/components/config/Recapitulatif'
+import { RecapitulatifFinal } from '@/components/config/RecapitulatifFinal'
+import { BoutonsAction } from '@/components/config/BoutonsAction'
 import { JamaisInclus } from '@/components/config/JamaisInclus'
 import type { Configuration } from '@/lib/config/devis'
 import { decoder, encoder } from '@/lib/config/url'
@@ -21,9 +23,11 @@ export function Configurateur() {
   // animer un delta sur la configuration initiale d'un lien partagé.
   const [pret, setPret] = useState(false)
   const [copie, setCopie] = useState<'succes' | 'echec' | null>(null)
+  const [recapVisible, setRecapVisible] = useState(false)
 
   const grilleRef = useRef<HTMLDivElement>(null)
   const panneauRef = useRef<HTMLDivElement>(null)
+  const recapRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     if (!copie) return
@@ -50,6 +54,15 @@ export function Configurateur() {
 
     grille.addEventListener('wheel', rediriger, { passive: false })
     return () => grille.removeEventListener('wheel', rediriger)
+  }, [])
+
+  // Le récapitulatif final et la barre fixe ne coexistent jamais.
+  useEffect(() => {
+    const cible = recapRef.current
+    if (!cible) return
+    const observateur = new IntersectionObserver(([entree]) => setRecapVisible(entree.isIntersecting))
+    observateur.observe(cible)
+    return () => observateur.disconnect()
   }, [])
 
   const copierLien = () => {
@@ -97,27 +110,18 @@ export function Configurateur() {
             <PanneauOptions config={config} onChange={setConfig} onScene={setScene} />
           </div>
 
-          <div className="mt-8 flex flex-wrap gap-3">
-            <button type="button" popoverTarget="recapitulatif"
-                    className="rounded-md border border-border px-3 py-1.5 text-sm">
-              Recevoir le récapitulatif
-            </button>
-            <button
-              type="button"
-              onClick={copierLien}
-              aria-live="polite"
-              className="rounded-md border border-border px-3 py-1.5 text-sm"
-            >
-              {copie === 'succes' ? 'Lien copié' : copie === 'echec' ? 'Échec de la copie' : 'Copier le lien'}
-            </button>
+          <div className="mt-8">
+            <BoutonsAction copie={copie} onCopier={copierLien} />
           </div>
           <Recapitulatif config={config} />
 
           <JamaisInclus />
+
+          <RecapitulatifFinal ref={recapRef} config={config} copie={copie} onCopier={copierLien} />
         </div>
       </div>
 
-      <BarrePrix config={config} pret={pret} />
+      <BarrePrix config={config} pret={pret} masquee={recapVisible} />
     </main>
   )
 }
