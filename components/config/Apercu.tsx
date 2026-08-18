@@ -1,21 +1,17 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { OPTIONS } from '@/lib/config/catalogue'
 import type { Configuration } from '@/lib/config/devis'
 import { contrastRatio, parseColor } from '@/lib/color/contrast'
 import type { SceneId } from '@/lib/config/scenes'
 
 const PAGES_BASE = ['Accueil', 'Services', 'Contact']
-const PAGES_SUP = ['Tarifs', 'Réalisations', 'À propos', 'Équipe', 'FAQ', 'Blog', 'Presse', 'Partenaires', 'Recrutement', 'Mentions', 'Plan', 'Aide']
+export const PAGES_SUP = ['Tarifs', 'Réalisations', 'À propos', 'Équipe', 'FAQ', 'Blog', 'Presse', 'Partenaires', 'Recrutement', 'Mentions', 'Plan', 'Aide']
 const NAV_EN = ['Home', 'Services', 'Contact']
 
-const CARTES: Record<string, string> = {
-  heberg: 'votre-nom.fr · certificat valide',
-  essentiel: 'Sauvegarde quotidienne · restauration en 1 h',
-  serenite: 'Surveillance active · intervention sous 4 h',
-  partenaire: 'Évolutions · rapport mensuel',
-  'sans-suivi': 'Vous gardez la main · aucun engagement mensuel',
-}
+/** Dérivé du catalogue : une formule y ajoutée porte sa carte, sinon elle n'apparaît pas ici. */
+const OPTIONS_RECURRENTES = OPTIONS.filter((o) => o.groupe === 'recurrent')
 
 /** Contraste réellement rendu : lu sur le DOM, jamais écrit en dur. */
 function useContrasteMesure(actif: boolean): number | null {
@@ -46,7 +42,7 @@ export function Apercu({ config, scene }: { config: Configuration; scene: SceneI
   const langues = config.langue ?? 0
   const [langue, setLangue] = useState('fr')
   const ratio = useContrasteMesure(scene === 'conformite')
-  const formule = ['partenaire', 'serenite', 'essentiel', 'heberg', 'sans-suivi'].find((id) => (config[id] ?? 0) > 0)
+  const formule = OPTIONS_RECURRENTES.find((o) => (config[o.id] ?? 0) > 0)
   const libelles = langue === 'en' ? [...NAV_EN, ...PAGES_SUP.slice(0, tranches * 3)] : pages
 
   return (
@@ -180,7 +176,7 @@ export function Apercu({ config, scene }: { config: Configuration; scene: SceneI
         <div className="flex flex-1 items-center p-4">
           {formule ? (
             <p data-testid="carte-etat" className="animate-apparait rounded-sm border border-border px-2 py-1 text-[0.5rem] text-muted-foreground">
-              {CARTES[formule]}
+              {formule.carte}
             </p>
           ) : (
             <p data-testid="apercu-exploitation-vide" className="animate-apparait text-[0.5rem] text-muted-foreground">

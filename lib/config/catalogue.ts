@@ -1,4 +1,3 @@
-// lib/config/catalogue.ts
 export type Unite = 'forfait' | 'mensuel' | 'pourcentage'
 
 export type GroupeId =
@@ -16,6 +15,8 @@ export type Option = {
   groupe: GroupeId
   /** Options répétables : tranches de pages, articles, langues. */
   quantifiable?: { max: number; suffixe: string }
+  /** Texte de la carte d’état affichée dans l’aperçu, groupe récurrent uniquement. */
+  carte?: string
 }
 
 export const SOCLE_ID = 'socle'
@@ -105,15 +106,20 @@ export const OPTIONS: readonly Option[] = [
     explication: 'Deux heures, une à deux personnes.' },
 
   { id: 'sans-suivi', libelle: 'Je m’en occupe moi-même', prix: 0, unite: 'mensuel', groupe: 'recurrent',
-    explication: 'Vous gardez la main sur l’hébergement et les mises à jour. Le site vous appartient de toute façon.' },
+    explication: 'Vous gardez la main sur l’hébergement et les mises à jour. Le site vous appartient de toute façon.',
+    carte: 'Vous gardez la main · aucun engagement mensuel' },
   { id: 'heberg', libelle: 'Hébergement et domaine', prix: 35, unite: 'mensuel', groupe: 'recurrent',
-    explication: 'Je m’occupe de l’hébergement, du domaine et du certificat.' },
+    explication: 'Je m’occupe de l’hébergement, du domaine et du certificat.',
+    carte: 'votre-nom.fr · certificat valide' },
   { id: 'essentiel', libelle: 'Essentiel', prix: 90, unite: 'mensuel', groupe: 'recurrent',
-    explication: 'Hébergement, mises à jour, sauvegardes quotidiennes, surveillance, correctifs.' },
+    explication: 'Hébergement, mises à jour, sauvegardes quotidiennes, surveillance, correctifs.',
+    carte: 'Sauvegarde quotidienne · restauration en 1 h' },
   { id: 'serenite', libelle: 'Sérénité', prix: 190, unite: 'mensuel', groupe: 'recurrent',
-    explication: 'Essentiel, plus une heure de modifications par mois et une intervention sous 4 h.' },
+    explication: 'Essentiel, plus une heure de modifications par mois et une intervention sous 4 h.',
+    carte: 'Surveillance active · intervention sous 4 h' },
   { id: 'partenaire', libelle: 'Partenaire', prix: 390, unite: 'mensuel', groupe: 'recurrent',
-    explication: 'Sérénité, plus les évolutions, le suivi d’audience et un rapport mensuel.' },
+    explication: 'Sérénité, plus les évolutions, le suivi d’audience et un rapport mensuel.',
+    carte: 'Évolutions · rapport mensuel' },
 ] as const
 
 const PAR_ID = new Map(OPTIONS.map((o) => [o.id, o]))
