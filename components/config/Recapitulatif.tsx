@@ -23,7 +23,7 @@ export function Recapitulatif({ config }: { config: Configuration }) {
 
   return (
     <div id="recapitulatif" popover="auto" data-testid="recapitulatif"
-         className="w-full max-w-lg rounded-lg border border-border bg-canvas p-6 text-foreground shadow-panel">
+         className="w-full max-w-lg rounded-lg border border-border bg-canvas p-6 text-foreground shadow-(--shadow-elevated)">
       <h2 className="text-lg font-semibold">Votre configuration</h2>
 
       <ul className="mt-4 flex flex-col gap-1 text-sm">

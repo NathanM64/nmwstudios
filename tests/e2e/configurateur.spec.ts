@@ -91,6 +91,12 @@ test('le delta annonce le montant ajouté', async ({ page }) => {
   await expect(page.getByTestId('delta')).toHaveText('+700 €')
 })
 
+test('changer de formule récurrente déclenche aussi un delta, sur le mensuel', async ({ page }) => {
+  await page.goto('/configurateur')
+  await page.getByRole('radio', { name: 'Partenaire' }).check()
+  await expect(page.getByTestId('delta')).toHaveText('+300 €/mois')
+})
+
 test('la fourchette et le mensuel s’annoncent aux lecteurs d’écran', async ({ page }) => {
   await page.goto('/configurateur')
   await expect(page.getByTestId('fourchette')).toHaveAttribute('aria-live', 'polite')
@@ -532,6 +538,25 @@ test('le bouton de partage copie l’adresse de la configuration', async ({ page
   await page.getByRole('button', { name: 'Copier le lien' }).click()
   const copie = await page.evaluate(() => navigator.clipboard.readText())
   expect(copie).toContain('blog')
+})
+
+test('copier le lien affiche une confirmation brève', async ({ page, context }) => {
+  await context.grantPermissions(['clipboard-read', 'clipboard-write'])
+  await page.goto('/configurateur')
+  await page.getByRole('button', { name: 'Copier le lien' }).click()
+  await expect(page.getByRole('button', { name: 'Lien copié' })).toBeVisible()
+})
+
+test('l’échec de la copie est signalé, pas silencieux', async ({ page }) => {
+  await page.goto('/configurateur')
+  await page.evaluate(() => {
+    Object.defineProperty(navigator, 'clipboard', {
+      value: { writeText: () => Promise.reject(new Error('refusé')) },
+      configurable: true,
+    })
+  })
+  await page.getByRole('button', { name: 'Copier le lien' }).click()
+  await expect(page.getByRole('button', { name: /échec/i })).toBeVisible()
 })
 
 test('la page dit ce qui n’est jamais inclus', async ({ page }) => {

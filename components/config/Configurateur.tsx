@@ -20,6 +20,20 @@ export function Configurateur() {
   // Faux tant que l'URL n'a pas été lue : la barre de prix s'en sert pour ne pas
   // animer un delta sur la configuration initiale d'un lien partagé.
   const [pret, setPret] = useState(false)
+  const [copie, setCopie] = useState<'succes' | 'echec' | null>(null)
+
+  useEffect(() => {
+    if (!copie) return
+    const minuteur = setTimeout(() => setCopie(null), 1800)
+    return () => clearTimeout(minuteur)
+  }, [copie])
+
+  const copierLien = () => {
+    navigator.clipboard
+      .writeText(location.href)
+      .then(() => setCopie('succes'))
+      .catch(() => setCopie('echec'))
+  }
 
   // Lu au montage, pas via `searchParams` : ce dernier rend la page dynamique et
   // Next n'y émet plus les préchargements de police dans le `<head>`.
@@ -62,10 +76,11 @@ export function Configurateur() {
             </button>
             <button
               type="button"
-              onClick={() => navigator.clipboard.writeText(location.href)}
+              onClick={copierLien}
+              aria-live="polite"
               className="rounded-md border border-border px-3 py-1.5 text-sm"
             >
-              Copier le lien
+              {copie === 'succes' ? 'Lien copié' : copie === 'echec' ? 'Échec de la copie' : 'Copier le lien'}
             </button>
           </div>
           <Recapitulatif config={config} />

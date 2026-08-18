@@ -5,9 +5,9 @@ import { calculer, formaterEuros, type Configuration } from '@/lib/config/devis'
 
 export function BarrePrix({ config, pret }: { config: Configuration; pret: boolean }) {
   const devis = calculer(config)
-  const precedent = useRef(devis.total)
+  const precedent = useRef({ total: devis.total, mensuel: devis.mensuel })
   const armee = useRef(false)
-  const [delta, setDelta] = useState<{ montant: number; cle: number } | null>(null)
+  const [delta, setDelta] = useState<{ montant: number; cle: number; unite: 'forfait' | 'mensuel' } | null>(null)
 
   // Le minuteur démonte le delta y compris sous `prefers-reduced-motion`,
   // où `animation: none` ne déclenche jamais `onAnimationEnd`.
@@ -17,16 +17,21 @@ export function BarrePrix({ config, pret }: { config: Configuration; pret: boole
       // Première passe une fois l'URL lue : pose la référence sans animer, sinon
       // la configuration d'un lien partagé s'afficherait comme un delta de l'utilisateur.
       armee.current = true
-      precedent.current = devis.total
+      precedent.current = { total: devis.total, mensuel: devis.mensuel }
       return
     }
-    const ecart = devis.total - precedent.current
-    precedent.current = devis.total
-    if (ecart === 0) return
-    setDelta({ montant: ecart, cle: Date.now() })
+    const ecartTotal = devis.total - precedent.current.total
+    const ecartMensuel = devis.mensuel - precedent.current.mensuel
+    precedent.current = { total: devis.total, mensuel: devis.mensuel }
+
+    // Une option ne touche jamais les deux à la fois : le forfait prime s'il change.
+    if (ecartTotal !== 0) setDelta({ montant: ecartTotal, cle: Date.now(), unite: 'forfait' })
+    else if (ecartMensuel !== 0) setDelta({ montant: ecartMensuel, cle: Date.now(), unite: 'mensuel' })
+    else return
+
     const minuteur = setTimeout(() => setDelta(null), 1800)
     return () => clearTimeout(minuteur)
-  }, [devis.total, pret])
+  }, [devis.total, devis.mensuel, pret])
 
   return (
     <div className="panel fixed inset-x-0 bottom-0 z-40 border-t border-border px-5 py-3 sm:px-8">
@@ -43,6 +48,7 @@ export function BarrePrix({ config, pret }: { config: Configuration; pret: boole
             >
               {delta.montant > 0 ? '+' : '−'}
               {formaterEuros(Math.abs(delta.montant))}
+              {delta.unite === 'mensuel' && '/mois'}
             </span>
           )}
         </p>

@@ -1,4 +1,3 @@
-// lib/config/devis.ts
 import { type Option, OPTIONS, SOCLE_ID } from '@/lib/config/catalogue'
 
 export type Configuration = Record<string, number>
@@ -12,6 +11,9 @@ export type Devis = {
 }
 
 export const CONFIG_VIDE: Configuration = {}
+
+/** Borne haute de la fourchette : 15 % au-dessus du total, pour couvrir l’imprévu du brief. */
+const MARGE_HAUTE = 1.15
 
 /** Quantité effective : plafonnée pour les quantifiables, ramenée à 1 sinon. */
 function quantite(option: Option, brute: number): number {
@@ -41,7 +43,7 @@ export function calculer(config: Configuration): Devis {
     total,
     mensuel,
     bas: Math.floor(total / 100) * 100,
-    haut: Math.ceil((total * 1.15) / 100) * 100,
+    haut: Math.ceil((total * MARGE_HAUTE) / 100) * 100,
   }
 }
 
