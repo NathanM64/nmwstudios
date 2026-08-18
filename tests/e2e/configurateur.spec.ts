@@ -333,3 +333,24 @@ test('chaque section du panneau est introduite par une phrase', async ({ page })
   await expect(page.getByText('Le point de départ.', { exact: false })).toBeVisible()
   await expect(page.getByText('quelqu’un doit s’en occuper', { exact: false })).toBeVisible()
 })
+
+test('le configurateur occupe la largeur de l’écran', async ({ page }) => {
+  await page.setViewportSize({ width: 1850, height: 1000 })
+  await page.goto('/configurateur')
+  const grille = await page.getByTestId('grille-configurateur').boundingBox()
+  expect(grille!.width).toBeGreaterThan(1500)
+})
+
+test('l’aperçu occupe nettement plus de place que le panneau', async ({ page }) => {
+  await page.setViewportSize({ width: 1850, height: 1000 })
+  await page.goto('/configurateur')
+  const apercu = await page.getByTestId('colonne-apercu').boundingBox()
+  const panneau = await page.getByTestId('colonne-options').boundingBox()
+  expect(apercu!.width).toBeGreaterThan(panneau!.width * 2)
+})
+
+test('le dock des sections d’accueil n’apparaît pas sur le configurateur', async ({ page }) => {
+  await page.goto('/configurateur')
+  await expect(page.getByRole('navigation', { name: 'Sections de la page' })).toHaveCount(0)
+  await expect(page.getByRole('link', { name: 'Revenir à l’accueil' })).toBeVisible()
+})

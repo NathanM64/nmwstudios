@@ -1,5 +1,5 @@
 import { Configurateur } from '@/components/config/Configurateur'
-import { Dock } from '@/components/shell/Dock'
+import { EnteteConfigurateur } from '@/components/config/EnteteConfigurateur'
 import { Footer } from '@/components/shell/Footer'
 
 export const metadata = {
@@ -10,7 +10,7 @@ export const metadata = {
 export default function Page() {
   return (
     <>
-      <Dock />
+      <EnteteConfigurateur />
       <Configurateur />
       <Footer />
     </>

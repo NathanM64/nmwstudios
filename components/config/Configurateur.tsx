@@ -1,8 +1,6 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { Container } from '@/components/ui/Container'
-import { ThemeToggle } from '@/components/shell/ThemeToggle'
 import { PanneauOptions } from '@/components/config/PanneauOptions'
 import { BarrePrix } from '@/components/config/BarrePrix'
 import { Apercu } from '@/components/config/Apercu'
@@ -29,22 +27,26 @@ export function Configurateur() {
   }, [config])
 
   return (
-    <main className="pb-40 sm:pt-24">
-      <Container className="flex items-center justify-between gap-4">
-        <h1 className="text-2xl font-semibold tracking-tight">Configurez votre site</h1>
-        <ThemeToggle />
-      </Container>
-
-      <Container className="mt-8 grid gap-8 lg:grid-cols-[1fr_22rem]">
-        <div className="sticky top-4 self-start lg:top-24">
+    <main className="pb-40">
+      <div
+        data-testid="grille-configurateur"
+        className="grid gap-8 px-5 sm:px-8 lg:grid-cols-[minmax(0,1fr)_26rem]"
+      >
+        <div data-testid="colonne-apercu" className="sticky top-4 self-start lg:top-8">
           <Apercu config={config} scene={scene} />
           <VignettesScene scene={scene} onChange={setScene} />
           <p className="mt-2 font-mono text-xs uppercase tracking-[0.08em] text-muted-foreground">
             aperçu, pas votre futur site
           </p>
         </div>
-        <PanneauOptions config={config} onChange={setConfig} onScene={setScene} />
-      </Container>
+
+        <div data-testid="colonne-options">
+          <h1 className="text-2xl font-semibold tracking-tight">Configurez votre site</h1>
+          <div className="mt-6">
+            <PanneauOptions config={config} onChange={setConfig} onScene={setScene} />
+          </div>
+        </div>
+      </div>
 
       <BarrePrix config={config} />
     </main>
