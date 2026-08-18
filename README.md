@@ -40,10 +40,10 @@ En place :
 - deux portes réelles, `/` (entreprise) et `/agences` (agence), avec
   commutateur d'audience et mémorisation du choix en cookie ;
 - un dock de navigation, lisible sur mobile ;
-- deux thèmes (sombre par défaut, clair complet), posés sans flash et sans
-  dépendre de JavaScript côté client pour le premier rendu ;
-- transitions inter-documents natives entre les deux portes ;
-- un repli logo en WebP 96×96 (le SVG reste dû par le propriétaire du projet).
+- deux thèmes (sombre par défaut, clair complet), posés avant le premier paint
+  par un script inline dans `<head>` — aucun flash, mais le mécanisme dépend de
+  JavaScript actif ; sans JS, le thème retombe sur le sombre par défaut ;
+- transitions inter-documents natives entre les deux portes.
 
 Reste à faire, connu :
 
@@ -52,7 +52,10 @@ Reste à faire, connu :
   projet détient (SIRET, forme juridique, adresse, directeur de publication,
   TVA) ;
 - **contenu commercial absent** : ce lot ne pose que la coquille, sans texte
-  commercial. Il fait l'objet du lot 1.
+  commercial. Il fait l'objet du lot 1 ;
+- **logo non intégré** : `public/logo.webp` (96×96) a été produit en repli du
+  PNG d'origine, mais aucun composant ne l'affiche — il n'y a pas encore
+  d'en-tête. Le SVG reste dû par le propriétaire du projet.
 
 ## Contraintes du projet
 
