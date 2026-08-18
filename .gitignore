@@ -23,6 +23,9 @@
 # misc
 .DS_Store
 *.pem
+.superpowers/
+/test-results/
+/playwright-report/
 
 # debug
 npm-debug.log*
@@ -43,3 +46,4 @@ next-env.d.ts
 # Internal docs (exclude all .md except README)
 *.md
 !README.md
+!CLAUDE.md

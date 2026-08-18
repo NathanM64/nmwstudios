@@ -1,15 +1,15 @@
-import { cn } from '@/lib/utils';
-
-interface SectionProps {
-  children: React.ReactNode;
-  className?: string;
-  id?: string;
-}
-
-export function Section({ children, className, id }: SectionProps) {
+export function Section({
+  id,
+  children,
+  className = '',
+}: {
+  id?: string
+  children: React.ReactNode
+  className?: string
+}) {
   return (
-    <section id={id} className={cn('py-16 md:py-24', className)}>
+    <section id={id} className={`scroll-mt-24 py-16 sm:py-24 ${className}`}>
       {children}
     </section>
-  );
+  )
 }
