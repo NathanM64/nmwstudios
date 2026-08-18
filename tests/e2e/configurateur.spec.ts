@@ -275,32 +275,55 @@ test('la scène du site garde tout ce qui a été coché', async ({ page }) => {
 test('la vignette de la scène active porte aria-pressed, les autres non', async ({ page }) => {
   await page.goto('/configurateur')
   await expect(page.getByRole('button', { name: 'Votre site', exact: true })).toHaveAttribute('aria-pressed', 'true')
-  await expect(page.getByRole('button', { name: 'Dans Google' })).toHaveAttribute('aria-pressed', 'false')
+  await expect(page.getByRole('button', { name: 'Dans Google', exact: true })).toHaveAttribute('aria-pressed', 'false')
   await page.getByRole('checkbox', { name: 'Fondations SEO' }).check()
   await expect(page.getByRole('button', { name: 'Votre site', exact: true })).toHaveAttribute('aria-pressed', 'false')
-  await expect(page.getByRole('button', { name: 'Dans Google' })).toHaveAttribute('aria-pressed', 'true')
+  await expect(page.getByRole('button', { name: 'Dans Google', exact: true })).toHaveAttribute('aria-pressed', 'true')
 })
 
-test('ouvrir l’infobulle d’une option de recherche bascule aussi la scène', async ({ page }) => {
+test('ouvrir l’infobulle d’une option de recherche bascule aussi la scène, sans acheter l’option', async ({ page }) => {
   await page.goto('/configurateur')
   await expect(page.getByTestId('apercu-nav')).toBeVisible()
   await page.getByRole('button', { name: 'Que comprend : Fondations SEO' }).click()
-  await expect(page.getByTestId('apercu-seo')).toBeVisible()
+  // La scène change, mais rien n'a été acheté : l'extrait ne doit pas apparaître pour autant.
+  await expect(page.getByTestId('apercu-recherche-vide')).toBeVisible()
+  await expect(page.getByTestId('apercu-seo')).toHaveCount(0)
   await expect(page.getByTestId('apercu-nav')).toHaveCount(0)
   await expect(page.getByRole('checkbox', { name: 'Fondations SEO' })).not.toBeChecked()
 })
 
-test('cocher le domaine ajoute son indicateur dans la scène technique', async ({ page }) => {
+test('la scène de recherche ne montre l’extrait qu’une fois le référencement acheté', async ({ page }) => {
   await page.goto('/configurateur')
+  // Bascule de scène seule, sans toucher la configuration : isole la garde de la scène.
+  await page.getByRole('button', { name: 'Dans Google', exact: true }).click()
+  await expect(page.getByTestId('apercu-seo')).toHaveCount(0)
+  await page.getByRole('checkbox', { name: 'Fondations SEO' }).check()
+  await expect(page.getByTestId('apercu-seo')).toBeVisible()
+})
+
+test('la scène technique ne montre perf et domaine qu’une fois achetés, chacun indépendamment', async ({ page }) => {
+  await page.goto('/configurateur')
+  await page.getByRole('button', { name: 'Technique', exact: true }).click()
+  await expect(page.getByTestId('apercu-perf')).toHaveCount(0)
   await expect(page.getByTestId('apercu-domaine')).toHaveCount(0)
   await page.getByRole('checkbox', { name: 'Domaine et e-mails professionnels' }).check()
-  await expect(page.getByTestId('apercu-perf')).toBeVisible()
   await expect(page.getByTestId('apercu-domaine')).toBeVisible()
+  await expect(page.getByTestId('apercu-perf')).toHaveCount(0)
 })
 
 test('la vignette « Déroulé » atteint la scène de planification sans rien cocher', async ({ page }) => {
   await page.goto('/configurateur')
-  await page.getByRole('button', { name: 'Déroulé' }).click()
+  await page.getByRole('button', { name: 'Déroulé', exact: true }).click()
   await expect(page.getByTestId('apercu-planning')).toBeVisible()
   await expect(page.getByTestId('apercu-nav')).toHaveCount(0)
+})
+
+test('la scène « Au quotidien » propose un repli sans rien cocher, puis la carte de l’auto-gestion', async ({ page }) => {
+  await page.goto('/configurateur')
+  await page.getByRole('button', { name: 'Au quotidien', exact: true }).click()
+  await expect(page.getByTestId('apercu-exploitation-vide')).toBeVisible()
+  await expect(page.getByTestId('carte-etat')).toHaveCount(0)
+  await page.getByRole('radio', { name: 'Je m’en occupe moi-même' }).check()
+  await expect(page.getByTestId('carte-etat')).toContainText('Vous gardez la main')
+  await expect(page.getByTestId('apercu-exploitation-vide')).toHaveCount(0)
 })

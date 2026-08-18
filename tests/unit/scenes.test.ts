@@ -25,10 +25,16 @@ describe('scènes', () => {
   })
 
   it('garde sur le site ce qui s’y voit, même dans un groupe spécialisé', () => {
-    // Un article se lit sur le blog, la bannière RGPD s'affiche sur la page.
+    // Un article se lit sur le blog, la newsletter et le paiement se voient sur la page.
     expect(sceneDeOption('article')).toBe('site')
     expect(sceneDeOption('newsletter')).toBe('site')
     expect(sceneDeOption('paiement')).toBe('site')
+  })
+
+  it('garde RGPD et mentions légales en conformité malgré leur rendu sur la page', () => {
+    // Choix assumé : elles y voisinent le contraste mesuré, un ensemble cohérent.
+    expect(sceneDeOption('rgpd')).toBe('conformite')
+    expect(sceneDeOption('legal')).toBe('conformite')
   })
 
   it('couvre chaque option du catalogue sans exception', () => {

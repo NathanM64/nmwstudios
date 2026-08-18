@@ -14,6 +14,7 @@ const CARTES: Record<string, string> = {
   essentiel: 'Sauvegarde quotidienne · restauration en 1 h',
   serenite: 'Surveillance active · intervention sous 4 h',
   partenaire: 'Évolutions · rapport mensuel',
+  'sans-suivi': 'Vous gardez la main · aucun engagement mensuel',
 }
 
 /** Contraste réellement rendu : lu sur le DOM, jamais écrit en dur. */
@@ -45,7 +46,7 @@ export function Apercu({ config, scene }: { config: Configuration; scene: SceneI
   const langues = config.langue ?? 0
   const [langue, setLangue] = useState('fr')
   const ratio = useContrasteMesure(scene === 'conformite')
-  const formule = ['partenaire', 'serenite', 'essentiel', 'heberg'].find((id) => (config[id] ?? 0) > 0)
+  const formule = ['partenaire', 'serenite', 'essentiel', 'heberg', 'sans-suivi'].find((id) => (config[id] ?? 0) > 0)
   const libelles = langue === 'en' ? [...NAV_EN, ...PAGES_SUP.slice(0, tranches * 3)] : pages
 
   return (
@@ -108,11 +109,17 @@ export function Apercu({ config, scene }: { config: Configuration; scene: SceneI
 
       {scene === 'recherche' && (
         <div className="flex flex-1 items-center p-4">
-          <div data-testid="apercu-seo" className="animate-apparait w-full rounded-sm border border-border p-2">
-            <p className="text-[0.5rem] text-accent">votre-nom.fr</p>
-            <p className="text-[0.5rem] text-foreground">Votre métier à Bègles · devis gratuit</p>
-            <p className="text-[0.5rem] text-muted-foreground">Description reprise de votre page d’accueil.</p>
-          </div>
+          {(config.seo ?? 0) > 0 ? (
+            <div data-testid="apercu-seo" className="animate-apparait w-full rounded-sm border border-border p-2">
+              <p className="text-[0.5rem] text-accent">votre-nom.fr</p>
+              <p className="text-[0.5rem] text-foreground">Votre métier à Bègles · devis gratuit</p>
+              <p className="text-[0.5rem] text-muted-foreground">Description reprise de votre page d’accueil.</p>
+            </div>
+          ) : (
+            <p data-testid="apercu-recherche-vide" className="animate-apparait text-[0.5rem] text-muted-foreground">
+              Rien à montrer dans les résultats de recherche pour l’instant.
+            </p>
+          )}
         </div>
       )}
 
@@ -126,22 +133,35 @@ export function Apercu({ config, scene }: { config: Configuration; scene: SceneI
 
       {scene === 'technique' && (
         <div className="flex flex-1 flex-col justify-center gap-2 p-4">
-          <p data-testid="apercu-perf" className="animate-apparait text-[0.5rem] text-muted-foreground">
-            Chargement mesuré après optimisation
-          </p>
+          {(config.perf ?? 0) > 0 && (
+            <p data-testid="apercu-perf" className="animate-apparait text-[0.5rem] text-muted-foreground">
+              Chargement mesuré après optimisation
+            </p>
+          )}
           {(config.domaine ?? 0) > 0 && (
             <p data-testid="apercu-domaine" className="animate-apparait text-[0.5rem] text-muted-foreground">
               votre-nom.fr · domaine réservé
             </p>
           )}
+          {(config.perf ?? 0) === 0 && (config.domaine ?? 0) === 0 && (
+            <p data-testid="apercu-technique-vide" className="animate-apparait text-[0.5rem] text-muted-foreground">
+              Rien de technique retenu pour l’instant.
+            </p>
+          )}
         </div>
       )}
 
-      {scene === 'exploitation' && formule && (
+      {scene === 'exploitation' && (
         <div className="flex flex-1 items-center p-4">
-          <p data-testid="carte-etat" className="animate-apparait rounded-sm border border-border px-2 py-1 text-[0.5rem] text-muted-foreground">
-            {CARTES[formule]}
-          </p>
+          {formule ? (
+            <p data-testid="carte-etat" className="animate-apparait rounded-sm border border-border px-2 py-1 text-[0.5rem] text-muted-foreground">
+              {CARTES[formule]}
+            </p>
+          ) : (
+            <p data-testid="apercu-exploitation-vide" className="animate-apparait text-[0.5rem] text-muted-foreground">
+              Aucune formule d’accompagnement retenue pour l’instant.
+            </p>
+          )}
         </div>
       )}
 

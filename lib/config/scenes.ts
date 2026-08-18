@@ -3,8 +3,9 @@ import { optionParId, type GroupeId } from '@/lib/config/catalogue'
 export type SceneId =
   | 'site' | 'recherche' | 'conformite' | 'technique' | 'exploitation' | 'planning'
 
-/** Le groupe est trop grossier : la bannière RGPD se voit sur la page, l'accessibilité
- *  non ; un article se lit sur le blog, le référencement se lit dans Google. */
+/** Le groupe est trop grossier : le référencement se lit dans Google, un article
+ *  se lit sur le blog. RGPD et mentions légales restent en conformité malgré leur
+ *  rendu sur la page : elles y voisinent le contraste mesuré, un ensemble cohérent. */
 const SCENE_PAR_OPTION: Record<string, SceneId> = {
   seo: 'recherche',
   'seo-local': 'recherche',
