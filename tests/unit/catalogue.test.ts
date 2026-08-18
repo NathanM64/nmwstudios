@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { GROUPES, OPTIONS, SOCLE_ID, optionParId } from '@/lib/config/catalogue'
-import { PAGES_SUP } from '@/components/config/Apercu'
+import { PAGES_SUP } from '@/components/config/scenes/SceneSite'
 
 describe('catalogue', () => {
   it('expose un socle à 1500 €', () => {

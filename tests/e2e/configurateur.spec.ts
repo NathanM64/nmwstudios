@@ -197,6 +197,15 @@ test('le ratio de contraste est remesuré au changement de thème', async ({ pag
   await expect(page.getByTestId('apercu-a11y')).not.toHaveText(avant ?? '')
 })
 
+test('le contraste mesuré ne s’affiche que si l’accessibilité est retenue', async ({ page }) => {
+  await page.goto('/configurateur')
+  await page.getByTestId('onglet-preuve').click()
+  await expect(page.getByTestId('apercu-a11y')).toHaveCount(0)
+
+  await page.getByRole('checkbox', { name: 'Accessibilité RGAA', exact: true }).check()
+  await expect(page.getByTestId('apercu-a11y')).toBeVisible()
+})
+
 test('le SEO affiche l’extrait de résultat de recherche', async ({ page }) => {
   await page.goto('/configurateur')
   await expect(page.getByTestId('apercu-seo')).toHaveCount(0)
@@ -312,7 +321,7 @@ test('cocher une option visible garde la scène du site', async ({ page }) => {
 test('les vignettes ramènent à la scène du site', async ({ page }) => {
   await page.goto('/configurateur')
   await page.getByRole('checkbox', { name: 'Fondations SEO' }).check()
-  await page.getByRole('button', { name: 'Votre site', exact: true }).click()
+  await page.getByRole('button', { name: 'Le site', exact: true }).click()
   await expect(page.getByTestId('apercu-nav')).toBeVisible()
 })
 
@@ -320,17 +329,17 @@ test('la scène du site garde tout ce qui a été coché', async ({ page }) => {
   await page.goto('/configurateur')
   await page.getByRole('checkbox', { name: 'Un blog' }).check()
   await page.getByRole('checkbox', { name: 'Fondations SEO' }).check()
-  await page.getByRole('button', { name: 'Votre site', exact: true }).click()
+  await page.getByRole('button', { name: 'Le site', exact: true }).click()
   await expect(page.getByTestId('apercu-blog')).toBeVisible()
 })
 
 test('la vignette de la scène active porte aria-pressed, les autres non', async ({ page }) => {
   await page.goto('/configurateur')
-  await expect(page.getByRole('button', { name: 'Votre site', exact: true })).toHaveAttribute('aria-pressed', 'true')
-  await expect(page.getByRole('button', { name: 'Dans Google', exact: true })).toHaveAttribute('aria-pressed', 'false')
+  await expect(page.getByRole('button', { name: 'Le site', exact: true })).toHaveAttribute('aria-pressed', 'true')
+  await expect(page.getByRole('button', { name: 'La preuve', exact: true })).toHaveAttribute('aria-pressed', 'false')
   await page.getByRole('checkbox', { name: 'Fondations SEO' }).check()
-  await expect(page.getByRole('button', { name: 'Votre site', exact: true })).toHaveAttribute('aria-pressed', 'false')
-  await expect(page.getByRole('button', { name: 'Dans Google', exact: true })).toHaveAttribute('aria-pressed', 'true')
+  await expect(page.getByRole('button', { name: 'Le site', exact: true })).toHaveAttribute('aria-pressed', 'false')
+  await expect(page.getByRole('button', { name: 'La preuve', exact: true })).toHaveAttribute('aria-pressed', 'true')
 })
 
 test('ouvrir l’infobulle d’une option de recherche bascule aussi la scène, sans acheter l’option', async ({ page }) => {
@@ -347,7 +356,7 @@ test('ouvrir l’infobulle d’une option de recherche bascule aussi la scène, 
 test('la scène de recherche ne montre l’extrait qu’une fois le référencement acheté', async ({ page }) => {
   await page.goto('/configurateur')
   // Bascule de scène seule, sans toucher la configuration : isole la garde de la scène.
-  await page.getByRole('button', { name: 'Dans Google', exact: true }).click()
+  await page.getByRole('button', { name: 'La preuve', exact: true }).click()
   await expect(page.getByTestId('apercu-seo')).toHaveCount(0)
   await page.getByRole('checkbox', { name: 'Fondations SEO' }).check()
   await expect(page.getByTestId('apercu-seo')).toBeVisible()
@@ -355,7 +364,7 @@ test('la scène de recherche ne montre l’extrait qu’une fois le référencem
 
 test('la scène technique ne montre perf et domaine qu’une fois achetés, chacun indépendamment', async ({ page }) => {
   await page.goto('/configurateur')
-  await page.getByRole('button', { name: 'Technique', exact: true }).click()
+  await page.getByRole('button', { name: 'La preuve', exact: true }).click()
   await expect(page.getByTestId('apercu-perf')).toHaveCount(0)
   await expect(page.getByTestId('apercu-domaine')).toHaveCount(0)
   await page.getByRole('checkbox', { name: 'Domaine et e-mails professionnels' }).check()
@@ -365,7 +374,7 @@ test('la scène technique ne montre perf et domaine qu’une fois achetés, chac
 
 test('le référencement local affiche une fiche d’établissement, sans contredire le SEO', async ({ page }) => {
   await page.goto('/configurateur')
-  await page.getByRole('button', { name: 'Dans Google', exact: true }).click()
+  await page.getByRole('button', { name: 'La preuve', exact: true }).click()
   await expect(page.getByTestId('apercu-recherche-vide')).toBeVisible()
   await page.getByRole('checkbox', { name: 'Référencement local' }).check()
   await expect(page.getByTestId('apercu-seo-local')).toContainText('Bègles')
@@ -374,7 +383,7 @@ test('le référencement local affiche une fiche d’établissement, sans contre
 
 test('la migration affiche la redirection des adresses de l’ancien site', async ({ page }) => {
   await page.goto('/configurateur')
-  await page.getByRole('button', { name: 'Technique', exact: true }).click()
+  await page.getByRole('button', { name: 'La preuve', exact: true }).click()
   await expect(page.getByTestId('apercu-technique-vide')).toBeVisible()
   await page.getByRole('checkbox', { name: 'Migration de votre site actuel' }).check()
   await expect(page.getByTestId('apercu-migration')).toContainText('redirigées')
@@ -383,7 +392,7 @@ test('la migration affiche la redirection des adresses de l’ancien site', asyn
 
 test('le RGPD affiche une bannière de consentement dans la scène conformité', async ({ page }) => {
   await page.goto('/configurateur')
-  await page.getByRole('button', { name: 'Conformité', exact: true }).click()
+  await page.getByRole('button', { name: 'La preuve', exact: true }).click()
   await expect(page.getByTestId('apercu-rgpd')).toHaveCount(0)
   await page.getByRole('checkbox', { name: 'Conformité RGPD' }).check()
   await expect(page.getByTestId('apercu-rgpd')).toBeVisible()
@@ -391,7 +400,7 @@ test('le RGPD affiche une bannière de consentement dans la scène conformité',
 
 test('les mentions légales affichent une ligne de pied de page', async ({ page }) => {
   await page.goto('/configurateur')
-  await page.getByRole('button', { name: 'Conformité', exact: true }).click()
+  await page.getByRole('button', { name: 'La preuve', exact: true }).click()
   await expect(page.getByTestId('apercu-legal')).toHaveCount(0)
   await page.getByRole('checkbox', { name: 'Mentions légales et CGV' }).check()
   await expect(page.getByTestId('apercu-legal')).toContainText('Mentions légales')
@@ -399,7 +408,7 @@ test('les mentions légales affichent une ligne de pied de page', async ({ page 
 
 test('la vignette « Déroulé » atteint la scène de planification sans rien cocher', async ({ page }) => {
   await page.goto('/configurateur')
-  await page.getByRole('button', { name: 'Déroulé', exact: true }).click()
+  await page.getByRole('button', { name: 'Le déroulé', exact: true }).click()
   await expect(page.getByTestId('apercu-planning')).toBeVisible()
   await expect(page.getByTestId('apercu-nav')).toHaveCount(0)
 })
@@ -407,7 +416,7 @@ test('la vignette « Déroulé » atteint la scène de planification sans rien c
 test('la scène « Au quotidien » propose un repli sans rien cocher, puis la carte de l’auto-gestion', async ({ page }) => {
   // Le défaut « essentiel » ne s’applique qu’en l’absence de configuration dans l’URL.
   await page.goto('/configurateur?blog')
-  await page.getByRole('button', { name: 'Au quotidien', exact: true }).click()
+  await page.getByRole('button', { name: 'Le déroulé', exact: true }).click()
   await expect(page.getByTestId('apercu-exploitation-vide')).toBeVisible()
   await expect(page.getByTestId('carte-etat')).toHaveCount(0)
   await page.getByRole('radio', { name: 'Je m’en occupe moi-même' }).check()
@@ -574,7 +583,7 @@ const SANS_RENDU = new Set([
   'redaction', 'reprise', 'photos', 'visuels', // le contenu réel n’est pas simulé, le gabarit reste fixe
   'formulaire', 'newsletter', 'paiement', // aucune traduction dans la scène « site » aujourd’hui
   'article', // se lit sur le blog publié, pas dans cet aperçu
-  'a11y', // le ratio s’affiche dès la scène conformité, indépendamment de l’achat
+  'a11y', // défaut corrigé couvert par son propre test, plus bas
   'cadrage', 'formation', 'express', // scène planning : texte fixe, rien ne s’y voit par construction
 ])
 
@@ -585,10 +594,6 @@ test('basculer sur sa scène et cocher une option change l’aperçu, pour tout 
     const scene = sceneDeOption(option.id)
     const libelleScene = SCENES.find((s) => s.id === scene)!.libelle
     await page.getByRole('button', { name: libelleScene, exact: true }).click()
-
-    // Le ratio de contraste se mesure de façon asynchrone : on le laisse se poser avant
-    // de figer l’état « avant », sinon son apparition seule fausserait le constat.
-    if (scene === 'conformite') await expect(page.getByTestId('apercu-a11y')).toBeVisible()
 
     const avant = await page.getByTestId('apercu').innerHTML()
 

@@ -17,6 +17,7 @@ export function VignettesScene({
           <button
             key={s.id}
             type="button"
+            data-testid={`onglet-${s.id}`}
             aria-pressed={actif}
             onClick={() => onChange(s.id)}
             className={`min-h-9 rounded-md border px-3 py-1.5 text-xs transition-colors duration-(--dur-micro) ${
