@@ -23,6 +23,14 @@ test('la porte entreprise rappelle discrètement le choix précédent', async ({
   await expect(page.getByRole('link', { name: /revenir à la version agence/i })).toBeVisible()
 })
 
+test('sans cookie, le rappel vers l’agence reste caché', async ({ page }) => {
+  await page.goto('/')
+  // toBeAttached() prouve que le lien existe bien dans le DOM, juste masqué par `hidden`.
+  const rappel = page.locator('#rappel-agence')
+  await expect(rappel).toBeAttached()
+  await expect(rappel).toBeHidden()
+})
+
 test('les deux portes portent le dock', async ({ page }) => {
   for (const url of ['/', '/agences']) {
     await page.goto(url)
