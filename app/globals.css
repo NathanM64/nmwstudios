@@ -105,6 +105,17 @@ body {
   animation-timing-function: var(--ease-out);
 }
 
+/* Un `backdrop-filter` capturé par une transition de vue n'a plus de fond à
+   traiter : le verre apparaît nu, en rectangle clair le temps de la navigation. */
+::view-transition-old(dock),
+::view-transition-new(dock),
+::view-transition-old(audience-switch),
+::view-transition-new(audience-switch) {
+  backdrop-filter: none;
+  background-color: transparent;
+  box-shadow: none;
+}
+
 /* Révélation au défilement, sans une ligne de JavaScript. */
 @media (prefers-reduced-motion: no-preference) {
   .reveal {
