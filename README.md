@@ -47,10 +47,6 @@ En place :
 
 Reste à faire, connu :
 
-- **pages légales absentes** : `/mentions-legales` et `/confidentialite`
-  n'existent pas. Elles exigent des données que seul le propriétaire du
-  projet détient (SIRET, forme juridique, adresse, directeur de publication,
-  TVA) ;
 - **contenu commercial absent** : ce lot ne pose que la coquille, sans texte
   commercial. Il fait l'objet du lot 1 ;
 - **logo non intégré** : `public/logo.webp` (96×96) a été produit en repli du

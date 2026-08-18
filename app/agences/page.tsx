@@ -3,6 +3,7 @@ import { Section } from '@/components/ui/Section'
 import { Dock } from '@/components/shell/Dock'
 import { ThemeToggle } from '@/components/shell/ThemeToggle'
 import { AudienceSwitch } from '@/components/shell/AudienceSwitch'
+import { Footer } from '@/components/shell/Footer'
 import { SECTIONS } from '@/lib/shell/sections'
 
 export const metadata = { title: 'Pour les agences' }
@@ -26,6 +27,7 @@ export default function Page() {
           </Section>
         ))}
       </main>
+      <Footer />
     </>
   )
 }
