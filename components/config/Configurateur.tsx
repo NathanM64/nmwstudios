@@ -17,9 +17,9 @@ export function Configurateur() {
 
       <Container className="mt-8 grid gap-8 lg:grid-cols-[1fr_22rem]">
         <div>
-          <div className="glass aspect-[4/3] w-full" />
+          <div className="panel aspect-[4/3] w-full" />
           <p className="mt-2 font-mono text-xs uppercase tracking-[0.08em] text-muted-foreground">
-            aperçu — pas votre futur site
+            aperçu, pas votre futur site
           </p>
         </div>
         <div data-config={Object.keys(config).length} />

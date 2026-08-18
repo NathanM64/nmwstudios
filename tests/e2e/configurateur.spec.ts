@@ -7,5 +7,5 @@ test('la route du configurateur répond et s’annonce', async ({ page }) => {
 
 test('l’aperçu est étiqueté comme une démonstration', async ({ page }) => {
   await page.goto('/configurateur')
-  await expect(page.getByText('aperçu — pas votre futur site')).toBeVisible()
+  await expect(page.getByText('aperçu, pas votre futur site')).toBeVisible()
 })
