@@ -1,5 +1,6 @@
 'use client'
 
+import { Infobulle } from '@/components/config/Infobulle'
 import { GROUPES, OPTIONS, SOCLE_ID, type Option } from '@/lib/config/catalogue'
 import { formaterEuros, type Configuration } from '@/lib/config/devis'
 
@@ -41,17 +42,24 @@ export function PanneauOptions({
 
               if (option.id === SOCLE_ID) {
                 return (
-                  <p key={option.id} className="flex justify-between text-sm">
-                    <span>{option.libelle}</span>
+                  // div, pas p : le popover de l'infobulle n'est pas du contenu phrasé.
+                  <div key={option.id} className="flex items-center justify-between text-sm">
+                    <span className="flex items-center gap-2">
+                      {option.libelle}
+                      <Infobulle id={option.id} libelle={option.libelle} texte={option.explication} />
+                    </span>
                     <span className="font-mono text-muted-foreground">{formaterEuros(option.prix)}</span>
-                  </p>
+                  </div>
                 )
               }
 
               if (option.quantifiable) {
                 return (
                   <div key={option.id} className="flex items-center justify-between gap-3 text-sm">
-                    <span>{option.libelle}</span>
+                    <span className="flex items-center gap-2">
+                      {option.libelle}
+                      <Infobulle id={option.id} libelle={option.libelle} texte={option.explication} />
+                    </span>
                     <span className="flex items-center gap-2">
                       <button
                         type="button"
@@ -83,23 +91,28 @@ export function PanneauOptions({
               const exclusif = groupe.exclusif === true
 
               return (
-                <label key={option.id} className="flex items-center justify-between gap-3 text-sm">
+                // div en dehors : un bouton d'infobulle est lui aussi labelable, il ne peut pas
+                // rejoindre l'input dans le même <label>.
+                <div key={option.id} className="flex items-center justify-between gap-3 text-sm">
                   <span className="flex items-center gap-2">
-                    <input
-                      type={exclusif ? 'radio' : 'checkbox'}
-                      name={exclusif ? groupe.id : undefined}
-                      checked={n > 0}
-                      onChange={(e) =>
-                        exclusif
-                          ? choisirExclusif(groupe.id, option.id)
-                          : poser(option.id, e.target.checked ? 1 : 0)
-                      }
-                      className="accent-accent"
-                    />
-                    {option.libelle}
+                    <label className="flex items-center gap-2">
+                      <input
+                        type={exclusif ? 'radio' : 'checkbox'}
+                        name={exclusif ? groupe.id : undefined}
+                        checked={n > 0}
+                        onChange={(e) =>
+                          exclusif
+                            ? choisirExclusif(groupe.id, option.id)
+                            : poser(option.id, e.target.checked ? 1 : 0)
+                        }
+                        className="accent-accent"
+                      />
+                      {option.libelle}
+                    </label>
+                    <Infobulle id={option.id} libelle={option.libelle} texte={option.explication} />
                   </span>
                   <span className="font-mono text-muted-foreground">{suffixePrix(option)}</span>
-                </label>
+                </div>
               )
             })}
           </div>

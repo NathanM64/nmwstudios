@@ -82,3 +82,28 @@ test('la barre reste visible sans défilement', async ({ page }) => {
   await page.goto('/configurateur')
   await expect(page.getByTestId('fourchette')).toBeInViewport()
 })
+
+test('l’explication d’une option est masquée par défaut', async ({ page }) => {
+  await page.goto('/configurateur')
+  // toBeHidden() seul passerait aussi si le texte n'existait nulle part : toBeAttached()
+  // force la preuve que le popover est bien dans le DOM, juste fermé.
+  const explication = page.getByText(/Une section actualités que vous alimentez/)
+  await expect(explication).toBeAttached()
+  await expect(explication).toBeHidden()
+})
+
+test('l’explication s’ouvre au clic et se ferme à Échap', async ({ page }) => {
+  await page.goto('/configurateur')
+  await page.getByRole('button', { name: 'Que comprend : Un blog' }).click()
+  await expect(page.getByText(/Une section actualités que vous alimentez/)).toBeVisible()
+  await page.keyboard.press('Escape')
+  await expect(page.getByText(/Une section actualités que vous alimentez/)).toBeHidden()
+})
+
+test('l’explication s’atteint au clavier', async ({ page }) => {
+  await page.goto('/configurateur')
+  const bouton = page.getByRole('button', { name: 'Que comprend : Un blog' })
+  await bouton.focus()
+  await page.keyboard.press('Enter')
+  await expect(page.getByText(/Une section actualités que vous alimentez/)).toBeVisible()
+})
