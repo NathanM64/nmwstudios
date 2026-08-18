@@ -13,7 +13,7 @@ export function Apercu({ config }: { config: Configuration }) {
     <div className="panel flex aspect-[4/3] w-full flex-col overflow-hidden">
       <header className="flex items-center justify-between gap-3 border-b border-border px-4 py-3">
         <span className="h-3 w-14 rounded-sm bg-accent/70" />
-        <nav data-testid="apercu-nav">
+        <div data-testid="apercu-nav">
           <ul className="flex flex-wrap gap-2">
             {pages.map((page) => (
               <li key={page} className="animate-apparait text-[0.5rem] text-muted-foreground">
@@ -21,7 +21,7 @@ export function Apercu({ config }: { config: Configuration }) {
               </li>
             ))}
           </ul>
-        </nav>
+        </div>
         {(config.membre ?? 0) > 0 && (
           <span data-testid="apercu-connexion" className="animate-apparait rounded-sm border border-border px-1.5 py-0.5 text-[0.5rem]">
             Connexion

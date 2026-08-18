@@ -128,6 +128,7 @@ test('cocher le blog fait apparaître la section actualités dans l’aperçu', 
 
 test('cocher l’espace membre ajoute le bouton de connexion dans l’aperçu', async ({ page }) => {
   await page.goto('/configurateur')
+  await expect(page.getByTestId('apercu-connexion')).toHaveCount(0)
   await page.getByRole('checkbox', { name: 'Espace membre' }).check()
   await expect(page.getByTestId('apercu-connexion')).toBeVisible()
 })
