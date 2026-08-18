@@ -81,6 +81,18 @@ test('le delta annonce le montant ajouté', async ({ page }) => {
   await expect(page.getByTestId('delta')).toHaveText('+700 €')
 })
 
+test('la fourchette et le mensuel s’annoncent aux lecteurs d’écran', async ({ page }) => {
+  await page.goto('/configurateur')
+  await expect(page.getByTestId('fourchette')).toHaveAttribute('aria-live', 'polite')
+  await expect(page.getByTestId('mensuel')).toHaveAttribute('aria-live', 'polite')
+})
+
+test('le delta n’est pas annoncé, décoratif et redondant avec la fourchette', async ({ page }) => {
+  await page.goto('/configurateur')
+  await page.getByRole('checkbox', { name: 'Un blog' }).check()
+  await expect(page.getByTestId('delta')).not.toHaveAttribute('aria-live', 'polite')
+})
+
 test('ouvrir un lien de configuration partagé n’affiche aucun delta fantôme', async ({ page }) => {
   await page.goto('/configurateur?blog&pages=2')
   await expect(page.getByTestId('delta')).toHaveCount(0)
@@ -236,6 +248,11 @@ test('le compteur dit ce qu’on incrémente', async ({ page }) => {
   await expect(page.getByTestId('unite-redaction')).toHaveText('page')
   await page.getByRole('button', { name: 'Ajouter : J’écris vos textes' }).click()
   await expect(page.getByTestId('unite-redaction')).toHaveText('pages')
+})
+
+test('le compteur de quantité s’annonce aux lecteurs d’écran', async ({ page }) => {
+  await page.goto('/configurateur')
+  await expect(page.getByTestId('quantite-pages')).toHaveAttribute('aria-live', 'polite')
 })
 
 test('l’infobulle s’ouvre près de son bouton, pas dans un coin', async ({ page }) => {

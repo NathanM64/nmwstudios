@@ -74,7 +74,7 @@ export function PanneauOptions({
                         −
                       </button>
                       <span className="flex items-baseline gap-1">
-                        <span data-testid={`quantite-${option.id}`} className="w-4 text-right font-mono">
+                        <span data-testid={`quantite-${option.id}`} aria-live="polite" className="w-4 text-right font-mono">
                           {n}
                         </span>
                         <span
