@@ -8,10 +8,15 @@ export function BarrePrix({ config }: { config: Configuration }) {
   const precedent = useRef(devis.total)
   const [delta, setDelta] = useState<{ montant: number; cle: number } | null>(null)
 
+  // Le minuteur démonte le delta y compris sous `prefers-reduced-motion`,
+  // où `animation: none` ne déclenche jamais `onAnimationEnd`.
   useEffect(() => {
     const ecart = devis.total - precedent.current
     precedent.current = devis.total
-    if (ecart !== 0) setDelta({ montant: ecart, cle: Date.now() })
+    if (ecart === 0) return
+    setDelta({ montant: ecart, cle: Date.now() })
+    const minuteur = setTimeout(() => setDelta(null), 1800)
+    return () => clearTimeout(minuteur)
   }, [devis.total])
 
   return (
@@ -26,7 +31,6 @@ export function BarrePrix({ config }: { config: Configuration }) {
               key={delta.cle}
               data-testid="delta"
               className="animate-delta font-mono text-xs text-accent"
-              onAnimationEnd={() => setDelta(null)}
             >
               {delta.montant > 0 ? '+' : '−'}
               {formaterEuros(Math.abs(delta.montant))}
