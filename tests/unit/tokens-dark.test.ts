@@ -1,10 +1,11 @@
 import { readFileSync } from 'node:fs'
 import { describe, expect, it } from 'vitest'
 import { contrastRatio } from '@/lib/color/contrast'
-import { readTokens, solid, surfaceOverCanvas, worstAmbientColor } from './tokens'
+import { ambientOverCanvas, readTokens, solid, surfaceOverCanvas, worstAmbientColor } from './tokens'
 
 const dark = readTokens('app/globals.css', '@theme')
 const ambient = worstAmbientColor('app/globals.css', ':root')
+const fondDePage = ambientOverCanvas(dark, ambient)
 
 describe('jetons du thème sombre', () => {
   it('définit tous les jetons attendus', () => {
@@ -24,11 +25,11 @@ describe('jetons du thème sombre', () => {
   })
 
   it('tient 4,5:1 pour le texte courant sur le fond de page', () => {
-    expect(contrastRatio(solid(dark, '--color-foreground'), solid(dark, '--color-canvas'))).toBeGreaterThanOrEqual(4.5)
+    expect(contrastRatio(solid(dark, '--color-foreground'), fondDePage)).toBeGreaterThanOrEqual(4.5)
   })
 
   it('tient 4,5:1 pour le texte secondaire sur le fond de page', () => {
-    expect(contrastRatio(solid(dark, '--color-muted-foreground'), solid(dark, '--color-canvas'))).toBeGreaterThanOrEqual(4.5)
+    expect(contrastRatio(solid(dark, '--color-muted-foreground'), fondDePage)).toBeGreaterThanOrEqual(4.5)
   })
 
   it('tient 4,5:1 pour le texte courant posé sur un panneau de verre', () => {

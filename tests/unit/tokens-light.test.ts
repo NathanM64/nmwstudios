@@ -1,10 +1,11 @@
 import { describe, expect, it } from 'vitest'
 import { contrastRatio } from '@/lib/color/contrast'
-import { readTokens, solid, surfaceOverCanvas, worstAmbientColor } from './tokens'
+import { ambientOverCanvas, readTokens, solid, surfaceOverCanvas, worstAmbientColor } from './tokens'
 
 const dark = readTokens('app/globals.css', '@theme')
 const light = readTokens('app/globals.css', "[data-theme='light']")
 const ambient = worstAmbientColor('app/globals.css', "[data-theme='light']")
+const fondDePage = ambientOverCanvas(light, ambient)
 
 describe('jetons du thème clair', () => {
   it('redéfinit exactement les mêmes jetons de couleur que le sombre', () => {
@@ -14,13 +15,11 @@ describe('jetons du thème clair', () => {
   })
 
   it('tient 4,5:1 pour le texte courant sur le fond de page', () => {
-    expect(contrastRatio(solid(light, '--color-foreground'), solid(light, '--color-canvas'))).toBeGreaterThanOrEqual(4.5)
+    expect(contrastRatio(solid(light, '--color-foreground'), fondDePage)).toBeGreaterThanOrEqual(4.5)
   })
 
   it('tient 4,5:1 pour le texte secondaire sur le fond de page', () => {
-    expect(
-      contrastRatio(solid(light, '--color-muted-foreground'), solid(light, '--color-canvas'))
-    ).toBeGreaterThanOrEqual(4.5)
+    expect(contrastRatio(solid(light, '--color-muted-foreground'), fondDePage)).toBeGreaterThanOrEqual(4.5)
   })
 
   it('tient 4,5:1 pour le texte courant posé sur un panneau de verre', () => {

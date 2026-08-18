@@ -61,14 +61,18 @@ export function worstAmbientColor(cssPath: string, blockHeader: string): { rgb: 
   return couleurs.reduce((pire, courante) => (courante.alpha > pire.alpha ? courante : pire))
 }
 
-/** Surface composée sur le pire cas d'ambiance, lui-même composé sur le canevas :
- *  la couche réellement rendue sous `.panel` (`body` pose `background-image: var(--ambient)`). */
+/** Fond de page réellement rendu : le pire cas d'ambiance composé sur le canevas
+ *  (`body` pose `background-image: var(--ambient)`, sous tout le texte, panneau ou non). */
+export function ambientOverCanvas(tokens: Record<string, string>, ambient: { rgb: Rgb; alpha: number }): Rgb {
+  return composite(ambient.rgb, ambient.alpha, solid(tokens, '--color-canvas'))
+}
+
+/** Surface composée sur le fond de page (ambiance sur canevas) : la couche réellement rendue sous `.panel`. */
 export function surfaceOverCanvas(
   tokens: Record<string, string>,
   surfaceName: string,
   ambient: { rgb: Rgb; alpha: number }
 ): Rgb {
-  const canvasWithAmbient = composite(ambient.rgb, ambient.alpha, solid(tokens, '--color-canvas'))
   const { rgb, alpha } = parseColor(tokens[surfaceName])
-  return composite(rgb, alpha, canvasWithAmbient)
+  return composite(rgb, alpha, ambientOverCanvas(tokens, ambient))
 }
