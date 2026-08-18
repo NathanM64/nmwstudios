@@ -56,6 +56,10 @@ Reste à faire, connu :
 - **logo non intégré** : `public/logo.webp` (96×96) a été produit en repli du
   PNG d'origine, mais aucun composant ne l'affiche — il n'y a pas encore
   d'en-tête. Le SVG reste dû par le propriétaire du projet.
+- **compaction mobile du dock non implémentée** : la spec prévoit qu'il se
+  compacte au défilement vers le bas et se rappelle vers le haut. Le dock est
+  aujourd'hui simplement fixe en bas d'écran. Son réglage demande du contenu
+  réel, il est reporté au lot 1.
 
 ## Contraintes du projet
 

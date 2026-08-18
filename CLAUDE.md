@@ -17,7 +17,7 @@ ce que fait la ligne suivante se supprime.
 - Aucune librairie d'animation : CSS natif (`animation-timeline`, `@view-transition`).
 - Poids du JavaScript de première charge : mesuré et rapporté par `yarn budget`, sans plafond bloquant. Référence au lot 0 : ≈ 131 ko gzip. On fait au mieux ; toute hausse notable se justifie.
 - Contraste ≥ 4,5:1 dans les deux thèmes, vérifié par test.
-- Le rayon de `blur()` ne s'anime jamais ; seuls `opacity` et `transform`.
+- Le rayon de `blur()` ne s'anime jamais ; les animations continues ne portent que sur `opacity` et `transform` (une transition discrète de couleur au survol y échappe).
 - Aucun texte long sur une surface de verre.
 - Aucun chiffre affiché qui ne soit mesuré. Aucun client, avis ou référence inventé.
 - Messages de commit en français, sans `Co-Authored-By`.

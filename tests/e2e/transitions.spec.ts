@@ -2,10 +2,12 @@ import { expect, test } from '@playwright/test'
 
 test('la navigation inter-documents est déclarée', async ({ page }) => {
   await page.goto('/')
+  // Règles de haut niveau seulement : celle imbriquée sous `prefers-reduced-motion`
+  // contient `navigation: none` et rendrait cette assertion vraie même sans la déclaration réelle.
   const declared = await page.evaluate(() =>
     [...document.styleSheets].some((sheet) => {
       try {
-        return [...sheet.cssRules].some((rule) => rule.cssText.includes('@view-transition'))
+        return [...sheet.cssRules].some((rule) => /navigation:\s*auto/.test(rule.cssText))
       } catch {
         return false
       }

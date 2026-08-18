@@ -39,12 +39,6 @@
 }
 
 :root {
-  /* Liseré-lentille : le rebond du bas est ce qui fait lire l'épaisseur. */
-  --panel-edge-lit: rgba(255, 255, 255, 0.3);
-  --panel-edge-side: rgba(255, 255, 255, 0.15);
-  --panel-edge-dim: rgba(255, 255, 255, 0.05);
-  --panel-edge-bounce: rgba(255, 255, 255, 0.13);
-
   --shadow-panel: 0 24px 60px -28px rgba(0, 0, 0, 0.95),
     0 2px 10px -6px rgba(0, 0, 0, 0.7),
     inset 0 1px 0 rgba(255, 255, 255, 0.09),
@@ -63,11 +57,6 @@
 }
 
 [data-theme='light'] {
-  --panel-edge-lit: rgba(255, 255, 255, 0.9);
-  --panel-edge-side: rgba(255, 255, 255, 0.6);
-  --panel-edge-dim: rgba(0, 0, 0, 0.04);
-  --panel-edge-bounce: rgba(255, 255, 255, 0.5);
-
   --shadow-panel: 0 24px 60px -30px rgba(20, 20, 40, 0.28),
     0 2px 10px -6px rgba(20, 20, 40, 0.16),
     inset 0 1px 0 rgba(255, 255, 255, 0.9);
