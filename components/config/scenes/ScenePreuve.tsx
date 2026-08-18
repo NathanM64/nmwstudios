@@ -5,11 +5,10 @@ import type { Configuration } from '@/lib/config/devis'
 import { contrastRatio, parseColor } from '@/lib/color/contrast'
 
 /** Contraste réellement rendu : lu sur le DOM, jamais écrit en dur. */
-function useContrasteMesure(actif: boolean): number | null {
+function useContrasteMesure(): number | null {
   const [ratio, setRatio] = useState<number | null>(null)
 
   useEffect(() => {
-    if (!actif) return
     const mesurer = () => {
       const styles = getComputedStyle(document.documentElement)
       const texte = parseColor(styles.getPropertyValue('--color-foreground').trim())
@@ -21,15 +20,14 @@ function useContrasteMesure(actif: boolean): number | null {
     const observateur = new MutationObserver(mesurer)
     observateur.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] })
     return () => observateur.disconnect()
-  }, [actif])
+  }, [])
 
-  // Dérivé au rendu plutôt que remis à `null` dans l'effet : évite un setState superflu.
-  return actif ? ratio : null
+  return ratio
 }
 
 export function ScenePreuve({ config }: { config: Configuration }) {
-  // Scène entière dédiée à la preuve : plus de garde sur la sous-section conformité.
-  const ratio = useContrasteMesure(true)
+  // Scène entière dédiée à la preuve : la mesure tourne toujours, l'affichage se garde plus bas sur config.a11y.
+  const ratio = useContrasteMesure()
 
   return (
     <div className="animate-apparait flex flex-1 flex-col">
