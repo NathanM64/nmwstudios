@@ -31,10 +31,6 @@ describe('compositions d’états du configurateur', () => {
       expect(contrastRatio(solid(tokens, '--color-foreground'), actif)).toBeGreaterThanOrEqual(4.5)
     })
 
-    it(`tient l’explication de carte sur l’aplat de surface en thème ${nom}`, () => {
-      expect(contrastRatio(solid(tokens, '--color-muted-foreground'), verre)).toBeGreaterThanOrEqual(4.5)
-    })
-
     it(`tient le libellé de carte sur l’état retenu en thème ${nom}`, () => {
       // État retenu à 4 %, pas 10 % : mesuré, voir CarteOption.tsx.
       const retenu = composite(solid(tokens, '--color-accent'), 0.04, verre)

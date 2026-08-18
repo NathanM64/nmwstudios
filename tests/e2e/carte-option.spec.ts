@@ -40,3 +40,14 @@ test('la carte est atteignable au clavier et s’active à l’espace', async ({
   await page.keyboard.press('Space')
   await expect(case_).toBeChecked()
 })
+
+test('la carte affiche un anneau de focus réellement peint au clavier', async ({ page }) => {
+  await page.goto('/configurateur')
+  // `opacity-0` sur l'input éteint aussi son anneau natif : l'indicateur doit être
+  // peint sur la carte elle-même, pas juste déductible de l'état focus de l'input.
+  await page.getByRole('checkbox', { name: 'Un blog', exact: true }).focus()
+  const carte = page.getByTestId('carte-blog')
+  await expect(carte).toHaveCSS('outline-style', 'solid')
+  await expect(carte).toHaveCSS('outline-width', '2px')
+  await expect(carte).toHaveCSS('outline-color', 'rgb(122, 162, 255)')
+})

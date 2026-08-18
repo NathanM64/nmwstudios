@@ -4,13 +4,14 @@ import type { Option } from '@/lib/config/catalogue'
 import { formaterEuros, suffixePrix } from '@/lib/config/devis'
 import { SOCLE_ID } from '@/lib/config/catalogue'
 
-// Aplat translucide, jamais `.panel` : le verre pose `backdrop-filter`, et la
-// carte porte du texte, ce que la règle du projet interdit sur une surface de verre.
-const CARTE = 'flex min-h-11 w-full items-start justify-between gap-4 rounded-md border p-3 text-left transition-colors duration-(--dur-micro)'
-const REPOS = 'border-border bg-surface hover:border-border-strong'
-// Accent à 4 % seulement : à 10 % sa luminance rejoint celle de muted-foreground
-// en thème sombre et le contraste du libellé s'effondre (mesuré dans le test de contraste).
-const RETENU = 'border-accent bg-accent/4'
+// Aplat translucide, jamais `.panel` (le verre pose `backdrop-filter`).
+// `isolate` confine la teinte et l'input à cette carte, pas aux voisines.
+const CARTE = 'relative isolate flex min-h-11 w-full items-start justify-between gap-4 rounded-md border bg-surface p-3 text-left transition-colors duration-(--dur-micro)'
+const REPOS = 'border-border hover:border-border-strong'
+const RETENU = 'border-accent'
+// Par-dessus `bg-surface`, jamais à sa place : Tailwind n'empile pas deux fonds.
+// Accent à 4 %, pas 10 % : au-delà, le contraste passe sous 4,5:1 en sombre.
+const TEINTE = 'pointer-events-none absolute inset-0 -z-10 rounded-md bg-accent/4'
 
 export function CarteOption({
   option,
@@ -28,13 +29,16 @@ export function CarteOption({
   const retenu = quantite > 0
   const titreId = `titre-${option.id}`
   const descId = `desc-${option.id}`
+  const teinte = retenu ? <span aria-hidden="true" className={TEINTE} /> : null
 
   const corps = (
     <>
       <span className="flex flex-col gap-1">
         <span id={titreId} className="text-sm">
           {option.libelle}
-          {quantite > 1 && ` × ${quantite}`}
+          {/* Non bornée par lib/config/url.ts pour les options non quantifiables :
+              une quantité résiduelle ne doit jamais s'afficher comme un choix. */}
+          {option.quantifiable && quantite > 1 && ` × ${quantite}`}
         </span>
         <span id={descId} className="text-xs text-muted-foreground">
           {option.explication}
@@ -55,6 +59,7 @@ export function CarteOption({
   if (option.id === SOCLE_ID) {
     return (
       <div data-testid={`carte-${option.id}`} className={`${CARTE} ${RETENU}`}>
+        {teinte}
         {corps}
       </div>
     )
@@ -63,6 +68,7 @@ export function CarteOption({
   if (option.quantifiable) {
     return (
       <div data-testid={`carte-${option.id}`} className={`${CARTE} ${retenu ? RETENU : REPOS}`}>
+        {teinte}
         <span className="flex flex-col gap-1">
           <span className="text-sm">{option.libelle}</span>
           <span className="text-xs text-muted-foreground">{option.explication}</span>
@@ -102,7 +108,11 @@ export function CarteOption({
   }
 
   return (
-    <label data-testid={`carte-${option.id}`} className={`${CARTE} ${retenu ? RETENU : REPOS} relative cursor-pointer`}>
+    <label
+      data-testid={`carte-${option.id}`}
+      className={`${CARTE} ${retenu ? RETENU : REPOS} cursor-pointer has-[:focus-visible]:outline has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-accent`}
+    >
+      {teinte}
       <input
         type={exclusif ? 'radio' : 'checkbox'}
         name={exclusif ? option.groupe : undefined}
@@ -114,9 +124,8 @@ export function CarteOption({
             ? onChoisirExclusif(option.groupe, option.id)
             : onPoser(option.id, e.target.checked ? 1 : 0)
         }
-        // `sr-only` seul ramène le clic natif à 0 px (clip-path) : la carte entière
-        // reste alors cliquable au clic simple, mais un clic direct sur l'input rate
-        // sa cible et la suite qui cible getByRole('checkbox'/'radio') échoue.
+        // `sr-only` viderait la zone cliquable (clip-path) : l'input doit
+        // couvrir toute la carte pour rester la vraie cible du clic direct.
         className="absolute inset-0 z-10 cursor-pointer opacity-0"
       />
       {corps}
