@@ -47,6 +47,13 @@ describe('calculer', () => {
     expect(devis.haut).toBe(3800)
   })
 
+  it('arrondit bas et haut sur un total non-multiple de cent', () => {
+    const devis = calculer({ redaction: 1 })
+    expect(devis.total).toBe(1650)
+    expect(devis.bas).toBe(1600)
+    expect(devis.haut).toBe(1900)
+  })
+
   it('expose la base hors pourcentage', () => {
     expect(calculer({ blog: 1, express: 1 }).base).toBe(2200)
   })

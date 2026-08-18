@@ -1,5 +1,5 @@
 // lib/config/devis.ts
-import { OPTIONS, SOCLE_ID, optionParId } from '@/lib/config/catalogue'
+import { Option, OPTIONS, SOCLE_ID } from '@/lib/config/catalogue'
 
 export type Configuration = Record<string, number>
 
@@ -14,9 +14,8 @@ export type Devis = {
 export const CONFIG_VIDE: Configuration = {}
 
 /** Quantité effective : plafonnée pour les quantifiables, ramenée à 1 sinon. */
-function quantite(id: string, brute: number): number {
-  const option = optionParId(id)
-  if (!option || brute <= 0) return 0
+function quantite(option: Option, brute: number): number {
+  if (brute <= 0) return 0
   if (!option.quantifiable) return 1
   return Math.min(Math.floor(brute), option.quantifiable.max)
 }
@@ -27,7 +26,7 @@ export function calculer(config: Configuration): Devis {
   let pourcentage = 0
 
   for (const option of OPTIONS) {
-    const n = option.id === SOCLE_ID ? 1 : quantite(option.id, config[option.id] ?? 0)
+    const n = option.id === SOCLE_ID ? 1 : quantite(option, config[option.id] ?? 0)
     if (n === 0) continue
 
     if (option.unite === 'mensuel') mensuel += option.prix * n
