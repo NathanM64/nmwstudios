@@ -6,11 +6,14 @@ import { ThemeToggle } from '@/components/shell/ThemeToggle'
 import { PanneauOptions } from '@/components/config/PanneauOptions'
 import { BarrePrix } from '@/components/config/BarrePrix'
 import { Apercu } from '@/components/config/Apercu'
+import { VignettesScene } from '@/components/config/VignettesScene'
 import { CONFIG_VIDE, type Configuration } from '@/lib/config/devis'
 import { decoder, encoder } from '@/lib/config/url'
+import type { SceneId } from '@/lib/config/scenes'
 
 export function Configurateur() {
   const [config, setConfig] = useState<Configuration>(CONFIG_VIDE)
+  const [scene, setScene] = useState<SceneId>('site')
 
   // Lu au montage, pas via `searchParams` : ce dernier rend la page dynamique et
   // Next n'y émet plus les préchargements de police dans le `<head>`.
@@ -34,12 +37,13 @@ export function Configurateur() {
 
       <Container className="mt-8 grid gap-8 lg:grid-cols-[1fr_22rem]">
         <div className="sticky top-4 self-start lg:top-24">
-          <Apercu config={config} />
+          <Apercu config={config} scene={scene} />
+          <VignettesScene scene={scene} onChange={setScene} />
           <p className="mt-2 font-mono text-xs uppercase tracking-[0.08em] text-muted-foreground">
             aperçu, pas votre futur site
           </p>
         </div>
-        <PanneauOptions config={config} onChange={setConfig} />
+        <PanneauOptions config={config} onChange={setConfig} onScene={setScene} />
       </Container>
 
       <BarrePrix config={config} />

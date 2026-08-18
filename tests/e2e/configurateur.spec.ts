@@ -241,3 +241,66 @@ test('l’aperçu reste visible quand on fait défiler les options', async ({ pa
   await page.getByRole('radio', { name: 'Partenaire' }).scrollIntoViewIfNeeded()
   await expect(page.getByTestId('apercu-nav')).toBeInViewport()
 })
+
+test('cocher le référencement bascule l’aperçu sur la scène de recherche', async ({ page }) => {
+  await page.goto('/configurateur')
+  await expect(page.getByTestId('apercu-nav')).toBeVisible()
+  await page.getByRole('checkbox', { name: 'Fondations SEO' }).check()
+  await expect(page.getByTestId('apercu-seo')).toBeVisible()
+  await expect(page.getByTestId('apercu-nav')).toHaveCount(0)
+})
+
+test('cocher une option visible garde la scène du site', async ({ page }) => {
+  await page.goto('/configurateur')
+  await page.getByRole('checkbox', { name: 'Un blog' }).check()
+  await expect(page.getByTestId('apercu-blog')).toBeVisible()
+  await expect(page.getByTestId('apercu-nav')).toBeVisible()
+})
+
+test('les vignettes ramènent à la scène du site', async ({ page }) => {
+  await page.goto('/configurateur')
+  await page.getByRole('checkbox', { name: 'Fondations SEO' }).check()
+  await page.getByRole('button', { name: 'Votre site', exact: true }).click()
+  await expect(page.getByTestId('apercu-nav')).toBeVisible()
+})
+
+test('la scène du site garde tout ce qui a été coché', async ({ page }) => {
+  await page.goto('/configurateur')
+  await page.getByRole('checkbox', { name: 'Un blog' }).check()
+  await page.getByRole('checkbox', { name: 'Fondations SEO' }).check()
+  await page.getByRole('button', { name: 'Votre site', exact: true }).click()
+  await expect(page.getByTestId('apercu-blog')).toBeVisible()
+})
+
+test('la vignette de la scène active porte aria-pressed, les autres non', async ({ page }) => {
+  await page.goto('/configurateur')
+  await expect(page.getByRole('button', { name: 'Votre site', exact: true })).toHaveAttribute('aria-pressed', 'true')
+  await expect(page.getByRole('button', { name: 'Dans Google' })).toHaveAttribute('aria-pressed', 'false')
+  await page.getByRole('checkbox', { name: 'Fondations SEO' }).check()
+  await expect(page.getByRole('button', { name: 'Votre site', exact: true })).toHaveAttribute('aria-pressed', 'false')
+  await expect(page.getByRole('button', { name: 'Dans Google' })).toHaveAttribute('aria-pressed', 'true')
+})
+
+test('ouvrir l’infobulle d’une option de recherche bascule aussi la scène', async ({ page }) => {
+  await page.goto('/configurateur')
+  await expect(page.getByTestId('apercu-nav')).toBeVisible()
+  await page.getByRole('button', { name: 'Que comprend : Fondations SEO' }).click()
+  await expect(page.getByTestId('apercu-seo')).toBeVisible()
+  await expect(page.getByTestId('apercu-nav')).toHaveCount(0)
+  await expect(page.getByRole('checkbox', { name: 'Fondations SEO' })).not.toBeChecked()
+})
+
+test('cocher le domaine ajoute son indicateur dans la scène technique', async ({ page }) => {
+  await page.goto('/configurateur')
+  await expect(page.getByTestId('apercu-domaine')).toHaveCount(0)
+  await page.getByRole('checkbox', { name: 'Domaine et e-mails professionnels' }).check()
+  await expect(page.getByTestId('apercu-perf')).toBeVisible()
+  await expect(page.getByTestId('apercu-domaine')).toBeVisible()
+})
+
+test('la vignette « Déroulé » atteint la scène de planification sans rien cocher', async ({ page }) => {
+  await page.goto('/configurateur')
+  await page.getByRole('button', { name: 'Déroulé' }).click()
+  await expect(page.getByTestId('apercu-planning')).toBeVisible()
+  await expect(page.getByTestId('apercu-nav')).toHaveCount(0)
+})

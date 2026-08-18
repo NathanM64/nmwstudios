@@ -3,6 +3,7 @@
 import { Infobulle } from '@/components/config/Infobulle'
 import { GROUPES, OPTIONS, SOCLE_ID, type Option } from '@/lib/config/catalogue'
 import { formaterEuros, type Configuration } from '@/lib/config/devis'
+import { sceneDeOption, type SceneId } from '@/lib/config/scenes'
 
 function suffixePrix(option: Option): string {
   return option.unite === 'mensuel'
@@ -15,17 +16,23 @@ function suffixePrix(option: Option): string {
 export function PanneauOptions({
   config,
   onChange,
+  onScene,
 }: {
   config: Configuration
   onChange: (config: Configuration) => void
+  onScene: (scene: SceneId) => void
 }) {
-  const poser = (id: string, n: number) => onChange({ ...config, [id]: n })
+  const poser = (id: string, n: number) => {
+    onChange({ ...config, [id]: n })
+    onScene(sceneDeOption(id))
+  }
 
   const choisirExclusif = (groupe: string, id: string) => {
     const suivant = { ...config }
     for (const o of OPTIONS) if (o.groupe === groupe) delete suivant[o.id]
     suivant[id] = 1
     onChange(suivant)
+    onScene(sceneDeOption(id))
   }
 
   return (
@@ -46,7 +53,9 @@ export function PanneauOptions({
                   <div key={option.id} className="flex items-center justify-between text-sm">
                     <div className="flex items-center gap-2">
                       {option.libelle}
-                      <Infobulle id={option.id} libelle={option.libelle} texte={option.explication} />
+                      <span onClick={() => onScene(sceneDeOption(option.id))}>
+                        <Infobulle id={option.id} libelle={option.libelle} texte={option.explication} />
+                      </span>
                     </div>
                     <span className="font-mono text-muted-foreground">{formaterEuros(option.prix)}</span>
                   </div>
@@ -58,7 +67,9 @@ export function PanneauOptions({
                   <div key={option.id} className="flex items-center justify-between gap-3 text-sm">
                     <div className="flex items-center gap-2">
                       {option.libelle}
-                      <Infobulle id={option.id} libelle={option.libelle} texte={option.explication} />
+                      <span onClick={() => onScene(sceneDeOption(option.id))}>
+                        <Infobulle id={option.id} libelle={option.libelle} texte={option.explication} />
+                      </span>
                     </div>
                     <span className="flex items-center gap-2">
                       <button
@@ -118,7 +129,9 @@ export function PanneauOptions({
                       />
                       {option.libelle}
                     </label>
-                    <Infobulle id={option.id} libelle={option.libelle} texte={option.explication} />
+                    <span onClick={() => onScene(sceneDeOption(option.id))}>
+                      <Infobulle id={option.id} libelle={option.libelle} texte={option.explication} />
+                    </span>
                   </div>
                   <span className="font-mono text-muted-foreground">{suffixePrix(option)}</span>
                 </div>

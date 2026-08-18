@@ -1,0 +1,34 @@
+'use client'
+
+import { SCENES, type SceneId } from '@/lib/config/scenes'
+
+export function VignettesScene({
+  scene,
+  onChange,
+}: {
+  scene: SceneId
+  onChange: (scene: SceneId) => void
+}) {
+  return (
+    <div role="group" aria-label="Point de vue de l’aperçu" className="mt-3 flex flex-wrap gap-2">
+      {SCENES.map((s) => {
+        const actif = s.id === scene
+        return (
+          <button
+            key={s.id}
+            type="button"
+            aria-pressed={actif}
+            onClick={() => onChange(s.id)}
+            className={`min-h-9 rounded-md border px-3 py-1.5 text-xs transition-colors duration-(--dur-micro) ${
+              actif
+                ? 'border-accent text-foreground'
+                : 'border-border text-muted-foreground hover:text-foreground'
+            }`}
+          >
+            {s.libelle}
+          </button>
+        )
+      })}
+    </div>
+  )
+}
