@@ -44,10 +44,10 @@ export function PanneauOptions({
                 return (
                   // div, pas p : le popover de l'infobulle n'est pas du contenu phrasé.
                   <div key={option.id} className="flex items-center justify-between text-sm">
-                    <span className="flex items-center gap-2">
+                    <div className="flex items-center gap-2">
                       {option.libelle}
                       <Infobulle id={option.id} libelle={option.libelle} texte={option.explication} />
-                    </span>
+                    </div>
                     <span className="font-mono text-muted-foreground">{formaterEuros(option.prix)}</span>
                   </div>
                 )
@@ -56,10 +56,10 @@ export function PanneauOptions({
               if (option.quantifiable) {
                 return (
                   <div key={option.id} className="flex items-center justify-between gap-3 text-sm">
-                    <span className="flex items-center gap-2">
+                    <div className="flex items-center gap-2">
                       {option.libelle}
                       <Infobulle id={option.id} libelle={option.libelle} texte={option.explication} />
-                    </span>
+                    </div>
                     <span className="flex items-center gap-2">
                       <button
                         type="button"
@@ -94,7 +94,7 @@ export function PanneauOptions({
                 // div en dehors : un bouton d'infobulle est lui aussi labelable, il ne peut pas
                 // rejoindre l'input dans le même <label>.
                 <div key={option.id} className="flex items-center justify-between gap-3 text-sm">
-                  <span className="flex items-center gap-2">
+                  <div className="flex items-center gap-2">
                     <label className="flex items-center gap-2">
                       <input
                         type={exclusif ? 'radio' : 'checkbox'}
@@ -110,7 +110,7 @@ export function PanneauOptions({
                       {option.libelle}
                     </label>
                     <Infobulle id={option.id} libelle={option.libelle} texte={option.explication} />
-                  </span>
+                  </div>
                   <span className="font-mono text-muted-foreground">{suffixePrix(option)}</span>
                 </div>
               )
