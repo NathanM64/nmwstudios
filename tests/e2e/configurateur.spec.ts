@@ -209,3 +209,8 @@ test('configurer ne remplit pas l’historique', async ({ page }) => {
   await page.goBack()
   await expect(page).not.toHaveURL(/configurateur/)
 })
+
+test('le configurateur précharge ses polices dans le HTML servi', async ({ request }) => {
+  const html = await (await request.get('/configurateur')).text()
+  expect(html).toContain('as="font"')
+})

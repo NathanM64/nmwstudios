@@ -6,11 +6,19 @@ import { ThemeToggle } from '@/components/shell/ThemeToggle'
 import { PanneauOptions } from '@/components/config/PanneauOptions'
 import { BarrePrix } from '@/components/config/BarrePrix'
 import { Apercu } from '@/components/config/Apercu'
-import type { Configuration } from '@/lib/config/devis'
+import { CONFIG_VIDE, type Configuration } from '@/lib/config/devis'
 import { decoder, encoder } from '@/lib/config/url'
 
-export function Configurateur({ recherche = '' }: { recherche?: string }) {
-  const [config, setConfig] = useState<Configuration>(() => decoder(recherche))
+export function Configurateur() {
+  const [config, setConfig] = useState<Configuration>(CONFIG_VIDE)
+
+  // Lu au montage, pas via `searchParams` : ce dernier rend la page dynamique et
+  // Next n'y émet plus les préchargements de police dans le `<head>`.
+  useEffect(() => {
+    const lue = decoder(location.search)
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- lecture ponctuelle de l'URL au montage, pas de resynchronisation en boucle.
+    if (Object.keys(lue).length > 0) setConfig(lue)
+  }, [])
 
   useEffect(() => {
     const query = encoder(config)

@@ -7,22 +7,11 @@ export const metadata = {
   description: 'Composez votre site et voyez le prix se construire.',
 }
 
-export default async function Page({
-  searchParams,
-}: {
-  searchParams: Promise<Record<string, string | string[] | undefined>>
-}) {
-  const params = await searchParams
-  const recherche = new URLSearchParams(
-    Object.entries(params).flatMap(([cle, valeur]) =>
-      valeur === undefined ? [] : [[cle, Array.isArray(valeur) ? valeur[0] : valeur] as [string, string]]
-    )
-  ).toString()
-
+export default function Page() {
   return (
     <>
       <Dock />
-      <Configurateur recherche={recherche} />
+      <Configurateur />
       <Footer />
     </>
   )
