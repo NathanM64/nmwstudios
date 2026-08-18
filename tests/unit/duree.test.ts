@@ -50,6 +50,11 @@ describe('calculerDeroule', () => {
     expect(calculerDeroule({ pages: 3 }).construction).toBeGreaterThan(calculerDeroule({ pages: 1 }).construction)
   })
 
+  it('plafonne les tranches au quantifiable.max', () => {
+    // La règle est dupliquée entre devis.ts et duree.ts, deux implémentations qui pourraient diverger.
+    expect(calculerDeroule({ pages: 100 }).construction).toBe(calculerDeroule({ pages: 4 }).construction)
+  })
+
   it('sort le cadrage de la construction, il la précède', () => {
     const deroule = calculerDeroule({ cadrage: 1 })
     expect(deroule.cadrage).toBeGreaterThan(0)
