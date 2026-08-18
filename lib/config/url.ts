@@ -11,10 +11,11 @@ export function decoder(recherche: string): Configuration {
   const config: Configuration = {}
 
   for (const [cle, valeur] of new URLSearchParams(recherche)) {
-    if (!optionParId(cle)) continue
+    const option = optionParId(cle)
+    if (!option) continue
     const n = valeur === '' ? 1 : Number(valeur)
     if (!Number.isInteger(n) || n <= 0) continue
-    config[cle] = n
+    config[cle] = option.quantifiable ? Math.min(n, option.quantifiable.max) : n
   }
 
   return config

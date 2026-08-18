@@ -200,6 +200,13 @@ test('une URL configurée restitue l’état à l’ouverture', async ({ page })
   await expect(page.getByTestId('mensuel')).toContainText('90')
 })
 
+test('un lien partagé plafonne une quantité au-delà du maximum de l’option', async ({ page }) => {
+  await page.goto('/configurateur?pages=99')
+  await expect(page.getByTestId('quantite-pages')).toHaveText('4')
+  await page.goto('/configurateur?redaction=999')
+  await expect(page.getByTestId('quantite-redaction')).toHaveText('15')
+})
+
 test('configurer ne remplit pas l’historique', async ({ page }) => {
   await page.goto('/configurateur')
   const longueurInitiale = await page.evaluate(() => history.length)

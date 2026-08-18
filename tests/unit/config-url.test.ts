@@ -53,6 +53,14 @@ describe('decoder', () => {
     expect(decoder('pages=-1&blog=0')).toEqual({})
   })
 
+  it('plafonne une quantité quantifiable au maximum déclaré', () => {
+    expect(decoder('pages=99')).toEqual({ pages: 4 })
+  })
+
+  it('plafonne la rédaction très au-delà de son maximum déclaré', () => {
+    expect(decoder('redaction=999')).toEqual({ redaction: 15 })
+  })
+
   it('fait l’aller-retour sans perte', () => {
     const config = { pages: 2, blog: 1, seo: 1, essentiel: 1 }
     expect(decoder(encoder(config))).toEqual(config)
