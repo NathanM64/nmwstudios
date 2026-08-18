@@ -21,11 +21,17 @@ function useContrasteMesure(actif: boolean): number | null {
 
   useEffect(() => {
     if (!actif) return
-    const styles = getComputedStyle(document.documentElement)
-    const texte = parseColor(styles.getPropertyValue('--color-foreground').trim())
-    const fond = parseColor(styles.getPropertyValue('--color-canvas').trim())
-    // eslint-disable-next-line react-hooks/set-state-in-effect -- mesure DOM ponctuelle déclenchée par `actif`, pas de boucle de rendu.
-    setRatio(contrastRatio(texte.rgb, fond.rgb))
+    const mesurer = () => {
+      const styles = getComputedStyle(document.documentElement)
+      const texte = parseColor(styles.getPropertyValue('--color-foreground').trim())
+      const fond = parseColor(styles.getPropertyValue('--color-canvas').trim())
+      setRatio(contrastRatio(texte.rgb, fond.rgb))
+    }
+    mesurer()
+    // Le thème se change depuis cet écran : sans observation, le chiffre affiché ment.
+    const observateur = new MutationObserver(mesurer)
+    observateur.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] })
+    return () => observateur.disconnect()
   }, [actif])
 
   // Dérivé au rendu plutôt que remis à `null` dans l'effet : évite un setState superflu.
@@ -85,7 +91,7 @@ export function Apercu({ config }: { config: Configuration }) {
 
         {ratio !== null && (
           <p data-testid="apercu-a11y" className="animate-apparait text-[0.5rem] text-accent">
-            Contraste mesuré : {ratio.toFixed(2)}:1 · conforme AA
+            Contraste mesuré : {ratio.toFixed(2)}:1 · {ratio >= 4.5 ? 'conforme AA' : 'sous le seuil AA'}
           </p>
         )}
 

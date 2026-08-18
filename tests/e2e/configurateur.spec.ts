@@ -153,14 +153,24 @@ test('l’accessibilité affiche un ratio de contraste mesuré et conforme', asy
   expect(ratio).toBeCloseTo(attendu, 2)
 })
 
+test('le ratio de contraste est remesuré au changement de thème', async ({ page }) => {
+  await page.goto('/configurateur')
+  await page.getByRole('checkbox', { name: 'Accessibilité RGAA' }).check()
+  const avant = await page.getByTestId('apercu-a11y').textContent()
+  await page.getByRole('button', { name: 'Changer de thème' }).click()
+  await expect(page.getByTestId('apercu-a11y')).not.toHaveText(avant ?? '')
+})
+
 test('le SEO affiche l’extrait de résultat de recherche', async ({ page }) => {
   await page.goto('/configurateur')
+  await expect(page.getByTestId('apercu-seo')).toHaveCount(0)
   await page.getByRole('checkbox', { name: 'Fondations SEO' }).check()
   await expect(page.getByTestId('apercu-seo')).toBeVisible()
 })
 
 test('la langue supplémentaire ajoute un sélecteur qui bascule l’aperçu', async ({ page }) => {
   await page.goto('/configurateur')
+  await expect(page.getByTestId('apercu-langue')).toHaveCount(0)
   await page.getByRole('button', { name: 'Ajouter : Une langue de plus' }).click()
   await expect(page.getByTestId('apercu-langue')).toBeVisible()
   await page.getByTestId('apercu-langue').selectOption('en')
@@ -169,6 +179,7 @@ test('la langue supplémentaire ajoute un sélecteur qui bascule l’aperçu', a
 
 test('la formule récurrente affiche sa carte d’état', async ({ page }) => {
   await page.goto('/configurateur')
+  await expect(page.getByTestId('carte-etat')).toHaveCount(0)
   await page.getByRole('radio', { name: 'Sérénité' }).check()
   await expect(page.getByTestId('carte-etat')).toContainText('4 h')
 })
