@@ -1,50 +1,31 @@
 import { optionParId, type GroupeId } from '@/lib/config/catalogue'
 
-export type SceneId =
-  | 'site' | 'recherche' | 'conformite' | 'technique' | 'exploitation' | 'planning'
+export type SceneId = 'site' | 'preuve' | 'deroule'
 
-/** Le groupe est trop grossier : le référencement se lit dans Google, un article
- *  se lit sur le blog. RGPD et mentions légales restent en conformité malgré leur
- *  rendu sur la page : elles y voisinent le contraste mesuré, un ensemble cohérent. */
+/** Le groupe est trop grossier : la livraison accélérée est technique par nature
+ *  mais ne se démontre que sur une ligne de temps. */
 const SCENE_PAR_OPTION: Record<string, SceneId> = {
-  seo: 'recherche',
-  'seo-local': 'recherche',
-  legal: 'conformite',
-  rgpd: 'conformite',
-  a11y: 'conformite',
-  migration: 'technique',
-  domaine: 'technique',
-  perf: 'technique',
-  cadrage: 'planning',
-  formation: 'planning',
-  express: 'planning',
-  'sans-suivi': 'exploitation',
-  heberg: 'exploitation',
-  essentiel: 'exploitation',
-  serenite: 'exploitation',
-  partenaire: 'exploitation',
+  seo: 'preuve',
+  'seo-local': 'preuve',
+  express: 'deroule',
 }
 
-/** Repli par groupe pour toute option non listée ci-dessus. */
 export const SCENE_PAR_GROUPE: Record<GroupeId, SceneId> = {
   socle: 'site',
   volume: 'site',
   contenu: 'site',
   fonctionnel: 'site',
   visibilite: 'site',
-  conformite: 'conformite',
-  technique: 'technique',
-  services: 'planning',
-  recurrent: 'exploitation',
+  conformite: 'preuve',
+  technique: 'preuve',
+  services: 'deroule',
+  recurrent: 'deroule',
 }
 
 export const SCENES: readonly { id: SceneId; libelle: string }[] = [
-  { id: 'site', libelle: 'Votre site' },
-  { id: 'recherche', libelle: 'Dans Google' },
-  { id: 'conformite', libelle: 'Conformité' },
-  { id: 'technique', libelle: 'Technique' },
-  { id: 'planning', libelle: 'Déroulé' },
-  { id: 'exploitation', libelle: 'Au quotidien' },
+  { id: 'site', libelle: 'Le site' },
+  { id: 'preuve', libelle: 'La preuve' },
+  { id: 'deroule', libelle: 'Le déroulé' },
 ] as const
 
 export function sceneDeOption(id: string): SceneId {

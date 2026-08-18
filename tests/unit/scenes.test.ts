@@ -1,43 +1,52 @@
 import { describe, expect, it } from 'vitest'
+import { OPTIONS } from '@/lib/config/catalogue'
 import { SCENES, SCENE_PAR_GROUPE, sceneDeOption } from '@/lib/config/scenes'
 
 describe('scènes', () => {
-  it('laisse les options visibles sur le site dans la scène de repos', () => {
-    for (const id of ['socle', 'pages', 'blog', 'langue', 'membre', 'rdv', 'redaction']) {
-      expect(sceneDeOption(id)).toBe('site')
+  it('en déclare exactement trois', () => {
+    expect(SCENES.map((s) => s.id)).toEqual(['site', 'preuve', 'deroule'])
+  })
+
+  it('range chaque option du catalogue dans une scène déclarée', () => {
+    const declarees = new Set(SCENES.map((s) => s.id))
+    for (const option of OPTIONS) {
+      expect(declarees.has(sceneDeOption(option.id))).toBe(true)
     }
   })
 
-  it('sort de la scène de repos pour ce qui ne se voit pas sur une page', () => {
-    expect(sceneDeOption('seo')).toBe('recherche')
-    expect(sceneDeOption('seo-local')).toBe('recherche')
-    expect(sceneDeOption('a11y')).toBe('conformite')
-    expect(sceneDeOption('migration')).toBe('technique')
-    expect(sceneDeOption('perf')).toBe('technique')
-    expect(sceneDeOption('formation')).toBe('planning')
-    expect(sceneDeOption('express')).toBe('planning')
-    expect(sceneDeOption('essentiel')).toBe('exploitation')
+  it('répartit les 30 options en 14, 8 et 8', () => {
+    const compte = { site: 0, preuve: 0, deroule: 0 }
+    for (const option of OPTIONS) compte[sceneDeOption(option.id)]++
+    expect(compte).toEqual({ site: 14, preuve: 8, deroule: 8 })
   })
 
-  it('garde sur le site ce qui s’y voit, même dans un groupe spécialisé', () => {
-    // Un article se lit sur le blog, la newsletter et le paiement se voient sur la page.
+  it('met dans la preuve ce qui se mesure, y compris hors du groupe conformité', () => {
+    for (const id of ['seo', 'seo-local', 'legal', 'rgpd', 'a11y', 'migration', 'domaine', 'perf']) {
+      expect(sceneDeOption(id)).toBe('preuve')
+    }
+  })
+
+  it('met dans le déroulé ce qui se passe dans le temps', () => {
+    for (const id of ['cadrage', 'formation', 'express', 'sans-suivi', 'heberg', 'essentiel', 'serenite', 'partenaire']) {
+      expect(sceneDeOption(id)).toBe('deroule')
+    }
+  })
+
+  it('garde un article sur le site, il se lit sur le blog et non dans un rapport', () => {
     expect(sceneDeOption('article')).toBe('site')
-    expect(sceneDeOption('newsletter')).toBe('site')
-    expect(sceneDeOption('paiement')).toBe('site')
   })
 
-  it('garde RGPD et mentions légales en conformité malgré leur rendu sur la page', () => {
-    // Choix assumé : elles y voisinent le contraste mesuré, un ensemble cohérent.
-    expect(sceneDeOption('rgpd')).toBe('conformite')
-    expect(sceneDeOption('legal')).toBe('conformite')
+  it('sort la livraison accélérée de son groupe technique pour la mettre dans le temps', () => {
+    expect(sceneDeOption('express')).toBe('deroule')
   })
 
-  it('retombe sur la scène de repos pour un identifiant inconnu', () => {
+  it('retombe sur le site pour un identifiant inconnu', () => {
     expect(sceneDeOption('licorne')).toBe('site')
   })
 
-  it('déclare un libellé pour chaque scène atteignable', () => {
-    const atteignables = new Set(Object.values(SCENE_PAR_GROUPE))
-    for (const id of atteignables) expect(SCENES.find((s) => s.id === id)?.libelle).toBeTruthy()
+  it('déclare un libellé pour chaque scène atteignable par un groupe', () => {
+    for (const id of new Set(Object.values(SCENE_PAR_GROUPE))) {
+      expect(SCENES.find((s) => s.id === id)?.libelle).toBeTruthy()
+    }
   })
 })
