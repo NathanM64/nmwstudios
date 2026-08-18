@@ -685,3 +685,12 @@ test('en bas du panneau, le récapitulatif final remplace la barre fixe, et l’
   await expect(page.getByTestId('recapitulatif-final')).toBeInViewport()
   await expect(page.getByTestId('barre-prix')).toBeHidden()
 })
+
+test('la barre de prix garde un fond opaque sur grand écran', async ({ page }) => {
+  await page.setViewportSize({ width: 1600, height: 900 })
+  await page.goto('/configurateur')
+  const fond = await page.getByTestId('barre-prix').evaluate((el) => getComputedStyle(el).backgroundColor)
+  // Fond transparent : `rgba(0, 0, 0, 0)`, alpha à zéro. Le fond opaque du jeton
+  // `--color-canvas` a toujours un alpha à 1, quel que soit le thème.
+  expect(fond).not.toMatch(/,\s*0\s*\)$/)
+})
