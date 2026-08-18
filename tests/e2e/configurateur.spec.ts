@@ -405,13 +405,12 @@ test('le dock des sections d’accueil n’apparaît pas sur le configurateur', 
   await expect(page.getByRole('link', { name: 'Revenir à l’accueil' })).toBeVisible()
 })
 
-test('aucune adresse n’est demandée avant d’avoir vu le prix', async ({ page }) => {
+test('aucune adresse n’est jamais demandée, le récapitulatif s’envoie par la messagerie du visiteur', async ({ page }) => {
   await page.goto('/configurateur')
   await expect(page.getByTestId('fourchette')).toBeVisible()
-  // includeHidden : par défaut getByRole ignore un popover fermé, un textbox absent le passerait aussi.
-  const email = page.getByRole('textbox', { name: /adresse e-mail/i, includeHidden: true })
-  await expect(email).toBeAttached()
-  await expect(email).toBeHidden()
+  await page.getByRole('button', { name: 'Recevoir le récapitulatif' }).click()
+  await expect(page.getByRole('textbox', { name: /adresse e-mail/i })).toHaveCount(0)
+  await expect(page.getByRole('checkbox', { name: /j’accepte/i })).toHaveCount(0)
 })
 
 test('le récapitulatif n’affiche jamais de montant en euros pour une majoration en pourcentage', async ({ page }) => {
@@ -438,11 +437,14 @@ test('le récapitulatif liste les options retenues', async ({ page }) => {
   await expect(recap).toContainText('Fondations SEO')
 })
 
-test('le récapitulatif demande une adresse et un consentement', async ({ page }) => {
+test('le récapitulatif propose un lien mailto qui reprend la configuration', async ({ page }) => {
   await page.goto('/configurateur?blog')
   await page.getByRole('button', { name: 'Recevoir le récapitulatif' }).click()
-  await expect(page.getByRole('textbox', { name: /adresse e-mail/i })).toBeVisible()
-  await expect(page.getByRole('checkbox', { name: /j’accepte/i })).toBeVisible()
+  const lien = page.getByRole('link', { name: /envoyer par e-mail/i })
+  await expect(lien).toBeVisible()
+  const href = await lien.getAttribute('href')
+  expect(href).toContain('mailto:contact@nmwstudios.com')
+  expect(decodeURIComponent(href ?? '')).toContain('blog')
 })
 
 test('le bloc Prix de l’accueil mène au configurateur', async ({ page }) => {
