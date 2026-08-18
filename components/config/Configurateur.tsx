@@ -50,7 +50,7 @@ export function Configurateur() {
   }, [config])
 
   return (
-    <main className="pb-40">
+    <main className="pb-24">
       <div
         data-testid="grille-configurateur"
         className="grid gap-8 px-5 sm:px-8 lg:grid-cols-[minmax(0,1fr)_26rem]"

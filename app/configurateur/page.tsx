@@ -1,6 +1,5 @@
 import { Configurateur } from '@/components/config/Configurateur'
 import { EnteteConfigurateur } from '@/components/config/EnteteConfigurateur'
-import { Footer } from '@/components/shell/Footer'
 
 export const metadata = {
   title: 'Configurez votre site',
@@ -12,7 +11,6 @@ export default function Page() {
     <>
       <EnteteConfigurateur />
       <Configurateur />
-      <Footer />
     </>
   )
 }
