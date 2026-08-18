@@ -82,3 +82,12 @@ test.describe('préférence système claire', () => {
     await expect(page.locator('html')).toHaveAttribute('data-theme', 'light')
   })
 })
+
+// Mesuré sur le HTML servi, pas sur le DOM : Next injecte des préchargements
+// après hydratation, trop tard pour le premier rendu.
+test('la page d’accueil précharge ses polices dans le HTML servi', async ({ request }) => {
+  const accueil = await (await request.get('/')).text()
+  const agences = await (await request.get('/agences')).text()
+  expect(agences).toContain('as="font"')
+  expect(accueil).toContain('as="font"')
+})

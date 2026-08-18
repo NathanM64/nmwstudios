@@ -1,16 +1,15 @@
-import { cookies } from 'next/headers'
 import { Container } from '@/components/ui/Container'
 import { Section } from '@/components/ui/Section'
 import { Dock } from '@/components/shell/Dock'
 import { ThemeToggle } from '@/components/shell/ThemeToggle'
 import { AudienceSwitch } from '@/components/shell/AudienceSwitch'
 import { Footer } from '@/components/shell/Footer'
-import { AUDIENCE_COOKIE } from '@/lib/shell/audience'
+import { rappelAudienceScript } from '@/lib/shell/audience'
 import { SECTIONS } from '@/lib/shell/sections'
 
-export default async function Page() {
-  const rappelAgence = (await cookies()).get(AUDIENCE_COOKIE)?.value === 'agence'
+const RAPPEL_ID = 'rappel-agence'
 
+export default function Page() {
   return (
     <>
       <Dock />
@@ -20,13 +19,17 @@ export default async function Page() {
           <ThemeToggle />
         </Container>
 
-        {rappelAgence && (
-          <Container>
-            <a href="/agences" className="mt-4 inline-block text-sm text-muted-foreground underline">
-              Revenir à la version agence
-            </a>
-          </Container>
-        )}
+        <Container>
+          <a
+            id={RAPPEL_ID}
+            hidden
+            href="/agences"
+            className="mt-4 inline-block text-sm text-muted-foreground underline"
+          >
+            Revenir à la version agence
+          </a>
+        </Container>
+        <script dangerouslySetInnerHTML={{ __html: rappelAudienceScript(RAPPEL_ID) }} />
 
         {SECTIONS.map(({ id, label }) => (
           <Section key={id} id={id}>
