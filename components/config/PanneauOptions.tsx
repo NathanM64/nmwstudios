@@ -69,8 +69,17 @@ export function PanneauOptions({
                       >
                         −
                       </button>
-                      <span data-testid={`quantite-${option.id}`} className="w-4 text-center font-mono">
-                        {n}
+                      <span className="flex items-baseline gap-1">
+                        <span data-testid={`quantite-${option.id}`} className="w-4 text-right font-mono">
+                          {n}
+                        </span>
+                        <span
+                          data-testid={`unite-${option.id}`}
+                          className="w-14 text-muted-foreground"
+                        >
+                          {option.quantifiable.suffixe}
+                          {n > 1 ? 's' : ''}
+                        </span>
                       </span>
                       <button
                         type="button"

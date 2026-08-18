@@ -214,3 +214,30 @@ test('le configurateur précharge ses polices dans le HTML servi', async ({ requ
   const html = await (await request.get('/configurateur')).text()
   expect(html).toContain('as="font"')
 })
+
+test('le compteur dit ce qu’on incrémente', async ({ page }) => {
+  await page.goto('/configurateur')
+  await page.getByRole('button', { name: 'Ajouter : J’écris vos textes' }).click()
+  await expect(page.getByTestId('unite-redaction')).toHaveText('page')
+  await page.getByRole('button', { name: 'Ajouter : J’écris vos textes' }).click()
+  await expect(page.getByTestId('unite-redaction')).toHaveText('pages')
+})
+
+test('l’infobulle s’ouvre près de son bouton, pas dans un coin', async ({ page }) => {
+  await page.goto('/configurateur')
+  const bouton = page.getByRole('button', { name: 'Que comprend : Un blog' })
+  await bouton.click()
+  const cible = await bouton.boundingBox()
+  const bulle = await page.locator('#explication-blog').boundingBox()
+  // Sans marge, un popover se colle en haut à gauche du viewport : on vérifie qu'il n'y est pas.
+  expect(bulle!.x).toBeGreaterThan(20)
+  expect(bulle!.y).toBeGreaterThan(20)
+  expect(Math.abs(bulle!.y - cible!.y)).toBeLessThan(400)
+})
+
+test('l’aperçu reste visible quand on fait défiler les options', async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 800 })
+  await page.goto('/configurateur')
+  await page.getByRole('radio', { name: 'Partenaire' }).scrollIntoViewIfNeeded()
+  await expect(page.getByTestId('apercu-nav')).toBeInViewport()
+})

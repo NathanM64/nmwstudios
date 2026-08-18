@@ -33,7 +33,7 @@ export function Configurateur() {
       </Container>
 
       <Container className="mt-8 grid gap-8 lg:grid-cols-[1fr_22rem]">
-        <div>
+        <div className="sticky top-4 self-start lg:top-24">
           <Apercu config={config} />
           <p className="mt-2 font-mono text-xs uppercase tracking-[0.08em] text-muted-foreground">
             aperçu, pas votre futur site

@@ -154,3 +154,17 @@ body {
 @media (prefers-reduced-motion: reduce) {
   .animate-apparait { animation: none; }
 }
+
+/* Le reset Tailwind pose `margin: 0` sur `*`, ce qui écrase le `margin: auto` dont
+   le navigateur se sert pour centrer un popover : sans lui, il se colle en haut à
+   gauche du viewport. L'ancrage, là où il est reconnu, le ramène près du bouton. */
+[popover] {
+  margin: auto;
+}
+
+@supports (anchor-name: --sonde) {
+  [popover][data-ancre] {
+    position-area: block-end span-inline-start;
+    margin: 0.35rem 0 0 0;
+  }
+}
