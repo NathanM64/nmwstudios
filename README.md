@@ -26,7 +26,7 @@ yarn start        # sert le build de production
 yarn lint         # ESLint
 yarn test         # tests unitaires (Vitest)
 yarn test:e2e     # tests bout en bout (Playwright), servis sur le port 3100
-yarn budget       # mesure le JavaScript de première charge sur /agences
+yarn budget       # mesure le JavaScript de première charge de chaque route prérendue
 ```
 
 `yarn test:e2e` construit et démarre son propre serveur sur le port 3100,
@@ -71,9 +71,8 @@ Reste à faire, connu :
 - Aucun chiffre affiché qui ne soit mesuré. Aucun client, avis ou référence
   inventé.
 - Pas de plafond de JavaScript imposé : `yarn budget` mesure et rapporte le
-  poids de la première charge, sans jamais faire échouer la commande.
-  Référence actuelle : 131,3 ko gzip sur `/agences`, plancher constaté de
-  Next 16 avec React 19 sur une page vide, polyfills exclus.
+  poids de la première charge de chaque route prérendue, sans jamais faire
+  échouer la commande.
 - Messages de commit en français, sans `Co-Authored-By`.
 
 ## Pointeurs

@@ -1,4 +1,4 @@
-import { readFileSync, realpathSync } from 'node:fs'
+import { readFileSync, readdirSync, realpathSync } from 'node:fs'
 import { join, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { gzipSync } from 'node:zlib'
@@ -24,6 +24,17 @@ export function readFirstLoadBytes(htmlPath, staticRoot) {
   )
 }
 
+/** Une route par page HTML statique, `index.html` devenant `/`. Exclut les routes internes de Next (`_not-found`, `_global-error`). */
+export function listerRoutesPrerendues(appDir) {
+  return readdirSync(appDir)
+    .filter((nom) => nom.endsWith('.html') && !nom.startsWith('_'))
+    .map((nom) => {
+      const base = nom.slice(0, -'.html'.length)
+      return { route: base === 'index' ? '/' : `/${base}`, fichier: join(appDir, nom) }
+    })
+    .sort((a, b) => a.route.localeCompare(b.route))
+}
+
 /* Comparer des chemins résolus, jamais des URL : `import.meta.url` percent-encode
    espaces et accents, et la comparaison échouerait sans rien mesurer. */
 const lanceEnLigneDeCommande =
@@ -31,8 +42,10 @@ const lanceEnLigneDeCommande =
   realpathSync(fileURLToPath(import.meta.url)) === realpathSync(resolve(process.argv[1]))
 
 if (lanceEnLigneDeCommande) {
-  const octets = readFirstLoadBytes('.next/server/app/agences.html', '.next')
-  console.log(
-    `JavaScript de première charge sur /agences : ${(octets / 1024).toFixed(1)} ko gzip, hors polyfills noModule`
-  )
+  for (const { route, fichier } of listerRoutesPrerendues('.next/server/app')) {
+    const octets = readFirstLoadBytes(fichier, '.next')
+    console.log(
+      `JavaScript de première charge sur ${route} : ${(octets / 1024).toFixed(1)} ko gzip, hors polyfills noModule`
+    )
+  }
 }
