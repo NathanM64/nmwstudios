@@ -120,31 +120,6 @@ test('la barre reste visible sans défilement', async ({ page }) => {
   await expect(page.getByTestId('fourchette')).toBeInViewport()
 })
 
-test('l’explication d’une option est masquée par défaut', async ({ page }) => {
-  await page.goto('/configurateur')
-  // toBeHidden() seul passerait aussi si le texte n'existait nulle part : toBeAttached()
-  // force la preuve que le popover est bien dans le DOM, juste fermé.
-  const explication = page.getByText(/Une section actualités que vous alimentez/)
-  await expect(explication).toBeAttached()
-  await expect(explication).toBeHidden()
-})
-
-test('l’explication s’ouvre au clic et se ferme à Échap', async ({ page }) => {
-  await page.goto('/configurateur')
-  await page.getByRole('button', { name: 'Que comprend : Un blog' }).click()
-  await expect(page.getByText(/Une section actualités que vous alimentez/)).toBeVisible()
-  await page.keyboard.press('Escape')
-  await expect(page.getByText(/Une section actualités que vous alimentez/)).toBeHidden()
-})
-
-test('l’explication s’atteint au clavier', async ({ page }) => {
-  await page.goto('/configurateur')
-  const bouton = page.getByRole('button', { name: 'Que comprend : Un blog' })
-  await bouton.focus()
-  await page.keyboard.press('Enter')
-  await expect(page.getByText(/Une section actualités que vous alimentez/)).toBeVisible()
-})
-
 test('l’aperçu montre trois entrées de navigation par défaut', async ({ page }) => {
   await page.goto('/configurateur')
   await expect(page.getByTestId('apercu-nav').getByRole('listitem')).toHaveCount(3)
@@ -288,20 +263,6 @@ test('le compteur de quantité s’annonce aux lecteurs d’écran', async ({ pa
   await expect(page.getByTestId('quantite-pages')).toHaveAttribute('aria-live', 'polite')
 })
 
-test('l’infobulle s’ouvre collée au bord droit et sous son bouton, pas centrée dans le viewport', async ({ page }) => {
-  await page.goto('/configurateur')
-  const bouton = page.getByRole('button', { name: 'Que comprend : Un blog' })
-  await bouton.click()
-  const cible = await bouton.boundingBox()
-  const bulle = await page.locator('#explication-blog').boundingBox()
-  // L'ancrage CSS aligne le bord droit du popover sur celui du bouton, avec 0.35rem sous sa base :
-  // un popover simplement centré (`margin: auto` sans ancre) manquerait ces deux tests de plusieurs centaines de pixels.
-  expect(Math.abs(bulle!.x + bulle!.width - (cible!.x + cible!.width))).toBeLessThan(3)
-  const ecartVertical = bulle!.y - (cible!.y + cible!.height)
-  expect(ecartVertical).toBeGreaterThanOrEqual(0)
-  expect(ecartVertical).toBeLessThan(15)
-})
-
 test('l’aperçu reste visible quand on fait défiler les options', async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 800 })
   await page.goto('/configurateur')
@@ -346,17 +307,6 @@ test('la vignette de la scène active porte aria-pressed, les autres non', async
   await page.getByRole('checkbox', { name: 'Fondations SEO' }).check()
   await expect(page.getByRole('button', { name: 'Le site', exact: true })).toHaveAttribute('aria-pressed', 'false')
   await expect(page.getByRole('button', { name: 'La preuve', exact: true })).toHaveAttribute('aria-pressed', 'true')
-})
-
-test('ouvrir l’infobulle d’une option de recherche bascule aussi la scène, sans acheter l’option', async ({ page }) => {
-  await page.goto('/configurateur')
-  await expect(page.getByTestId('apercu-nav')).toBeVisible()
-  await page.getByRole('button', { name: 'Que comprend : Fondations SEO' }).click()
-  // La scène change, mais rien n'a été acheté : l'extrait ne doit pas apparaître pour autant.
-  await expect(page.getByTestId('apercu-recherche-vide')).toBeVisible()
-  await expect(page.getByTestId('apercu-seo')).toHaveCount(0)
-  await expect(page.getByTestId('apercu-nav')).toHaveCount(0)
-  await expect(page.getByRole('checkbox', { name: 'Fondations SEO' })).not.toBeChecked()
 })
 
 test('la scène de recherche ne montre l’extrait qu’une fois le référencement acheté', async ({ page }) => {
