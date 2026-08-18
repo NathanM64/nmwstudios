@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import { CONFIG_VIDE, calculer, formaterEuros } from '@/lib/config/devis'
+import { optionParId } from '@/lib/config/catalogue'
+import { CONFIG_VIDE, calculer, formaterEuros, suffixePrix } from '@/lib/config/devis'
 
 describe('calculer', () => {
   it('facture le socle seul sur une configuration vide', () => {
@@ -66,5 +67,23 @@ describe('formaterEuros', () => {
 
   it('laisse un montant court intact', () => {
     expect(formaterEuros(90)).toBe('90 €')
+  })
+})
+
+describe('suffixePrix', () => {
+  it('additionne un montant en euros pour une option forfait', () => {
+    expect(suffixePrix(optionParId('blog')!)).toBe('+700 €')
+  })
+
+  it('multiplie le forfait par la quantité pour une option quantifiable', () => {
+    expect(suffixePrix(optionParId('pages')!, 3)).toBe('+1 800 €')
+  })
+
+  it('suffixe le mois pour une option mensuelle, sans addition', () => {
+    expect(suffixePrix(optionParId('essentiel')!)).toBe('90 €/mois')
+  })
+
+  it('affiche une majoration en pourcentage, jamais un montant en euros', () => {
+    expect(suffixePrix(optionParId('express')!)).toBe('+30 %')
   })
 })

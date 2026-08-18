@@ -1,17 +1,9 @@
 'use client'
 
 import { Infobulle } from '@/components/config/Infobulle'
-import { GROUPES, OPTIONS, SOCLE_ID, type Option } from '@/lib/config/catalogue'
-import { formaterEuros, type Configuration } from '@/lib/config/devis'
+import { GROUPES, OPTIONS, SOCLE_ID } from '@/lib/config/catalogue'
+import { formaterEuros, suffixePrix, type Configuration } from '@/lib/config/devis'
 import { sceneDeOption, type SceneId } from '@/lib/config/scenes'
-
-function suffixePrix(option: Option): string {
-  return option.unite === 'mensuel'
-    ? `${formaterEuros(option.prix)}/mois`
-    : option.unite === 'pourcentage'
-      ? `+${option.prix} %`
-      : `+${formaterEuros(option.prix)}`
-}
 
 export function PanneauOptions({
   config,

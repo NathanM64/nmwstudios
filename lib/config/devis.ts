@@ -1,5 +1,5 @@
 // lib/config/devis.ts
-import { Option, OPTIONS, SOCLE_ID } from '@/lib/config/catalogue'
+import { type Option, OPTIONS, SOCLE_ID } from '@/lib/config/catalogue'
 
 export type Configuration = Record<string, number>
 
@@ -48,4 +48,13 @@ export function calculer(config: Configuration): Devis {
 export function formaterEuros(montant: number): string {
   const chiffres = String(montant).replace(/\B(?=(\d{3})+(?!\d))/g, ' ')
   return `${chiffres} €`
+}
+
+/** Prix affiché pour une option selon son unité, quantité prise en compte pour les quantifiables. */
+export function suffixePrix(option: Option, quantite = 1): string {
+  return option.unite === 'mensuel'
+    ? `${formaterEuros(option.prix)}/mois`
+    : option.unite === 'pourcentage'
+      ? `+${option.prix} %`
+      : `+${formaterEuros(option.prix * quantite)}`
 }

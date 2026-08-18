@@ -366,6 +366,22 @@ test('aucune adresse n’est demandée avant d’avoir vu le prix', async ({ pag
   await expect(email).toBeHidden()
 })
 
+test('le récapitulatif n’affiche jamais de montant en euros pour une majoration en pourcentage', async ({ page }) => {
+  await page.goto('/configurateur?express')
+  await page.getByRole('button', { name: 'Recevoir le récapitulatif' }).click()
+  const recap = page.getByTestId('recapitulatif')
+  await expect(recap).toContainText('+30 %')
+  await expect(recap).not.toContainText('30 €')
+})
+
+test('le récapitulatif multiplie le prix d’une option quantifiable par sa quantité', async ({ page }) => {
+  await page.goto('/configurateur?pages=3')
+  await page.getByRole('button', { name: 'Recevoir le récapitulatif' }).click()
+  const recap = page.getByTestId('recapitulatif')
+  await expect(recap).toContainText('1 800 €')
+  await expect(recap).not.toContainText('600 €')
+})
+
 test('le récapitulatif liste les options retenues', async ({ page }) => {
   await page.goto('/configurateur?blog&seo')
   await page.getByRole('button', { name: 'Recevoir le récapitulatif' }).click()

@@ -1,7 +1,7 @@
 'use client'
 
 import { OPTIONS, SOCLE_ID } from '@/lib/config/catalogue'
-import { calculer, formaterEuros, type Configuration } from '@/lib/config/devis'
+import { calculer, formaterEuros, suffixePrix, type Configuration } from '@/lib/config/devis'
 
 export function Recapitulatif({ config }: { config: Configuration }) {
   const devis = calculer(config)
@@ -13,15 +13,20 @@ export function Recapitulatif({ config }: { config: Configuration }) {
       <h2 className="text-lg font-semibold">Votre configuration</h2>
 
       <ul className="mt-4 flex flex-col gap-1 text-sm">
-        {retenues.map((option) => (
-          <li key={option.id} className="flex justify-between gap-4">
-            <span>
-              {option.libelle}
-              {(config[option.id] ?? 0) > 1 && ` × ${config[option.id]}`}
-            </span>
-            <span className="font-mono text-muted-foreground">{formaterEuros(option.prix)}</span>
-          </li>
-        ))}
+        {retenues.map((option) => {
+          const quantite = config[option.id] ?? 1
+          return (
+            <li key={option.id} className="flex justify-between gap-4">
+              <span>
+                {option.libelle}
+                {quantite > 1 && ` × ${quantite}`}
+              </span>
+              <span className="font-mono text-muted-foreground">
+                {option.id === SOCLE_ID ? formaterEuros(option.prix) : suffixePrix(option, quantite)}
+              </span>
+            </li>
+          )
+        })}
       </ul>
 
       <p className="mt-4 font-mono">
