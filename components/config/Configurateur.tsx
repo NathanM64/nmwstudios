@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { Container } from '@/components/ui/Container'
 import { ThemeToggle } from '@/components/shell/ThemeToggle'
+import { PanneauOptions } from '@/components/config/PanneauOptions'
 import { CONFIG_VIDE, type Configuration } from '@/lib/config/devis'
 
 export function Configurateur() {
@@ -22,7 +23,7 @@ export function Configurateur() {
             aperçu, pas votre futur site
           </p>
         </div>
-        <div data-config={Object.keys(config).length} />
+        <PanneauOptions config={config} onChange={setConfig} />
       </Container>
     </main>
   )
