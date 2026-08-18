@@ -85,11 +85,14 @@ test.describe('préférence système claire', () => {
 
 // Mesuré sur le HTML servi, pas sur le DOM : Next injecte des préchargements
 // après hydratation, trop tard pour le premier rendu.
-test('la page d’accueil précharge ses polices dans le HTML servi', async ({ request }) => {
-  const accueil = await (await request.get('/')).text()
-  const agences = await (await request.get('/agences')).text()
-  expect(agences).toContain('as="font"')
-  expect(accueil).toContain('as="font"')
+test('la page d’accueil précharge ses polices dans le <head>, pas ailleurs dans le flux', async ({ request }) => {
+  // Le bug d'origine émettait le préchargement dans le flux : on isole le <head> pour ne pas le manquer.
+  const tete = async (chemin: string) => {
+    const html = await (await request.get(chemin)).text()
+    return /<head[^>]*>([\s\S]*?)<\/head>/i.exec(html)?.[1] ?? ''
+  }
+  expect(await tete('/agences')).toContain('as="font"')
+  expect(await tete('/')).toContain('as="font"')
 })
 
 test('la police du site est réellement appliquée, pas celle de secours', async ({ page }) => {

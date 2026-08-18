@@ -72,9 +72,17 @@ test('la barre affiche la fourchette et le mensuel ensemble', async ({ page }) =
 
 test('la fourchette monte quand on ajoute une option', async ({ page }) => {
   await page.goto('/configurateur')
-  const avant = await page.getByTestId('fourchette').textContent()
+  const lireBornes = async () => {
+    const texte = (await page.getByTestId('fourchette').textContent()) ?? ''
+    const [bas, haut] = texte.split('–').map((partie) => Number(partie.replace(/\D/g, '')))
+    return { bas, haut }
+  }
+  const avant = await lireBornes()
   await page.getByRole('checkbox', { name: 'Un blog' }).check()
-  await expect(page.getByTestId('fourchette')).not.toHaveText(avant ?? '')
+  const apres = await lireBornes()
+  // Une régression qui soustrairait ferait aussi « changer » le texte : on compare les bornes elles-mêmes.
+  expect(apres.bas).toBeGreaterThan(avant.bas)
+  expect(apres.haut).toBeGreaterThan(avant.haut)
 })
 
 test('le delta annonce le montant ajouté', async ({ page }) => {
@@ -239,9 +247,11 @@ test('configurer ne remplit pas l’historique', async ({ page }) => {
   await expect(page).not.toHaveURL(/configurateur/)
 })
 
-test('le configurateur précharge ses polices dans le HTML servi', async ({ request }) => {
+test('le configurateur précharge ses polices dans le <head>, pas ailleurs dans le flux', async ({ request }) => {
   const html = await (await request.get('/configurateur')).text()
-  expect(html).toContain('as="font"')
+  // Le bug d'origine émettait le préchargement dans le flux : on isole le <head> pour ne pas le manquer.
+  const tete = /<head[^>]*>([\s\S]*?)<\/head>/i.exec(html)?.[1] ?? ''
+  expect(tete).toContain('as="font"')
 })
 
 test('le compteur dit ce qu’on incrémente', async ({ page }) => {
@@ -257,16 +267,18 @@ test('le compteur de quantité s’annonce aux lecteurs d’écran', async ({ pa
   await expect(page.getByTestId('quantite-pages')).toHaveAttribute('aria-live', 'polite')
 })
 
-test('l’infobulle s’ouvre près de son bouton, pas dans un coin', async ({ page }) => {
+test('l’infobulle s’ouvre collée au bord droit et sous son bouton, pas centrée dans le viewport', async ({ page }) => {
   await page.goto('/configurateur')
   const bouton = page.getByRole('button', { name: 'Que comprend : Un blog' })
   await bouton.click()
   const cible = await bouton.boundingBox()
   const bulle = await page.locator('#explication-blog').boundingBox()
-  // Sans marge, un popover se colle en haut à gauche du viewport : on vérifie qu'il n'y est pas.
-  expect(bulle!.x).toBeGreaterThan(20)
-  expect(bulle!.y).toBeGreaterThan(20)
-  expect(Math.abs(bulle!.y - cible!.y)).toBeLessThan(400)
+  // L'ancrage CSS aligne le bord droit du popover sur celui du bouton, avec 0.35rem sous sa base :
+  // un popover simplement centré (`margin: auto` sans ancre) manquerait ces deux tests de plusieurs centaines de pixels.
+  expect(Math.abs(bulle!.x + bulle!.width - (cible!.x + cible!.width))).toBeLessThan(3)
+  const ecartVertical = bulle!.y - (cible!.y + cible!.height)
+  expect(ecartVertical).toBeGreaterThanOrEqual(0)
+  expect(ecartVertical).toBeLessThan(15)
 })
 
 test('l’aperçu reste visible quand on fait défiler les options', async ({ page }) => {
@@ -399,8 +411,9 @@ test('la scène « Au quotidien » propose un repli sans rien cocher, puis la ca
 
 test('chaque section du panneau est introduite par une phrase', async ({ page }) => {
   await page.goto('/configurateur')
-  await expect(page.getByText('Le point de départ.', { exact: false })).toBeVisible()
-  await expect(page.getByText('quelqu’un doit s’en occuper', { exact: false })).toBeVisible()
+  for (const groupe of GROUPES) {
+    await expect(page.getByText(groupe.intro, { exact: false })).toBeVisible()
+  }
 })
 
 test('le configurateur occupe la largeur de l’écran', async ({ page }) => {
@@ -448,12 +461,13 @@ test('le récapitulatif multiplie le prix d’une option quantifiable par sa qua
   await expect(recap).not.toContainText('600 €')
 })
 
-test('le récapitulatif liste les options retenues', async ({ page }) => {
+test('le récapitulatif liste les options retenues, et seulement celles-ci', async ({ page }) => {
   await page.goto('/configurateur?blog&seo')
   await page.getByRole('button', { name: 'Recevoir le récapitulatif' }).click()
   const recap = page.getByTestId('recapitulatif')
   await expect(recap).toContainText('Un blog')
   await expect(recap).toContainText('Fondations SEO')
+  await expect(recap).not.toContainText('Prise de rendez-vous')
 })
 
 test('le récapitulatif propose un lien mailto qui reprend la configuration', async ({ page }) => {

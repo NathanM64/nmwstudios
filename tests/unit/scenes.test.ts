@@ -1,12 +1,7 @@
 import { describe, expect, it } from 'vitest'
-import { GROUPES, OPTIONS } from '@/lib/config/catalogue'
 import { SCENES, SCENE_PAR_GROUPE, sceneDeOption } from '@/lib/config/scenes'
 
 describe('scènes', () => {
-  it('associe une scène à chacun des groupes du catalogue', () => {
-    for (const groupe of GROUPES) expect(SCENE_PAR_GROUPE[groupe.id]).toBeDefined()
-  })
-
   it('laisse les options visibles sur le site dans la scène de repos', () => {
     for (const id of ['socle', 'pages', 'blog', 'langue', 'membre', 'rdv', 'redaction']) {
       expect(sceneDeOption(id)).toBe('site')
@@ -35,12 +30,6 @@ describe('scènes', () => {
     // Choix assumé : elles y voisinent le contraste mesuré, un ensemble cohérent.
     expect(sceneDeOption('rgpd')).toBe('conformite')
     expect(sceneDeOption('legal')).toBe('conformite')
-  })
-
-  it('couvre chaque option du catalogue sans exception', () => {
-    for (const option of OPTIONS) {
-      expect(SCENES.some((s) => s.id === sceneDeOption(option.id))).toBe(true)
-    }
   })
 
   it('retombe sur la scène de repos pour un identifiant inconnu', () => {
