@@ -627,3 +627,47 @@ test('l’aperçu remplit la hauteur disponible entre l’en-tête et la barre d
   // que de suivre la hauteur de la grille, qu’on lit ici sur le panneau voisin.
   expect(apercu.height).toBeGreaterThan(panneau.height * 0.7)
 })
+
+test('la molette défile le panneau même quand le curseur est sur l’aperçu', async ({ page }) => {
+  await page.setViewportSize({ width: 1600, height: 900 })
+  await page.goto('/configurateur')
+  const panneau = page.getByTestId('colonne-options')
+  const avant = await panneau.evaluate((el) => el.scrollTop)
+
+  const boite = (await page.getByTestId('apercu').boundingBox())!
+  await page.mouse.move(boite.x + boite.width / 2, boite.y + boite.height / 2)
+  await page.mouse.wheel(0, 400)
+
+  await expect.poll(() => panneau.evaluate((el) => el.scrollTop)).toBeGreaterThan(avant)
+})
+
+test('la molette sur l’aperçu ne fait pas défiler la page elle-même', async ({ page }) => {
+  await page.setViewportSize({ width: 1600, height: 900 })
+  await page.goto('/configurateur')
+  const boite = (await page.getByTestId('apercu').boundingBox())!
+  await page.mouse.move(boite.x + boite.width / 2, boite.y + boite.height / 2)
+  await page.mouse.wheel(0, 400)
+  const scrollPage = await page.evaluate(() => document.documentElement.scrollTop)
+  expect(scrollPage).toBe(0)
+})
+
+test('la molette directement sur le panneau continue de le faire défiler nativement', async ({ page }) => {
+  await page.setViewportSize({ width: 1600, height: 900 })
+  await page.goto('/configurateur')
+  const panneau = page.getByTestId('colonne-options')
+  const boite = (await panneau.boundingBox())!
+  await page.mouse.move(boite.x + boite.width / 2, boite.y + 10)
+  const avant = await panneau.evaluate((el) => el.scrollTop)
+  await page.mouse.wheel(0, 400)
+  await expect.poll(() => panneau.evaluate((el) => el.scrollTop)).toBeGreaterThan(avant)
+})
+
+test('le défilement au clavier fonctionne toujours dans le panneau', async ({ page }) => {
+  await page.setViewportSize({ width: 1600, height: 900 })
+  await page.goto('/configurateur')
+  const panneau = page.getByTestId('colonne-options')
+  await page.getByRole('checkbox', { name: 'Un blog' }).focus()
+  const avant = await panneau.evaluate((el) => el.scrollTop)
+  await page.keyboard.press('PageDown')
+  await expect.poll(() => panneau.evaluate((el) => el.scrollTop)).toBeGreaterThan(avant)
+})

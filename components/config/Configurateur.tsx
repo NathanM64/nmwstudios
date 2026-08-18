@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { PanneauOptions } from '@/components/config/PanneauOptions'
 import { BarrePrix } from '@/components/config/BarrePrix'
 import { Apercu } from '@/components/config/Apercu'
@@ -22,11 +22,35 @@ export function Configurateur() {
   const [pret, setPret] = useState(false)
   const [copie, setCopie] = useState<'succes' | 'echec' | null>(null)
 
+  const grilleRef = useRef<HTMLDivElement>(null)
+  const panneauRef = useRef<HTMLDivElement>(null)
+
   useEffect(() => {
     if (!copie) return
     const minuteur = setTimeout(() => setCopie(null), 1800)
     return () => clearTimeout(minuteur)
   }, [copie])
+
+  // Écouteur natif, pas `onWheel` : React attache les gestionnaires de molette en
+  // passif, où `preventDefault` échoue silencieusement (avertissement de console).
+  useEffect(() => {
+    const grille = grilleRef.current
+    const panneau = panneauRef.current
+    if (!grille || !panneau) return
+
+    const rediriger = (event: WheelEvent) => {
+      if (!window.matchMedia('(min-width: 1024px)').matches) return
+      if (panneau.contains(event.target as Node)) return
+      const max = panneau.scrollHeight - panneau.clientHeight
+      const suivant = Math.min(Math.max(panneau.scrollTop + event.deltaY, 0), max)
+      if (suivant === panneau.scrollTop) return
+      panneau.scrollTop = suivant
+      event.preventDefault()
+    }
+
+    grille.addEventListener('wheel', rediriger, { passive: false })
+    return () => grille.removeEventListener('wheel', rediriger)
+  }, [])
 
   const copierLien = () => {
     navigator.clipboard
@@ -52,6 +76,7 @@ export function Configurateur() {
   return (
     <main className="pb-24 lg:flex lg:min-h-0 lg:flex-1 lg:flex-col lg:pb-0">
       <div
+        ref={grilleRef}
         data-testid="grille-configurateur"
         className="grid gap-8 px-5 sm:px-8 lg:min-h-0 lg:flex-1 lg:grid-cols-[minmax(0,1fr)_26rem] lg:overflow-hidden lg:pb-4"
       >
@@ -66,7 +91,7 @@ export function Configurateur() {
           </p>
         </div>
 
-        <div data-testid="colonne-options" className="lg:min-h-0 lg:overflow-y-auto lg:pr-2">
+        <div ref={panneauRef} data-testid="colonne-options" className="lg:min-h-0 lg:overflow-y-auto lg:pr-2">
           <h1 className="text-2xl font-semibold tracking-tight">Configurez votre site</h1>
           <div className="mt-6">
             <PanneauOptions config={config} onChange={setConfig} onScene={setScene} />
