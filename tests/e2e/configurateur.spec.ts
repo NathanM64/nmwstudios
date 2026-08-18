@@ -617,3 +617,13 @@ test('sur grand écran, la page ne défile pas, seul le panneau le fait', async 
     .evaluate((el) => el.scrollHeight > el.clientHeight + 1)
   expect(panneauDefile).toBe(true)
 })
+
+test('l’aperçu remplit la hauteur disponible entre l’en-tête et la barre de prix', async ({ page }) => {
+  await page.setViewportSize({ width: 1600, height: 900 })
+  await page.goto('/configurateur')
+  const panneau = (await page.getByTestId('colonne-options').boundingBox())!
+  const apercu = (await page.getByTestId('apercu').boundingBox())!
+  // Avant correction, `self-start` figeait l’aperçu à sa hauteur minimale plutôt
+  // que de suivre la hauteur de la grille, qu’on lit ici sur le panneau voisin.
+  expect(apercu.height).toBeGreaterThan(panneau.height * 0.7)
+})
