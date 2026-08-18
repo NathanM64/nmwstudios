@@ -28,7 +28,6 @@ export function Dock() {
     <nav
       aria-label="Sections de la page"
       className="panel fixed inset-x-0 bottom-4 z-50 mx-auto flex w-max gap-1 p-1.5 sm:inset-x-auto sm:bottom-auto sm:top-4 sm:left-1/2 sm:-translate-x-1/2"
-      style={{ viewTransitionName: 'dock' }}
     >
       {SECTIONS.map(({ id, label }) => (
         <a

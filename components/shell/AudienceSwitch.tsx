@@ -2,12 +2,11 @@
 
 import { AUDIENCE_COOKIE, AUDIENCE_MAX_AGE, AUDIENCES, type Audience } from '@/lib/shell/audience'
 
-/** Ancres volontaires, pas `next/link` : `@view-transition` exige une navigation de document. */
+/** Ancres volontaires : chaque porte est une URL partageable, rendue statiquement. */
 export function AudienceSwitch({ current }: { current: Audience }) {
   return (
     <div
       className="panel inline-flex gap-1 p-1"
-      style={{ viewTransitionName: 'audience-switch' }}
     >
       {AUDIENCES.map(({ id, label, href }) => (
         <a

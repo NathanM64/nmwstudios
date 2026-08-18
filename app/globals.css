@@ -94,16 +94,10 @@ body {
   box-shadow: var(--shadow-panel);
 }
 
-/* Firefox dégrade en fondu simple : accepté, aucun contenu n'en dépend. */
-@view-transition {
-  navigation: auto;
-}
-
-::view-transition-old(dock),
-::view-transition-new(dock) {
-  animation-duration: var(--dur-page);
-  animation-timing-function: var(--ease-out);
-}
+/* Pas de transition de vue : le navigateur y remplace la page par des captures
+   figées, où `backdrop-filter` n'a plus de fond à flouter. Les surfaces de verre
+   s'y superposaient en un rectangle clair, mesuré et non corrigeable en CSS
+   (les pixels sont peints avant que les règles s'appliquent). Le verre prime. */
 
 @media (prefers-reduced-motion: no-preference) {
   .reveal {
@@ -125,10 +119,6 @@ body {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  @view-transition {
-    navigation: none;
-  }
-
   *,
   *::before,
   *::after {

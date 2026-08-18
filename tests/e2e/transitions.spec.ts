@@ -1,28 +1,31 @@
 import { expect, test } from '@playwright/test'
 
-test('la navigation inter-documents est déclarée', async ({ page }) => {
+test('aucune transition de vue n’est déclarée', async ({ page }) => {
   await page.goto('/')
-  // Règles de haut niveau seulement : celle imbriquée sous `prefers-reduced-motion`
-  // contient `navigation: none` et rendrait cette assertion vraie même sans la déclaration réelle.
-  const declared = await page.evaluate(() =>
-    [...document.styleSheets].some((sheet) => {
+  // Décision du 18/08/2026 : la transition de vue superposait les surfaces de verre
+  // en un rectangle clair, mesuré et non corrigeable en CSS. Le verre prime.
+  const declaree = await page.evaluate(() =>
+    [...document.styleSheets].some((feuille) => {
       try {
-        return [...sheet.cssRules].some((rule) => /navigation:\s*auto/.test(rule.cssText))
+        return [...feuille.cssRules].some((regle) => /@view-transition/.test(regle.cssText))
       } catch {
         return false
       }
     })
   )
-  expect(declared).toBe(true)
+  expect(declaree).toBe(false)
 })
 
-test('le dock porte un nom de transition stable sur les deux portes', async ({ page }) => {
+test('aucun panneau ne porte de nom de transition', async ({ page }) => {
   for (const url of ['/', '/agences']) {
     await page.goto(url)
-    const name = await page
-      .getByRole('navigation', { name: 'Sections de la page' })
-      .evaluate((el) => getComputedStyle(el).viewTransitionName)
-    expect(name).toBe('dock')
+    const noms = await page.evaluate(() =>
+      [...document.querySelectorAll('*')]
+        .map((el) => getComputedStyle(el).viewTransitionName)
+        // `root` est posé d'office par le navigateur sur la racine, pas par nous.
+        .filter((n) => n && n !== 'none' && n !== 'root')
+    )
+    expect(noms).toEqual([])
   }
 })
 
