@@ -41,7 +41,7 @@ export function Configurateur() {
         data-testid="grille-configurateur"
         className="grid gap-8 px-5 sm:px-8 lg:grid-cols-[minmax(0,1fr)_26rem]"
       >
-        <div data-testid="colonne-apercu" className="sticky top-4 self-start lg:top-8">
+        <div data-testid="colonne-apercu" className="sticky top-20 self-start">
           <Apercu config={config} scene={scene} />
           <VignettesScene scene={scene} onChange={setScene} />
           <p className="mt-2 font-mono text-xs uppercase tracking-[0.08em] text-muted-foreground">

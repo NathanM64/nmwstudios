@@ -50,7 +50,7 @@ export function Apercu({ config, scene }: { config: Configuration; scene: SceneI
   const libelles = langue === 'en' ? [...NAV_EN, ...PAGES_SUP.slice(0, tranches * 3)] : pages
 
   return (
-    <div data-testid="apercu" className="panel flex min-h-[26rem] w-full flex-col overflow-hidden">
+    <div data-testid="apercu" className="panel flex min-h-[26rem] w-full flex-col overflow-hidden lg:h-[calc(100dvh-13rem)]">
       {scene === 'site' && (
         <div className="animate-apparait flex flex-1 flex-col">
           <header className="flex items-center justify-between gap-3 border-b border-border px-4 py-3">
