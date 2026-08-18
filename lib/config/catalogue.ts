@@ -17,6 +17,9 @@ export type Option = {
   quantifiable?: { max: number; suffixe: string }
   /** Texte de la carte d’état affichée dans l’aperçu, groupe récurrent uniquement. */
   carte?: string
+  /** Jours de travail apportés à la construction. Zéro pour ce qui ne construit rien.
+   *  Écrits à la main, jamais dérivés du prix : un rapport constant livrerait le TJM. */
+  jours: number
 }
 
 export const SOCLE_ID = 'socle'
@@ -44,82 +47,82 @@ export const GROUPES: readonly Groupe[] = [
 
 export const OPTIONS: readonly Option[] = [
   { id: SOCLE_ID, libelle: '1 à 3 pages, formulaire de contact', prix: 1500, unite: 'forfait', groupe: 'socle',
-    explication: 'Le socle : trois pages, un formulaire qui envoie un e-mail, aucune base de données.' },
+    explication: 'Le socle : trois pages, un formulaire qui envoie un e-mail, aucune base de données.', jours: 3.5 },
 
   { id: 'pages', libelle: '3 pages de plus', prix: 600, unite: 'forfait', groupe: 'volume',
     quantifiable: { max: 4, suffixe: 'tranche' },
-    explication: 'Chaque tranche ajoute trois pages : services, tarifs, réalisations, à vous de voir.' },
+    explication: 'Chaque tranche ajoute trois pages : services, tarifs, réalisations, à vous de voir.', jours: 1.5 },
   { id: 'blog', libelle: 'Un blog', prix: 700, unite: 'forfait', groupe: 'volume',
-    explication: 'Une section actualités que vous alimentez vous-même.' },
+    explication: 'Une section actualités que vous alimentez vous-même.', jours: 1.5 },
   { id: 'langue', libelle: 'Une langue de plus', prix: 800, unite: 'forfait', groupe: 'volume',
     quantifiable: { max: 3, suffixe: 'langue' },
-    explication: 'Le site entier dans une langue supplémentaire, avec un sélecteur.' },
+    explication: 'Le site entier dans une langue supplémentaire, avec un sélecteur.', jours: 1.5 },
 
   { id: 'redaction', libelle: 'J’écris vos textes', prix: 150, unite: 'forfait', groupe: 'contenu',
     quantifiable: { max: 15, suffixe: 'page' },
-    explication: 'Je vous interroge sur votre métier, puis j’écris. Les faits viennent de vous.' },
+    explication: 'Je vous interroge sur votre métier, puis j’écris. Les faits viennent de vous.', jours: 0.25 },
   { id: 'reprise', libelle: 'Je reprends vos textes existants', prix: 400, unite: 'forfait', groupe: 'contenu',
-    explication: 'Vos contenus actuels, restructurés et remis en forme.' },
+    explication: 'Vos contenus actuels, restructurés et remis en forme.', jours: 1 },
   { id: 'photos', libelle: 'Je retouche vos photos', prix: 300, unite: 'forfait', groupe: 'contenu',
-    explication: 'Recadrage, correction, allègement. Je ne prends pas les photos : vous les fournissez.' },
+    explication: 'Recadrage, correction, allègement. Je ne prends pas les photos : vous les fournissez.', jours: 0.5 },
   { id: 'visuels', libelle: 'Visuels sous licence', prix: 150, unite: 'forfait', groupe: 'contenu',
-    explication: 'Sélection d’images libres de droits quand vous n’avez pas les vôtres.' },
+    explication: 'Sélection d’images libres de droits quand vous n’avez pas les vôtres.', jours: 0.25 },
 
   { id: 'formulaire', libelle: 'Formulaire avancé', prix: 400, unite: 'forfait', groupe: 'fonctionnel',
-    explication: 'Plusieurs étapes, pièces jointes, champs conditionnels.' },
+    explication: 'Plusieurs étapes, pièces jointes, champs conditionnels.', jours: 1 },
   { id: 'rdv', libelle: 'Prise de rendez-vous', prix: 900, unite: 'forfait', groupe: 'fonctionnel',
-    explication: 'Vos clients réservent un créneau en ligne.' },
+    explication: 'Vos clients réservent un créneau en ligne.', jours: 1.5 },
   { id: 'newsletter', libelle: 'Newsletter', prix: 500, unite: 'forfait', groupe: 'fonctionnel',
-    explication: 'Collecte des adresses et envoi des campagnes.' },
+    explication: 'Collecte des adresses et envoi des campagnes.', jours: 0.75 },
   { id: 'paiement', libelle: 'Paiement en ligne', prix: 1200, unite: 'forfait', groupe: 'fonctionnel',
-    explication: 'Encaissement par carte, sans passer par une boutique complète.' },
+    explication: 'Encaissement par carte, sans passer par une boutique complète.', jours: 2 },
   { id: 'membre', libelle: 'Espace membre', prix: 1500, unite: 'forfait', groupe: 'fonctionnel',
-    explication: 'Vos clients se connectent pour accéder à un contenu réservé.' },
+    explication: 'Vos clients se connectent pour accéder à un contenu réservé.', jours: 3 },
 
   { id: 'seo', libelle: 'Fondations SEO', prix: 600, unite: 'forfait', groupe: 'visibilite',
-    explication: 'Structure, métadonnées, données structurées, Search Console.' },
+    explication: 'Structure, métadonnées, données structurées, Search Console.', jours: 1 },
   { id: 'seo-local', libelle: 'Référencement local', prix: 800, unite: 'forfait', groupe: 'visibilite',
-    explication: 'Fiche Google, pages par ville, citations locales.' },
+    explication: 'Fiche Google, pages par ville, citations locales.', jours: 1.5 },
   { id: 'article', libelle: 'Un article optimisé', prix: 180, unite: 'forfait', groupe: 'visibilite',
     quantifiable: { max: 10, suffixe: 'article' },
-    explication: 'Article rédigé pour une requête précise.' },
+    explication: 'Article rédigé pour une requête précise.', jours: 0.4 },
 
   { id: 'legal', libelle: 'Mentions légales et CGV', prix: 300, unite: 'forfait', groupe: 'conformite',
-    explication: 'Rédigées pour votre activité, pas copiées d’un modèle.' },
+    explication: 'Rédigées pour votre activité, pas copiées d’un modèle.', jours: 0.5 },
   { id: 'rgpd', libelle: 'Conformité RGPD', prix: 400, unite: 'forfait', groupe: 'conformite',
-    explication: 'Bannière conforme, registre des traitements, politique de confidentialité.' },
+    explication: 'Bannière conforme, registre des traitements, politique de confidentialité.', jours: 1 },
   { id: 'a11y', libelle: 'Accessibilité RGAA', prix: 1200, unite: 'forfait', groupe: 'conformite',
-    explication: 'Mise en conformité et déclaration. Obligatoire au-delà de 10 salariés et 2 M€ de chiffre d’affaires sur un service grand public, pas en dessous.' },
+    explication: 'Mise en conformité et déclaration. Obligatoire au-delà de 10 salariés et 2 M€ de chiffre d’affaires sur un service grand public, pas en dessous.', jours: 3 },
 
   { id: 'migration', libelle: 'Migration de votre site actuel', prix: 600, unite: 'forfait', groupe: 'technique',
-    explication: 'Reprise des contenus et redirections, pour ne rien perdre de votre référencement.' },
+    explication: 'Reprise des contenus et redirections, pour ne rien perdre de votre référencement.', jours: 1.5 },
   { id: 'domaine', libelle: 'Domaine et e-mails professionnels', prix: 200, unite: 'forfait', groupe: 'technique',
-    explication: 'Nom de domaine réservé et adresses configurées.' },
+    explication: 'Nom de domaine réservé et adresses configurées.', jours: 0.25 },
   { id: 'perf', libelle: 'Optimisation de la vitesse', prix: 500, unite: 'forfait', groupe: 'technique',
-    explication: 'Mesures avant et après, chiffres à l’appui.' },
+    explication: 'Mesures avant et après, chiffres à l’appui.', jours: 1 },
   { id: 'express', libelle: 'Livraison accélérée', prix: 30, unite: 'pourcentage', groupe: 'technique',
-    explication: 'Votre projet passe devant les autres.' },
+    explication: 'Votre projet passe devant les autres.', jours: 0 },
 
   { id: 'cadrage', libelle: 'Atelier de cadrage', prix: 500, unite: 'forfait', groupe: 'services',
-    explication: 'Une demi-journée pour décider quoi construire avant de construire.' },
+    explication: 'Une demi-journée pour décider quoi construire avant de construire.', jours: 0.5 },
   { id: 'formation', libelle: 'Formation à la prise en main', prix: 600, unite: 'forfait', groupe: 'services',
-    explication: 'Deux heures, une à deux personnes.' },
+    explication: 'Deux heures, une à deux personnes.', jours: 0.5 },
 
   { id: 'sans-suivi', libelle: 'Je m’en occupe moi-même', prix: 0, unite: 'mensuel', groupe: 'recurrent',
     explication: 'Vous gardez la main sur l’hébergement et les mises à jour. Le site vous appartient de toute façon.',
-    carte: 'Vous gardez la main · aucun engagement mensuel' },
+    carte: 'Vous gardez la main · aucun engagement mensuel', jours: 0 },
   { id: 'heberg', libelle: 'Hébergement et domaine', prix: 35, unite: 'mensuel', groupe: 'recurrent',
     explication: 'Je m’occupe de l’hébergement, du domaine et du certificat.',
-    carte: 'votre-nom.fr · certificat valide' },
+    carte: 'votre-nom.fr · certificat valide', jours: 0 },
   { id: 'essentiel', libelle: 'Essentiel', prix: 90, unite: 'mensuel', groupe: 'recurrent',
     explication: 'Hébergement, mises à jour, sauvegardes quotidiennes, surveillance, correctifs.',
-    carte: 'Sauvegarde quotidienne · restauration en 1 h' },
+    carte: 'Sauvegarde quotidienne · restauration en 1 h', jours: 0 },
   { id: 'serenite', libelle: 'Sérénité', prix: 190, unite: 'mensuel', groupe: 'recurrent',
     explication: 'Essentiel, plus une heure de modifications par mois et une intervention sous 4 h.',
-    carte: 'Surveillance active · intervention sous 4 h' },
+    carte: 'Surveillance active · intervention sous 4 h', jours: 0 },
   { id: 'partenaire', libelle: 'Partenaire', prix: 390, unite: 'mensuel', groupe: 'recurrent',
     explication: 'Sérénité, plus les évolutions, le suivi d’audience et un rapport mensuel.',
-    carte: 'Évolutions · rapport mensuel' },
+    carte: 'Évolutions · rapport mensuel', jours: 0 },
 ] as const
 
 const PAR_ID = new Map(OPTIONS.map((o) => [o.id, o]))
