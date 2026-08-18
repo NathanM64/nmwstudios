@@ -137,3 +137,18 @@ body {
     transition-duration: 0.01ms !important;
   }
 }
+
+@keyframes delta-apparait {
+  from { opacity: 0; transform: translateY(0.35rem); }
+  20%  { opacity: 1; transform: none; }
+  80%  { opacity: 1; transform: none; }
+  to   { opacity: 0; transform: translateY(-0.35rem); }
+}
+
+.animate-delta {
+  animation: delta-apparait 1.6s var(--ease-out) forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-delta { animation: none; opacity: 1; }
+}

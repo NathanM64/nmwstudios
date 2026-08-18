@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { Container } from '@/components/ui/Container'
 import { ThemeToggle } from '@/components/shell/ThemeToggle'
 import { PanneauOptions } from '@/components/config/PanneauOptions'
+import { BarrePrix } from '@/components/config/BarrePrix'
 import { CONFIG_VIDE, type Configuration } from '@/lib/config/devis'
 
 export function Configurateur() {
@@ -25,6 +26,8 @@ export function Configurateur() {
         </div>
         <PanneauOptions config={config} onChange={setConfig} />
       </Container>
+
+      <BarrePrix config={config} />
     </main>
   )
 }
