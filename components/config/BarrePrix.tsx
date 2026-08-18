@@ -17,7 +17,7 @@ export function BarrePrix({ config }: { config: Configuration }) {
   return (
     <div className="panel fixed inset-x-0 bottom-0 z-40 border-t border-border px-5 py-3 sm:px-8">
       <div className="mx-auto flex w-full max-w-5xl items-baseline justify-between gap-4">
-        <p className="flex items-baseline gap-3">
+        <p className="flex min-w-0 flex-wrap items-baseline gap-x-3">
           <span data-testid="fourchette" className="font-mono text-lg tabular-nums">
             {formaterEuros(devis.bas)} – {formaterEuros(devis.haut)}
           </span>
@@ -26,6 +26,7 @@ export function BarrePrix({ config }: { config: Configuration }) {
               key={delta.cle}
               data-testid="delta"
               className="animate-delta font-mono text-xs text-accent"
+              onAnimationEnd={() => setDelta(null)}
             >
               {delta.montant > 0 ? '+' : '−'}
               {formaterEuros(Math.abs(delta.montant))}
