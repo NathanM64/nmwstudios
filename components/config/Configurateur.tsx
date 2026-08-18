@@ -103,13 +103,7 @@ export function Configurateur() {
           </p>
         </div>
 
-        <div
-          ref={panneauRef}
-          data-testid="colonne-options"
-          // 32px : hauteur mesurée de l'en-tête sticky, sinon le focus arrière (Maj+Tab)
-          // aligne le haut de la carte sous la légende qui la recouvre.
-          className="lg:min-h-0 lg:scroll-pt-8 lg:overflow-y-auto lg:pr-2"
-        >
+        <div ref={panneauRef} data-testid="colonne-options" className="lg:min-h-0 lg:overflow-y-auto lg:pr-2">
           <h1 className="text-2xl font-semibold tracking-tight">Configurez votre site</h1>
           <div className="mt-6">
             <PanneauOptions config={config} onChange={setConfig} onScene={setScene} />

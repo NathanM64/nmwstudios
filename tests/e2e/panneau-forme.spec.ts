@@ -47,3 +47,21 @@ test('la carte atteinte en tabulation arrière n’est pas recouverte par la lé
   const legende = (await page.getByTestId('legende-fonctionnel').boundingBox())!
   expect(carte.y).toBeGreaterThanOrEqual(legende.y + legende.height)
 })
+
+test('en régime tablette, la carte atteinte en tabulation arrière n’est pas recouverte non plus', async ({ page }) => {
+  await page.setViewportSize({ width: 768, height: 900 })
+  await page.goto('/configurateur')
+
+  // En dessous de `lg`, c'est la page entière qui défile, pas colonne-options :
+  // ce couple carte/légende est celui du constat d'origine, reproductible à cette largeur.
+  await page.getByRole('button', { name: 'Copier le lien' }).focus()
+  const cible = page.getByRole('checkbox', { name: 'Paiement en ligne' })
+  for (let i = 0; i < 60 && !(await cible.evaluate((n) => n === document.activeElement)); i++) {
+    await page.keyboard.press('Shift+Tab')
+  }
+  await expect(cible).toBeFocused()
+
+  const carte = (await page.getByTestId('carte-paiement').boundingBox())!
+  const legende = (await page.getByTestId('legende-fonctionnel').boundingBox())!
+  expect(carte.y).toBeGreaterThanOrEqual(legende.y + legende.height)
+})
