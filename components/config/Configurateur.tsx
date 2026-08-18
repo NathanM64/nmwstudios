@@ -50,12 +50,12 @@ export function Configurateur() {
   }, [config])
 
   return (
-    <main className="pb-24">
+    <main className="pb-24 lg:flex lg:min-h-0 lg:flex-1 lg:flex-col lg:pb-0">
       <div
         data-testid="grille-configurateur"
-        className="grid gap-8 px-5 sm:px-8 lg:grid-cols-[minmax(0,1fr)_26rem]"
+        className="grid gap-8 px-5 sm:px-8 lg:min-h-0 lg:flex-1 lg:grid-cols-[minmax(0,1fr)_26rem] lg:overflow-hidden lg:pb-4"
       >
-        <div data-testid="colonne-apercu" className="sticky top-20 self-start">
+        <div data-testid="colonne-apercu" className="sticky top-20 self-start lg:static lg:min-h-0">
           <Apercu config={config} scene={scene} />
           <VignettesScene scene={scene} onChange={setScene} />
           <p className="mt-2 font-mono text-xs uppercase tracking-[0.08em] text-muted-foreground">
@@ -63,7 +63,7 @@ export function Configurateur() {
           </p>
         </div>
 
-        <div data-testid="colonne-options">
+        <div data-testid="colonne-options" className="lg:min-h-0 lg:overflow-y-auto lg:pr-2">
           <h1 className="text-2xl font-semibold tracking-tight">Configurez votre site</h1>
           <div className="mt-6">
             <PanneauOptions config={config} onChange={setConfig} onScene={setScene} />

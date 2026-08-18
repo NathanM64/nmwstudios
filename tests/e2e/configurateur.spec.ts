@@ -603,3 +603,17 @@ test('basculer sur sa scène et cocher une option change l’aperçu, pour tout 
     expect(apres, `« ${option.libelle} » ne change rien dans l’aperçu`).not.toBe(avant)
   }
 })
+
+test('sur grand écran, la page ne défile pas, seul le panneau le fait', async ({ page }) => {
+  await page.setViewportSize({ width: 1600, height: 900 })
+  await page.goto('/configurateur')
+  const defilementPage = await page.evaluate(
+    () => document.documentElement.scrollHeight > document.documentElement.clientHeight + 1
+  )
+  expect(defilementPage).toBe(false)
+
+  const panneauDefile = await page
+    .getByTestId('colonne-options')
+    .evaluate((el) => el.scrollHeight > el.clientHeight + 1)
+  expect(panneauDefile).toBe(true)
+})
