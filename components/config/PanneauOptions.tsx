@@ -36,14 +36,15 @@ export function PanneauOptions({
   }
 
   return (
-    <div className="flex flex-col gap-8">
+    <div className="flex flex-col gap-12">
       {GROUPES.map((groupe) => (
         <fieldset key={groupe.id} className="border-0 p-0">
           <legend className="font-mono text-xs uppercase tracking-[0.08em] text-accent">
             {groupe.titre}
           </legend>
+          <p className="mt-2 max-w-prose text-sm text-muted-foreground">{groupe.intro}</p>
 
-          <div className="mt-3 flex flex-col gap-2">
+          <div className="mt-4 flex flex-col gap-3">
             {OPTIONS.filter((o) => o.groupe === groupe.id).map((option) => {
               const n = config[option.id] ?? 0
 

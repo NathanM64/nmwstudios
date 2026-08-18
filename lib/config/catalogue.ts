@@ -5,7 +5,7 @@ export type GroupeId =
   | 'socle' | 'volume' | 'contenu' | 'fonctionnel'
   | 'visibilite' | 'conformite' | 'technique' | 'services' | 'recurrent'
 
-export type Groupe = { id: GroupeId; titre: string; exclusif?: boolean }
+export type Groupe = { id: GroupeId; titre: string; intro: string; exclusif?: boolean }
 
 export type Option = {
   id: string
@@ -23,15 +23,24 @@ export type Option = {
 export const SOCLE_ID = 'socle'
 
 export const GROUPES: readonly Groupe[] = [
-  { id: 'socle', titre: 'Votre site' },
-  { id: 'volume', titre: 'Pages et langues' },
-  { id: 'contenu', titre: 'Contenu' },
-  { id: 'fonctionnel', titre: 'Fonctionnalités' },
-  { id: 'visibilite', titre: 'Être trouvé' },
-  { id: 'conformite', titre: 'Conformité' },
-  { id: 'technique', titre: 'Technique' },
-  { id: 'services', titre: 'Accompagnement' },
-  { id: 'recurrent', titre: 'Je m’occupe de tout', exclusif: true },
+  { id: 'socle', titre: 'Votre site',
+    intro: 'Le point de départ. Trois pages, un formulaire de contact, rien de superflu.' },
+  { id: 'volume', titre: 'Pages et langues',
+    intro: 'Combien de pages il vous faut, et dans combien de langues.' },
+  { id: 'contenu', titre: 'Contenu',
+    intro: 'Vos textes et vos images. C’est ce qui retarde le plus souvent un projet : autant décider maintenant qui s’en charge.' },
+  { id: 'fonctionnel', titre: 'Fonctionnalités',
+    intro: 'Ce que vos visiteurs pourront faire, au-delà de vous lire.' },
+  { id: 'visibilite', titre: 'Être trouvé',
+    intro: 'Apparaître quand quelqu’un cherche votre métier près de chez vous.' },
+  { id: 'conformite', titre: 'Conformité',
+    intro: 'Ce que la loi impose à tout le monde, et ce qu’elle impose à certains seulement.' },
+  { id: 'technique', titre: 'Technique',
+    intro: 'Le socle qui ne se voit pas : reprise de l’existant, adresse, vitesse de chargement.' },
+  { id: 'services', titre: 'Accompagnement',
+    intro: 'Avant la construction pour décider quoi faire, après la livraison pour en reprendre la main.' },
+  { id: 'recurrent', titre: 'Je m’occupe de tout', exclusif: true,
+    intro: 'Une fois le site en ligne, quelqu’un doit s’en occuper. Vous, ou moi.' },
 ] as const
 
 export const OPTIONS: readonly Option[] = [

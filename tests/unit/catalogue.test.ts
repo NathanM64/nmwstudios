@@ -41,4 +41,11 @@ describe('catalogue', () => {
   it('rend introuvable un identifiant inconnu', () => {
     expect(optionParId('inexistant')).toBeUndefined()
   })
+
+  it('introduit chaque groupe par une phrase', () => {
+    for (const groupe of GROUPES) {
+      expect(groupe.intro.length).toBeGreaterThan(20)
+      expect(groupe.intro).not.toContain('—')
+    }
+  })
 })

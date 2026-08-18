@@ -327,3 +327,9 @@ test('la scène « Au quotidien » propose un repli sans rien cocher, puis la ca
   await expect(page.getByTestId('carte-etat')).toContainText('Vous gardez la main')
   await expect(page.getByTestId('apercu-exploitation-vide')).toHaveCount(0)
 })
+
+test('chaque section du panneau est introduite par une phrase', async ({ page }) => {
+  await page.goto('/configurateur')
+  await expect(page.getByText('Le point de départ.', { exact: false })).toBeVisible()
+  await expect(page.getByText('quelqu’un doit s’en occuper', { exact: false })).toBeVisible()
+})
