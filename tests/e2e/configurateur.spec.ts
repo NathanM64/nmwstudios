@@ -1,6 +1,8 @@
+import { readFileSync } from 'node:fs'
 import { expect, test } from '@playwright/test'
 import { contrastRatio, parseColor } from '../../lib/color/contrast'
-import { GROUPES, OPTIONS, SOCLE_ID } from '../../lib/config/catalogue'
+import { GROUPES, OPTIONS, SOCLE_ID, optionParId } from '../../lib/config/catalogue'
+import { formaterEuros } from '../../lib/config/devis'
 import { SCENES, sceneDeOption } from '../../lib/config/scenes'
 
 test('la route du configurateur répond et s’annonce', async ({ page }) => {
@@ -469,6 +471,19 @@ test('le bloc Prix de l’accueil mène au configurateur', async ({ page }) => {
   await page.locator('#prix').scrollIntoViewIfNeeded()
   await page.getByRole('link', { name: /configurer votre site/i }).click()
   await expect(page).toHaveURL(/\/configurateur/)
+})
+
+test('le prix socle de l’accueil vient du catalogue, avec la typographie de formaterEuros', async ({ page }) => {
+  await page.goto('/')
+  const texte = await page.locator('#prix').textContent()
+  // .textContent() brut, pas toContainText() : Playwright normalise les espaces et masquerait
+  // une régression vers l'espace ordinaire à la place de la fine insécable de formaterEuros.
+  expect(texte).toContain(formaterEuros(optionParId(SOCLE_ID)!.prix))
+})
+
+test('la page d’accueil reste statique malgré le prix dérivé du catalogue', async () => {
+  const manifeste = JSON.parse(readFileSync('.next/prerender-manifest.json', 'utf8'))
+  expect(manifeste.routes['/']?.compute).toBe('static')
 })
 
 test('le configurateur est utilisable au clavier seul', async ({ page }) => {

@@ -6,8 +6,11 @@ import { AudienceSwitch } from '@/components/shell/AudienceSwitch'
 import { Footer } from '@/components/shell/Footer'
 import { rappelAudienceScript } from '@/lib/shell/audience'
 import { SECTIONS } from '@/lib/shell/sections'
+import { optionParId, SOCLE_ID } from '@/lib/config/catalogue'
+import { formaterEuros } from '@/lib/config/devis'
 
 const RAPPEL_ID = 'rappel-agence'
+const SOCLE = optionParId(SOCLE_ID)!
 
 export default function Page() {
   return (
@@ -38,7 +41,7 @@ export default function Page() {
               {id === 'prix' ? (
                 <div className="mt-6">
                   <p className="max-w-prose text-lg">
-                    Un site à partir de 1 500 €. Le reste dépend de ce que vous y mettez.
+                    Un site à partir de {formaterEuros(SOCLE.prix)}. Le reste dépend de ce que vous y mettez.
                   </p>
                   <a href="/configurateur"
                      className="mt-6 inline-block rounded-md bg-accent px-5 py-3 text-canvas transition-opacity duration-(--dur-micro) hover:opacity-90">
