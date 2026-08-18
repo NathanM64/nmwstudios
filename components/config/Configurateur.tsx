@@ -1,15 +1,21 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Container } from '@/components/ui/Container'
 import { ThemeToggle } from '@/components/shell/ThemeToggle'
 import { PanneauOptions } from '@/components/config/PanneauOptions'
 import { BarrePrix } from '@/components/config/BarrePrix'
 import { Apercu } from '@/components/config/Apercu'
-import { CONFIG_VIDE, type Configuration } from '@/lib/config/devis'
+import type { Configuration } from '@/lib/config/devis'
+import { decoder, encoder } from '@/lib/config/url'
 
-export function Configurateur() {
-  const [config, setConfig] = useState<Configuration>(CONFIG_VIDE)
+export function Configurateur({ recherche = '' }: { recherche?: string }) {
+  const [config, setConfig] = useState<Configuration>(() => decoder(recherche))
+
+  useEffect(() => {
+    const query = encoder(config)
+    history.replaceState(null, '', query ? `?${query}` : location.pathname)
+  }, [config])
 
   return (
     <main className="pb-40 sm:pt-24">

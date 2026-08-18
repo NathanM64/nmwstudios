@@ -183,3 +183,29 @@ test('la formule récurrente affiche sa carte d’état', async ({ page }) => {
   await page.getByRole('radio', { name: 'Sérénité' }).check()
   await expect(page.getByTestId('carte-etat')).toContainText('4 h')
 })
+
+test('cocher une option se reflète dans l’URL', async ({ page }) => {
+  await page.goto('/configurateur')
+  await page.getByRole('checkbox', { name: 'Un blog' }).check()
+  await expect(page).toHaveURL(/[?&]blog(&|$)/)
+})
+
+test('une URL configurée restitue l’état à l’ouverture', async ({ page }) => {
+  await page.goto('/configurateur?blog&pages=2&essentiel')
+  await expect(page.getByRole('checkbox', { name: 'Un blog' })).toBeChecked()
+  await expect(page.getByTestId('quantite-pages')).toHaveText('2')
+  await expect(page.getByTestId('mensuel')).toContainText('90')
+})
+
+test('configurer ne remplit pas l’historique', async ({ page }) => {
+  await page.goto('/configurateur')
+  const longueurInitiale = await page.evaluate(() => history.length)
+  await page.getByRole('checkbox', { name: 'Un blog' }).check()
+  await expect(page).toHaveURL(/blog/)
+  await page.getByRole('checkbox', { name: 'Prise de rendez-vous' }).check()
+  await expect(page).toHaveURL(/rdv/)
+  // Longueur inchangée malgré l’URL qui bouge : la preuve que c’est replaceState, pas pushState.
+  expect(await page.evaluate(() => history.length)).toBe(longueurInitiale)
+  await page.goBack()
+  await expect(page).not.toHaveURL(/configurateur/)
+})
