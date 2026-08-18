@@ -24,15 +24,22 @@ test('le socle est affiché mais ne se décoche pas', async ({ page }) => {
 
 test('le pas-à-pas incrémente une option quantifiable', async ({ page }) => {
   await page.goto('/configurateur')
-  await page.getByRole('button', { name: 'Ajouter 3 pages de plus' }).click()
-  await page.getByRole('button', { name: 'Ajouter 3 pages de plus' }).click()
+  await page.getByRole('button', { name: 'Ajouter : 3 pages de plus' }).click()
+  await page.getByRole('button', { name: 'Ajouter : 3 pages de plus' }).click()
   await expect(page.getByTestId('quantite-pages')).toHaveText('2')
 })
 
 test('le pas-à-pas ne descend pas sous zéro', async ({ page }) => {
   await page.goto('/configurateur')
-  await page.getByRole('button', { name: 'Retirer 3 pages de plus' }).click()
+  await page.getByRole('button', { name: 'Retirer : 3 pages de plus' }).click()
   await expect(page.getByTestId('quantite-pages')).toHaveText('0')
+})
+
+test('le pas-à-pas ne dépasse pas le maximum de l’option', async ({ page }) => {
+  await page.goto('/configurateur')
+  const ajouter = page.getByRole('button', { name: 'Ajouter : 3 pages de plus' })
+  for (let i = 0; i < 6; i++) await ajouter.click()
+  await expect(page.getByTestId('quantite-pages')).toHaveText('4')
 })
 
 test('les formules récurrentes s’excluent mutuellement', async ({ page }) => {

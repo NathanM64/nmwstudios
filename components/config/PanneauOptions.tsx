@@ -55,7 +55,7 @@ export function PanneauOptions({
                     <span className="flex items-center gap-2">
                       <button
                         type="button"
-                        aria-label={`Retirer ${option.libelle}`}
+                        aria-label={`Retirer : ${option.libelle}`}
                         onClick={() => poser(option.id, Math.max(0, n - 1))}
                         className="h-7 w-7 rounded-md border border-border"
                       >
@@ -66,7 +66,7 @@ export function PanneauOptions({
                       </span>
                       <button
                         type="button"
-                        aria-label={`Ajouter ${option.libelle}`}
+                        aria-label={`Ajouter : ${option.libelle}`}
                         onClick={() => poser(option.id, Math.min(option.quantifiable!.max, n + 1))}
                         className="h-7 w-7 rounded-md border border-border"
                       >
