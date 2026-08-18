@@ -81,7 +81,7 @@ export const OPTIONS: readonly Option[] = [
   { id: 'rgpd', libelle: 'Conformité RGPD', prix: 400, unite: 'forfait', groupe: 'conformite',
     explication: 'Bannière conforme, registre des traitements, politique de confidentialité.' },
   { id: 'a11y', libelle: 'Accessibilité RGAA', prix: 1200, unite: 'forfait', groupe: 'conformite', apercu: 'a11y',
-    explication: 'Mise en conformité et déclaration. Obligatoire au-delà de 10 salariés et 2 M€ de chiffre d’affaires sur un service grand public — pas en dessous.' },
+    explication: 'Mise en conformité et déclaration. Obligatoire au-delà de 10 salariés et 2 M€ de chiffre d’affaires sur un service grand public, pas en dessous.' },
 
   { id: 'migration', libelle: 'Migration de votre site actuel', prix: 600, unite: 'forfait', groupe: 'technique',
     explication: 'Reprise des contenus et redirections, pour ne rien perdre de votre référencement.' },
