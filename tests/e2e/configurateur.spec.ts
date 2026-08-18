@@ -19,7 +19,8 @@ test('cocher une option la retient', async ({ page }) => {
 
 test('le socle est affiché mais ne se décoche pas', async ({ page }) => {
   await page.goto('/configurateur')
-  await expect(page.getByText('1 à 3 pages, formulaire de contact')).toBeVisible()
+  // .first() : le récapitulatif reprend aussi ce libellé, fermé mais présent dans le DOM.
+  await expect(page.getByText('1 à 3 pages, formulaire de contact').first()).toBeVisible()
   await expect(page.getByRole('checkbox', { name: /1 à 3 pages/ })).toHaveCount(0)
 })
 
@@ -353,4 +354,28 @@ test('le dock des sections d’accueil n’apparaît pas sur le configurateur', 
   await page.goto('/configurateur')
   await expect(page.getByRole('navigation', { name: 'Sections de la page' })).toHaveCount(0)
   await expect(page.getByRole('link', { name: 'Revenir à l’accueil' })).toBeVisible()
+})
+
+test('aucune adresse n’est demandée avant d’avoir vu le prix', async ({ page }) => {
+  await page.goto('/configurateur')
+  await expect(page.getByTestId('fourchette')).toBeVisible()
+  // includeHidden : par défaut getByRole ignore un popover fermé, un textbox absent le passerait aussi.
+  const email = page.getByRole('textbox', { name: /adresse e-mail/i, includeHidden: true })
+  await expect(email).toBeAttached()
+  await expect(email).toBeHidden()
+})
+
+test('le récapitulatif liste les options retenues', async ({ page }) => {
+  await page.goto('/configurateur?blog&seo')
+  await page.getByRole('button', { name: 'Recevoir le récapitulatif' }).click()
+  const recap = page.getByTestId('recapitulatif')
+  await expect(recap).toContainText('Un blog')
+  await expect(recap).toContainText('Fondations SEO')
+})
+
+test('le récapitulatif demande une adresse et un consentement', async ({ page }) => {
+  await page.goto('/configurateur?blog')
+  await page.getByRole('button', { name: 'Recevoir le récapitulatif' }).click()
+  await expect(page.getByRole('textbox', { name: /adresse e-mail/i })).toBeVisible()
+  await expect(page.getByRole('checkbox', { name: /j’accepte/i })).toBeVisible()
 })

@@ -5,6 +5,7 @@ import { PanneauOptions } from '@/components/config/PanneauOptions'
 import { BarrePrix } from '@/components/config/BarrePrix'
 import { Apercu } from '@/components/config/Apercu'
 import { VignettesScene } from '@/components/config/VignettesScene'
+import { Recapitulatif } from '@/components/config/Recapitulatif'
 import { CONFIG_VIDE, type Configuration } from '@/lib/config/devis'
 import { decoder, encoder } from '@/lib/config/url'
 import type { SceneId } from '@/lib/config/scenes'
@@ -45,6 +46,14 @@ export function Configurateur() {
           <div className="mt-6">
             <PanneauOptions config={config} onChange={setConfig} onScene={setScene} />
           </div>
+
+          <div className="mt-8 flex flex-wrap gap-3">
+            <button type="button" popoverTarget="recapitulatif"
+                    className="rounded-md border border-border px-3 py-1.5 text-sm">
+              Recevoir le récapitulatif
+            </button>
+          </div>
+          <Recapitulatif config={config} />
         </div>
       </div>
 
