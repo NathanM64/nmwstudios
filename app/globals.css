@@ -152,3 +152,16 @@ body {
 @media (prefers-reduced-motion: reduce) {
   .animate-delta { animation: none; opacity: 1; }
 }
+
+@keyframes apparait {
+  from { opacity: 0; transform: translateY(0.25rem); }
+  to   { opacity: 1; transform: none; }
+}
+
+.animate-apparait {
+  animation: apparait var(--dur-std) var(--ease-out) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-apparait { animation: none; }
+}

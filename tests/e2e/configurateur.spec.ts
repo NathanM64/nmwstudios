@@ -107,3 +107,27 @@ test('l’explication s’atteint au clavier', async ({ page }) => {
   await page.keyboard.press('Enter')
   await expect(page.getByText(/Une section actualités que vous alimentez/)).toBeVisible()
 })
+
+test('l’aperçu montre trois entrées de navigation par défaut', async ({ page }) => {
+  await page.goto('/configurateur')
+  await expect(page.getByTestId('apercu-nav').getByRole('listitem')).toHaveCount(3)
+})
+
+test('ajouter une tranche de pages enrichit la navigation de l’aperçu', async ({ page }) => {
+  await page.goto('/configurateur')
+  await page.getByRole('button', { name: 'Ajouter : 3 pages de plus' }).click()
+  await expect(page.getByTestId('apercu-nav').getByRole('listitem')).toHaveCount(6)
+})
+
+test('cocher le blog fait apparaître la section actualités dans l’aperçu', async ({ page }) => {
+  await page.goto('/configurateur')
+  await expect(page.getByTestId('apercu-blog')).toHaveCount(0)
+  await page.getByRole('checkbox', { name: 'Un blog' }).check()
+  await expect(page.getByTestId('apercu-blog')).toBeVisible()
+})
+
+test('cocher l’espace membre ajoute le bouton de connexion dans l’aperçu', async ({ page }) => {
+  await page.goto('/configurateur')
+  await page.getByRole('checkbox', { name: 'Espace membre' }).check()
+  await expect(page.getByTestId('apercu-connexion')).toBeVisible()
+})

@@ -5,6 +5,7 @@ import { Container } from '@/components/ui/Container'
 import { ThemeToggle } from '@/components/shell/ThemeToggle'
 import { PanneauOptions } from '@/components/config/PanneauOptions'
 import { BarrePrix } from '@/components/config/BarrePrix'
+import { Apercu } from '@/components/config/Apercu'
 import { CONFIG_VIDE, type Configuration } from '@/lib/config/devis'
 
 export function Configurateur() {
@@ -19,7 +20,7 @@ export function Configurateur() {
 
       <Container className="mt-8 grid gap-8 lg:grid-cols-[1fr_22rem]">
         <div>
-          <div className="panel aspect-[4/3] w-full" />
+          <Apercu config={config} />
           <p className="mt-2 font-mono text-xs uppercase tracking-[0.08em] text-muted-foreground">
             aperçu, pas votre futur site
           </p>
