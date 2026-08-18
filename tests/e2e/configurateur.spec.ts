@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test'
+import { contrastRatio, parseColor } from '../../lib/color/contrast'
 
 test('la route du configurateur répond et s’annonce', async ({ page }) => {
   await page.goto('/configurateur')
@@ -131,4 +132,43 @@ test('cocher l’espace membre ajoute le bouton de connexion dans l’aperçu', 
   await expect(page.getByTestId('apercu-connexion')).toHaveCount(0)
   await page.getByRole('checkbox', { name: 'Espace membre' }).check()
   await expect(page.getByTestId('apercu-connexion')).toBeVisible()
+})
+
+test('l’accessibilité affiche un ratio de contraste mesuré et conforme', async ({ page }) => {
+  await page.goto('/configurateur')
+  await page.getByRole('checkbox', { name: 'Accessibilité RGAA' }).check()
+  const jetons = await page.evaluate(() => {
+    const styles = getComputedStyle(document.documentElement)
+    return {
+      texte: styles.getPropertyValue('--color-foreground').trim(),
+      fond: styles.getPropertyValue('--color-canvas').trim(),
+    }
+  })
+  // Rejoue le calcul depuis les jetons réellement rendus : un ratio codé en dur
+  // ou lu sur la mauvaise paire de jetons ne coïnciderait pas avec ce résultat.
+  const attendu = contrastRatio(parseColor(jetons.texte).rgb, parseColor(jetons.fond).rgb)
+  const texte = await page.getByTestId('apercu-a11y').textContent()
+  const ratio = Number(/(\d+[.,]\d+)/.exec(texte ?? '')?.[1].replace(',', '.'))
+  expect(ratio).toBeGreaterThanOrEqual(4.5)
+  expect(ratio).toBeCloseTo(attendu, 2)
+})
+
+test('le SEO affiche l’extrait de résultat de recherche', async ({ page }) => {
+  await page.goto('/configurateur')
+  await page.getByRole('checkbox', { name: 'Fondations SEO' }).check()
+  await expect(page.getByTestId('apercu-seo')).toBeVisible()
+})
+
+test('la langue supplémentaire ajoute un sélecteur qui bascule l’aperçu', async ({ page }) => {
+  await page.goto('/configurateur')
+  await page.getByRole('button', { name: 'Ajouter : Une langue de plus' }).click()
+  await expect(page.getByTestId('apercu-langue')).toBeVisible()
+  await page.getByTestId('apercu-langue').selectOption('en')
+  await expect(page.getByTestId('apercu-nav')).toContainText('Home')
+})
+
+test('la formule récurrente affiche sa carte d’état', async ({ page }) => {
+  await page.goto('/configurateur')
+  await page.getByRole('radio', { name: 'Sérénité' }).check()
+  await expect(page.getByTestId('carte-etat')).toContainText('4 h')
 })
