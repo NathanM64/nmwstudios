@@ -379,3 +379,17 @@ test('le récapitulatif demande une adresse et un consentement', async ({ page }
   await expect(page.getByRole('textbox', { name: /adresse e-mail/i })).toBeVisible()
   await expect(page.getByRole('checkbox', { name: /j’accepte/i })).toBeVisible()
 })
+
+test('le bloc Prix de l’accueil mène au configurateur', async ({ page }) => {
+  await page.goto('/')
+  await page.locator('#prix').scrollIntoViewIfNeeded()
+  await page.getByRole('link', { name: /configurer votre site/i }).click()
+  await expect(page).toHaveURL(/\/configurateur/)
+})
+
+test('le configurateur est utilisable au clavier seul', async ({ page }) => {
+  await page.goto('/configurateur')
+  await page.getByRole('checkbox', { name: 'Un blog' }).focus()
+  await page.keyboard.press('Space')
+  await expect(page.getByRole('checkbox', { name: 'Un blog' })).toBeChecked()
+})

@@ -35,7 +35,19 @@ export default function Page() {
           <Section key={id} id={id}>
             <Container>
               <h2 className="font-mono text-xs uppercase tracking-[0.08em] text-accent">{label}</h2>
-              <div className="min-h-[70vh]" />
+              {id === 'prix' ? (
+                <div className="mt-6">
+                  <p className="max-w-prose text-lg">
+                    Un site à partir de 1 500 €. Le reste dépend de ce que vous y mettez.
+                  </p>
+                  <a href="/configurateur"
+                     className="mt-6 inline-block rounded-md bg-accent px-5 py-3 text-canvas transition-opacity duration-(--dur-micro) hover:opacity-90">
+                    Configurer votre site
+                  </a>
+                </div>
+              ) : (
+                <div className="min-h-[70vh]" />
+              )}
             </Container>
           </Section>
         ))}
