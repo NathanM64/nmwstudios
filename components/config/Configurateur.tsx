@@ -7,7 +7,6 @@ import { Apercu } from '@/components/config/Apercu'
 import { VignettesScene } from '@/components/config/VignettesScene'
 import { Recapitulatif } from '@/components/config/Recapitulatif'
 import { RecapitulatifFinal } from '@/components/config/RecapitulatifFinal'
-import { BoutonsAction } from '@/components/config/BoutonsAction'
 import { JamaisInclus } from '@/components/config/JamaisInclus'
 import type { Configuration } from '@/lib/config/devis'
 import { decoder, encoder } from '@/lib/config/url'
@@ -110,9 +109,6 @@ export function Configurateur() {
             <PanneauOptions config={config} onChange={setConfig} onScene={setScene} />
           </div>
 
-          <div className="mt-8">
-            <BoutonsAction copie={copie} onCopier={copierLien} />
-          </div>
           <Recapitulatif config={config} />
 
           <JamaisInclus />
