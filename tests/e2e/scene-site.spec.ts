@@ -25,7 +25,7 @@ test('le faux texte devient du texte écrit quand la rédaction est retenue', as
 })
 
 test('la reprise réordonne les blocs existants au lieu d’écrire du neuf', async ({ page }) => {
-  await page.getByRole('checkbox', { name: 'Je reprends vos textes existants', exact: true }).check()
+  await page.getByRole('checkbox', { name: 'Je restructure vos textes existants', exact: true }).check()
   await expect(page.getByTestId('site-reprise')).toBeVisible()
   // Rédaction et reprise ne se confondent pas à l'écran.
   await expect(page.getByTestId('site-texte')).toHaveCount(0)
@@ -33,7 +33,7 @@ test('la reprise réordonne les blocs existants au lieu d’écrire du neuf', as
 
 test('rédaction et reprise cochées ensemble restent visibles toutes les deux', async ({ page }) => {
   await page.getByRole('button', { name: 'Ajouter : J’écris vos textes' }).click()
-  await page.getByRole('checkbox', { name: 'Je reprends vos textes existants', exact: true }).check()
+  await page.getByRole('checkbox', { name: 'Je restructure vos textes existants', exact: true }).check()
   await expect(page.getByTestId('site-texte')).toBeVisible()
   await expect(page.getByTestId('site-reprise')).toBeVisible()
 })
