@@ -77,7 +77,8 @@ export function CarteOption({
             type="button"
             aria-label={`Retirer : ${option.libelle}`}
             onClick={() => onPoser(option.id, Math.max(0, quantite - 1))}
-            className="h-11 w-11 rounded-md border border-border text-base leading-none"
+            // scroll-mt dérivé de --legende-h : la légende collante ne doit jamais recouvrir la cible focalisée.
+            className="h-11 w-11 scroll-mt-(--carte-scroll-pt) rounded-md border border-border text-base leading-none"
           >
             &minus;
           </button>
@@ -94,7 +95,7 @@ export function CarteOption({
             type="button"
             aria-label={`Ajouter : ${option.libelle}`}
             onClick={() => onPoser(option.id, Math.min(option.quantifiable!.max, quantite + 1))}
-            className="h-11 w-11 rounded-md border border-border text-base leading-none"
+            className="h-11 w-11 scroll-mt-(--carte-scroll-pt) rounded-md border border-border text-base leading-none"
           >
             +
           </button>
@@ -125,7 +126,7 @@ export function CarteOption({
         }
         // `sr-only` viderait la zone cliquable (clip-path) : l'input doit
         // couvrir toute la carte pour rester la vraie cible du clic direct.
-        className="absolute inset-0 z-10 cursor-pointer opacity-0"
+        className="absolute inset-0 z-10 scroll-mt-(--input-scroll-mt) cursor-pointer opacity-0"
       />
       {corps}
     </label>

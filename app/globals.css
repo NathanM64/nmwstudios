@@ -57,9 +57,12 @@
 
   /* Hauteur mesurée de la légende collante du configurateur (text-xs/py-2). */
   --legende-h: 2rem;
-  /* + 13px, écart mesuré entre le bord de la carte et le bouton du pas-à-pas (le plus grand des deux cibles focalisables, l'input n'en a qu'1) :
-     scroll-padding aligne la cible focalisée, pas la carte, donc la carte doit avoir sa propre marge pour ne jamais passer sous la légende. */
+  /* + 13px, écart mesuré entre le bord de la carte et le bouton du pas-à-pas : posée en scroll-margin
+     sur la cible focalisée elle-même, pas la carte, donc la carte a besoin de sa propre marge. */
   --carte-scroll-pt: calc(var(--legende-h) + 13px);
+  /* + 1px seulement pour l'input des cases à cocher : en position absolue, il est calé sur la boîte
+     de padding de la carte, pas sa bordure, contrairement au bouton qui est en flux normal. */
+  --input-scroll-mt: calc(var(--legende-h) + 1px);
 }
 
 [data-theme='light'] {
@@ -81,8 +84,6 @@ html[data-theme='light'] {
 html {
   background-color: var(--color-canvas);
   color-scheme: dark;
-  /* Sans préfixe de largeur : sous `lg`, c'est le document qui défile, pas colonne-options. */
-  scroll-padding-top: var(--carte-scroll-pt);
 }
 
 body {
