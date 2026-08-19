@@ -64,6 +64,20 @@ describe('decoder', () => {
     expect(decoder('blog=3')).toEqual({ blog: 1 })
   })
 
+  it('ne garde qu’une formule du groupe exclusif, la dernière lue', () => {
+    expect(decoder('essentiel&partenaire')).toEqual({ partenaire: 1 })
+    expect(decoder('partenaire&essentiel')).toEqual({ essentiel: 1 })
+  })
+
+  it('ne laisse pas le refus de suivi coexister avec une formule payante', () => {
+    expect(decoder('sans-suivi&essentiel')).toEqual({ essentiel: 1 })
+    expect(decoder('essentiel&sans-suivi')).toEqual({ 'sans-suivi': 1 })
+  })
+
+  it('ne touche pas aux groupes cumulables', () => {
+    expect(decoder('blog&seo&rdv')).toEqual({ blog: 1, seo: 1, rdv: 1 })
+  })
+
   it('fait l’aller-retour sans perte', () => {
     const config = { pages: 2, blog: 1, seo: 1, essentiel: 1 }
     expect(decoder(encoder(config))).toEqual(config)
