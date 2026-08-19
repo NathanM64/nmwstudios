@@ -38,7 +38,7 @@ for (const option of OPTIONS.filter((o) => o.id !== SOCLE_ID)) {
   })
 }
 
-test('le catalogue et les scènes couvrent bien trente options', async ({ page }) => {
+test('le catalogue et les scènes couvrent bien trente options', () => {
   // Garde-fou : si le catalogue grossit, la boucle ci-dessus grossit avec lui.
   expect(OPTIONS.length).toBe(30)
   expect(optionParId(SOCLE_ID)).toBeDefined()
