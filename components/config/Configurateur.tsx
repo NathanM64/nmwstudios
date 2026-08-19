@@ -4,7 +4,6 @@ import { useEffect, useRef, useState } from 'react'
 import { PanneauOptions } from '@/components/config/PanneauOptions'
 import { BarrePrix } from '@/components/config/BarrePrix'
 import { Apercu } from '@/components/config/Apercu'
-import { VignettesScene } from '@/components/config/VignettesScene'
 import { Recapitulatif } from '@/components/config/Recapitulatif'
 import { RecapitulatifFinal } from '@/components/config/RecapitulatifFinal'
 import { JamaisInclus } from '@/components/config/JamaisInclus'
@@ -96,11 +95,7 @@ export function Configurateur() {
           data-testid="colonne-apercu"
           className="sticky top-20 self-start lg:static lg:flex lg:min-h-0 lg:flex-col lg:self-auto"
         >
-          <Apercu config={config} scene={scene} />
-          <VignettesScene scene={scene} onChange={setScene} />
-          <p className="mt-2 font-mono text-xs uppercase tracking-[0.08em] text-muted-foreground">
-            aperçu, pas votre futur site
-          </p>
+          <Apercu config={config} scene={scene} onChange={setScene} />
         </div>
 
         <div ref={panneauRef} data-testid="colonne-options" className="lg:min-h-0 lg:overflow-y-auto lg:pr-2">

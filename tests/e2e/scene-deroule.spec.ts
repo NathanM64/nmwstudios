@@ -104,8 +104,10 @@ test('sur une petite hauteur, la scène du déroulé ne déborde pas silencieuse
     await page.setViewportSize(taille)
     await page.goto(pireCasDeroule)
     await page.getByTestId('onglet-deroule').click()
+    // `objet-scene`, pas `apercu` : depuis la Task 11, c'est lui qui écrête, l'aperçu se
+    // contente d'accueillir la barre d'onglets et de lui laisser le reste en flex.
     const debordement = await page
-      .getByTestId('apercu')
+      .getByTestId('objet-scene')
       .evaluate((el) => el.scrollHeight - el.clientHeight)
     expect(debordement, `débordement à ${taille.width}x${taille.height}`).toBeLessThanOrEqual(6)
 

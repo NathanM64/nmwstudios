@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { composite, contrastRatio } from '@/lib/color/contrast'
-import { readTokens, solid, surfaceOverCanvas, worstAmbientColor } from './tokens'
+import { readTokens, solid, surfaceOverCanvas, surfaceOverSurface, worstAmbientColor } from './tokens'
 
 const THEMES = [
   { nom: 'sombre', tokens: readTokens('app/globals.css', '@theme'), entete: ':root' },
@@ -36,6 +36,18 @@ describe('compositions d’états du configurateur', () => {
       const retenu = composite(solid(tokens, '--color-accent'), 0.04, verre)
       expect(contrastRatio(solid(tokens, '--color-foreground'), retenu)).toBeGreaterThanOrEqual(4.5)
       expect(contrastRatio(solid(tokens, '--color-muted-foreground'), retenu)).toBeGreaterThanOrEqual(4.5)
+    })
+
+    // objet-scene (Apercu.tsx) pose `bg-surface-raised` par-dessus le verre : les scènes
+    // y affichent leur texte sourdine et leurs libellés d'accent directement dessus.
+    const matiere = surfaceOverSurface(tokens, '--color-surface-raised', verre)
+
+    it(`tient le texte sourdine sur la matière de la maquette en thème ${nom}`, () => {
+      expect(contrastRatio(solid(tokens, '--color-muted-foreground'), matiere)).toBeGreaterThanOrEqual(4.5)
+    })
+
+    it(`tient l’étiquette d’accent sur la matière de la maquette en thème ${nom}`, () => {
+      expect(contrastRatio(solid(tokens, '--color-accent'), matiere)).toBeGreaterThanOrEqual(4.5)
     })
   }
 })

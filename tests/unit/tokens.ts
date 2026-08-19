@@ -76,3 +76,9 @@ export function surfaceOverCanvas(
   const { rgb, alpha } = parseColor(tokens[surfaceName])
   return composite(rgb, alpha, ambientOverCanvas(tokens, ambient))
 }
+
+/** Une surface posée sur une autre déjà composée (ex. la matière de la maquette sur le verre). */
+export function surfaceOverSurface(tokens: Record<string, string>, surfaceName: string, base: Rgb): Rgb {
+  const { rgb, alpha } = parseColor(tokens[surfaceName])
+  return composite(rgb, alpha, base)
+}

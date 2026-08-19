@@ -604,8 +604,10 @@ test('sur une petite hauteur, la scène du site ne déborde pas silencieusement 
   for (const taille of resolutions) {
     await page.setViewportSize(taille)
     await page.goto(pireCasSite)
+    // `objet-scene`, pas `apercu` : depuis la Task 11, c'est lui qui écrête, l'aperçu se
+    // contente d'accueillir la barre d'onglets et de lui laisser le reste en flex.
     const debordement = await page
-      .getByTestId('apercu')
+      .getByTestId('objet-scene')
       .evaluate((el) => el.scrollHeight - el.clientHeight)
     // Tolérance à 6 px : la scène la plus vide affiche déjà 3-4 px d'arrondi sous-pixel
     // sur cette grille imbriquée, bruit de mesure et non un débordement de contenu.
