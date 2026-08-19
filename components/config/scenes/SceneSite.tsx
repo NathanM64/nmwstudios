@@ -37,6 +37,10 @@ export function SceneSite({ config }: { config: Configuration }) {
   const visuels = config.visuels ?? 0
   const blog = config.blog ?? 0
   const articles = config.article ?? 0
+  const formulaire = config.formulaire ?? 0
+  const rdv = config.rdv ?? 0
+  const newsletter = config.newsletter ?? 0
+  const paiement = config.paiement ?? 0
   const [langue, setLangue] = useState('fr')
   const libelles = langue === 'en' ? [...NAV_EN, ...PAGES_SUP.slice(0, tranches * 3)] : pages
 
@@ -117,12 +121,6 @@ export function SceneSite({ config }: { config: Configuration }) {
           )}
         </div>
 
-        {(config.rdv ?? 0) > 0 && (
-          <span data-testid="apercu-rdv" className="animate-apparait mt-1 w-fit rounded-sm bg-accent/20 px-2 py-1 text-[0.5rem]">
-            Réserver un créneau
-          </span>
-        )}
-
         {(blog > 0 || articles > 0) && (
           <section data-testid="site-blog" className="animate-apparait mt-auto">
             <p className="text-[0.5rem] uppercase tracking-wider text-accent">Actualités</p>
@@ -136,6 +134,57 @@ export function SceneSite({ config }: { config: Configuration }) {
                   ))
                 : [0, 1, 2].map((i) => <div key={i} className="h-6 rounded-sm border border-border" />)}
             </div>
+          </section>
+        )}
+
+        <section data-testid="site-formulaire" className="mt-2 rounded-sm border border-border p-2">
+          {formulaire > 0 && (
+            <div data-testid="site-etapes" className="animate-apparait mb-1 flex gap-1">
+              {[1, 2, 3].map((n) => (
+                <span key={n} className="rounded-sm bg-accent/20 px-1 font-mono text-[0.45rem] text-accent">
+                  {n}
+                </span>
+              ))}
+            </div>
+          )}
+          <div className="flex flex-col gap-1">
+            {[0, 1, 2].map((i) => (
+              <span key={i} data-testid="site-champ" className="h-2 rounded-sm bg-foreground/12" />
+            ))}
+          </div>
+          {formulaire > 0 && (
+            <p className="animate-apparait mt-1 text-[0.5rem] text-muted-foreground">Pièce jointe</p>
+          )}
+        </section>
+
+        {rdv > 0 && (
+          <section data-testid="site-rdv" className="animate-apparait mt-2">
+            <p className="text-[0.5rem] uppercase tracking-wider text-accent">Réserver un créneau</p>
+            <div className="mt-1 grid grid-cols-6 gap-1">
+              {['9h', '10h', '11h', '14h', '15h', '16h'].map((h) => (
+                <span key={h} data-testid="site-creneau" className="rounded-sm border border-border py-0.5 text-center text-[0.45rem] text-muted-foreground">
+                  {h}
+                </span>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {paiement > 0 && (
+          <section data-testid="site-paiement" className="animate-apparait mt-2 flex items-center justify-between rounded-sm border border-border p-2">
+            <span className="text-[0.5rem] text-muted-foreground">Régler en ligne</span>
+            <span className="flex gap-1">
+              {/* Logos dessinés, aucune marque reproduite. */}
+              <span className="h-2 w-4 rounded-[2px] bg-foreground/25" />
+              <span className="h-2 w-4 rounded-[2px] bg-foreground/15" />
+            </span>
+          </section>
+        )}
+
+        {newsletter > 0 && (
+          <section data-testid="site-newsletter" className="animate-apparait mt-2 flex items-center gap-1 rounded-sm bg-surface-raised p-2">
+            <span className="h-2 flex-1 rounded-sm bg-foreground/12" />
+            <span className="rounded-sm bg-accent/20 px-1 text-[0.45rem] text-accent">S’inscrire</span>
           </section>
         )}
       </div>

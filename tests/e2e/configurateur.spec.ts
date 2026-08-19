@@ -536,7 +536,6 @@ test('la page dit ce qui n’est jamais inclus', async ({ page }) => {
 // Options sans traduction visuelle dans l’aperçu aujourd’hui, chacune pour une raison précise.
 const SANS_RENDU = new Set([
   SOCLE_ID, // acquis d’office, aucun contrôle à cocher
-  'formulaire', 'newsletter', 'paiement', // aucune traduction dans la scène « site » aujourd’hui
   'a11y', // défaut corrigé couvert par son propre test, plus bas
   'cadrage', 'formation', 'express', // scène planning : texte fixe, rien ne s’y voit par construction
 ])
