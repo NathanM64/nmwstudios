@@ -20,7 +20,7 @@ export function VignettesScene({
             data-testid={`onglet-${s.id}`}
             aria-pressed={actif}
             onClick={() => onChange(s.id)}
-            className={`min-h-8 rounded-md border px-3 py-1 text-xs transition-colors duration-(--dur-micro) ${
+            className={`min-h-9 rounded-md border px-3 py-1.5 text-xs transition-colors duration-(--dur-micro) ${
               actif
                 ? 'border-accent text-foreground'
                 : 'border-border text-muted-foreground hover:text-foreground'

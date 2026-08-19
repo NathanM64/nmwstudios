@@ -597,6 +597,7 @@ test('sur une petite hauteur, la scène du site ne déborde pas silencieusement 
     { width: 1366, height: 768 },
     { width: 1024, height: 700 },
     { width: 1280, height: 800 },
+    { width: 1280, height: 600 },
   ]
   const pireCasSite =
     '/configurateur?pages=4&langue=3&redaction&reprise&photos&visuels&blog&article=10&membre&formulaire&rdv&newsletter&paiement'

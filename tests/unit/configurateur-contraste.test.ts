@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { composite, contrastRatio } from '@/lib/color/contrast'
-import { readTokens, solid, surfaceOverCanvas, surfaceOverSurface, worstAmbientColor } from './tokens'
+import { readTokens, solid, surfaceOverCanvas, worstAmbientColor } from './tokens'
 
 const THEMES = [
   { nom: 'sombre', tokens: readTokens('app/globals.css', '@theme'), entete: ':root' },
@@ -38,9 +38,9 @@ describe('compositions d’états du configurateur', () => {
       expect(contrastRatio(solid(tokens, '--color-muted-foreground'), retenu)).toBeGreaterThanOrEqual(4.5)
     })
 
-    // objet-scene (Apercu.tsx) pose `bg-surface-raised` par-dessus le verre : les scènes
-    // y affichent leur texte sourdine et leurs libellés d'accent directement dessus.
-    const matiere = surfaceOverSurface(tokens, '--color-surface-raised', verre)
+    // objet-scene (Apercu.tsx) pose `bg-maquette` : un fond plein, pas du verre, donc
+    // pas de compositing avec le fond de page, direct comme le reste de son texte.
+    const matiere = solid(tokens, '--color-maquette')
 
     it(`tient le texte sourdine sur la matière de la maquette en thème ${nom}`, () => {
       expect(contrastRatio(solid(tokens, '--color-muted-foreground'), matiere)).toBeGreaterThanOrEqual(4.5)

@@ -46,7 +46,7 @@ export function SceneSite({ config }: { config: Configuration }) {
 
   return (
     <div className="animate-apparait flex flex-1 flex-col">
-      <header className="flex items-center justify-between gap-3 border-b border-border px-4 py-2">
+      <header className="flex items-center justify-between gap-3 border-b border-border px-3 py-1.5">
         <span className="h-3 w-14 rounded-sm bg-accent/70" />
         <div data-testid="site-nav">
           <ul className="flex flex-wrap gap-2">
@@ -76,7 +76,7 @@ export function SceneSite({ config }: { config: Configuration }) {
         )}
       </header>
 
-      <div className="flex flex-1 flex-col gap-1 p-2">
+      <div className="flex flex-1 flex-col gap-1 p-1.5">
         {/* Rédaction et reprise se cumulent : la cascade ne sert que le repli commun. */}
         {redaction === 0 && reprise === 0 && (
           <>
@@ -88,21 +88,21 @@ export function SceneSite({ config }: { config: Configuration }) {
         {redaction > 0 && (
           <div data-testid="site-texte" className="animate-apparait">
             <p className="text-sm text-foreground">{TEXTE_ECRIT.titre}</p>
-            <p className="mt-1 text-[0.62rem] leading-snug text-muted-foreground">{TEXTE_ECRIT.corps}</p>
+            <p className="mt-0.5 text-[0.62rem] leading-snug text-muted-foreground">{TEXTE_ECRIT.corps}</p>
           </div>
         )}
 
         {reprise > 0 && (
-          <ul data-testid="site-reprise" className="animate-apparait flex flex-col gap-1">
+          <ul data-testid="site-reprise" className="animate-apparait flex flex-col gap-0.5">
             {BLOCS_REPRIS.map((bloc) => (
-              <li key={bloc} className="rounded-sm border border-border px-2 py-0.5 text-[0.6rem] leading-tight text-muted-foreground">
+              <li key={bloc} className="rounded-sm border border-border px-2 py-px text-[0.6rem] leading-tight text-muted-foreground">
                 {bloc}
               </li>
             ))}
           </ul>
         )}
 
-        <div data-testid="site-cadre" className="relative h-16 overflow-hidden rounded-sm border border-border bg-[linear-gradient(135deg,rgba(122,162,255,0.22),rgba(168,120,255,0.16)_60%,rgba(96,214,214,0.12))]">
+        <div data-testid="site-cadre" className="relative h-12 overflow-hidden rounded-sm border border-border bg-[linear-gradient(135deg,rgba(122,162,255,0.22),rgba(168,120,255,0.16)_60%,rgba(96,214,214,0.12))]">
           {photos > 0 && (
             <>
               {/* Le travail sur la photo, jamais la photo : rien à produire graphiquement. */}
@@ -125,10 +125,10 @@ export function SceneSite({ config }: { config: Configuration }) {
           <section data-testid="site-blog" className="animate-apparait mt-auto">
             <p className="text-[0.5rem] uppercase tracking-wider text-accent">Actualités</p>
             {/* 5 colonnes : 10 articles au maximum tiennent sur 2 lignes plutôt que 4, sans quoi le cadre déborde. */}
-            <div className="mt-1 grid grid-cols-5 gap-1">
+            <div className="mt-0.5 grid grid-cols-5 gap-0.5">
               {articles > 0
                 ? ARTICLES.slice(0, articles).map((article) => (
-                    <div key={article.requete} data-testid="site-article" className="rounded-sm border border-border p-1">
+                    <div key={article.requete} data-testid="site-article" className="rounded-sm border border-border p-0.5">
                       <p className="text-[0.5rem] leading-tight text-foreground">{article.titre}</p>
                       <p className="mt-0.5 font-mono text-[0.45rem] text-accent">{article.requete}</p>
                     </div>
@@ -140,8 +140,8 @@ export function SceneSite({ config }: { config: Configuration }) {
 
         {/* Grille à deux colonnes : chaque carte prend sa moitié, ou toute la ligne si sa voisine
             est absente. Conditions indépendantes, aucune ne dépend d'une autre pour s'afficher. */}
-        <div className="grid grid-cols-2 gap-1">
-          <section data-testid="site-formulaire" className={`rounded-sm border border-border p-1 ${newsletter > 0 ? '' : 'col-span-2'}`}>
+        <div className="grid grid-cols-2 gap-0.5">
+          <section data-testid="site-formulaire" className={`rounded-sm border border-border p-0.5 ${newsletter > 0 ? '' : 'col-span-2'}`}>
             {formulaire > 0 && (
               <div data-testid="site-etapes" className="animate-apparait mb-0.5 flex gap-1">
                 {[1, 2, 3].map((n) => (

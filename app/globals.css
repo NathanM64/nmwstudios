@@ -4,8 +4,9 @@
 @theme {
   --color-canvas: #0a0a0f;
   --color-surface: rgba(255, 255, 255, 0.045);
-  /* Plafonné à 2 % : au-delà, le texte sourdine posé dessus (matière de la maquette) passe sous 4,5:1. */
-  --color-surface-raised: rgba(255, 255, 255, 0.02);
+  --color-surface-raised: rgba(255, 255, 255, 0.07);
+  /* Fond plein, pas du verre : un écran, pas une vitre. Vaut --color-canvas. */
+  --color-maquette: #0a0a0f;
   --color-foreground: #f4f4f7;
   --color-muted-foreground: #a3a3ae;
   --color-accent: #7aa2ff;
@@ -31,6 +32,7 @@
   --color-canvas: #f6f7fb;
   --color-surface: rgba(255, 255, 255, 0.62);
   --color-surface-raised: rgba(255, 255, 255, 0.78);
+  --color-maquette: #f6f7fb;
   --color-foreground: #12121a;
   --color-muted-foreground: #55555f;
   --color-accent: #3a58b1;
@@ -167,14 +169,7 @@ body {
 
 /* Le reset Tailwind pose `margin: 0` sur `*`, ce qui écrase le `margin: auto` dont
    le navigateur se sert pour centrer un popover : sans lui, il se colle en haut à
-   gauche du viewport. L'ancrage, là où il est reconnu, le ramène près du bouton. */
+   gauche du viewport. */
 [popover] {
   margin: auto;
-}
-
-@supports (anchor-name: --sonde) {
-  [popover][data-ancre] {
-    position-area: block-end span-inline-start;
-    margin: 0.35rem 0 0 0;
-  }
 }

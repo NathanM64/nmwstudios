@@ -24,7 +24,7 @@ export function Apercu({
       </div>
       <div
         data-testid="objet-scene"
-        className="m-3 flex-1 overflow-hidden rounded-md border border-border-strong bg-surface-raised shadow-(--shadow-elevated)"
+        className="m-3 flex-1 overflow-hidden rounded-md border border-border-strong bg-maquette shadow-(--shadow-elevated)"
       >
         {scene === 'site' && <SceneSite config={config} />}
         {scene === 'preuve' && <ScenePreuve config={config} />}
