@@ -50,6 +50,15 @@ test('une option lourde allonge visiblement la construction', async ({ page }) =
   await expect.poll(() => largeur(page, 'deroule-construction')).toBeGreaterThan(avant)
 })
 
+// Le repère de livraison est confiné par la propriété `translate` : posé en `transform`, il
+// perdait son fondu d'entrée, dont le keyframe se termine sur `transform: none`.
+test('le repère de livraison garde son fondu d’entrée', async ({ page }) => {
+  const repere = page.getByTestId('deroule-livraison')
+  await expect(repere).toHaveClass(/animate-apparait/)
+  const style = await repere.evaluate((el) => getComputedStyle(el).translate)
+  expect(style, 'le confinement doit passer par `translate`, pas `transform`').not.toBe('none')
+})
+
 test('la livraison accélérée comprime la barre et laisse un fantôme', async ({ page }) => {
   await page.getByRole('checkbox', { name: 'Espace membre', exact: true }).check()
   await page.getByTestId('onglet-deroule').click()
@@ -74,6 +83,19 @@ test('se passer de suivi vide la bande sans laisser un cadre muet', async ({ pag
   await expect(page.getByTestId('deroule-mois')).toContainText('vous')
 })
 
+// Le refus assumé n'est pas le repli : sans manifestation propre, `?` et `?sans-suivi`
+// rendaient exactement le même déroulé.
+test('le refus de suivi a sa manifestation, distincte du repli sans rien cocher', async ({ page }) => {
+  await page.goto('/configurateur?blog')
+  await page.getByTestId('onglet-deroule').click()
+  await expect(page.getByTestId('deroule-sans-suivi')).toHaveCount(0)
+
+  await page.getByRole('radio', { name: 'Je m’en occupe moi-même', exact: true }).check()
+  await expect(page.getByTestId('deroule-sans-suivi')).toBeVisible()
+  await expect(page.getByTestId('deroule-charge')).toHaveCount(3)
+  await expect(page.getByTestId('deroule-evenement')).toHaveCount(0)
+})
+
 // Trois groupes non exclusifs, rien n'empêche de cocher les trois en plus d'une formule :
 // évite la cascade qui a déjà fait disparaître une option payée sur ce chantier.
 test('cadrage, formation et livraison accélérée cochés ensemble restent tous visibles', async ({ page }) => {
@@ -96,6 +118,8 @@ test('sur une petite hauteur, la scène du déroulé ne déborde pas silencieuse
     { width: 1024, height: 700 },
     { width: 1280, height: 800 },
     { width: 1280, height: 600 },
+    // 1280 × 560 : un 1280 × 720 amputé de la barre d'onglets et de la barre de favoris.
+    { width: 1280, height: 560 },
   ]
   const pireCasDeroule =
     '/configurateur?cadrage&formation&express&partenaire&pages=4&langue=3&redaction=15&reprise&photos&visuels&blog&article=10&membre&formulaire&rdv&newsletter&paiement&seo&seo-local&perf&a11y&rgpd&legal&migration&domaine'
@@ -104,8 +128,8 @@ test('sur une petite hauteur, la scène du déroulé ne déborde pas silencieuse
     await page.setViewportSize(taille)
     await page.goto(pireCasDeroule)
     await page.getByTestId('onglet-deroule').click()
-    // `objet-scene`, pas `apercu` : depuis la Task 11, c'est lui qui écrête, l'aperçu se
-    // contente d'accueillir la barre d'onglets et de lui laisser le reste en flex.
+    // `objet-scene`, pas `apercu` : c'est lui qui écrête, l'aperçu se contente d'accueillir
+    // la barre d'onglets et de lui laisser le reste en flex.
     const debordement = await page
       .getByTestId('objet-scene')
       .evaluate((el) => el.scrollHeight - el.clientHeight)
