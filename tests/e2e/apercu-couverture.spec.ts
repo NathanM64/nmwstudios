@@ -24,7 +24,15 @@ for (const option of OPTIONS.filter((o) => o.id !== SOCLE_ID)) {
     await page.getByTestId(`onglet-${scene}`).click()
 
     const apercu = page.getByTestId('apercu')
-    const avant = await apercu.innerHTML()
+    // Empreinte structurelle : les nœuds réellement présents et leurs identifiants de test.
+    // Un `data-retenu` ou une classe d'état qui bascule seul ne fait plus passer ce test.
+    const empreinte = () =>
+      apercu.evaluate((el) => {
+        const noeuds = [...el.querySelectorAll('*')]
+        const ids = noeuds.map((n) => n.getAttribute('data-testid') ?? '').filter(Boolean).sort()
+        return `${noeuds.length} nœuds · ${ids.join(',')}`
+      })
+    const avant = await empreinte()
 
     if (option.quantifiable) {
       await page.getByRole('button', { name: `Ajouter : ${option.libelle}` }).click()
@@ -34,7 +42,7 @@ for (const option of OPTIONS.filter((o) => o.id !== SOCLE_ID)) {
       await page.getByRole('checkbox', { name: option.libelle, exact: true }).check()
     }
 
-    await expect.poll(() => apercu.innerHTML()).not.toBe(avant)
+    await expect.poll(empreinte, { message: `${option.id} n’ajoute aucun artefact à l’aperçu` }).not.toBe(avant)
   })
 }
 

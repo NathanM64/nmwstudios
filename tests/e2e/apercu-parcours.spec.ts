@@ -25,9 +25,8 @@ test('cocher tout le catalogue dans l’ordre garde aperçu, scène et total coh
     // La scène commutée est celle de l'option qu'on vient de poser.
     await expect(page.getByTestId(`onglet-${sceneDeOption(option.id)}`)).toHaveAttribute('aria-pressed', 'true')
 
-    // Le total affiché suit le moteur de calcul, sans dérive. Comparaison sur la
-    // chaîne formatée : « 1 500 € » porte une espace de milliers, donc un
-    // découpage naïf du nombre brut ne s'y retrouverait jamais.
+    // Comparaison sur la chaîne formatée : « 1 500 € » porte une espace de milliers,
+    // qu'un découpage naïf du nombre brut ne retrouverait jamais.
     const attendu = calculer(config)
     await expect(page.getByTestId('fourchette')).toContainText(formaterEuros(attendu.bas))
   }
