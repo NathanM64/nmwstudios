@@ -54,12 +54,12 @@ describe('compositions d’états du configurateur', () => {
 // directions, plus sur les jetons du site, que la scène ne lit plus.
 describe('opacité posée dans une scène de l’aperçu', () => {
   const source = readFileSync('components/config/scenes/ScenePreuve.tsx', 'utf8')
-  const trouve = /retenu \? '' : 'opacity-(\d+)'/.exec(source)
+  const trouve = /retenu \? '[^']*' : 'opacity-(\d+)'/.exec(source)
 
   it('la ligne non retenue porte une opacité repérable sur le texte courant de la maquette', () => {
     expect(trouve, 'opacité de la ligne non retenue introuvable dans ScenePreuve.tsx').not.toBeNull()
     // Sans cette vérification, le modèle ci-dessous pourrait viser une couleur que la ligne n'utilise plus.
-    expect(source).toMatch(/data-retenu[\s\S]{0,500}?m-corps/)
+    expect(source).toMatch(/data-retenu[\s\S]{0,800}?m-corps/)
   })
 
   for (const style of STYLES) {

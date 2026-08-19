@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { Fragment, useEffect, useState } from 'react'
 import type { Configuration } from '@/lib/config/devis'
 import { contrastRatio, parseColor } from '@/lib/color/contrast'
 import { lireChargement } from '@/lib/config/mesure'
@@ -53,11 +53,21 @@ export function ScenePreuve({ config, domaine = DOMAINE_DEFAUT }: { config: Conf
 
   return (
     <div className="animate-apparait m-air-serre m-marge flex flex-1 flex-col">
-      <p data-testid="preuve-score" className="m-surtitre">
-        {retenus} / {CONTROLES.length} contrôles retenus
-      </p>
+      {/* Le compteur domine, les huit lignes se rangent dessous. Sur une ligne avec son
+          libellé plutôt qu'au-dessus : le cadre en bandeau ne paie pas deux fois. */}
+      <div className="flex shrink-0 items-baseline gap-3">
+        <p data-testid="preuve-score" className="m-chiffre shrink-0">
+          {retenus} / {CONTROLES.length}
+        </p>
+        <div className="min-w-0 flex-1">
+          <p className="m-surtitre">contrôles retenus</p>
+          <span className="m-filet mt-1 block h-px w-full" />
+        </div>
+      </div>
 
-      <div className="flex flex-1 flex-col justify-center gap-0.5">
+      {/* Les lignes s'étirent pour occuper la place libre, aucune ne se comprime sous son
+          contenu : c'est le centrage qui creusait les bandes vides de la version précédente. */}
+      <div className="m-air-serre flex flex-1 flex-col">
         {CONTROLES.map((controle) => {
           const retenu = (config[controle.id] ?? 0) > 0
           return (
@@ -65,17 +75,20 @@ export function ScenePreuve({ config, domaine = DOMAINE_DEFAUT }: { config: Conf
               key={controle.id}
               data-testid="preuve-ligne"
               data-retenu={retenu ? 'oui' : 'non'}
-              // opacity-70 : la ligne reste en retrait sans passer sous 4,5:1, mesuré dans les deux
-              // thèmes et modélisé par tests/unit/configurateur-contraste.test.ts.
-              className={`m-cadre m-ligne flex flex-col gap-0.5 ${retenu ? '' : 'opacity-70'}`}
+              // opacity-70 : la ligne reste en retrait sans passer sous 4,5:1, modélisé sur les
+              // trois directions par tests/unit/configurateur-contraste.test.ts.
+              className={`m-cadre m-ligne flex shrink-0 grow flex-col justify-center gap-0.5 ${retenu ? 'm-retenu' : 'opacity-70'}`}
             >
-              <p className="m-corps">{controle.nom}</p>
+              <div className="flex min-w-0 items-baseline gap-1.5">
+                {retenu && <span className="m-barre h-1.5 w-1.5 shrink-0" />}
+                <p className="m-corps truncate">{controle.nom}</p>
+              </div>
 
               {retenu && controle.id === 'seo' && (
-                <div data-testid="preuve-serp" className="animate-apparait m-cadre px-1 py-0.5">
-                  <p className="m-mono">votre-nom.fr</p>
-                  <p className="m-corps">{recherche.titre}</p>
-                  <p className="m-legende">{recherche.description}</p>
+                <div data-testid="preuve-serp" className="animate-apparait flex flex-col">
+                  <p className="m-mono m-sourd">votre-nom.fr</p>
+                  <p className="m-sous-titre m-accent truncate">{recherche.titre}</p>
+                  <p className="m-legende line-clamp-1">{recherche.description}</p>
                 </div>
               )}
 
@@ -86,12 +99,12 @@ export function ScenePreuve({ config, domaine = DOMAINE_DEFAUT }: { config: Conf
               {retenu && controle.id === 'perf' && (
                 <>
                   {/* Artefact visuel, aucune requête simulée : la mesure vient du texte en dessous. */}
-                  <div data-testid="preuve-cascade" className="animate-apparait flex flex-col gap-0.5">
+                  <div data-testid="preuve-cascade" className="animate-apparait m-cascade flex flex-col gap-0.5">
                     {[100, 65, 40, 20].map((largeur, i) => (
                       <span key={i} className="m-barre h-0.5" style={{ width: `${largeur}%` }} />
                     ))}
                   </div>
-                  <p data-testid="preuve-vitesse" className="m-corps m-accent">
+                  <p data-testid="preuve-vitesse" className="m-corps m-accent truncate">
                     {vitesse === null
                       ? 'mesure indisponible'
                       : `mesuré sur ce configurateur, pas sur votre futur site : ${vitesse.toFixed(2).replace('.', ',')} s`}
@@ -100,33 +113,42 @@ export function ScenePreuve({ config, domaine = DOMAINE_DEFAUT }: { config: Conf
               )}
 
               {retenu && controle.id === 'a11y' && ratio !== null && (
-                <p data-testid="apercu-a11y" className="m-legende m-accent">
+                <p data-testid="apercu-a11y" className="m-legende m-accent truncate">
                   mesuré sur ce configurateur, pas sur votre futur site : {ratio.toFixed(2).replace('.', ',')}:1 ·{' '}
                   {ratio >= 4.5 ? 'conforme AA' : 'sous le seuil AA'}
                 </p>
               )}
 
               {retenu && controle.id === 'rgpd' && (
-                <p data-testid="preuve-rgpd" className="m-cadre m-legende w-fit px-1 py-0.5">
+                <p data-testid="preuve-rgpd" className="m-cadre m-legende w-fit px-1">
                   Bannière de consentement aux cookies
                 </p>
               )}
 
               {retenu && controle.id === 'legal' && (
-                <p data-testid="preuve-legal" className="m-legende">
+                <p data-testid="preuve-legal" className="m-legende truncate">
                   Pied de page · Mentions légales
                 </p>
               )}
 
               {retenu && controle.id === 'migration' && (
-                <div data-testid="preuve-redirections" className="m-legende flex flex-col gap-0.5 font-mono">
-                  <p>/ancien-site/accueil → / · 301</p>
-                  <p>/ancien-site/contact → /#contact · 301</p>
+                // Une vraie table : deux colonnes et un code de réponse, pas deux lignes de texte.
+                <div data-testid="preuve-redirections" className="m-table font-mono">
+                  {[
+                    ['/ancien-site/accueil', '/'],
+                    ['/ancien-site/contact', '/#contact'],
+                  ].map(([avant, apres]) => (
+                    <Fragment key={avant}>
+                      <span className="m-legende">{avant}</span>
+                      <span className="m-legende m-accent">{apres}</span>
+                      <span className="m-jeton m-legende justify-self-start px-1">301</span>
+                    </Fragment>
+                  ))}
                 </div>
               )}
 
               {retenu && controle.id === 'domaine' && (
-                <p data-testid="preuve-domaine" className="m-legende">
+                <p data-testid="preuve-domaine" className="m-legende truncate">
                   votre-nom.fr · certificat valide
                 </p>
               )}

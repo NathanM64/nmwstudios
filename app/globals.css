@@ -207,7 +207,21 @@ body {
 
 .m-cadre { border: 1px solid var(--m-bord); border-radius: var(--m-rayon); }
 .m-cadre-tiret { border: 1px dashed var(--m-bord); border-radius: var(--m-rayon); }
+/* Ligne retenue du rapport : le bord prend l'accent, le fond se détache. Déclarée après
+   `.m-cadre`, dont elle surcharge la couleur de bord. */
+.m-retenu { border-color: var(--m-accent); background-color: var(--m-fond-2); }
 .m-trait-sourd { background-color: var(--m-texte-sourd); }
+
+/* Deux instruments du rapport qui ne doivent pas s'étirer sur toute la ligne : une cascade
+   de requêtes large de 900 px se lit comme des filets, et une table de redirections dont les
+   colonnes s'écartent ne se lit plus comme une table. */
+.m-cascade { width: min(100%, calc(var(--m-densite) * 15rem)); }
+.m-table {
+  display: grid;
+  grid-template-columns: max-content max-content auto;
+  gap: 1px calc(var(--m-densite) * 0.75rem);
+  justify-content: start;
+}
 .m-carte { border: 1px solid var(--m-bord); border-radius: var(--m-rayon); background-color: var(--m-fond-2); }
 .m-carte-2 { border-radius: var(--m-rayon-2); background-color: var(--m-fond-2); }
 .m-ligne { padding: calc(var(--m-densite) * 0.16rem) calc(var(--m-densite) * 0.4rem); }
@@ -277,6 +291,7 @@ body {
   .m-bas { grid-template-columns: 1.05fr 1fr; }
   .m-aplat { min-height: calc(var(--m-densite) * 1.25rem); }
   .m-ligne { padding: 0 calc(var(--m-densite) * 0.4rem); }
+  .m-chiffre { font-size: calc(var(--m-chiffre-taille) * 0.7); }
   .m-titre { font-size: calc(var(--m-titre-taille) * 0.62); }
   .m-chapeau { font-size: var(--m-texte-taille); -webkit-line-clamp: 1; }
   .m-air { gap: calc(var(--m-densite) * 0.21rem); }
