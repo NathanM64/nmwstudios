@@ -54,6 +54,10 @@ export function Apercu({
                 color: 'var(--m-texte)',
                 fontFamily: 'var(--m-corps-famille)',
                 fontWeight: 'var(--m-corps-graisse)',
+                // Les widgets natifs de la maquette suivent sa direction, pas le thème
+                // du site : sans cela le volet du sélecteur de langue est peint sombre
+                // sous un texte sombre.
+                colorScheme: 'var(--m-schema)',
               } as React.CSSProperties
             }
             className="flex min-w-0 flex-1"

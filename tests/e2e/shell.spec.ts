@@ -107,6 +107,23 @@ test('aucune violation axe sérieuse sur « La preuve » sans rien cocher', asyn
   }
 })
 
+// Le volet d'un sélecteur est rendu dans un portail, hors de l'arbre du configurateur :
+// les passes axe ci-dessus ne le voient jamais ouvert.
+test('aucune violation axe sérieuse quand le volet d’un sélecteur est ouvert', async ({ page }) => {
+  for (const theme of ['dark', 'light'] as const) {
+    await page.goto('/configurateur')
+    await page.evaluate((t) => {
+      document.documentElement.dataset.theme = t
+    }, theme)
+    await page.getByTestId('selecteur-domaine-declencheur').click()
+    await expect(page.getByTestId('selecteur-domaine-volet')).toBeVisible()
+    await fonduTermine(page)
+    const results = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa']).analyze()
+    const serious = results.violations.filter((v) => v.impact === 'serious' || v.impact === 'critical')
+    expect(serious, `volet ouvert en thème ${theme} : ${JSON.stringify(serious, null, 2)}`).toEqual([])
+  }
+})
+
 test('la page se charge sans erreur ni avertissement de console', async ({ page }) => {
   const bruit: string[] = []
   page.on('console', (message) => {

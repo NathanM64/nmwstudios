@@ -60,7 +60,7 @@ export function SceneSite({ config, domaine = DOMAINE_DEFAUT }: { config: Config
               value={active}
               onChange={(evenement) => setLangue(evenement.target.value as Langue)}
               aria-label="Langue de l’aperçu"
-              className="animate-apparait m-cadre m-legende bg-transparent"
+              className="animate-glisse m-select px-1"
             >
               {offertes.map((code) => (
                 <option key={code} value={code}>

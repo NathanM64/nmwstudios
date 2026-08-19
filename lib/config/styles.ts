@@ -15,6 +15,7 @@ export const STYLES: readonly Style[] = [
     id: 'editorial',
     libelle: 'Éditorial',
     variables: {
+      '--m-schema': 'light',
       '--m-fond': '#faf8f5',
       '--m-fond-2': '#f0ece5',
       '--m-texte': '#1a1a19',
@@ -47,6 +48,7 @@ export const STYLES: readonly Style[] = [
     id: 'franc',
     libelle: 'Franc',
     variables: {
+      '--m-schema': 'light',
       '--m-fond': '#fffefc',
       '--m-fond-2': '#eef2f9',
       '--m-texte': '#14161a',
@@ -79,6 +81,7 @@ export const STYLES: readonly Style[] = [
     id: 'premium',
     libelle: 'Premium',
     variables: {
+      '--m-schema': 'dark',
       '--m-fond': '#121415',
       '--m-fond-2': '#1c1f20',
       '--m-texte': '#eef0f0',

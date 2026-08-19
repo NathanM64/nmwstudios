@@ -103,6 +103,18 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+/* Volet de liste déroulante : posé au-dessus de la page, il lui faut une matière opaque.
+   Le verre du reste de l'interface laisserait lire au travers le texte qui passe dessous.
+   Même peinture que le fond de page, comme l'en-tête de groupe collant. */
+.panel-menu {
+  background-color: var(--color-canvas);
+  background-image: var(--ambient);
+  background-attachment: fixed;
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-elevated);
+}
+
 .panel {
   background-color: var(--color-surface);
   backdrop-filter: var(--glass);
@@ -245,6 +257,14 @@ body {
 
 /* Étiquette opaque posée sur l'aplat : le fond de la maquette, pas une transparence,
    sinon le contraste dépend du dégradé qui passe dessous. */
+.m-select {
+  background-color: var(--m-fond);
+  color: var(--m-texte);
+  border: 1px solid var(--m-bord);
+  border-radius: var(--m-rayon);
+  font-size: var(--m-legende-taille);
+}
+
 .m-etiquette {
   background-color: var(--m-fond);
   color: var(--m-texte);
