@@ -9,7 +9,8 @@ import { RecapitulatifFinal } from '@/components/config/RecapitulatifFinal'
 import { JamaisInclus } from '@/components/config/JamaisInclus'
 import type { Configuration } from '@/lib/config/devis'
 import { decoder, encoder } from '@/lib/config/url'
-import { premiereAncreDe, type SceneId } from '@/lib/config/scenes'
+import { GROUPES, type GroupeId } from '@/lib/config/catalogue'
+import { ANCRE_PAR_GROUPE, premiereAncreDe, type SceneId } from '@/lib/config/scenes'
 import type { Cible } from '@/lib/config/defilement'
 import { DOMAINE_DEFAUT, type DomaineId } from '@/lib/config/domaines'
 import { STYLE_DEFAUT, type StyleId } from '@/lib/config/styles'
@@ -31,6 +32,18 @@ export function Configurateur() {
 
   const surPartie = useCallback((partie: SceneId) => {
     setCible({ ancre: premiereAncreDe(partie), progression: 0 })
+  }, [])
+
+  // Lire un groupe, c'est parcourir la distance qui sépare son ancre de celle du groupe d'après.
+  // Le dernier groupe n'a pas de suite : sa cible se pose, elle n'interpole rien.
+  const surLecture = useCallback(({ groupe, progression }: { groupe: GroupeId; progression: number }) => {
+    const rang = GROUPES.findIndex((g) => g.id === groupe)
+    const suivant = GROUPES[rang + 1]
+    setCible({
+      ancre: ANCRE_PAR_GROUPE[groupe],
+      vers: suivant ? ANCRE_PAR_GROUPE[suivant.id] : undefined,
+      progression,
+    })
   }, [])
 
   const grilleRef = useRef<HTMLDivElement>(null)
@@ -119,7 +132,7 @@ export function Configurateur() {
         <div ref={panneauRef} data-testid="colonne-options" className="min-w-0 xl:min-h-0 xl:overflow-y-auto xl:pr-2">
           <h1 className="text-2xl font-semibold tracking-tight">Configurez votre site</h1>
           <div className="mt-6">
-            <PanneauOptions config={config} onChange={setConfig} onScene={surPartie} />
+            <PanneauOptions config={config} onChange={setConfig} onScene={surPartie} onLecture={surLecture} />
           </div>
 
           <Recapitulatif config={config} />

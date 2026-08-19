@@ -1,6 +1,6 @@
 'use client'
 
-import { Fragment, useEffect, useRef, useState } from 'react'
+import { Fragment, memo, useEffect, useRef, useState } from 'react'
 import type { Configuration } from '@/lib/config/devis'
 import { contrastRatio, parseColor } from '@/lib/color/contrast'
 import { lireChargement } from '@/lib/config/mesure'
@@ -70,7 +70,13 @@ const CONTROLES = [
   { id: 'domaine', nom: 'Adresse et certificat' },
 ] as const
 
-export function ScenePreuve({ config, domaine = DOMAINE_DEFAUT }: { config: Configuration; domaine?: DomaineId }) {
+export const ScenePreuve = memo(function ScenePreuve({
+  config,
+  domaine = DOMAINE_DEFAUT,
+}: {
+  config: Configuration
+  domaine?: DomaineId
+}) {
   // Cette scène n'a pas de sélecteur de langue : elle reste en français, comme le reste de ses libellés.
   const recherche = editorialDe(domaine, 'fr').recherche
   const ratio = useContrasteMesure()
@@ -195,4 +201,4 @@ export function ScenePreuve({ config, domaine = DOMAINE_DEFAUT }: { config: Conf
       </div>
     </div>
   )
-}
+})

@@ -33,11 +33,19 @@ async function offsetsReels(page: Page): Promise<string> {
 }
 
 /** Tant qu'une animation d'entrée court, le relevé et la mise en page bougent ensemble, et un
- *  écart nul ne prouverait rien : c'est une fois posée que la position doit être la bonne. */
+ *  écart nul ne prouverait rien : c'est une fois posée que la position doit être la bonne.
+ *
+ *  Une transition reciblée en vol est annulée, et sa promesse `finished` rejette : la lecture
+ *  du formulaire recible celle du rouleau à chaque cran. Annulée vaut terminée ici, ce qui
+ *  compte étant qu'aucune de celles relevées à l'appel ne bouge plus. */
 async function animationsFinies(page: Page): Promise<void> {
   await page
     .getByTestId('rouleau')
-    .evaluate((r) => Promise.all(r.getAnimations({ subtree: true }).map((a) => a.finished)).then(() => undefined))
+    .evaluate((r) =>
+      Promise.all(r.getAnimations({ subtree: true }).map((a) => a.finished.catch(() => undefined))).then(
+        () => undefined
+      )
+    )
 }
 
 test.beforeEach(async ({ page }) => {

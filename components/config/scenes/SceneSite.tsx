@@ -1,13 +1,19 @@
 'use client'
 
-import { useState } from 'react'
+import { memo, useState } from 'react'
 import type { Configuration } from '@/lib/config/devis'
 import { HABILLAGE, LANGUES, type Langue } from '@/lib/config/maquette'
 import { DOMAINE_DEFAUT, editorialDe, type DomaineId } from '@/lib/config/domaines'
 
 const PAGES_SOCLE = 3
 
-export function SceneSite({ config, domaine = DOMAINE_DEFAUT }: { config: Configuration; domaine?: DomaineId }) {
+export const SceneSite = memo(function SceneSite({
+  config,
+  domaine = DOMAINE_DEFAUT,
+}: {
+  config: Configuration
+  domaine?: DomaineId
+}) {
   const tranches = config.pages ?? 0
   const langues = config.langue ?? 0
   const redaction = config.redaction ?? 0
@@ -230,4 +236,4 @@ export function SceneSite({ config, domaine = DOMAINE_DEFAUT }: { config: Config
       </div>
     </div>
   )
-}
+})

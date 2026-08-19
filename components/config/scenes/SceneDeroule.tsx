@@ -1,5 +1,6 @@
 'use client'
 
+import { memo } from 'react'
 import { OPTIONS } from '@/lib/config/catalogue'
 import type { Configuration } from '@/lib/config/devis'
 import { calculerDeroule } from '@/lib/config/duree'
@@ -33,7 +34,7 @@ function formaterSemaines(semaines: number): string {
   return `${valeur.toString().replace('.', ',')} semaine${valeur >= 2 ? 's' : ''}`
 }
 
-export function SceneDeroule({ config }: { config: Configuration }) {
+export const SceneDeroule = memo(function SceneDeroule({ config }: { config: Configuration }) {
   const deroule = calculerDeroule(config)
   const formule = OPTIONS_RECURRENTES.find((o) => (config[o.id] ?? 0) > 0)
   const evenements = formule ? (EVENEMENTS[formule.id] ?? []) : []
@@ -190,4 +191,4 @@ export function SceneDeroule({ config }: { config: Configuration }) {
       </div>
     </div>
   )
-}
+})

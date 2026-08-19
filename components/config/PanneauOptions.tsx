@@ -1,10 +1,10 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
+import { memo, useEffect, useRef } from 'react'
 import { CarteOption } from '@/components/config/CarteOption'
 import { GROUPES, OPTIONS, type GroupeId } from '@/lib/config/catalogue'
 import type { Configuration } from '@/lib/config/devis'
-import { ANCRE_PAR_GROUPE, partieDeAncre, sceneDeOption, type SceneId } from '@/lib/config/scenes'
+import { sceneDeOption, type SceneId } from '@/lib/config/scenes'
 
 /** Ligne de lecture, en part de la hauteur de fenêtre : le groupe qui la franchit est celui
  *  qu'on est en train de lire, et c'est aussi là que se cale son en-tête collant. */
@@ -16,17 +16,20 @@ const LIGNE_DE_LECTURE = 0.3
  *  reprendrait la main sur le choix qui vient de l'émettre. */
 const SUSPENSION_MS = 500
 
-export function PanneauOptions({
+export const PanneauOptions = memo(function PanneauOptions({
   config,
   onChange,
   onScene,
+  onLecture,
 }: {
   config: Configuration
   onChange: (config: Configuration) => void
   onScene: (scene: SceneId) => void
+  onLecture: (lecture: { groupe: GroupeId; progression: number }) => void
 }) {
   const racineRef = useRef<HTMLDivElement>(null)
   const dernierGroupe = useRef<GroupeId | null>(null)
+  const derniereProgression = useRef<number | null>(null)
   const releve = useRef<() => void>(() => {})
   const suspenduJusqua = useRef(0)
   const rattrapage = useRef(0)
@@ -55,15 +58,26 @@ export function PanneauOptions({
     const relever = () => {
       if (Date.now() < suspenduJusqua.current) return
       const ligne = window.innerHeight * LIGNE_DE_LECTURE
-      let courant: GroupeId | null = null
+      let courant: HTMLElement | null = null
       for (const section of racine.querySelectorAll<HTMLElement>('[data-groupe]')) {
-        if (section.getBoundingClientRect().top <= ligne) courant = section.dataset.groupe as GroupeId
+        if (section.getBoundingClientRect().top <= ligne) courant = section
       }
-      if (!courant || courant === dernierGroupe.current) return
-      // Au montage on note le groupe sans commuter : un lien partagé a déjà choisi sa scène.
+      if (!courant) return
+
+      const boite = courant.getBoundingClientRect()
+      // Avancement dans le groupe lu, quantifié au cinquantième : à chaque image, ce serait un
+      // rendu de React par image de défilement.
+      const brut = boite.height > 0 ? (ligne - boite.top) / boite.height : 0
+      const progression = Math.round(Math.min(Math.max(brut, 0), 1) * 50) / 50
+      const groupe = courant.dataset.groupe as GroupeId
+
+      if (groupe === dernierGroupe.current && progression === derniereProgression.current) return
+      // Au montage on note la lecture sans l'émettre : le premier groupe a déjà franchi la ligne,
+      // et émettre ferait glisser la page de quelques pixels avant le premier geste.
       const premier = dernierGroupe.current === null
-      dernierGroupe.current = courant
-      if (!premier) onScene(partieDeAncre(ANCRE_PAR_GROUPE[courant]))
+      dernierGroupe.current = groupe
+      derniereProgression.current = progression
+      if (!premier) onLecture({ groupe, progression })
     }
 
     releve.current = relever
@@ -87,7 +101,7 @@ export function PanneauOptions({
       if (attente) cancelAnimationFrame(attente)
       clearTimeout(rattrapage.current)
     }
-  }, [onScene])
+  }, [onLecture])
 
   const choisirExclusif = (groupe: string, id: string) => {
     const suivant = { ...config }
@@ -132,4 +146,4 @@ export function PanneauOptions({
       ))}
     </div>
   )
-}
+})
