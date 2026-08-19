@@ -14,12 +14,29 @@ const TEXTE_ECRIT = {
 
 const BLOCS_REPRIS = ['Nos services', 'Notre histoire', 'Nous contacter']
 
+const ARTICLES = [
+  { titre: 'Quel bois pour une extension ?', requete: 'extension bois bègles' },
+  { titre: 'Prix d’une toiture en 2026', requete: 'prix toiture gironde' },
+  { titre: 'Ossature ou maçonnerie', requete: 'ossature bois avis' },
+  { titre: 'Isoler une charpente ancienne', requete: 'isolation charpente' },
+  { titre: 'Faut-il un permis pour une véranda', requete: 'permis véranda gironde' },
+  { titre: 'Entretenir un bardage bois', requete: 'entretien bardage' },
+  { titre: 'Combien de temps dure un chantier', requete: 'délai chantier bois' },
+  { titre: 'Bois local ou importé', requete: 'bois local gironde' },
+  { titre: 'Rénover sans tout casser', requete: 'rénovation toiture bègles' },
+  { titre: 'Choisir son couvreur', requete: 'couvreur bègles avis' },
+]
+
 export function SceneSite({ config }: { config: Configuration }) {
   const tranches = config.pages ?? 0
   const pages = [...PAGES_BASE, ...PAGES_SUP.slice(0, tranches * 3)]
   const langues = config.langue ?? 0
   const redaction = config.redaction ?? 0
   const reprise = config.reprise ?? 0
+  const photos = config.photos ?? 0
+  const visuels = config.visuels ?? 0
+  const blog = config.blog ?? 0
+  const articles = config.article ?? 0
   const [langue, setLangue] = useState('fr')
   const libelles = langue === 'en' ? [...NAV_EN, ...PAGES_SUP.slice(0, tranches * 3)] : pages
 
@@ -81,19 +98,43 @@ export function SceneSite({ config }: { config: Configuration }) {
           </ul>
         )}
 
+        <div data-testid="site-cadre" className="relative h-24 overflow-hidden rounded-sm border border-border bg-[linear-gradient(135deg,rgba(122,162,255,0.22),rgba(168,120,255,0.16)_60%,rgba(96,214,214,0.12))]">
+          {photos > 0 && (
+            <>
+              {/* Le travail sur la photo, jamais la photo : rien à produire graphiquement. */}
+              <span data-testid="site-reperes" className="animate-apparait absolute inset-2 border border-accent" />
+              {/* Aucun chiffre : un poids annoncé serait une mesure inventée. Le recadrage
+                  et la mention qualitative suffisent à montrer le traitement. */}
+              <span data-testid="site-poids" className="animate-apparait absolute bottom-1 left-1/2 -translate-x-1/2 rounded-sm bg-canvas/80 px-1 text-[0.55rem] text-accent">
+                recadrée et allégée
+              </span>
+            </>
+          )}
+          {visuels > 0 && (
+            <span data-testid="site-visuels" className="animate-apparait absolute bottom-1 left-1 rounded-sm bg-canvas/80 px-1 text-[0.55rem] text-muted-foreground">
+              visuel sous licence
+            </span>
+          )}
+        </div>
+
         {(config.rdv ?? 0) > 0 && (
           <span data-testid="apercu-rdv" className="animate-apparait mt-1 w-fit rounded-sm bg-accent/20 px-2 py-1 text-[0.5rem]">
             Réserver un créneau
           </span>
         )}
 
-        {(config.blog ?? 0) > 0 && (
-          <section data-testid="apercu-blog" className="animate-apparait mt-auto">
+        {(blog > 0 || articles > 0) && (
+          <section data-testid="site-blog" className="animate-apparait mt-auto">
             <p className="text-[0.5rem] uppercase tracking-wider text-accent">Actualités</p>
             <div className="mt-1 grid grid-cols-3 gap-1">
-              {[0, 1, 2].map((i) => (
-                <div key={i} className="h-6 rounded-sm border border-border" />
-              ))}
+              {articles > 0
+                ? ARTICLES.slice(0, articles).map((article) => (
+                    <div key={article.requete} data-testid="site-article" className="rounded-sm border border-border p-1">
+                      <p className="text-[0.5rem] leading-tight text-foreground">{article.titre}</p>
+                      <p className="mt-0.5 font-mono text-[0.45rem] text-accent">{article.requete}</p>
+                    </div>
+                  ))
+                : [0, 1, 2].map((i) => <div key={i} className="h-6 rounded-sm border border-border" />)}
             </div>
           </section>
         )}

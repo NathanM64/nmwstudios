@@ -133,9 +133,9 @@ test('ajouter une tranche de pages enrichit la navigation de l’aperçu', async
 
 test('cocher le blog fait apparaître la section actualités dans l’aperçu', async ({ page }) => {
   await page.goto('/configurateur')
-  await expect(page.getByTestId('apercu-blog')).toHaveCount(0)
+  await expect(page.getByTestId('site-blog')).toHaveCount(0)
   await page.getByRole('checkbox', { name: 'Un blog' }).check()
-  await expect(page.getByTestId('apercu-blog')).toBeVisible()
+  await expect(page.getByTestId('site-blog')).toBeVisible()
 })
 
 test('cocher l’espace membre ajoute le bouton de connexion dans l’aperçu', async ({ page }) => {
@@ -281,7 +281,7 @@ test('cocher le référencement bascule l’aperçu sur la scène de recherche',
 test('cocher une option visible garde la scène du site', async ({ page }) => {
   await page.goto('/configurateur')
   await page.getByRole('checkbox', { name: 'Un blog' }).check()
-  await expect(page.getByTestId('apercu-blog')).toBeVisible()
+  await expect(page.getByTestId('site-blog')).toBeVisible()
   await expect(page.getByTestId('site-nav')).toBeVisible()
 })
 
@@ -297,7 +297,7 @@ test('la scène du site garde tout ce qui a été coché', async ({ page }) => {
   await page.getByRole('checkbox', { name: 'Un blog' }).check()
   await page.getByRole('checkbox', { name: 'Fondations SEO' }).check()
   await page.getByRole('button', { name: 'Le site', exact: true }).click()
-  await expect(page.getByTestId('apercu-blog')).toBeVisible()
+  await expect(page.getByTestId('site-blog')).toBeVisible()
 })
 
 test('la vignette de la scène active porte aria-pressed, les autres non', async ({ page }) => {
@@ -536,9 +536,7 @@ test('la page dit ce qui n’est jamais inclus', async ({ page }) => {
 // Options sans traduction visuelle dans l’aperçu aujourd’hui, chacune pour une raison précise.
 const SANS_RENDU = new Set([
   SOCLE_ID, // acquis d’office, aucun contrôle à cocher
-  'photos', 'visuels', // le contenu réel n’est pas simulé, le gabarit reste fixe
   'formulaire', 'newsletter', 'paiement', // aucune traduction dans la scène « site » aujourd’hui
-  'article', // se lit sur le blog publié, pas dans cet aperçu
   'a11y', // défaut corrigé couvert par son propre test, plus bas
   'cadrage', 'formation', 'express', // scène planning : texte fixe, rien ne s’y voit par construction
 ])
