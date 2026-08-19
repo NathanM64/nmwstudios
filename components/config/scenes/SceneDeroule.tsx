@@ -45,35 +45,35 @@ export function SceneDeroule({ config }: { config: Configuration }) {
   const decalage = (semaines: number) => `-${(semaines / deroule.total) * 100}% 0`
 
   return (
-    <div className="animate-apparait flex flex-1 flex-col gap-6 p-3">
+    <div className="animate-apparait m-marge flex flex-1 flex-col gap-6">
       <div className="flex flex-col gap-2">
-        <p className="text-[0.8125rem] uppercase tracking-wider text-accent">Déroulé du projet</p>
+        <p className="m-surtitre">Déroulé du projet</p>
 
         <div
           data-testid="deroule-piste"
           className="relative h-5"
           style={{ width: `${Math.min(100, (deroule.total / ECHELLE_SEMAINES) * 100)}%` }}
         >
-          <div className="absolute inset-x-0 top-1/2 h-px -translate-y-1/2 bg-border" />
+          <div className="m-filet absolute inset-x-0 top-1/2 h-px -translate-y-1/2" />
 
           {deroule.cadrage > 0 && (
             <div
               data-testid="deroule-cadrage"
-              className="animate-apparait absolute top-0.5 bottom-0.5 min-w-[5px] rounded-sm bg-accent-2/60"
+              className="animate-apparait m-barre-2 absolute top-0.5 bottom-0.5 min-w-[5px]"
               style={{ left: 0, width: pct(deroule.cadrage) }}
             />
           )}
 
           <div
             data-testid="deroule-construction"
-            className="absolute top-0.5 bottom-0.5 min-w-[5px] rounded-sm bg-accent/60"
+            className="m-barre absolute top-0.5 bottom-0.5 min-w-[5px]"
             style={{ left: pct(deroule.cadrage), width: pct(deroule.construction) }}
           />
 
           {deroule.formation > 0 && (
             <div
               data-testid="deroule-formation"
-              className="animate-apparait absolute top-0.5 bottom-0.5 min-w-[5px] rounded-sm bg-accent-2/60"
+              className="animate-apparait m-barre-2 absolute top-0.5 bottom-0.5 min-w-[5px]"
               style={{ left: pct(deroule.livraison), width: pct(deroule.formation) }}
             />
           )}
@@ -87,18 +87,18 @@ export function SceneDeroule({ config }: { config: Configuration }) {
                 left: `${(deroule.livraisonSansExpress / deroule.total) * 100}%`,
                 translate: decalage(deroule.livraisonSansExpress),
               }}
-              className="animate-apparait absolute -top-1 -bottom-1 w-px bg-muted-foreground"
+              className="animate-apparait m-trait-sourd absolute -top-1 -bottom-1 w-px"
             />
           )}
 
           <span
             data-testid="deroule-livraison"
-            className="animate-apparait absolute -top-1 -bottom-1 w-0.5 rounded-full bg-accent"
+            className="animate-apparait m-barre absolute -top-1 -bottom-1 w-0.5"
             style={{ left: pct(deroule.livraison), translate: decalage(deroule.livraison) }}
           />
         </div>
 
-        <p className="text-[0.8125rem] leading-tight text-muted-foreground">
+        <p className="m-legende">
           Livraison à {formaterSemaines(deroule.livraison)}
           {deroule.livraison < deroule.livraisonSansExpress &&
             ` au lieu de ${formaterSemaines(deroule.livraisonSansExpress)} sans la livraison accélérée`}
@@ -106,7 +106,7 @@ export function SceneDeroule({ config }: { config: Configuration }) {
       </div>
 
       <div className="mt-auto flex flex-col gap-2">
-        <p className="text-[0.8125rem] uppercase tracking-wider text-accent">Chaque mois, après la livraison</p>
+        <p className="m-surtitre">Chaque mois, après la livraison</p>
         <div data-testid="deroule-mois" className="flex flex-col gap-1">
           {evenements.length > 0 && (
             <div className="flex flex-wrap gap-1">
@@ -114,7 +114,7 @@ export function SceneDeroule({ config }: { config: Configuration }) {
                 <span
                   key={e}
                   data-testid="deroule-evenement"
-                  className="rounded-sm border border-border px-1.5 py-0.5 text-[0.8125rem] leading-tight text-muted-foreground"
+                  className="m-puce px-1.5 py-0.5"
                 >
                   {e}
                 </span>
@@ -129,20 +129,20 @@ export function SceneDeroule({ config }: { config: Configuration }) {
                   <span
                     key={e}
                     data-testid="deroule-charge"
-                    className="rounded-sm border border-dashed border-border-strong px-1.5 py-0.5 text-[0.8125rem] leading-tight text-muted-foreground"
+                    className="m-cadre-tiret m-legende px-1.5 py-0.5"
                   >
                     {e}
                   </span>
                 ))}
               </div>
-              <p className="text-[0.8125rem] leading-tight text-muted-foreground">
+              <p className="m-legende">
                 Personne ne passe : le site est à vous, et vous vous en occupez.
               </p>
             </div>
           )}
 
           {!formule && (
-            <p className="text-[0.8125rem] leading-tight text-muted-foreground">
+            <p className="m-legende">
               Après la livraison, à vous de dire qui s’en occupe.
             </p>
           )}

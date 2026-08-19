@@ -5,8 +5,6 @@
   --color-canvas: #0a0a0f;
   --color-surface: rgba(255, 255, 255, 0.045);
   --color-surface-raised: rgba(255, 255, 255, 0.07);
-  /* Fond plein, pas du verre : un écran, pas une vitre. Vaut --color-canvas. */
-  --color-maquette: #0a0a0f;
   --color-foreground: #f4f4f7;
   --color-muted-foreground: #a3a3ae;
   --color-accent: #7aa2ff;
@@ -32,7 +30,6 @@
   --color-canvas: #f6f7fb;
   --color-surface: rgba(255, 255, 255, 0.62);
   --color-surface-raised: rgba(255, 255, 255, 0.78);
-  --color-maquette: #f6f7fb;
   --color-foreground: #12121a;
   --color-muted-foreground: #55555f;
   --color-accent: #3a58b1;
@@ -143,6 +140,165 @@ body {
     transform-origin: top left;
   }
 }
+
+/* ── Habillage de la maquette ──
+   Le style n'existe que comme variables `--m-*`, posées sur la racine par Apercu.tsx.
+   Ces classes sont le seul endroit où ces variables se lisent : les scènes n'écrivent
+   ni couleur, ni taille de police, ni rayon, et un quatrième style ne coûte qu'un jeu
+   de valeurs. Protégé par tests/unit/maquette-variables.test.ts. */
+.m-titre {
+  font-family: var(--m-titre-famille);
+  font-weight: var(--m-titre-graisse);
+  font-size: var(--m-titre-taille);
+  line-height: var(--m-titre-interligne);
+  letter-spacing: var(--m-titre-suivi);
+  color: var(--m-texte);
+}
+
+.m-enseigne {
+  font-family: var(--m-titre-famille);
+  font-weight: var(--m-titre-graisse);
+  font-size: var(--m-sous-titre-taille);
+  letter-spacing: var(--m-titre-suivi);
+  color: var(--m-texte);
+}
+
+.m-chiffre {
+  font-family: var(--m-titre-famille);
+  font-weight: var(--m-titre-graisse);
+  font-size: var(--m-chiffre-taille);
+  line-height: 0.92;
+  letter-spacing: var(--m-titre-suivi);
+  color: var(--m-texte);
+}
+
+.m-sous-titre { font-size: var(--m-sous-titre-taille); line-height: 1.25; color: var(--m-texte); }
+/* Chapeau borné : sept métiers dans quatre langues n'ont pas des accroches de la même
+   longueur, et sans borne le pire cas dépend du texte plutôt que de la mise en page. */
+.m-chapeau {
+  font-size: var(--m-corps-taille);
+  line-height: 1.45;
+  color: var(--m-texte-sourd);
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+}
+.m-corps { font-size: var(--m-texte-taille); line-height: 1.35; color: var(--m-texte); }
+.m-menu { font-size: var(--m-menu-taille); line-height: 1.3; color: var(--m-texte-sourd); }
+.m-legende { font-size: var(--m-legende-taille); line-height: 1.3; color: var(--m-texte-sourd); }
+.m-sourd { color: var(--m-texte-sourd); }
+.m-accent { color: var(--m-accent); }
+
+.m-surtitre {
+  font-size: var(--m-legende-taille);
+  line-height: 1.3;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--m-accent);
+}
+
+.m-mono {
+  font-family: var(--font-mono);
+  font-size: var(--m-legende-taille);
+  line-height: 1.3;
+  color: var(--m-accent);
+}
+
+.m-cadre { border: 1px solid var(--m-bord); border-radius: var(--m-rayon); }
+.m-cadre-tiret { border: 1px dashed var(--m-bord); border-radius: var(--m-rayon); }
+.m-trait-sourd { background-color: var(--m-texte-sourd); }
+.m-carte { border: 1px solid var(--m-bord); border-radius: var(--m-rayon); background-color: var(--m-fond-2); }
+.m-carte-2 { border-radius: var(--m-rayon-2); background-color: var(--m-fond-2); }
+.m-ligne { padding: calc(var(--m-densite) * 0.16rem) calc(var(--m-densite) * 0.4rem); }
+.m-filet { background-color: var(--m-bord); }
+.m-filet-haut { border-top: 1px solid var(--m-bord); }
+.m-aplat {
+  background-color: var(--m-fond-2);
+  background-image: var(--m-aplat);
+  border-radius: var(--m-rayon-2);
+  /* Hauteur plancher de la place de l'image, décidée par le style et non par la scène. */
+  min-height: calc(var(--m-densite) * 2.75rem);
+}
+
+/* Bouton plein : le seul endroit où l'accent porte du texte posé dessus. */
+.m-plein {
+  background-color: var(--m-accent);
+  color: var(--m-accent-contraste);
+  border-radius: var(--m-rayon);
+  font-size: var(--m-texte-taille);
+}
+
+/* Étiquette opaque posée sur l'aplat : le fond de la maquette, pas une transparence,
+   sinon le contraste dépend du dégradé qui passe dessous. */
+.m-etiquette {
+  background-color: var(--m-fond);
+  color: var(--m-texte);
+  border-radius: var(--m-rayon);
+  font-size: var(--m-legende-taille);
+  line-height: 1.3;
+}
+
+ /* Pastille bornée : quinze noms de pages d'un métier bavard tenaient sur six lignes,
+    et la hauteur de la scène dépendait alors du texte, pas de la mise en page. */
+.m-puce-borne { max-width: calc(var(--m-densite) * 8rem); }
+
+.m-puce {
+  border: 1px solid var(--m-bord);
+  border-radius: var(--m-rayon);
+  font-size: var(--m-legende-taille);
+  line-height: 1.4;
+  color: var(--m-texte-sourd);
+}
+
+.m-reperes { border: 1px dashed var(--m-accent); }
+
+/* Cadre en bandeau : la page se resserre au lieu de déborder. Le seuil est un rapport,
+   pas une hauteur : le rapport dit si la page a de quoi respirer, et il est le même dans
+   le cadre logique et à l'écran, ce qu'une hauteur en pixels ne serait pas dès que le
+   plancher d'échelle mord. Le texte courant n'y touche pas : son plancher de 10 px se
+   mesure en 1440 × 900, où ce cadre-là n'existe pas. */
+/* Les bandes basses s'empilent quand la page a de la hauteur, et passent en deux colonnes
+   quand elle n'en a pas. C'est la place libre en largeur qui paie la hauteur manquante. */
+.m-bas {
+  display: grid;
+  grid-template-columns: 1fr;
+  align-content: start;
+}
+
+@container (max-aspect-ratio: 6 / 5) {
+  .m-aplat { min-height: calc(var(--m-densite) * 2rem); }
+  .m-titre { font-size: calc(var(--m-titre-taille) * 0.72); }
+  .m-air { gap: calc(var(--m-densite) * 0.28rem); }
+  .m-marge { padding: calc(var(--m-densite) * 0.5rem) calc(var(--m-densite) * 0.7rem); }
+}
+
+@container (min-aspect-ratio: 19 / 10) {
+  .m-bas { grid-template-columns: 1.05fr 1fr; }
+  .m-aplat { min-height: calc(var(--m-densite) * 1.25rem); }
+  .m-ligne { padding: 0 calc(var(--m-densite) * 0.4rem); }
+  .m-titre { font-size: calc(var(--m-titre-taille) * 0.62); }
+  .m-chapeau { font-size: var(--m-texte-taille); -webkit-line-clamp: 1; }
+  .m-air { gap: calc(var(--m-densite) * 0.21rem); }
+  .m-air-serre { gap: calc(var(--m-densite) * 0.16rem); }
+  .m-marge { padding: calc(var(--m-densite) * 0.36rem) calc(var(--m-densite) * 0.7rem); }
+}
+.m-teinte { background-color: color-mix(in srgb, var(--m-accent) 16%, transparent); }
+/* Un champ borné sur le fond de la maquette, pas une barre grise : c'est ce qui
+   faisait lire le formulaire du socle comme un champ de filaire vide. */
+.m-champ {
+  border: 1px solid var(--m-bord);
+  background-color: var(--m-fond);
+  border-radius: var(--m-rayon);
+}
+.m-jeton { background-color: color-mix(in srgb, var(--m-texte) 18%, transparent); border-radius: var(--m-rayon); }
+.m-barre { background-color: var(--m-accent); border-radius: var(--m-rayon); }
+.m-barre-2 { background-color: var(--m-accent-2); border-radius: var(--m-rayon); }
+
+/* Densité : le style décide de l'air entre les blocs, pas la scène. */
+.m-air { gap: calc(var(--m-densite) * 0.4rem); }
+.m-air-serre { gap: calc(var(--m-densite) * 0.22rem); }
+.m-marge { padding: calc(var(--m-densite) * 0.7rem) calc(var(--m-densite) * 1rem); }
 
 /* En-tête de groupe collant : pas de bande posée sur l'ambiance, mais le fond de page
    lui-même, repeint à l'identique (`fixed` le cale sur le viewport comme celui du body),

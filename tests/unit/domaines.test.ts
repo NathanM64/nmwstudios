@@ -55,6 +55,7 @@ describe('domaines de la maquette', () => {
       for (const langue of LANGUES) {
         const e = EDITORIAL[d.id][langue]
         expect(e.enseigne.length).toBeGreaterThan(0)
+        expect(e.surtitre.length).toBeGreaterThan(0)
         expect(e.titre.length).toBeGreaterThan(0)
         expect(e.corps.length).toBeGreaterThan(0)
         expect(e.recherche.titre.length).toBeGreaterThan(0)
@@ -63,10 +64,12 @@ describe('domaines de la maquette', () => {
     }
   })
 
+  // Le caractère est écrit en échappement : sinon ce fichier serait lui-même une occurrence
+  // que la vérification de clôture remonterait, et elle perdrait son sens.
   it("n'emploie jamais le tiret cadratin, que le propriétaire refuse", () => {
     for (const d of DOMAINES) {
       for (const langue of LANGUES) {
-        expect(JSON.stringify(EDITORIAL[d.id][langue])).not.toContain('—')
+        expect(JSON.stringify(EDITORIAL[d.id][langue])).not.toContain('\u2014')
       }
     }
   })

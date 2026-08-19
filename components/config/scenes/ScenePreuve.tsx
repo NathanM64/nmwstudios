@@ -52,8 +52,8 @@ export function ScenePreuve({ config, domaine = DOMAINE_DEFAUT }: { config: Conf
   const retenus = CONTROLES.filter((controle) => (config[controle.id] ?? 0) > 0).length
 
   return (
-    <div className="animate-apparait flex flex-1 flex-col gap-0.5 px-1.5 py-1">
-      <p data-testid="preuve-score" className="text-[0.875rem] uppercase tracking-wider text-accent">
+    <div className="animate-apparait m-air-serre m-marge flex flex-1 flex-col">
+      <p data-testid="preuve-score" className="m-surtitre">
         {retenus} / {CONTROLES.length} contrôles retenus
       </p>
 
@@ -67,20 +67,20 @@ export function ScenePreuve({ config, domaine = DOMAINE_DEFAUT }: { config: Conf
               data-retenu={retenu ? 'oui' : 'non'}
               // opacity-70 : la ligne reste en retrait sans passer sous 4,5:1, mesuré dans les deux
               // thèmes et modélisé par tests/unit/configurateur-contraste.test.ts.
-              className={`flex flex-col gap-0.5 rounded-sm border border-border px-1.5 py-0.5 ${retenu ? '' : 'opacity-70'}`}
+              className={`m-cadre m-ligne flex flex-col gap-0.5 ${retenu ? '' : 'opacity-70'}`}
             >
-              <p className="text-[0.8125rem] leading-tight text-foreground">{controle.nom}</p>
+              <p className="m-corps">{controle.nom}</p>
 
               {retenu && controle.id === 'seo' && (
-                <div data-testid="preuve-serp" className="animate-apparait rounded-sm border border-border px-1 py-0.5">
-                  <p className="text-[0.75rem] leading-tight text-accent">votre-nom.fr</p>
-                  <p className="text-[0.75rem] leading-tight text-foreground">{recherche.titre}</p>
-                  <p className="text-[0.75rem] leading-tight text-muted-foreground">{recherche.description}</p>
+                <div data-testid="preuve-serp" className="animate-apparait m-cadre px-1 py-0.5">
+                  <p className="m-mono">votre-nom.fr</p>
+                  <p className="m-corps">{recherche.titre}</p>
+                  <p className="m-legende">{recherche.description}</p>
                 </div>
               )}
 
               {retenu && controle.id === 'seo-local' && (
-                <p className="text-[0.75rem] leading-tight text-muted-foreground">Bègles · horaires d’ouverture renseignés</p>
+                <p className="m-legende">Bègles · horaires d’ouverture renseignés</p>
               )}
 
               {retenu && controle.id === 'perf' && (
@@ -88,10 +88,10 @@ export function ScenePreuve({ config, domaine = DOMAINE_DEFAUT }: { config: Conf
                   {/* Artefact visuel, aucune requête simulée : la mesure vient du texte en dessous. */}
                   <div data-testid="preuve-cascade" className="animate-apparait flex flex-col gap-0.5">
                     {[100, 65, 40, 20].map((largeur, i) => (
-                      <span key={i} className="h-0.5 rounded-sm bg-accent/40" style={{ width: `${largeur}%` }} />
+                      <span key={i} className="m-barre h-0.5" style={{ width: `${largeur}%` }} />
                     ))}
                   </div>
-                  <p data-testid="preuve-vitesse" className="text-[0.8125rem] font-medium leading-tight text-accent">
+                  <p data-testid="preuve-vitesse" className="m-corps m-accent">
                     {vitesse === null
                       ? 'mesure indisponible'
                       : `mesuré sur ce configurateur, pas sur votre futur site : ${vitesse.toFixed(2).replace('.', ',')} s`}
@@ -100,33 +100,33 @@ export function ScenePreuve({ config, domaine = DOMAINE_DEFAUT }: { config: Conf
               )}
 
               {retenu && controle.id === 'a11y' && ratio !== null && (
-                <p data-testid="apercu-a11y" className="text-[0.75rem] leading-tight text-accent">
+                <p data-testid="apercu-a11y" className="m-legende m-accent">
                   mesuré sur ce configurateur, pas sur votre futur site : {ratio.toFixed(2).replace('.', ',')}:1 ·{' '}
                   {ratio >= 4.5 ? 'conforme AA' : 'sous le seuil AA'}
                 </p>
               )}
 
               {retenu && controle.id === 'rgpd' && (
-                <p data-testid="preuve-rgpd" className="w-fit rounded-sm border border-border px-1 py-0.5 text-[0.75rem] leading-tight text-muted-foreground">
+                <p data-testid="preuve-rgpd" className="m-cadre m-legende w-fit px-1 py-0.5">
                   Bannière de consentement aux cookies
                 </p>
               )}
 
               {retenu && controle.id === 'legal' && (
-                <p data-testid="preuve-legal" className="text-[0.75rem] leading-tight text-muted-foreground">
+                <p data-testid="preuve-legal" className="m-legende">
                   Pied de page · Mentions légales
                 </p>
               )}
 
               {retenu && controle.id === 'migration' && (
-                <div data-testid="preuve-redirections" className="flex flex-col gap-0.5 font-mono text-[0.75rem] leading-tight text-muted-foreground">
+                <div data-testid="preuve-redirections" className="m-legende flex flex-col gap-0.5 font-mono">
                   <p>/ancien-site/accueil → / · 301</p>
                   <p>/ancien-site/contact → /#contact · 301</p>
                 </div>
               )}
 
               {retenu && controle.id === 'domaine' && (
-                <p data-testid="preuve-domaine" className="text-[0.75rem] leading-tight text-muted-foreground">
+                <p data-testid="preuve-domaine" className="m-legende">
                   votre-nom.fr · certificat valide
                 </p>
               )}

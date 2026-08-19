@@ -4,6 +4,8 @@ export type DomaineId = 'vtc' | 'sante' | 'restaurant' | 'architecte' | 'etudes'
 
 export type Editorial = {
   enseigne: string
+  /** Surtitre du héros : le secteur, pas le slogan. Une ligne, jamais deux. */
+  surtitre: string
   /** Trois pages du socle puis les douze des tranches : sert aussi à nommer les pages rédigées. */
   pages: string[]
   titre: string
@@ -32,6 +34,7 @@ export const EDITORIAL: Record<DomaineId, Record<Langue, Editorial>> = {
   vtc: {
     fr: {
       enseigne: 'Trajets Garonne',
+      surtitre: 'Bordeaux et Gironde',
       pages: ['Accueil', 'Prestations', 'Réserver', 'Tarifs', 'Aéroport', 'Gare Saint-Jean', 'Longue distance', 'Mise à disposition', 'Zones desservies', 'Le véhicule', 'Entreprises', 'Événements', 'À propos', 'Contact', 'Mentions légales'],
       titre: 'Votre chauffeur à Bordeaux, réservé la veille',
       corps: 'Aéroport, gare, longue distance et mise à disposition. Berline, tarif connu avant le départ.',
@@ -57,6 +60,7 @@ export const EDITORIAL: Record<DomaineId, Record<Langue, Editorial>> = {
     },
     en: {
       enseigne: 'Trajets Garonne',
+      surtitre: 'Bordeaux and Gironde',
       pages: ['Home', 'Services', 'Book', 'Rates', 'Airport', 'Train station', 'Long distance', 'Hourly hire', 'Areas covered', 'The car', 'Business', 'Events', 'About', 'Contact', 'Legal'],
       titre: 'Your driver in Bordeaux, booked the day before',
       corps: 'Airport, station, long distance and hourly hire. Saloon car, fare known before you leave.',
@@ -82,6 +86,7 @@ export const EDITORIAL: Record<DomaineId, Record<Langue, Editorial>> = {
     },
     es: {
       enseigne: 'Trajets Garonne',
+      surtitre: 'Burdeos y Gironda',
       pages: ['Inicio', 'Servicios', 'Reservar', 'Tarifas', 'Aeropuerto', 'Estación', 'Larga distancia', 'Por horas', 'Zonas cubiertas', 'El vehículo', 'Empresas', 'Eventos', 'Quiénes somos', 'Contacto', 'Aviso legal'],
       titre: 'Su chófer en Burdeos, reservado el día antes',
       corps: 'Aeropuerto, estación, larga distancia y servicio por horas. Berlina, tarifa conocida antes de salir.',
@@ -107,6 +112,7 @@ export const EDITORIAL: Record<DomaineId, Record<Langue, Editorial>> = {
     },
     de: {
       enseigne: 'Trajets Garonne',
+      surtitre: 'Bordeaux und Gironde',
       pages: ['Startseite', 'Leistungen', 'Buchen', 'Preise', 'Flughafen', 'Bahnhof', 'Fernstrecken', 'Stundenweise', 'Einsatzgebiet', 'Das Fahrzeug', 'Firmen', 'Veranstaltungen', 'Über uns', 'Kontakt', 'Impressum'],
       titre: 'Ihr Fahrer in Bordeaux, am Vortag gebucht',
       corps: 'Flughafen, Bahnhof, Fernstrecken und stundenweise Fahrten. Limousine, Preis vor der Abfahrt bekannt.',
@@ -134,6 +140,7 @@ export const EDITORIAL: Record<DomaineId, Record<Langue, Editorial>> = {
   sante: {
     fr: {
       enseigne: 'Cabinet Belvédère',
+      surtitre: 'Cabinet de kinésithérapie',
       pages: ['Accueil', 'Le cabinet', 'Rendez-vous', 'Kinésithérapie du sport', 'Rééducation du dos', 'Suites opératoires', 'Première séance', 'Tarifs et remboursement', 'Accès et horaires', 'L’équipe', 'Questions fréquentes', 'Conseils', 'Contact', 'Mentions légales', 'Plan du site'],
       titre: 'Kinésithérapie du sport et du dos, à Bordeaux',
       corps: 'Bilan, rééducation et prévention. Rendez-vous en ligne, cabinet accessible de plain-pied.',
@@ -159,6 +166,7 @@ export const EDITORIAL: Record<DomaineId, Record<Langue, Editorial>> = {
     },
     en: {
       enseigne: 'Cabinet Belvédère',
+      surtitre: 'Physiotherapy practice',
       pages: ['Home', 'The practice', 'Appointments', 'Sports physiotherapy', 'Back rehabilitation', 'After surgery', 'First session', 'Fees and cover', 'Getting here', 'The team', 'FAQ', 'Advice', 'Contact', 'Legal', 'Sitemap'],
       titre: 'Sports and back physiotherapy in Bordeaux',
       corps: 'Assessment, rehabilitation and prevention. Book online, step-free practice.',
@@ -184,6 +192,7 @@ export const EDITORIAL: Record<DomaineId, Record<Langue, Editorial>> = {
     },
     es: {
       enseigne: 'Cabinet Belvédère',
+      surtitre: 'Consulta de fisioterapia',
       pages: ['Inicio', 'La consulta', 'Citas', 'Fisioterapia deportiva', 'Rehabilitación de espalda', 'Postoperatorio', 'Primera sesión', 'Tarifas y reembolso', 'Cómo llegar', 'El equipo', 'Preguntas', 'Consejos', 'Contacto', 'Aviso legal', 'Mapa del sitio'],
       titre: 'Fisioterapia deportiva y de espalda en Burdeos',
       corps: 'Valoración, rehabilitación y prevención. Cita en línea, consulta sin escalones.',
@@ -209,6 +218,7 @@ export const EDITORIAL: Record<DomaineId, Record<Langue, Editorial>> = {
     },
     de: {
       enseigne: 'Cabinet Belvédère',
+      surtitre: 'Physiotherapiepraxis',
       pages: ['Startseite', 'Die Praxis', 'Termine', 'Sportphysiotherapie', 'Rückentherapie', 'Nach der Operation', 'Erste Sitzung', 'Preise und Erstattung', 'Anfahrt', 'Das Team', 'Fragen', 'Tipps', 'Kontakt', 'Impressum', 'Sitemap'],
       titre: 'Sport- und Rückenphysiotherapie in Bordeaux',
       corps: 'Befund, Rehabilitation und Vorbeugung. Termin online, Praxis ebenerdig zugänglich.',
@@ -236,6 +246,7 @@ export const EDITORIAL: Record<DomaineId, Record<Langue, Editorial>> = {
   restaurant: {
     fr: {
       enseigne: 'Table Belloc',
+      surtitre: 'Bistrot de quartier',
       pages: ['Accueil', 'La carte', 'Réserver', 'Menu du midi', 'Le soir', 'Les vins', 'La maison', 'Le marché', 'Groupes', 'À emporter', 'Horaires et accès', 'Actualités', 'Contact', 'Mentions légales', 'Plan du site'],
       titre: 'Cuisine du marché, deux services par jour',
       corps: 'Une carte courte, réécrite chaque semaine selon ce que le marché donne le matin.',
@@ -261,6 +272,7 @@ export const EDITORIAL: Record<DomaineId, Record<Langue, Editorial>> = {
     },
     en: {
       enseigne: 'Table Belloc',
+      surtitre: 'Neighbourhood bistro',
       pages: ['Home', 'Menu', 'Book', 'Lunch menu', 'Dinner', 'Wines', 'The house', 'The market', 'Groups', 'Takeaway', 'Hours and access', 'News', 'Contact', 'Legal', 'Sitemap'],
       titre: 'Market cooking, two services a day',
       corps: 'A short menu, rewritten every week from whatever the market gives us that morning.',
@@ -286,6 +298,7 @@ export const EDITORIAL: Record<DomaineId, Record<Langue, Editorial>> = {
     },
     es: {
       enseigne: 'Table Belloc',
+      surtitre: 'Bistró de barrio',
       pages: ['Inicio', 'La carta', 'Reservar', 'Menú del mediodía', 'Por la noche', 'Los vinos', 'La casa', 'El mercado', 'Grupos', 'Para llevar', 'Horarios y acceso', 'Novedades', 'Contacto', 'Aviso legal', 'Mapa del sitio'],
       titre: 'Cocina de mercado, dos servicios al día',
       corps: 'Una carta corta, reescrita cada semana con lo que el mercado da por la mañana.',
@@ -311,6 +324,7 @@ export const EDITORIAL: Record<DomaineId, Record<Langue, Editorial>> = {
     },
     de: {
       enseigne: 'Table Belloc',
+      surtitre: 'Bistro im Viertel',
       pages: ['Startseite', 'Die Karte', 'Reservieren', 'Mittagsmenü', 'Abends', 'Die Weine', 'Das Haus', 'Der Markt', 'Gruppen', 'Zum Mitnehmen', 'Öffnungszeiten', 'Aktuelles', 'Kontakt', 'Impressum', 'Sitemap'],
       titre: 'Marktküche, zwei Servicezeiten am Tag',
       corps: 'Eine kurze Karte, jede Woche neu geschrieben, nach dem, was der Markt morgens hergibt.',
@@ -338,6 +352,7 @@ export const EDITORIAL: Record<DomaineId, Record<Langue, Editorial>> = {
   architecte: {
     fr: {
       enseigne: 'Atelier Bastide',
+      surtitre: 'Agence d’architecture',
       pages: ['Accueil', 'L’agence', 'Contact', 'Réalisations', 'Réhabilitation', 'Extension', 'Local professionnel', 'Faisabilité', 'Méthode', 'Honoraires', 'L’équipe', 'Chantiers en cours', 'Presse', 'Mentions légales', 'Plan du site'],
       titre: 'Réhabiliter sans effacer',
       corps: 'Logement, échoppe et local professionnel. Étude de faisabilité avant tout engagement de travaux.',
@@ -363,6 +378,7 @@ export const EDITORIAL: Record<DomaineId, Record<Langue, Editorial>> = {
     },
     en: {
       enseigne: 'Atelier Bastide',
+      surtitre: 'Architecture practice',
       pages: ['Home', 'The practice', 'Contact', 'Projects', 'Renovation', 'Extension', 'Commercial space', 'Feasibility', 'Method', 'Fees', 'The team', 'Current sites', 'Press', 'Legal', 'Sitemap'],
       titre: 'Renovating without erasing',
       corps: 'Homes, townhouses and commercial spaces. A feasibility study before any work is committed.',
@@ -388,6 +404,7 @@ export const EDITORIAL: Record<DomaineId, Record<Langue, Editorial>> = {
     },
     es: {
       enseigne: 'Atelier Bastide',
+      surtitre: 'Estudio de arquitectura',
       pages: ['Inicio', 'El estudio', 'Contacto', 'Proyectos', 'Rehabilitación', 'Ampliación', 'Local profesional', 'Viabilidad', 'Método', 'Honorarios', 'El equipo', 'Obras en curso', 'Prensa', 'Aviso legal', 'Mapa del sitio'],
       titre: 'Rehabilitar sin borrar',
       corps: 'Vivienda, casa tradicional y local profesional. Estudio de viabilidad antes de comprometer obra.',
@@ -413,6 +430,7 @@ export const EDITORIAL: Record<DomaineId, Record<Langue, Editorial>> = {
     },
     de: {
       enseigne: 'Atelier Bastide',
+      surtitre: 'Architekturbüro',
       pages: ['Startseite', 'Das Büro', 'Kontakt', 'Projekte', 'Sanierung', 'Anbau', 'Gewerbefläche', 'Machbarkeit', 'Methode', 'Honorare', 'Das Team', 'Laufende Baustellen', 'Presse', 'Impressum', 'Sitemap'],
       titre: 'Sanieren, ohne zu löschen',
       corps: 'Wohnraum, Stadthaus und Gewerbefläche. Machbarkeitsstudie, bevor Bauarbeiten vergeben werden.',
@@ -440,6 +458,7 @@ export const EDITORIAL: Record<DomaineId, Record<Langue, Editorial>> = {
   etudes: {
     fr: {
       enseigne: 'Bureau Estuaire',
+      surtitre: 'Bureau d’études techniques',
       pages: ['Accueil', 'Le bureau', 'Contact', 'Structure', 'Thermique', 'Acoustique', 'Missions', 'Projets', 'Méthode', 'Outils de calcul', 'L’équipe', 'Recrutement', 'Documents', 'Mentions légales', 'Plan du site'],
       titre: 'Structure et thermique, calculées et signées',
       corps: 'Notes de calcul, études thermiques et assistance en phase chantier, pour architectes et maîtres d’ouvrage.',
@@ -465,6 +484,7 @@ export const EDITORIAL: Record<DomaineId, Record<Langue, Editorial>> = {
     },
     en: {
       enseigne: 'Bureau Estuaire',
+      surtitre: 'Engineering consultancy',
       pages: ['Home', 'The office', 'Contact', 'Structure', 'Thermal', 'Acoustics', 'Services', 'Projects', 'Method', 'Calculation tools', 'The team', 'Careers', 'Documents', 'Legal', 'Sitemap'],
       titre: 'Structural and thermal engineering, calculated and signed',
       corps: 'Calculation notes, thermal studies and on-site support, for architects and building owners.',
@@ -490,6 +510,7 @@ export const EDITORIAL: Record<DomaineId, Record<Langue, Editorial>> = {
     },
     es: {
       enseigne: 'Bureau Estuaire',
+      surtitre: 'Oficina técnica',
       pages: ['Inicio', 'La oficina', 'Contacto', 'Estructura', 'Térmica', 'Acústica', 'Servicios', 'Proyectos', 'Método', 'Herramientas de cálculo', 'El equipo', 'Empleo', 'Documentos', 'Aviso legal', 'Mapa del sitio'],
       titre: 'Estructura y térmica, calculadas y firmadas',
       corps: 'Memorias de cálculo, estudios térmicos y asistencia en obra, para arquitectos y promotores.',
@@ -515,6 +536,7 @@ export const EDITORIAL: Record<DomaineId, Record<Langue, Editorial>> = {
     },
     de: {
       enseigne: 'Bureau Estuaire',
+      surtitre: 'Ingenieurbüro',
       pages: ['Startseite', 'Das Büro', 'Kontakt', 'Tragwerk', 'Wärmeschutz', 'Akustik', 'Leistungen', 'Projekte', 'Methode', 'Rechenwerkzeuge', 'Das Team', 'Karriere', 'Dokumente', 'Impressum', 'Sitemap'],
       titre: 'Tragwerk und Wärmeschutz, gerechnet und unterschrieben',
       corps: 'Statische Berechnungen, Wärmeschutznachweise und Baustellenbegleitung für Architekten und Bauherren.',
@@ -542,6 +564,7 @@ export const EDITORIAL: Record<DomaineId, Record<Langue, Editorial>> = {
   formation: {
     fr: {
       enseigne: 'Cap Décidé',
+      surtitre: 'Formation et accompagnement',
       pages: ['Accueil', 'Les formations', 'Contact', 'Prise de parole', 'Accompagnement individuel', 'Ateliers d’équipe', 'Entreprises', 'Programme', 'Méthode', 'Tarifs', 'Financement', 'Calendrier', 'Ressources', 'Mentions légales', 'Plan du site'],
       titre: 'Prendre la parole sans la subir',
       corps: 'Formation à l’oral et accompagnement individuel, en présence à Bordeaux ou à distance.',
@@ -567,6 +590,7 @@ export const EDITORIAL: Record<DomaineId, Record<Langue, Editorial>> = {
     },
     en: {
       enseigne: 'Cap Décidé',
+      surtitre: 'Training and coaching',
       pages: ['Home', 'Courses', 'Contact', 'Public speaking', 'One to one', 'Team workshops', 'Business', 'Programme', 'Method', 'Fees', 'Funding', 'Calendar', 'Resources', 'Legal', 'Sitemap'],
       titre: 'Speaking up without dreading it',
       corps: 'Public speaking courses and one to one coaching, in Bordeaux or remotely.',
@@ -592,6 +616,7 @@ export const EDITORIAL: Record<DomaineId, Record<Langue, Editorial>> = {
     },
     es: {
       enseigne: 'Cap Décidé',
+      surtitre: 'Formación y acompañamiento',
       pages: ['Inicio', 'Formaciones', 'Contacto', 'Hablar en público', 'Acompañamiento individual', 'Talleres de equipo', 'Empresas', 'Programa', 'Método', 'Tarifas', 'Financiación', 'Calendario', 'Recursos', 'Aviso legal', 'Mapa del sitio'],
       titre: 'Hablar en público sin padecerlo',
       corps: 'Formación en oratoria y acompañamiento individual, en Burdeos o a distancia.',
@@ -617,6 +642,7 @@ export const EDITORIAL: Record<DomaineId, Record<Langue, Editorial>> = {
     },
     de: {
       enseigne: 'Cap Décidé',
+      surtitre: 'Training und Begleitung',
       pages: ['Startseite', 'Die Kurse', 'Kontakt', 'Reden halten', 'Einzelbegleitung', 'Teamworkshops', 'Firmen', 'Programm', 'Methode', 'Preise', 'Förderung', 'Termine', 'Material', 'Impressum', 'Sitemap'],
       titre: 'Reden halten, ohne sie zu erleiden',
       corps: 'Rhetoriktraining und Einzelbegleitung, in Bordeaux oder aus der Ferne.',
@@ -644,6 +670,7 @@ export const EDITORIAL: Record<DomaineId, Record<Langue, Editorial>> = {
   autre: {
     fr: {
       enseigne: 'Votre entreprise',
+      surtitre: 'Votre secteur, votre ville',
       pages: ['Accueil', 'Services', 'Contact', 'Tarifs', 'Réalisations', 'À propos', 'Équipe', 'FAQ', 'Blog', 'Presse', 'Partenaires', 'Recrutement', 'Documents', 'Mentions', 'Plan'],
       titre: 'Votre activité, dite clairement',
       corps: 'Ce que vous faites, pour qui, et comment vous joindre. Le reste vient après.',
@@ -669,6 +696,7 @@ export const EDITORIAL: Record<DomaineId, Record<Langue, Editorial>> = {
     },
     en: {
       enseigne: 'Your company',
+      surtitre: 'Your sector, your town',
       pages: ['Home', 'Services', 'Contact', 'Pricing', 'Projects', 'About', 'Team', 'FAQ', 'Blog', 'Press', 'Partners', 'Careers', 'Documents', 'Legal', 'Sitemap'],
       titre: 'Your business, said plainly',
       corps: 'What you do, who for, and how to reach you. The rest comes later.',
@@ -694,6 +722,7 @@ export const EDITORIAL: Record<DomaineId, Record<Langue, Editorial>> = {
     },
     es: {
       enseigne: 'Su empresa',
+      surtitre: 'Su sector, su ciudad',
       pages: ['Inicio', 'Servicios', 'Contacto', 'Tarifas', 'Proyectos', 'Nosotros', 'Equipo', 'FAQ', 'Blog', 'Prensa', 'Socios', 'Empleo', 'Documentos', 'Aviso legal', 'Mapa'],
       titre: 'Su actividad, dicha con claridad',
       corps: 'Lo que hace, para quién, y cómo contactarle. El resto viene después.',
@@ -719,6 +748,7 @@ export const EDITORIAL: Record<DomaineId, Record<Langue, Editorial>> = {
     },
     de: {
       enseigne: 'Ihr Unternehmen',
+      surtitre: 'Ihre Branche, Ihre Stadt',
       pages: ['Startseite', 'Leistungen', 'Kontakt', 'Preise', 'Projekte', 'Über uns', 'Team', 'FAQ', 'Blog', 'Presse', 'Partner', 'Karriere', 'Dokumente', 'Impressum', 'Sitemap'],
       titre: 'Ihre Tätigkeit, klar gesagt',
       corps: 'Was Sie tun, für wen, und wie man Sie erreicht. Der Rest kommt danach.',

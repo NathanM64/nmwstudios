@@ -13,7 +13,6 @@ describe('jetons du thème sombre', () => {
       '--color-canvas',
       '--color-surface',
       '--color-surface-raised',
-      '--color-maquette',
       '--color-foreground',
       '--color-muted-foreground',
       '--color-accent',

@@ -1,6 +1,7 @@
 import { readFileSync } from 'node:fs'
 import { describe, expect, it } from 'vitest'
-import { composite, contrastRatio } from '@/lib/color/contrast'
+import { composite, contrastRatio, parseColor } from '@/lib/color/contrast'
+import { STYLES } from '@/lib/config/styles'
 import { ambientOverCanvas, readTokens, solid, surfaceOverCanvas, worstAmbientColor } from './tokens'
 
 const THEMES = [
@@ -44,37 +45,28 @@ describe('compositions d’états du configurateur', () => {
       expect(contrastRatio(solid(tokens, '--color-muted-foreground'), retenu)).toBeGreaterThanOrEqual(4.5)
     })
 
-    // objet-scene (Apercu.tsx) pose `bg-maquette` : un fond plein, pas du verre, donc
-    // pas de compositing avec le fond de page, direct comme le reste de son texte.
-    const matiere = solid(tokens, '--color-maquette')
-
-    it(`tient le texte sourdine sur la matière de la maquette en thème ${nom}`, () => {
-      expect(contrastRatio(solid(tokens, '--color-muted-foreground'), matiere)).toBeGreaterThanOrEqual(4.5)
-    })
-
-    it(`tient l’étiquette d’accent sur la matière de la maquette en thème ${nom}`, () => {
-      expect(contrastRatio(solid(tokens, '--color-accent'), matiere)).toBeGreaterThanOrEqual(4.5)
-    })
   }
 })
 
 // Les jetons ne modélisent pas une opacité écrite dans un composant : c'est par là que la
 // ligne non retenue de « La preuve » est passée à 3,5:1 sans faire rougir un seul test.
+// La maquette a sa palette propre depuis le 19/08/2026 : le modèle porte sur les trois
+// directions, plus sur les jetons du site, que la scène ne lit plus.
 describe('opacité posée dans une scène de l’aperçu', () => {
   const source = readFileSync('components/config/scenes/ScenePreuve.tsx', 'utf8')
   const trouve = /retenu \? '' : 'opacity-(\d+)'/.exec(source)
 
-  it('la ligne non retenue porte une opacité repérable sur du texte foreground', () => {
+  it('la ligne non retenue porte une opacité repérable sur le texte courant de la maquette', () => {
     expect(trouve, 'opacité de la ligne non retenue introuvable dans ScenePreuve.tsx').not.toBeNull()
     // Sans cette vérification, le modèle ci-dessous pourrait viser une couleur que la ligne n'utilise plus.
-    expect(source).toMatch(/data-retenu[\s\S]{0,500}?text-foreground/)
+    expect(source).toMatch(/data-retenu[\s\S]{0,500}?m-corps/)
   })
 
-  for (const { nom, tokens } of THEMES) {
-    it(`tient 4,5:1 pour la ligne non retenue de « La preuve » en thème ${nom}`, () => {
-      const maquette = solid(tokens, '--color-maquette')
-      const rendu = composite(solid(tokens, '--color-foreground'), Number(trouve![1]) / 100, maquette)
-      expect(contrastRatio(rendu, maquette)).toBeGreaterThanOrEqual(4.5)
+  for (const style of STYLES) {
+    it(`tient 4,5:1 pour la ligne non retenue en direction ${style.id}`, () => {
+      const fond = parseColor(style.variables['--m-fond']).rgb
+      const rendu = composite(parseColor(style.variables['--m-texte']).rgb, Number(trouve![1]) / 100, fond)
+      expect(contrastRatio(rendu, fond), style.id).toBeGreaterThanOrEqual(4.5)
     })
   }
 })

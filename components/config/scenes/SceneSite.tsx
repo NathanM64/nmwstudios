@@ -7,6 +7,11 @@ import { DOMAINE_DEFAUT, editorialDe, type DomaineId } from '@/lib/config/domain
 
 const PAGES_SOCLE = 3
 
+/** Une barre de menu ne montre pas quinze entrées : au-delà, le reste se compte.
+ *  C'est aussi ce qui borne la hauteur du bandeau, la plus variable de la scène,
+ *  puisque les sept métiers n'ont pas des noms de pages de la même longueur. */
+const NAV_VISIBLES = 9
+
 export function SceneSite({ config, domaine = DOMAINE_DEFAUT }: { config: Configuration; domaine?: DomaineId }) {
   const tranches = config.pages ?? 0
   const langues = config.langue ?? 0
@@ -29,152 +34,138 @@ export function SceneSite({ config, domaine = DOMAINE_DEFAUT }: { config: Config
   const t = HABILLAGE[active]
   const e = editorialDe(domaine, active)
   const libelles = e.pages.slice(0, PAGES_SOCLE + tranches * 3)
+  const visibles = libelles.slice(0, NAV_VISIBLES)
+  const reste = libelles.length - visibles.length
 
   return (
-    <div className="animate-apparait flex flex-1 flex-col">
-      <header className="flex flex-wrap items-center justify-between gap-3 border-b border-border px-3 py-1">
-        <span className="h-3 w-14 rounded-sm bg-accent/70" />
-        <div data-testid="site-nav">
-          <ul className="flex flex-wrap gap-2">
-            {libelles.map((page) => (
-              <li key={page} className="animate-apparait text-[0.8125rem] text-muted-foreground">
-                {page}
-              </li>
-            ))}
-          </ul>
+    <div className="animate-apparait m-air m-marge flex min-w-0 flex-1 flex-col">
+      <header className="flex min-w-0 items-baseline gap-3">
+        <span data-testid="site-enseigne" className="m-enseigne shrink-0">
+          {e.enseigne}
+        </span>
+        <div className="flex min-w-0 flex-1 flex-wrap items-center justify-end gap-x-3 gap-y-0.5">
+          <nav data-testid="site-nav">
+            <ul className="flex flex-wrap justify-end gap-x-2 gap-y-0.5">
+              {visibles.map((page) => (
+                <li key={page} className="animate-apparait m-menu">
+                  {page}
+                </li>
+              ))}
+              {reste > 0 && <li className="animate-apparait m-menu">+{reste}</li>}
+            </ul>
+          </nav>
+          {langues > 0 && (
+            <select
+              data-testid="site-langue"
+              value={active}
+              onChange={(evenement) => setLangue(evenement.target.value as Langue)}
+              aria-label="Langue de l’aperçu"
+              className="animate-apparait m-cadre m-legende bg-transparent"
+            >
+              {offertes.map((code) => (
+                <option key={code} value={code}>
+                  {code.toUpperCase()}
+                </option>
+              ))}
+            </select>
+          )}
+          {(config.membre ?? 0) > 0 && (
+            <span data-testid="site-connexion" className="animate-apparait m-puce px-1.5">
+              {t.connexion}
+            </span>
+          )}
         </div>
-        {langues > 0 && (
-          <select
-            data-testid="site-langue"
-            value={active}
-            onChange={(e) => setLangue(e.target.value as Langue)}
-            aria-label="Langue de l’aperçu"
-            className="animate-apparait rounded-sm border border-border bg-transparent text-[0.8125rem]"
-          >
-            {offertes.map((code) => (
-              <option key={code} value={code}>
-                {code.toUpperCase()}
-              </option>
-            ))}
-          </select>
-        )}
-        {(config.membre ?? 0) > 0 && (
-          <span data-testid="site-connexion" className="animate-apparait rounded-sm border border-border px-1.5 py-0.5 text-[0.8125rem]">
-            {t.connexion}
-          </span>
-        )}
       </header>
 
-      <div className="flex flex-1 flex-col gap-1 p-1.5">
-        {/* Rédaction et reprise se cumulent : la cascade ne sert que le repli commun. */}
-        {redaction === 0 && reprise === 0 && (
-          <>
-            <div className="h-3 w-2/3 rounded-sm bg-foreground/25" />
-            <div className="h-2 w-1/2 rounded-sm bg-foreground/15" />
-          </>
-        )}
+      <span data-testid="site-filet" className="m-filet h-px w-full shrink-0" />
 
-        {redaction > 0 && (
-          <div data-testid="site-texte" className="animate-apparait">
-            <p className="text-[1.3125rem] leading-tight text-foreground">{e.titre}</p>
-            <p className="text-[1rem] leading-snug text-muted-foreground">{e.corps}</p>
-            {/* Une page nommée par unité : sans elle, quinze pages rédigées rendent le même écran qu'une. */}
-            <div data-testid="site-redaction" className="mt-0.5 flex flex-wrap items-center gap-x-1 gap-y-0.5">
-              <span className="text-[0.75rem] uppercase tracking-wider text-accent">{t.redigees}</span>
-              {e.pages.slice(0, redaction).map((page) => (
-                <span
-                  key={page}
-                  data-testid="site-page-redigee"
-                  className="rounded-sm border border-border px-1 text-[0.75rem] leading-tight text-muted-foreground"
-                >
-                  {page}
-                </span>
-              ))}
-            </div>
-          </div>
-        )}
+      {/* Héros : hauteur au contenu, jamais centrée. C'est la place libre en dessous qui
+          s'étire, donc cocher une option ne déplace pas le titre. */}
+      <div className="flex shrink-0 flex-col gap-1">
+        <p className="m-surtitre">{e.surtitre}</p>
+        <p data-testid="site-titre" className="m-titre">
+          {e.titre}
+        </p>
+        <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1">
+          <p data-testid="site-corps" className="m-chapeau max-w-[62ch] flex-1">
+            {e.corps}
+          </p>
+          <span className="m-plein ml-auto shrink-0 px-3 py-0.5">{e.pages[2]}</span>
+        </div>
+      </div>
 
-        {reprise > 0 && (
-          <ul data-testid="site-reprise" className="animate-apparait flex flex-col gap-0.5">
-            {e.blocsRepris.map((bloc) => (
-              <li key={bloc} className="rounded-sm border border-border px-2 text-[0.875rem] leading-tight text-muted-foreground">
-                {bloc}
-              </li>
-            ))}
-          </ul>
-        )}
-
-        <div data-testid="site-cadre" className="relative h-9 overflow-hidden rounded-sm border border-border bg-[linear-gradient(135deg,rgba(122,162,255,0.22),rgba(168,120,255,0.16)_60%,rgba(96,214,214,0.12))]">
+      <div className="m-air flex min-h-0 flex-1 flex-col">
+        {/* Bande haute : l'aplat prend la hauteur libre, les services prennent la leur.
+            Aucun centrage, donc aucune bande vide, et rien ne se comprime sous son contenu. */}
+        <div data-testid="site-cadre" className="m-aplat relative shrink grow basis-0 overflow-hidden">
           {photos > 0 && (
             <>
               {/* Le travail sur la photo, jamais la photo : rien à produire graphiquement. */}
-              <span data-testid="site-reperes" className="animate-apparait absolute inset-2 border border-accent" />
+              <span data-testid="site-reperes" className="animate-apparait m-reperes absolute inset-3" />
               {/* Aucun chiffre : un poids annoncé serait une mesure inventée. */}
-              <span data-testid="site-poids" className="animate-apparait absolute bottom-0.5 left-1/2 -translate-x-1/2 rounded-sm bg-canvas/80 px-1 text-[0.8125rem] text-accent">
+              <span data-testid="site-poids" className="animate-apparait m-etiquette absolute right-1.5 bottom-1.5 px-1.5">
                 {t.photo}
               </span>
             </>
           )}
           {visuels > 0 && (
-            <span data-testid="site-visuels" className="animate-apparait absolute bottom-0.5 left-1 rounded-sm bg-canvas/80 px-1 text-[0.8125rem] text-muted-foreground">
+            <span data-testid="site-visuels" className="animate-apparait m-etiquette absolute bottom-1.5 left-1.5 px-1.5">
               {t.visuel}
             </span>
           )}
         </div>
 
-        {(blog > 0 || articles > 0) && (
-          <section data-testid="site-blog" className="animate-apparait mt-auto">
-            <p className="text-[0.8125rem] uppercase tracking-wider text-accent">{t.actualites}</p>
-            {/* 5 colonnes : 10 articles au maximum tiennent sur 2 lignes plutôt que 4, sans quoi le cadre déborde. */}
-            <div className="grid grid-cols-5 gap-0.5">
-              {articles > 0
-                ? e.articles.slice(0, articles).map((article) => (
-                    <div key={article.requete} data-testid="site-article" className="rounded-sm border border-border px-0.5">
-                      <p className="text-[0.8125rem] leading-tight text-foreground">{article.titre}</p>
-                      <p className="font-mono text-[0.75rem] leading-tight text-accent">{article.requete}</p>
-                    </div>
-                  ))
-                : [0, 1, 2].map((i) => <div key={i} className="h-5 rounded-sm border border-border" />)}
-            </div>
-          </section>
-        )}
-
-        {/* Grille à deux colonnes : chaque carte prend sa moitié, ou toute la ligne si sa voisine
-            est absente. Conditions indépendantes, aucune ne dépend d'une autre pour s'afficher. */}
-        <div className="grid grid-cols-2 gap-0.5">
-          <section data-testid="site-formulaire" className={`rounded-sm border border-border p-0.5 ${newsletter > 0 ? '' : 'col-span-2'}`}>
-            {formulaire > 0 && (
-              <div data-testid="site-etapes" className="animate-apparait mb-0.5 flex gap-1">
-                {[1, 2, 3].map((n) => (
-                  <span key={n} className="rounded-sm bg-accent/20 px-1 font-mono text-[0.75rem] leading-tight text-accent">
-                    {n}
-                  </span>
-                ))}
+        <div className="m-air m-bas shrink-0">
+        <div data-testid="site-services" className="m-air grid shrink-0 grid-cols-3">
+          {e.services.map((service, i) => (
+            <div key={service.nom} data-testid="site-service" className="m-filet-haut flex min-w-0 gap-2 pt-1">
+              <span className="m-mono shrink-0">{String(i + 1).padStart(2, '0')}</span>
+              <div className="min-w-0">
+                <p className="m-sous-titre truncate">{service.nom}</p>
+                <p className="m-legende line-clamp-2">{service.texte}</p>
               </div>
-            )}
-            <div className="flex flex-col gap-0.5">
-              {[0, 1, 2].map((i) => (
-                <span key={i} data-testid="site-champ" className="h-1 rounded-sm bg-foreground/12" />
-              ))}
             </div>
-            {formulaire > 0 && (
-              <p className="animate-apparait text-[0.75rem] leading-tight text-muted-foreground">{t.pieceJointe}</p>
-            )}
+          ))}
+        </div>
+
+        {/* Bande de services achetés : chaque carte prend sa part de la largeur, ou toute la
+            ligne si ses voisines sont absentes. Conditions indépendantes, aucune cascade. */}
+        <div className="m-air flex shrink-0 flex-wrap items-stretch">
+          <section data-testid="site-formulaire" className="m-carte m-air-serre flex min-w-0 flex-[1.6] flex-col px-2 py-1">
+            <div className="flex flex-wrap items-baseline gap-x-2 gap-y-0.5">
+              <p className="m-surtitre">{e.blocsRepris[2]}</p>
+              {formulaire > 0 && (
+                <div data-testid="site-etapes" className="animate-apparait flex gap-1">
+                  {[1, 2, 3].map((n) => (
+                    <span key={n} className="m-jeton m-mono px-1.5">
+                      {n}
+                    </span>
+                  ))}
+                </div>
+              )}
+              {formulaire > 0 && <p className="animate-apparait m-legende">{t.pieceJointe}</p>}
+            </div>
+            <div className="flex items-center gap-1">
+              {[0, 1, 2].map((i) => (
+                <span key={i} data-testid="site-champ" className="m-champ h-3 min-w-0 flex-1" />
+              ))}
+              <span className="m-plein shrink-0 px-2 py-0.5">{t.envoyer}</span>
+            </div>
           </section>
 
           {newsletter > 0 && (
-            <section data-testid="site-newsletter" className="animate-apparait flex items-center gap-1 self-start rounded-sm bg-surface-raised p-1">
-              <span className="h-1 flex-1 rounded-sm bg-foreground/12" />
-              <span className="rounded-sm bg-accent/20 px-1 text-[0.75rem] leading-tight text-accent">{t.inscrire}</span>
+            <section data-testid="site-newsletter" className="animate-apparait m-carte flex min-w-0 flex-1 items-center gap-1.5 px-2 py-1.5">
+              <span className="m-champ h-3 min-w-0 flex-1" />
+              <span className="m-plein shrink-0 px-1.5">{t.inscrire}</span>
             </section>
           )}
 
           {rdv > 0 && (
-            <section data-testid="site-rdv" className={`animate-apparait ${paiement > 0 ? '' : 'col-span-2'}`}>
-              <p className="text-[0.8125rem] uppercase tracking-wider text-accent">{t.reserver}</p>
-              <div className="grid grid-cols-6 gap-0.5">
+            <section data-testid="site-rdv" className="animate-apparait m-air-serre flex min-w-0 flex-1 flex-col">
+              <p className="m-surtitre">{t.reserver}</p>
+              <div className="flex flex-wrap gap-0.5">
                 {t.creneaux.map((h) => (
-                  <span key={h} data-testid="site-creneau" className="rounded-sm border border-border text-center text-[0.75rem] leading-tight text-muted-foreground">
+                  <span key={h} data-testid="site-creneau" className="m-puce px-1">
                     {h}
                   </span>
                 ))}
@@ -183,15 +174,66 @@ export function SceneSite({ config, domaine = DOMAINE_DEFAUT }: { config: Config
           )}
 
           {paiement > 0 && (
-            <section data-testid="site-paiement" className={`animate-apparait flex items-center justify-between self-start rounded-sm border border-border px-1 py-0.5 ${rdv > 0 ? '' : 'col-span-2'}`}>
-              <span className="text-[0.8125rem] leading-tight text-muted-foreground">{t.regler}</span>
-              <span className="flex gap-1">
+            <section data-testid="site-paiement" className="animate-apparait m-carte flex min-w-0 flex-1 items-center justify-between gap-2 px-2 py-1.5">
+              <span className="m-corps truncate">{t.regler}</span>
+              <span className="flex shrink-0 gap-1">
                 {/* Logos dessinés, aucune marque reproduite. */}
-                <span className="h-1.5 w-3 rounded-[2px] bg-foreground/25" />
-                <span className="h-1.5 w-3 rounded-[2px] bg-foreground/15" />
+                <span className="m-jeton h-2 w-4" />
+                <span className="m-jeton h-2 w-4" />
               </span>
             </section>
           )}
+        </div>
+
+        {/* Rédaction et reprise se cumulent : aucune ne dépend de l'autre pour s'afficher. */}
+        {(redaction > 0 || reprise > 0) && (
+          <div className="m-air-serre flex shrink-0 flex-col">
+            {redaction > 0 && (
+              <div data-testid="site-texte" className="animate-apparait flex min-w-0 flex-wrap items-baseline gap-x-2 gap-y-0.5">
+                <span className="m-surtitre">{t.redigees}</span>
+                {/* Une page nommée par unité : sans elle, quinze pages rédigées rendent le même écran qu'une. */}
+                <span data-testid="site-redaction" className="flex min-w-0 flex-1 basis-0 flex-wrap items-baseline gap-1">
+                  {e.pages.slice(0, redaction).map((page) => (
+                    <span key={page} data-testid="site-page-redigee" className="m-puce m-puce-borne truncate px-1.5">
+                      {page}
+                    </span>
+                  ))}
+                </span>
+              </div>
+            )}
+
+            {reprise > 0 && (
+              <ul data-testid="site-reprise" className="animate-apparait flex flex-wrap gap-1">
+                {e.blocsRepris.map((bloc) => (
+                  <li key={bloc} className="m-puce px-1.5">
+                    {bloc}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+        )}
+
+        {(blog > 0 || articles > 0) && (
+          <section data-testid="site-blog" className="animate-apparait m-air-serre flex shrink-0 flex-col">
+            {/* Pleine largeur et 5 colonnes : 10 articles tiennent sur 2 lignes avec des titres
+                encore lisibles, ce qu'une demi-colonne ne permettait pas. */}
+            <div className="flex items-baseline gap-2">
+              <p className="m-surtitre">{t.actualites}</p>
+              <span className="m-filet h-px flex-1" />
+            </div>
+            <div className="grid grid-cols-5 gap-1">
+              {articles > 0
+                ? e.articles.slice(0, articles).map((article) => (
+                    <div key={article.requete} data-testid="site-article" className="m-carte min-w-0 px-1.5">
+                      <p className="m-corps truncate">{article.titre}</p>
+                      <p className="m-mono truncate">{article.requete}</p>
+                    </div>
+                  ))
+                : [0, 1, 2].map((i) => <div key={i} className="m-carte h-6" />)}
+            </div>
+          </section>
+        )}
         </div>
       </div>
     </div>

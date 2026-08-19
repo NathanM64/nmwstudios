@@ -10,6 +10,8 @@ import { JamaisInclus } from '@/components/config/JamaisInclus'
 import type { Configuration } from '@/lib/config/devis'
 import { decoder, encoder } from '@/lib/config/url'
 import type { SceneId } from '@/lib/config/scenes'
+import { DOMAINE_DEFAUT, type DomaineId } from '@/lib/config/domaines'
+import { STYLE_DEFAUT, type StyleId } from '@/lib/config/styles'
 
 /** Le suivi mensuel est proposé d’emblée, et se refuse par « Je m’en occupe moi-même ». */
 export const CONFIG_DEPART: Configuration = { essentiel: 1 }
@@ -17,6 +19,9 @@ export const CONFIG_DEPART: Configuration = { essentiel: 1 }
 export function Configurateur() {
   const [config, setConfig] = useState<Configuration>(CONFIG_DEPART)
   const [scene, setScene] = useState<SceneId>('site')
+  // Métier et direction de style ne vivent pas dans l'URL : ils ne changent ni le prix ni le devis.
+  const [domaine, setDomaine] = useState<DomaineId>(DOMAINE_DEFAUT)
+  const [style, setStyle] = useState<StyleId>(STYLE_DEFAUT)
   // Faux tant que l'URL n'a pas été lue : la barre de prix s'en sert pour ne pas
   // animer un delta sur la configuration initiale d'un lien partagé.
   const [pret, setPret] = useState(false)
@@ -95,7 +100,15 @@ export function Configurateur() {
           data-testid="colonne-apercu"
           className="sticky top-20 min-w-0 self-start lg:static lg:flex lg:min-h-0 lg:flex-col lg:self-auto"
         >
-          <Apercu config={config} scene={scene} onChange={setScene} />
+          <Apercu
+            config={config}
+            scene={scene}
+            domaine={domaine}
+            style={style}
+            onChange={setScene}
+            onDomaine={setDomaine}
+            onStyle={setStyle}
+          />
         </div>
 
         <div ref={panneauRef} data-testid="colonne-options" className="min-w-0 lg:min-h-0 lg:overflow-y-auto lg:pr-2">

@@ -10,6 +10,7 @@ export type Habillage = {
   creneaux: string[]
   reserver: string
   inscrire: string
+  envoyer: string
   pieceJointe: string
   regler: string
   connexion: string
@@ -24,6 +25,7 @@ export const HABILLAGE: Record<Langue, Habillage> = {
     creneaux: ['9 h', '10 h', '11 h', '14 h', '15 h', '16 h'],
     reserver: 'Réserver un créneau',
     inscrire: 'S’inscrire',
+    envoyer: 'Envoyer',
     pieceJointe: 'Pièce jointe',
     regler: 'Régler en ligne',
     connexion: 'Connexion',
@@ -36,6 +38,7 @@ export const HABILLAGE: Record<Langue, Habillage> = {
     creneaux: ['9 am', '10 am', '11 am', '2 pm', '3 pm', '4 pm'],
     reserver: 'Book a slot',
     inscrire: 'Sign up',
+    envoyer: 'Send',
     pieceJointe: 'Attachment',
     regler: 'Pay online',
     connexion: 'Log in',
@@ -48,6 +51,7 @@ export const HABILLAGE: Record<Langue, Habillage> = {
     creneaux: ['9:00', '10:00', '11:00', '14:00', '15:00', '16:00'],
     reserver: 'Reservar una cita',
     inscrire: 'Suscribirse',
+    envoyer: 'Enviar',
     pieceJointe: 'Adjunto',
     regler: 'Pagar en línea',
     connexion: 'Acceder',
@@ -60,6 +64,7 @@ export const HABILLAGE: Record<Langue, Habillage> = {
     creneaux: ['9 Uhr', '10 Uhr', '11 Uhr', '14 Uhr', '15 Uhr', '16 Uhr'],
     reserver: 'Termin buchen',
     inscrire: 'Abonnieren',
+    envoyer: 'Senden',
     pieceJointe: 'Anhang',
     regler: 'Online bezahlen',
     connexion: 'Anmelden',
