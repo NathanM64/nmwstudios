@@ -27,9 +27,18 @@ test('le référencement compose un extrait de résultat', async ({ page }) => {
 test('la vitesse affichée est mesurée et se présente comme telle', async ({ page }) => {
   await page.getByRole('checkbox', { name: 'Optimisation de la vitesse', exact: true }).check()
   await expect(page.getByTestId('preuve-cascade')).toBeVisible()
-  // Le libellé doit dire d'où vient le chiffre, sinon il se lit comme une promesse.
-  await expect(page.getByTestId('preuve-vitesse')).toContainText('cette page')
+  // Le mot qui ferme la lecture : « cette page » se lirait comme le futur site du visiteur.
+  await expect(page.getByTestId('preuve-vitesse')).toContainText('configurateur')
   await expect(page.getByTestId('preuve-vitesse')).toContainText('s')
+})
+
+test('la vitesse vient de l’API Performance, pas d’une constante', async ({ page }) => {
+  await page.addInitScript(() => {
+    performance.getEntriesByType = () => [{ duration: 7777, entryType: 'navigation', name: '', startTime: 0, toJSON: () => ({}) }] as never
+  })
+  await page.goto('/configurateur?perf')
+  await page.getByTestId('onglet-preuve').click()
+  await expect(page.getByTestId('preuve-vitesse')).toContainText('7.78')
 })
 
 test('la migration montre une redirection réelle', async ({ page }) => {
@@ -47,6 +56,8 @@ test('les lignes non retenues restent visibles et grisées', async ({ page }) =>
 
 test('la vitesse affichée change d’une visite à l’autre ou reste plausible', async ({ page }) => {
   await page.getByRole('checkbox', { name: 'Optimisation de la vitesse', exact: true }).check()
+  // Attend la mesure : le premier rendu affiche « mesure indisponible ».
+  await expect(page.getByTestId('preuve-vitesse')).not.toHaveText('mesure indisponible')
   const texte = await page.getByTestId('preuve-vitesse').textContent()
   const secondes = Number(/(\d+[.,]\d+)/.exec(texte ?? '')?.[1]?.replace(',', '.'))
   // Une constante en dur passerait ce test ; c'est le test unitaire de lireChargement
@@ -55,9 +66,8 @@ test('la vitesse affichée change d’une visite à l’autre ou reste plausible
   expect(secondes).toBeLessThan(30)
 })
 
-// Les huit options viennent de trois groupes non exclusifs : rien n'empêche de
-// toutes les cocher. Un test de coexistence évite la cascade qui a déjà fait
-// disparaître une option payée trois fois sur ce chantier.
+// Trois groupes non exclusifs, rien n'empêche de cocher les huit : évite la
+// cascade qui a déjà fait disparaître une option payée sur ce chantier.
 test('les huit contrôles cochés ensemble passent tous au vert, sans en faire disparaître un', async ({ page }) => {
   for (const nom of [
     'Fondations SEO',
@@ -72,7 +82,8 @@ test('les huit contrôles cochés ensemble passent tous au vert, sans en faire d
     await page.getByRole('checkbox', { name: nom, exact: true }).check()
   }
 
-  await expect(page.getByTestId('preuve-score')).toContainText('8')
+  // toContainText('8') passerait même à zéro contrôle retenu : le dénominateur le contient toujours.
+  await expect(page.getByTestId('preuve-score')).toHaveText(/^8 \/ 8/)
   const lignes = page.getByTestId('preuve-ligne')
   await expect(lignes).toHaveCount(8)
   for (let i = 0; i < 8; i++) {
@@ -86,15 +97,14 @@ test('les huit contrôles cochés ensemble passent tous au vert, sans en faire d
   }
 })
 
-// Aucun défilement interne à l'aperçu : `overflow-hidden` écrête en silence, et
-// `toBeVisible` de Playwright ne détecte pas cet écrêtage par un ancêtre. Même
-// gabarit que la scène du site, pire cas propre à « La preuve » : ses huit
-// contrôles cochés ensemble.
+// `overflow-hidden` écrête en silence, `toBeVisible` ne voit pas ce rognage.
+// Même gabarit que la scène du site, pire cas propre à « La preuve ».
 test('sur une petite hauteur, la scène de la preuve ne déborde pas silencieusement de son cadre', async ({ page }) => {
   const resolutions = [
     { width: 1366, height: 768 },
     { width: 1024, height: 700 },
     { width: 1280, height: 800 },
+    { width: 1280, height: 600 },
   ]
   const pireCasPreuve = '/configurateur?seo&seo-local&perf&a11y&rgpd&legal&migration&domaine'
 
