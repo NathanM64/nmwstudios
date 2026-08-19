@@ -588,6 +588,31 @@ test('l’aperçu remplit la hauteur disponible entre l’en-tête et la barre d
   expect(apercu.height).toBeGreaterThan(panneau.height * 0.7)
 })
 
+// Aucun défilement interne à l'aperçu : `overflow-hidden` écrête en silence, et
+// `toBeVisible` de Playwright ne détecte pas cet écrêtage par un ancêtre.
+// « La preuve » et « Le déroulé » portent le même risque une fois enrichies :
+// même gabarit de test, pire cas d'options composé pour leur propre scène.
+test('sur une petite hauteur, la scène du site ne déborde pas silencieusement de son cadre', async ({ page }) => {
+  const resolutions = [
+    { width: 1366, height: 768 },
+    { width: 1024, height: 700 },
+    { width: 1280, height: 800 },
+  ]
+  const pireCasSite =
+    '/configurateur?pages=4&langue=3&redaction&reprise&photos&visuels&blog&article=10&membre&formulaire&rdv&newsletter&paiement'
+
+  for (const taille of resolutions) {
+    await page.setViewportSize(taille)
+    await page.goto(pireCasSite)
+    const debordement = await page
+      .getByTestId('apercu')
+      .evaluate((el) => el.scrollHeight - el.clientHeight)
+    // Tolérance à 6 px : la scène la plus vide affiche déjà 3-4 px d'arrondi sous-pixel
+    // sur cette grille imbriquée, bruit de mesure et non un débordement de contenu.
+    expect(debordement, `débordement à ${taille.width}x${taille.height}`).toBeLessThanOrEqual(6)
+  }
+})
+
 test('la molette défile le panneau même quand le curseur est sur l’aperçu', async ({ page }) => {
   await page.setViewportSize({ width: 1600, height: 900 })
   await page.goto('/configurateur')

@@ -46,7 +46,7 @@ export function SceneSite({ config }: { config: Configuration }) {
 
   return (
     <div className="animate-apparait flex flex-1 flex-col">
-      <header className="flex items-center justify-between gap-3 border-b border-border px-4 py-3">
+      <header className="flex items-center justify-between gap-3 border-b border-border px-4 py-2">
         <span className="h-3 w-14 rounded-sm bg-accent/70" />
         <div data-testid="site-nav">
           <ul className="flex flex-wrap gap-2">
@@ -76,7 +76,7 @@ export function SceneSite({ config }: { config: Configuration }) {
         )}
       </header>
 
-      <div className="flex flex-1 flex-col gap-2 p-4">
+      <div className="flex flex-1 flex-col gap-1 p-2">
         {/* Rédaction et reprise se cumulent : la cascade ne sert que le repli commun. */}
         {redaction === 0 && reprise === 0 && (
           <>
@@ -88,21 +88,21 @@ export function SceneSite({ config }: { config: Configuration }) {
         {redaction > 0 && (
           <div data-testid="site-texte" className="animate-apparait">
             <p className="text-sm text-foreground">{TEXTE_ECRIT.titre}</p>
-            <p className="mt-1 text-[0.62rem] leading-relaxed text-muted-foreground">{TEXTE_ECRIT.corps}</p>
+            <p className="mt-1 text-[0.62rem] leading-snug text-muted-foreground">{TEXTE_ECRIT.corps}</p>
           </div>
         )}
 
         {reprise > 0 && (
           <ul data-testid="site-reprise" className="animate-apparait flex flex-col gap-1">
             {BLOCS_REPRIS.map((bloc) => (
-              <li key={bloc} className="rounded-sm border border-border px-2 py-1 text-[0.6rem] text-muted-foreground">
+              <li key={bloc} className="rounded-sm border border-border px-2 py-0.5 text-[0.6rem] leading-tight text-muted-foreground">
                 {bloc}
               </li>
             ))}
           </ul>
         )}
 
-        <div data-testid="site-cadre" className="relative h-24 overflow-hidden rounded-sm border border-border bg-[linear-gradient(135deg,rgba(122,162,255,0.22),rgba(168,120,255,0.16)_60%,rgba(96,214,214,0.12))]">
+        <div data-testid="site-cadre" className="relative h-16 overflow-hidden rounded-sm border border-border bg-[linear-gradient(135deg,rgba(122,162,255,0.22),rgba(168,120,255,0.16)_60%,rgba(96,214,214,0.12))]">
           {photos > 0 && (
             <>
               {/* Le travail sur la photo, jamais la photo : rien à produire graphiquement. */}
@@ -124,7 +124,8 @@ export function SceneSite({ config }: { config: Configuration }) {
         {(blog > 0 || articles > 0) && (
           <section data-testid="site-blog" className="animate-apparait mt-auto">
             <p className="text-[0.5rem] uppercase tracking-wider text-accent">Actualités</p>
-            <div className="mt-1 grid grid-cols-3 gap-1">
+            {/* 5 colonnes : 10 articles au maximum tiennent sur 2 lignes plutôt que 4, sans quoi le cadre déborde. */}
+            <div className="mt-1 grid grid-cols-5 gap-1">
               {articles > 0
                 ? ARTICLES.slice(0, articles).map((article) => (
                     <div key={article.requete} data-testid="site-article" className="rounded-sm border border-border p-1">
@@ -137,56 +138,60 @@ export function SceneSite({ config }: { config: Configuration }) {
           </section>
         )}
 
-        <section data-testid="site-formulaire" className="mt-2 rounded-sm border border-border p-2">
-          {formulaire > 0 && (
-            <div data-testid="site-etapes" className="animate-apparait mb-1 flex gap-1">
-              {[1, 2, 3].map((n) => (
-                <span key={n} className="rounded-sm bg-accent/20 px-1 font-mono text-[0.45rem] text-accent">
-                  {n}
-                </span>
+        {/* Grille à deux colonnes : chaque carte prend sa moitié, ou toute la ligne si sa voisine
+            est absente. Conditions indépendantes, aucune ne dépend d'une autre pour s'afficher. */}
+        <div className="grid grid-cols-2 gap-1">
+          <section data-testid="site-formulaire" className={`rounded-sm border border-border p-1 ${newsletter > 0 ? '' : 'col-span-2'}`}>
+            {formulaire > 0 && (
+              <div data-testid="site-etapes" className="animate-apparait mb-0.5 flex gap-1">
+                {[1, 2, 3].map((n) => (
+                  <span key={n} className="rounded-sm bg-accent/20 px-1 font-mono text-[0.45rem] text-accent">
+                    {n}
+                  </span>
+                ))}
+              </div>
+            )}
+            <div className="flex flex-col gap-0.5">
+              {[0, 1, 2].map((i) => (
+                <span key={i} data-testid="site-champ" className="h-1.5 rounded-sm bg-foreground/12" />
               ))}
             </div>
+            {formulaire > 0 && (
+              <p className="animate-apparait mt-0.5 text-[0.5rem] text-muted-foreground">Pièce jointe</p>
+            )}
+          </section>
+
+          {newsletter > 0 && (
+            <section data-testid="site-newsletter" className="animate-apparait flex items-center gap-1 self-start rounded-sm bg-surface-raised p-1">
+              <span className="h-1.5 flex-1 rounded-sm bg-foreground/12" />
+              <span className="rounded-sm bg-accent/20 px-1 text-[0.45rem] text-accent">S’inscrire</span>
+            </section>
           )}
-          <div className="flex flex-col gap-1">
-            {[0, 1, 2].map((i) => (
-              <span key={i} data-testid="site-champ" className="h-2 rounded-sm bg-foreground/12" />
-            ))}
-          </div>
-          {formulaire > 0 && (
-            <p className="animate-apparait mt-1 text-[0.5rem] text-muted-foreground">Pièce jointe</p>
+
+          {rdv > 0 && (
+            <section data-testid="site-rdv" className={`animate-apparait ${paiement > 0 ? '' : 'col-span-2'}`}>
+              <p className="text-[0.5rem] uppercase tracking-wider text-accent">Réserver un créneau</p>
+              <div className="mt-0.5 grid grid-cols-3 gap-0.5">
+                {['9h', '10h', '11h', '14h', '15h', '16h'].map((h) => (
+                  <span key={h} data-testid="site-creneau" className="rounded-sm border border-border py-0.5 text-center text-[0.45rem] text-muted-foreground">
+                    {h}
+                  </span>
+                ))}
+              </div>
+            </section>
           )}
-        </section>
 
-        {rdv > 0 && (
-          <section data-testid="site-rdv" className="animate-apparait mt-2">
-            <p className="text-[0.5rem] uppercase tracking-wider text-accent">Réserver un créneau</p>
-            <div className="mt-1 grid grid-cols-6 gap-1">
-              {['9h', '10h', '11h', '14h', '15h', '16h'].map((h) => (
-                <span key={h} data-testid="site-creneau" className="rounded-sm border border-border py-0.5 text-center text-[0.45rem] text-muted-foreground">
-                  {h}
-                </span>
-              ))}
-            </div>
-          </section>
-        )}
-
-        {paiement > 0 && (
-          <section data-testid="site-paiement" className="animate-apparait mt-2 flex items-center justify-between rounded-sm border border-border p-2">
-            <span className="text-[0.5rem] text-muted-foreground">Régler en ligne</span>
-            <span className="flex gap-1">
-              {/* Logos dessinés, aucune marque reproduite. */}
-              <span className="h-2 w-4 rounded-[2px] bg-foreground/25" />
-              <span className="h-2 w-4 rounded-[2px] bg-foreground/15" />
-            </span>
-          </section>
-        )}
-
-        {newsletter > 0 && (
-          <section data-testid="site-newsletter" className="animate-apparait mt-2 flex items-center gap-1 rounded-sm bg-surface-raised p-2">
-            <span className="h-2 flex-1 rounded-sm bg-foreground/12" />
-            <span className="rounded-sm bg-accent/20 px-1 text-[0.45rem] text-accent">S’inscrire</span>
-          </section>
-        )}
+          {paiement > 0 && (
+            <section data-testid="site-paiement" className={`animate-apparait flex items-center justify-between self-start rounded-sm border border-border p-1 ${rdv > 0 ? '' : 'col-span-2'}`}>
+              <span className="text-[0.5rem] text-muted-foreground">Régler en ligne</span>
+              <span className="flex gap-1">
+                {/* Logos dessinés, aucune marque reproduite. */}
+                <span className="h-2 w-4 rounded-[2px] bg-foreground/25" />
+                <span className="h-2 w-4 rounded-[2px] bg-foreground/15" />
+              </span>
+            </section>
+          )}
+        </div>
       </div>
     </div>
   )

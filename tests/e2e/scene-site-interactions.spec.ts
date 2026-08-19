@@ -40,17 +40,17 @@ test('formulaire avancé, rendez-vous, newsletter et paiement cochés ensemble r
   await page.getByRole('checkbox', { name: 'Newsletter', exact: true }).check()
   await page.getByRole('checkbox', { name: 'Paiement en ligne', exact: true }).check()
 
-  const etapes = page.getByTestId('site-etapes')
+  const formulaire = page.getByTestId('site-formulaire')
   const rdv = page.getByTestId('site-rdv')
   const newsletter = page.getByTestId('site-newsletter')
   const paiement = page.getByTestId('site-paiement')
-  await expect(etapes).toBeVisible()
+  await expect(formulaire).toBeVisible()
   await expect(rdv).toBeVisible()
   await expect(newsletter).toBeVisible()
   await expect(paiement).toBeVisible()
 
   const boites = [
-    (await etapes.boundingBox())!,
+    (await formulaire.boundingBox())!,
     (await rdv.boundingBox())!,
     (await newsletter.boundingBox())!,
     (await paiement.boundingBox())!,
