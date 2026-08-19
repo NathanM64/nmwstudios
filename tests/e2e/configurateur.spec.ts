@@ -282,8 +282,11 @@ test('cocher une option visible garde la scène du site', async ({ page }) => {
   await page.goto('/configurateur')
   await page.getByRole('checkbox', { name: 'Un blog' }).check()
   await expect(page.getByTestId('site-blog')).toBeVisible()
-  // `toBeVisible` est désormais vrai en permanence : les trois parties sont montées.
-  await expect.poll(() => dansLaFenetre(page, 'site-nav')).toBe(true)
+  // La page vise l'ancre de l'option, pas la tête de sa partie : la navigation peut sortir par
+  // le haut sans qu'on ait quitté le site. `toBeVisible` est vrai en permanence, les trois
+  // parties étant montées : c'est la partie qui doit rester dans la fenêtre.
+  await expect(page.getByTestId('onglet-site')).toHaveAttribute('aria-pressed', 'true')
+  await expect.poll(() => dansLaFenetre(page, 'partie-site')).toBe(true)
 })
 
 test('les vignettes ramènent à la scène du site', async ({ page }) => {

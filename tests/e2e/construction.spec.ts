@@ -2,11 +2,18 @@ import { expect, test } from '@playwright/test'
 
 test('cocher une option anime seulement l’élément concerné', async ({ page }) => {
   await page.goto('/configurateur')
-  const titreAvant = await page.getByTestId('site-titre').boundingBox()
+  // Rang dans le document, pas position à l'écran : cocher amène l'ancre de l'option, et toute
+  // la page défile sous la fenêtre. Ce qui se juge ici est le reflux, pas ce défilement.
+  const rangDuTitre = () =>
+    page.getByTestId('site-titre').evaluate((titre) => {
+      const rouleau = titre.closest('[data-testid="rouleau"]')!
+      return titre.getBoundingClientRect().top - rouleau.getBoundingClientRect().top
+    })
+  const titreAvant = await rangDuTitre()
   await page.getByRole('checkbox', { name: 'Un blog', exact: true }).check()
   // Le titre ne doit pas bouger : seule la section ajoutée s'anime.
-  const titreApres = await page.getByTestId('site-titre').boundingBox()
-  expect(Math.abs(titreApres!.y - titreAvant!.y)).toBeLessThan(2)
+  const titreApres = await rangDuTitre()
+  expect(Math.abs(titreApres - titreAvant)).toBeLessThan(2)
   await expect(page.getByTestId('site-blog')).toBeVisible()
 })
 

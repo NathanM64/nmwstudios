@@ -4,13 +4,14 @@ import { memo, useEffect, useRef } from 'react'
 import { CarteOption } from '@/components/config/CarteOption'
 import { GROUPES, OPTIONS, type GroupeId } from '@/lib/config/catalogue'
 import type { Configuration } from '@/lib/config/devis'
-import { sceneDeOption, type SceneId } from '@/lib/config/scenes'
+import { ancreDeOption } from '@/lib/config/scenes'
+import type { Cible } from '@/lib/config/defilement'
 
 /** Ligne de lecture, en part de la hauteur de fenêtre : le groupe qui la franchit est celui
  *  qu'on est en train de lire, et c'est aussi là que se cale son en-tête collant. */
 const LIGNE_DE_LECTURE = 0.3
 
-/** Un choix délibéré gagne pendant ce délai. Cocher une option amène sa scène, mais fait aussi
+/** Un choix délibéré gagne pendant ce délai. Cocher une option amène son ancre, mais fait aussi
  *  défiler le panneau jusqu'à la carte, jusqu'à trois fois : mise en vue, focus, puis
  *  réancrage du navigateur après le rendu. Sans cette suspension, ce défilement subi
  *  reprendrait la main sur le choix qui vient de l'émettre. */
@@ -19,12 +20,12 @@ const SUSPENSION_MS = 500
 export const PanneauOptions = memo(function PanneauOptions({
   config,
   onChange,
-  onScene,
+  onCible,
   onLecture,
 }: {
   config: Configuration
   onChange: (config: Configuration) => void
-  onScene: (scene: SceneId) => void
+  onCible: (cible: Cible) => void
   onLecture: (lecture: { groupe: GroupeId; progression: number }) => void
 }) {
   const racineRef = useRef<HTMLDivElement>(null)
@@ -43,12 +44,13 @@ export const PanneauOptions = memo(function PanneauOptions({
     rattrapage.current = window.setTimeout(() => releve.current(), SUSPENSION_MS + 16)
   }
 
-  // Cocher une option, c'est déclarer qu'on lit ce groupe : le relevé de défilement en prend
-  // acte, sans quoi le défilement provoqué par le clic lui-même reprendrait la main aussitôt.
+  // L'ancre de l'option, pas la tête de sa partie : un article se voit dans les actualités,
+  // la livraison accélérée sur la ligne de temps. Le relevé se suspend, sans quoi le
+  // défilement provoqué par le clic lui-même reprendrait la main aussitôt.
   const poser = (id: string, n: number) => {
     onChange({ ...config, [id]: n })
     suspendreLeReleve()
-    onScene(sceneDeOption(id))
+    onCible({ ancre: ancreDeOption(id), progression: 0 })
   }
 
   // L'aperçu suit la lecture : parcourir le formulaire fait défiler les scènes, sans rien cocher.
@@ -111,7 +113,7 @@ export const PanneauOptions = memo(function PanneauOptions({
     suivant[id] = 1
     onChange(suivant)
     suspendreLeReleve()
-    onScene(sceneDeOption(id))
+    onCible({ ancre: ancreDeOption(id), progression: 0 })
   }
 
   return (

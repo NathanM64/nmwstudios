@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test'
+import { SCENES, ancreDeOption } from '../../lib/config/scenes'
 import { dansLaFenetre } from './fenetre'
 
 type Page = import('@playwright/test').Page
@@ -18,6 +19,15 @@ async function ecartDuReleve(page: Page): Promise<number> {
     }
     return pire
   })
+}
+
+/** Écart, en pixels logiques, entre la position posée du rouleau et le décalage publié pour
+ *  une ancre. Zéro veut dire que c'est bien cette ancre qui est en haut de la fenêtre. */
+async function ecartAAncre(page: Page, ancre: string): Promise<number> {
+  return page.getByTestId('rouleau').evaluate((rouleau: HTMLElement, a) => {
+    const y = Math.abs(parseFloat(getComputedStyle(rouleau).translate.split(' ')[1] ?? '0'))
+    return Math.abs(y - (JSON.parse(rouleau.dataset.mesures!) as Record<string, number>)[a])
+  }, ancre)
 }
 
 /** Décalages réels, tels que la mise en page les donne, indépendamment de ce que le document
@@ -179,4 +189,54 @@ test('le mouvement réduit pose la position sans transition', async ({ page }) =
   // Seuil de `transitions.spec.ts` : la remise à zéro globale du projet pose 0,01 ms en
   // `!important`, qu'aucune règle ne peut ramener à zéro franc.
   expect(parseFloat(duree)).toBeLessThan(0.001)
+})
+
+test('cocher une option amène son ancre dans la fenêtre', async ({ page }) => {
+  await page.getByRole('checkbox', { name: 'Un blog', exact: true }).check()
+  await expect.poll(() => dansLaFenetre(page, 'site-blog')).toBe(true)
+  // La partie du site tient dans une fenêtre : le blog s'y voit même sans rien viser, et le
+  // seul constat ci-dessus passerait aussi bien sur la page laissée en haut. C'est la position
+  // posée qui dit que l'ancre de l'option est visée, et non la tête de sa partie.
+  await expect.poll(() => ecartAAncre(page, ancreDeOption('blog'))).toBeLessThan(2)
+})
+
+test('cocher un contrôle technique amène le rapport', async ({ page }) => {
+  await page.getByRole('checkbox', { name: 'Fondations SEO', exact: true }).check()
+  await expect.poll(() => dansLaFenetre(page, 'preuve-serp')).toBe(true)
+})
+
+test('ce qui sort de la fenêtre est inerte', async ({ page }) => {
+  // Sans `inert`, la tabulation atteint le sélecteur de langue d'une partie invisible.
+  await page.goto('/configurateur?langue=2')
+  // `overflow: clip` ne peut pas ramener un élément focalisé à l'écran, contrairement à
+  // `hidden` : le sélecteur d'une partie sortie doit être hors d'atteinte, pas seulement invisible.
+  const prendLeFocus = () =>
+    page.getByTestId('site-langue').evaluate((el: HTMLElement) => {
+      el.focus()
+      return document.activeElement === el
+    })
+
+  await expect(page.getByTestId('partie-site')).not.toHaveAttribute('inert', '')
+  expect(await prendLeFocus(), 'le site est dans la fenêtre et déjà hors du clavier').toBe(true)
+
+  await page.getByTestId('onglet-deroule').click()
+  await expect.poll(() => dansLaFenetre(page, 'partie-site')).toBe(false)
+  await expect(page.getByTestId('partie-site')).toHaveAttribute('inert', '')
+  expect(await prendLeFocus(), 'le sélecteur d’une partie sortie prend encore le focus').toBe(false)
+  await expect(page.getByTestId('partie-deroule')).not.toHaveAttribute('inert', '')
+
+  // Le retour rend la partie au clavier : un `inert` jamais retiré la rendrait inatteignable.
+  await page.getByTestId('onglet-site').click()
+  await expect.poll(() => dansLaFenetre(page, 'partie-site')).toBe(true)
+  await expect(page.getByTestId('partie-site')).not.toHaveAttribute('inert', '')
+  expect(await prendLeFocus(), 'le site est revenu sans rendre son sélecteur au clavier').toBe(true)
+})
+
+test('le premier rendu n’est pas intégralement inerte', async ({ page }) => {
+  // Avant la première mesure la fenêtre est haute de zéro et aucune partie ne la croise : sans
+  // repli, le HTML prérendu sort avec `inert` partout, et la maquette naît inatteignable.
+  const html = await (await page.request.get('/configurateur')).text()
+  const balises = html.match(/<div[^>]*data-testid="partie-[a-z-]+"[^>]*>/g) ?? []
+  expect(balises).toHaveLength(SCENES.length)
+  for (const balise of balises) expect(balise, balise).not.toContain('inert')
 })

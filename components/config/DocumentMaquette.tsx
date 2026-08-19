@@ -3,8 +3,8 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import type { Configuration } from '@/lib/config/devis'
 import type { DomaineId } from '@/lib/config/domaines'
-import { SCENES, type AncreId } from '@/lib/config/scenes'
-import { positionCible, type Cible, type Mesures } from '@/lib/config/defilement'
+import { SCENES, type AncreId, type SceneId } from '@/lib/config/scenes'
+import { partiesActives, positionCible, type Cible, type Mesures } from '@/lib/config/defilement'
 import { SceneSite } from '@/components/config/scenes/SceneSite'
 import { ScenePreuve } from '@/components/config/scenes/ScenePreuve'
 import { SceneDeroule } from '@/components/config/scenes/SceneDeroule'
@@ -13,6 +13,11 @@ import { SceneDeroule } from '@/components/config/scenes/SceneDeroule'
 const useEffetDeMiseEnPage = typeof window === 'undefined' ? useEffect : useLayoutEffect
 
 const VIDE: Mesures = { offsets: {}, hauteurDocument: 0, hauteurFenetre: 0 }
+
+/** Haut et bas de chaque partie, en pixels logiques depuis le haut du rouleau. */
+type Bornes = Partial<Record<SceneId, { haut: number; bas: number }>>
+
+const PREFIXE_PARTIE = 'partie-'
 
 export function DocumentMaquette({
   config,
@@ -25,6 +30,7 @@ export function DocumentMaquette({
 }) {
   const rouleauRef = useRef<HTMLDivElement>(null)
   const [mesures, setMesures] = useState<Mesures>(VIDE)
+  const [bornes, setBornes] = useState<Bornes>({})
 
   useEffetDeMiseEnPage(() => {
     const rouleau = rouleauRef.current
@@ -41,6 +47,16 @@ export function DocumentMaquette({
       for (const el of rouleau.querySelectorAll<HTMLElement>('[data-ancre]')) {
         offsets[el.dataset.ancre as AncreId] = (el.getBoundingClientRect().top - haut) / echelle
       }
+      // Les parties se repèrent par leur `data-testid`, seul marqueur qu'elles portent.
+      const prises: Bornes = {}
+      for (const el of rouleau.querySelectorAll<HTMLElement>(`[data-testid^="${PREFIXE_PARTIE}"]`)) {
+        const rect = el.getBoundingClientRect()
+        prises[el.dataset.testid!.slice(PREFIXE_PARTIE.length) as SceneId] = {
+          haut: (rect.top - haut) / echelle,
+          bas: (rect.bottom - haut) / echelle,
+        }
+      }
+      setBornes(prises)
       setMesures({
         offsets,
         hauteurDocument: rouleau.offsetHeight,
@@ -70,6 +86,11 @@ export function DocumentMaquette({
   }, [config, domaine])
 
   const position = positionCible(cible, mesures)
+  // Avant la première mesure la fenêtre est haute de zéro et aucune partie ne la croise :
+  // sans ce repli, le premier rendu serait intégralement inerte.
+  const actives = new Set(
+    mesures.hauteurFenetre > 0 ? partiesActives(bornes, position, mesures.hauteurFenetre) : SCENES.map((s) => s.id)
+  )
   // Décalages publiés : tant qu'aucun repère ne vise une ancre interne, une mesure périmée ne
   // se verrait nulle part, et rien ne dirait que la Task 4 part d'un relevé faux.
   const releve = Object.fromEntries(Object.entries(mesures.offsets).map(([a, o]) => [a, Math.round(o!)]))
@@ -82,7 +103,12 @@ export function DocumentMaquette({
       className="maquette-rouleau"
       style={{ translate: `0 ${-position}px` }}
     >
-      <div data-testid="partie-site" data-ancre="site-haut" className="maquette-partie">
+      <div
+        data-testid="partie-site"
+        data-ancre="site-haut"
+        inert={!actives.has('site')}
+        className="maquette-partie"
+      >
         <SceneSite config={config} domaine={domaine} />
       </div>
 
@@ -91,6 +117,7 @@ export function DocumentMaquette({
           key={partie.id}
           data-testid={`partie-${partie.id}`}
           data-ancre={`${partie.id}-haut`}
+          inert={!actives.has(partie.id)}
           className="maquette-partie"
         >
           <div className="m-marge flex shrink-0 items-baseline gap-3">

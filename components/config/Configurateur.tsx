@@ -132,7 +132,7 @@ export function Configurateur() {
         <div ref={panneauRef} data-testid="colonne-options" className="min-w-0 xl:min-h-0 xl:overflow-y-auto xl:pr-2">
           <h1 className="text-2xl font-semibold tracking-tight">Configurez votre site</h1>
           <div className="mt-6">
-            <PanneauOptions config={config} onChange={setConfig} onScene={surPartie} onLecture={surLecture} />
+            <PanneauOptions config={config} onChange={setConfig} onCible={setCible} onLecture={surLecture} />
           </div>
 
           <Recapitulatif config={config} />
