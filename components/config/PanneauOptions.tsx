@@ -35,9 +35,9 @@ export const PanneauOptions = memo(function PanneauOptions({
   const suspenduJusqua = useRef(0)
   const rattrapage = useRef(0)
 
-  // Le rattrapage resynchronise la référence à la fin de la fenêtre : cocher une option
-  // quantifiable change la hauteur du groupe sans qu'aucun défilement ne soit émis, et l'écart
-  // passerait sinon pour une lecture du visiteur au premier défilement suivant.
+  // Le rattrapage relit la géométrie à la fin de la fenêtre, et n'émet que si elle a changé
+  // depuis la dernière écriture. Aucun geste ne la change aujourd'hui, une carte gardant sa
+  // hauteur à toute quantité : il ne rattrape rien, et s'il émettait il contredirait le choix.
   const suspendreLeReleve = () => {
     suspenduJusqua.current = Date.now() + SUSPENSION_MS
     clearTimeout(rattrapage.current)

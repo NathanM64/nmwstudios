@@ -198,6 +198,13 @@ test('cocher une option amène son ancre dans la fenêtre', async ({ page }) => 
   // seul constat ci-dessus passerait aussi bien sur la page laissée en haut. C'est la position
   // posée qui dit que l'ancre de l'option est visée, et non la tête de sa partie.
   await expect.poll(() => ecartAAncre(page, ancreDeOption('blog'))).toBeLessThan(2)
+
+  // Attente franche au delà des 500 ms de suspension et des 16 ms du rattrapage. Un sondage se
+  // contente de sa fin de transition, à 320 ms, et ne verrait pas le demi-tour d'après : l'ancre
+  // du groupe de « Un blog » est la navigation, pas les actualités, et l'écart se compte en
+  // centaines de pixels sans qu'on ait quitté la partie du site.
+  await page.waitForTimeout(900)
+  expect(await ecartAAncre(page, ancreDeOption('blog'))).toBeLessThan(2)
 })
 
 test('cocher un contrôle technique amène le rapport', async ({ page }) => {
