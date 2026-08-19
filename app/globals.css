@@ -299,6 +299,10 @@ body {
   .m-marge { padding: calc(var(--m-densite) * 0.36rem) calc(var(--m-densite) * 0.7rem); }
 }
 .m-teinte { background-color: color-mix(in srgb, var(--m-accent) 16%, transparent); }
+/* Couloir du chronogramme : assez marqué pour que le temps non employé se voie, assez
+   discret pour ne pas concurrencer les barres. */
+.m-couloir { background-color: color-mix(in srgb, var(--m-texte) 5%, transparent); border-radius: var(--m-rayon); }
+.m-repere { background-color: color-mix(in srgb, var(--m-texte) 12%, transparent); }
 /* Un champ borné sur le fond de la maquette, pas une barre grise : c'est ce qui
    faisait lire le formulaire du socle comme un champ de filaire vide. */
 .m-champ {
@@ -307,8 +311,9 @@ body {
   border-radius: var(--m-rayon);
 }
 .m-jeton { background-color: color-mix(in srgb, var(--m-texte) 18%, transparent); border-radius: var(--m-rayon); }
-.m-barre { background-color: var(--m-accent); border-radius: var(--m-rayon); }
-.m-barre-2 { background-color: var(--m-accent-2); border-radius: var(--m-rayon); }
+/* Plancher de largeur : une phase très courte doit rester une barre visible. */
+.m-barre { background-color: var(--m-accent); border-radius: var(--m-rayon); min-width: 4px; }
+.m-barre-2 { background-color: var(--m-accent-2); border-radius: var(--m-rayon); min-width: 4px; }
 
 /* Densité : le style décide de l'air entre les blocs, pas la scène. */
 .m-air { gap: calc(var(--m-densite) * 0.4rem); }

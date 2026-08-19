@@ -17,12 +17,15 @@ const EVENEMENTS: Record<string, string[]> = {
 /** Ce que le client reprend en refusant le suivi : les mêmes rendez-vous, à sa charge. */
 const A_VOTRE_CHARGE = ['Sauvegarde', 'Mises à jour', 'Surveillance']
 
-/** Pire cas réel du catalogue, express décoché : échelle fixe de la piste, sans quoi une option
+/** Pire cas réel du catalogue, express décoché : échelle fixe de l'axe, sans quoi une option
  *  lourde ne changerait que sa part du total, jamais sa largeur en pixels. */
 const CONFIG_MAX: Configuration = Object.fromEntries(
   OPTIONS.map((o) => [o.id, o.id === 'express' ? 0 : (o.quantifiable?.max ?? 1)])
 )
 const ECHELLE_SEMAINES = calculerDeroule(CONFIG_MAX).total
+
+/** Graduations tous les `PAS` semaines : cinq repères environ sur toute l'échelle. */
+const PAS_SEMAINES = Math.max(1, Math.round(ECHELLE_SEMAINES / 5))
 
 function formaterSemaines(semaines: number): string {
   const valeur = Math.round(semaines * 10) / 10
@@ -36,47 +39,95 @@ export function SceneDeroule({ config }: { config: Configuration }) {
   const evenements = formule ? (EVENEMENTS[formule.id] ?? []) : []
   const refus = formule?.id === 'sans-suivi'
 
-  // Pourcentages du total courant, dans une piste elle-même mise à l'échelle du pire cas :
-  // une option lourde élargit la barre en pixels, pas seulement sa part du total.
-  const pct = (semaines: number) => `${(semaines / deroule.total) * 100}%`
+  // Toutes les positions sont des parts de l'échelle du pire cas, jamais du total courant :
+  // une option lourde élargit donc la barre en pixels, pas seulement sa part du projet.
+  const part = (semaines: number) => `${(semaines / ECHELLE_SEMAINES) * 100}%`
 
   // Un repère ponctuel a sa propre largeur : à `left: P%`, le reculer de `P%` de sa largeur
   // le confine exactement à la piste, à toute position et sans jamais trop reculer.
-  const decalage = (semaines: number) => `-${(semaines / deroule.total) * 100}% 0`
+  const decalage = (semaines: number) => `-${(semaines / ECHELLE_SEMAINES) * 100}% 0`
+
+  const graduations = Array.from(
+    { length: Math.floor(ECHELLE_SEMAINES / PAS_SEMAINES) + 1 },
+    (_, i) => i * PAS_SEMAINES
+  )
+
+  const rangees = [
+    deroule.cadrage > 0 && { id: 'cadrage', nom: 'Cadrage', depart: 0, duree: deroule.cadrage, seconde: true },
+    { id: 'construction', nom: 'Construction', depart: deroule.cadrage, duree: deroule.construction, seconde: false },
+    { id: 'livraison', nom: 'Livraison', depart: deroule.livraison, duree: 0, seconde: false },
+    deroule.formation > 0 && { id: 'formation', nom: 'Formation', depart: deroule.livraison, duree: deroule.formation, seconde: true },
+  ].filter(Boolean) as { id: string; nom: string; depart: number; duree: number; seconde: boolean }[]
+
+  const lignes = { gridTemplateRows: `repeat(${rangees.length}, minmax(0, 1fr))` }
 
   return (
-    <div className="animate-apparait m-marge flex flex-1 flex-col gap-6">
-      <div className="flex flex-col gap-2">
+    <div className="animate-apparait m-air m-marge flex flex-1 flex-col">
+      <div className="flex shrink-0 items-baseline gap-3">
         <p className="m-surtitre">Déroulé du projet</p>
+        <span className="m-filet h-px flex-1" />
+        <p className="m-legende shrink-0">semaines</p>
+      </div>
 
-        <div
-          data-testid="deroule-piste"
-          className="relative h-5"
-          style={{ width: `${Math.min(100, (deroule.total / ECHELLE_SEMAINES) * 100)}%` }}
-        >
-          <div className="m-filet absolute inset-x-0 top-1/2 h-px -translate-y-1/2" />
+      {/* L'axe rend le fantôme de la livraison accélérée lisible : sans graduation, il ne se
+          situait nulle part. */}
+      <div className="flex shrink-0 gap-3">
+        <span className="m-legende invisible shrink-0">Construction</span>
+        <div data-testid="deroule-axe" className="relative min-w-0 flex-1">
+          <span className="m-filet absolute inset-x-0 bottom-0 h-px" />
+          {graduations.map((semaine) => (
+            <span
+              key={semaine}
+              data-testid="deroule-graduation"
+              className="m-legende absolute bottom-0 pb-0.5"
+              style={{ left: part(semaine), translate: semaine === 0 ? '0 0' : '-50% 0' }}
+            >
+              {semaine}
+            </span>
+          ))}
+        </div>
+      </div>
 
-          {deroule.cadrage > 0 && (
-            <div
-              data-testid="deroule-cadrage"
-              className="animate-apparait m-barre-2 absolute top-0.5 bottom-0.5 min-w-[5px]"
-              style={{ left: 0, width: pct(deroule.cadrage) }}
+      <div className="m-air flex min-h-0 flex-1 gap-3">
+        <div className="grid shrink-0 gap-1" style={lignes}>
+          {rangees.map((rangee) => (
+            <div key={rangee.id} className="self-center">
+              <p data-testid="deroule-nom" className="m-corps">
+                {rangee.nom}
+              </p>
+              <p className="m-legende">
+                {rangee.id === 'livraison'
+                  ? `à ${formaterSemaines(rangee.depart)}`
+                  : formaterSemaines(rangee.duree)}
+              </p>
+            </div>
+          ))}
+        </div>
+
+        <div data-testid="deroule-piste" className="relative grid min-w-0 flex-1 gap-1" style={lignes}>
+          {/* Les graduations traversent les couloirs : sans elles, le temps non employé se lit
+              comme un vide de mise en page plutôt que comme du temps. */}
+          {graduations.map((semaine) => (
+            <span
+              key={semaine}
+              className="m-repere absolute inset-y-0 w-px"
+              style={{ left: part(semaine), gridArea: '1 / 1 / -1 / -1' }}
             />
-          )}
+          ))}
 
-          <div
-            data-testid="deroule-construction"
-            className="m-barre absolute top-0.5 bottom-0.5 min-w-[5px]"
-            style={{ left: pct(deroule.cadrage), width: pct(deroule.construction) }}
-          />
-
-          {deroule.formation > 0 && (
-            <div
-              data-testid="deroule-formation"
-              className="animate-apparait m-barre-2 absolute top-0.5 bottom-0.5 min-w-[5px]"
-              style={{ left: pct(deroule.livraison), width: pct(deroule.formation) }}
-            />
-          )}
+          {rangees.map((rangee) => (
+            <div key={rangee.id} className="m-couloir relative">
+              {rangee.id === 'livraison' ? (
+                <span className="m-filet absolute inset-x-0 inset-y-0 my-auto h-px" />
+              ) : (
+                <div
+                  data-testid={`deroule-${rangee.id}`}
+                  className={`animate-apparait absolute top-[32%] bottom-[32%] ${rangee.seconde ? 'm-barre-2' : 'm-barre'}`}
+                  style={{ left: part(rangee.depart), width: part(rangee.duree) }}
+                />
+              )}
+            </div>
+          ))}
 
           {/* Confinement par la propriété `translate`, jamais par `transform` : le keyframe
               d'apparition finit sur `transform: none` et écraserait un décalage posé là. */}
@@ -84,38 +135,37 @@ export function SceneDeroule({ config }: { config: Configuration }) {
             <span
               data-testid="deroule-fantome"
               style={{
-                left: `${(deroule.livraisonSansExpress / deroule.total) * 100}%`,
+                left: part(deroule.livraisonSansExpress),
                 translate: decalage(deroule.livraisonSansExpress),
               }}
-              className="animate-apparait m-trait-sourd absolute -top-1 -bottom-1 w-px"
+              className="animate-apparait m-trait-sourd absolute inset-y-0 w-px"
             />
           )}
 
           <span
             data-testid="deroule-livraison"
-            className="animate-apparait m-barre absolute -top-1 -bottom-1 w-0.5"
-            style={{ left: pct(deroule.livraison), translate: decalage(deroule.livraison) }}
+            className="animate-apparait m-barre absolute inset-y-0 w-0.5"
+            style={{ left: part(deroule.livraison), translate: decalage(deroule.livraison) }}
           />
         </div>
-
-        <p className="m-legende">
-          Livraison à {formaterSemaines(deroule.livraison)}
-          {deroule.livraison < deroule.livraisonSansExpress &&
-            ` au lieu de ${formaterSemaines(deroule.livraisonSansExpress)} sans la livraison accélérée`}
-        </p>
       </div>
 
-      <div className="mt-auto flex flex-col gap-2">
-        <p className="m-surtitre">Chaque mois, après la livraison</p>
+      <p className="m-legende shrink-0">
+        Livraison à {formaterSemaines(deroule.livraison)}
+        {deroule.livraison < deroule.livraisonSansExpress &&
+          ` au lieu de ${formaterSemaines(deroule.livraisonSansExpress)} sans la livraison accélérée`}
+      </p>
+
+      <div className="m-air-serre flex shrink-0 flex-col">
+        <div className="flex items-baseline gap-3">
+          <p className="m-surtitre">Chaque mois, après la livraison</p>
+          <span className="m-filet h-px flex-1" />
+        </div>
         <div data-testid="deroule-mois" className="flex flex-col gap-1">
           {evenements.length > 0 && (
             <div className="flex flex-wrap gap-1">
               {evenements.map((e) => (
-                <span
-                  key={e}
-                  data-testid="deroule-evenement"
-                  className="m-puce px-1.5 py-0.5"
-                >
+                <span key={e} data-testid="deroule-evenement" className="m-puce px-1.5">
                   {e}
                 </span>
               ))}
@@ -126,26 +176,16 @@ export function SceneDeroule({ config }: { config: Configuration }) {
             <div data-testid="deroule-sans-suivi" className="animate-apparait flex flex-col gap-1">
               <div className="flex flex-wrap gap-1">
                 {A_VOTRE_CHARGE.map((e) => (
-                  <span
-                    key={e}
-                    data-testid="deroule-charge"
-                    className="m-cadre-tiret m-legende px-1.5 py-0.5"
-                  >
+                  <span key={e} data-testid="deroule-charge" className="m-cadre-tiret m-legende px-1.5">
                     {e}
                   </span>
                 ))}
               </div>
-              <p className="m-legende">
-                Personne ne passe : le site est à vous, et vous vous en occupez.
-              </p>
+              <p className="m-legende">Personne ne passe : le site est à vous, et vous vous en occupez.</p>
             </div>
           )}
 
-          {!formule && (
-            <p className="m-legende">
-              Après la livraison, à vous de dire qui s’en occupe.
-            </p>
-          )}
+          {!formule && <p className="m-legende">Après la livraison, à vous de dire qui s’en occupe.</p>}
         </div>
       </div>
     </div>
