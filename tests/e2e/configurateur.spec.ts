@@ -203,11 +203,11 @@ test('la langue supplémentaire ajoute un sélecteur qui bascule l’aperçu', a
   await expect(page.getByTestId('site-nav')).toContainText('Home')
 })
 
-test('la formule récurrente affiche sa carte d’état', async ({ page }) => {
+test('la formule récurrente peuple la bande mensuelle', async ({ page }) => {
   await page.goto('/configurateur')
-  await expect(page.getByTestId('carte-etat')).toHaveCount(0)
+  await expect(page.getByTestId('deroule-mois')).toHaveCount(0)
   await page.getByRole('radio', { name: 'Sérénité' }).check()
-  await expect(page.getByTestId('carte-etat')).toContainText('4 h')
+  await expect(page.getByTestId('deroule-mois')).toContainText('4 h')
 })
 
 test('cocher une option se reflète dans l’URL', async ({ page }) => {
@@ -362,22 +362,23 @@ test('les mentions légales affichent une ligne de pied de page', async ({ page 
   await expect(page.getByTestId('preuve-legal')).toContainText('Mentions légales')
 })
 
-test('la vignette « Déroulé » atteint la scène de planification sans rien cocher', async ({ page }) => {
+test('la vignette « Déroulé » atteint la scène du déroulé sans rien cocher', async ({ page }) => {
   await page.goto('/configurateur')
   await page.getByRole('button', { name: 'Le déroulé', exact: true }).click()
-  await expect(page.getByTestId('apercu-planning')).toBeVisible()
+  await expect(page.getByTestId('deroule-construction')).toBeVisible()
   await expect(page.getByTestId('site-nav')).toHaveCount(0)
 })
 
-test('la scène « Au quotidien » propose un repli sans rien cocher, puis la carte de l’auto-gestion', async ({ page }) => {
+test('la scène du déroulé propose un repli sans rien cocher, puis assume l’auto-gestion', async ({ page }) => {
   // Le défaut « essentiel » ne s’applique qu’en l’absence de configuration dans l’URL.
   await page.goto('/configurateur?blog')
   await page.getByRole('button', { name: 'Le déroulé', exact: true }).click()
-  await expect(page.getByTestId('apercu-exploitation-vide')).toBeVisible()
-  await expect(page.getByTestId('carte-etat')).toHaveCount(0)
+  await expect(page.getByTestId('deroule-mois')).toContainText('vous')
+  await page.getByRole('radio', { name: 'Essentiel' }).check()
+  await expect(page.getByTestId('deroule-evenement')).not.toHaveCount(0)
   await page.getByRole('radio', { name: 'Je m’en occupe moi-même' }).check()
-  await expect(page.getByTestId('carte-etat')).toContainText('Vous gardez la main')
-  await expect(page.getByTestId('apercu-exploitation-vide')).toHaveCount(0)
+  await expect(page.getByTestId('deroule-evenement')).toHaveCount(0)
+  await expect(page.getByTestId('deroule-mois')).toContainText('vous')
 })
 
 test('chaque section du panneau est introduite par une phrase', async ({ page }) => {
@@ -537,7 +538,6 @@ test('la page dit ce qui n’est jamais inclus', async ({ page }) => {
 const SANS_RENDU = new Set([
   SOCLE_ID, // acquis d’office, aucun contrôle à cocher
   'a11y', // défaut corrigé couvert par son propre test, plus bas
-  'cadrage', 'formation', 'express', // scène planning : texte fixe, rien ne s’y voit par construction
 ])
 
 test('basculer sur sa scène et cocher une option change l’aperçu, pour tout le catalogue', async ({ page }) => {
