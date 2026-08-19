@@ -49,7 +49,7 @@ export function ScenePreuve({ config }: { config: Configuration }) {
   const retenus = CONTROLES.filter((controle) => (config[controle.id] ?? 0) > 0).length
 
   return (
-    <div className="animate-apparait flex flex-1 flex-col gap-1 p-2">
+    <div className="animate-apparait flex flex-1 flex-col gap-0.5 px-1.5 py-1">
       <p data-testid="preuve-score" className="text-[0.55rem] uppercase tracking-wider text-accent">
         {retenus} / {CONTROLES.length} contrôles retenus
       </p>
@@ -62,7 +62,9 @@ export function ScenePreuve({ config }: { config: Configuration }) {
               key={controle.id}
               data-testid="preuve-ligne"
               data-retenu={retenu ? 'oui' : 'non'}
-              className={`flex flex-col gap-0.5 rounded-sm border border-border px-1.5 py-0.5 ${retenu ? '' : 'opacity-40'}`}
+              // opacity-70 : la ligne reste en retrait sans passer sous 4,5:1, mesuré dans les deux
+              // thèmes et modélisé par tests/unit/configurateur-contraste.test.ts.
+              className={`flex flex-col gap-0.5 rounded-sm border border-border px-1.5 py-0.5 ${retenu ? '' : 'opacity-70'}`}
             >
               <p className="text-[0.5rem] leading-tight text-foreground">{controle.nom}</p>
 
@@ -89,14 +91,15 @@ export function ScenePreuve({ config }: { config: Configuration }) {
                   <p data-testid="preuve-vitesse" className="text-[0.5rem] font-medium leading-tight text-accent">
                     {vitesse === null
                       ? 'mesure indisponible'
-                      : `mesuré sur ce configurateur, pas sur votre futur site : ${vitesse.toFixed(2)} s`}
+                      : `mesuré sur ce configurateur, pas sur votre futur site : ${vitesse.toFixed(2).replace('.', ',')} s`}
                   </p>
                 </>
               )}
 
               {retenu && controle.id === 'a11y' && ratio !== null && (
                 <p data-testid="apercu-a11y" className="text-[0.45rem] leading-tight text-accent">
-                  Contraste mesuré : {ratio.toFixed(2)}:1 · {ratio >= 4.5 ? 'conforme AA' : 'sous le seuil AA'}
+                  mesuré sur ce configurateur, pas sur votre futur site : {ratio.toFixed(2).replace('.', ',')}:1 ·{' '}
+                  {ratio >= 4.5 ? 'conforme AA' : 'sous le seuil AA'}
                 </p>
               )}
 

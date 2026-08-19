@@ -1,5 +1,13 @@
 import AxeBuilder from '@axe-core/playwright'
-import { expect, test } from '@playwright/test'
+import { expect, test, type Page } from '@playwright/test'
+
+// `animate-apparait` fait entrer les scènes en fondu : axe lu pendant le fondu mesure une
+// opacité transitoire et rapporte un contraste qui n'existe à aucun moment stable.
+async function fonduTermine(page: Page) {
+  await page.waitForFunction(() =>
+    [...document.querySelectorAll('.animate-apparait')].every((el) => getComputedStyle(el).opacity === '1')
+  )
+}
 
 test('le thème sombre est posé avant le premier rendu', async ({ page }) => {
   await page.goto('/')
@@ -40,22 +48,62 @@ test('la bascule de thème persiste après rechargement', async ({ page }) => {
 })
 
 // axe ne juge pas le contraste par-dessus l'ambiance dégradée (background gradient) ; cette couverture vient des tests de jetons (tests/unit/tokens-*.test.ts).
-test('aucune violation axe sérieuse dans les deux thèmes', async ({ page }) => {
+// Le configurateur y figure : la maquette est un fond plein, donc axe y juge bien le contraste.
+for (const chemin of ['/', '/configurateur']) {
+  test(`aucune violation axe sérieuse sur ${chemin} dans les deux thèmes`, async ({ page }) => {
+    for (const theme of ['dark', 'light'] as const) {
+      await page.goto(chemin)
+      await page.evaluate((t) => {
+        document.documentElement.dataset.theme = t
+      }, theme)
+      await fonduTermine(page)
+      const results = await new AxeBuilder({ page })
+        .withTags(['wcag2a', 'wcag2aa'])
+        .analyze()
+      const serious = results.violations.filter((v) => v.impact === 'serious' || v.impact === 'critical')
+      const contrasteIncomplet = results.incomplete.filter((v) => v.id === 'color-contrast')
+      expect(
+        serious,
+        `violations sur ${chemin} en thème ${theme} : ${JSON.stringify(serious, null, 2)}\n` +
+          `color-contrast incomplete (non jugé par axe) en thème ${theme} : ${JSON.stringify(contrasteIncomplet, null, 2)}`
+      ).toEqual([])
+    }
+  })
+}
+
+// Les trois scènes de l'aperçu ne coexistent pas dans le DOM : sans cette passe, deux tiers
+// du catalogue échapperaient au balayage, dont les huit lignes de « La preuve ».
+test('aucune violation axe sérieuse sur les trois scènes de l’aperçu, tout coché', async ({ page }) => {
+  const toutCoche =
+    '/configurateur?pages=4&langue=3&redaction=15&reprise&photos&visuels&blog&article=10&membre&formulaire&rdv&newsletter&paiement&seo&seo-local&perf&a11y&rgpd&legal&migration&domaine&cadrage&formation&express&partenaire'
   for (const theme of ['dark', 'light'] as const) {
-    await page.goto('/')
+    for (const scene of ['site', 'preuve', 'deroule']) {
+      await page.goto(toutCoche)
+      await page.evaluate((t) => {
+        document.documentElement.dataset.theme = t
+      }, theme)
+      await page.getByTestId(`onglet-${scene}`).click()
+      await fonduTermine(page)
+      const results = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa']).analyze()
+      const serious = results.violations.filter((v) => v.impact === 'serious' || v.impact === 'critical')
+      expect(serious, `scène ${scene} en thème ${theme} : ${JSON.stringify(serious, null, 2)}`).toEqual([])
+    }
+  }
+})
+
+// Le rapport s'ouvre avec ses huit lignes grisées : c'est l'état par défaut qui est passé
+// sous le seuil de contraste, pas un état coché.
+test('aucune violation axe sérieuse sur « La preuve » sans rien cocher', async ({ page }) => {
+  for (const theme of ['dark', 'light'] as const) {
+    await page.goto('/configurateur')
     await page.evaluate((t) => {
       document.documentElement.dataset.theme = t
     }, theme)
-    const results = await new AxeBuilder({ page })
-      .withTags(['wcag2a', 'wcag2aa'])
-      .analyze()
+    await page.getByTestId('onglet-preuve').click()
+    await fonduTermine(page)
+    const results = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa']).analyze()
     const serious = results.violations.filter((v) => v.impact === 'serious' || v.impact === 'critical')
-    const contrasteIncomplet = results.incomplete.filter((v) => v.id === 'color-contrast')
-    expect(
-      serious,
-      `violations en thème ${theme} : ${JSON.stringify(serious, null, 2)}\n` +
-        `color-contrast incomplete (non jugé par axe) en thème ${theme} : ${JSON.stringify(contrasteIncomplet, null, 2)}`
-    ).toEqual([])
+    expect(serious, `« La preuve » vide en thème ${theme} : ${JSON.stringify(serious, null, 2)}`).toEqual([])
   }
 })
 

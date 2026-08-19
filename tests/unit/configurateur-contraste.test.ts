@@ -1,3 +1,4 @@
+import { readFileSync } from 'node:fs'
 import { describe, expect, it } from 'vitest'
 import { composite, contrastRatio } from '@/lib/color/contrast'
 import { readTokens, solid, surfaceOverCanvas, worstAmbientColor } from './tokens'
@@ -48,6 +49,27 @@ describe('compositions d’états du configurateur', () => {
 
     it(`tient l’étiquette d’accent sur la matière de la maquette en thème ${nom}`, () => {
       expect(contrastRatio(solid(tokens, '--color-accent'), matiere)).toBeGreaterThanOrEqual(4.5)
+    })
+  }
+})
+
+// Les jetons ne modélisent pas une opacité écrite dans un composant : c'est par là que la
+// ligne non retenue de « La preuve » est passée à 3,5:1 sans faire rougir un seul test.
+describe('opacité posée dans une scène de l’aperçu', () => {
+  const source = readFileSync('components/config/scenes/ScenePreuve.tsx', 'utf8')
+  const trouve = /retenu \? '' : 'opacity-(\d+)'/.exec(source)
+
+  it('la ligne non retenue porte une opacité repérable sur du texte foreground', () => {
+    expect(trouve, 'opacité de la ligne non retenue introuvable dans ScenePreuve.tsx').not.toBeNull()
+    // Sans cette vérification, le modèle ci-dessous pourrait viser une couleur que la ligne n'utilise plus.
+    expect(source).toMatch(/data-retenu[\s\S]{0,500}?text-foreground/)
+  })
+
+  for (const { nom, tokens } of THEMES) {
+    it(`tient 4,5:1 pour la ligne non retenue de « La preuve » en thème ${nom}`, () => {
+      const maquette = solid(tokens, '--color-maquette')
+      const rendu = composite(solid(tokens, '--color-foreground'), Number(trouve![1]) / 100, maquette)
+      expect(contrastRatio(rendu, maquette)).toBeGreaterThanOrEqual(4.5)
     })
   }
 })

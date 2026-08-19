@@ -38,7 +38,23 @@ test('la vitesse vient de l’API Performance, pas d’une constante', async ({ 
   })
   await page.goto('/configurateur?perf')
   await page.getByTestId('onglet-preuve').click()
-  await expect(page.getByTestId('preuve-vitesse')).toContainText('7.78')
+  await expect(page.getByTestId('preuve-vitesse')).toContainText('7,78')
+})
+
+// Le chiffre est celui de la palette du configurateur, pas une propriété du futur site :
+// le libellé doit le dire, comme celui de la vitesse juste au-dessus.
+test('le contraste affiché nomme sa source', async ({ page }) => {
+  await page.getByRole('checkbox', { name: 'Accessibilité RGAA', exact: true }).check()
+  await expect(page.getByTestId('apercu-a11y')).toContainText('configurateur')
+  await expect(page.getByTestId('apercu-a11y')).toContainText('pas sur votre futur site')
+})
+
+test('les deux chiffres de la scène s’écrivent avec la virgule décimale française', async ({ page }) => {
+  await page.getByRole('checkbox', { name: 'Accessibilité RGAA', exact: true }).check()
+  await page.getByRole('checkbox', { name: 'Optimisation de la vitesse', exact: true }).check()
+  await expect(page.getByTestId('apercu-a11y')).toHaveText(/\d+,\d+:1/)
+  await expect(page.getByTestId('preuve-vitesse')).not.toHaveText('mesure indisponible')
+  await expect(page.getByTestId('preuve-vitesse')).toHaveText(/\d+,\d+ s/)
 })
 
 test('la migration montre une redirection réelle', async ({ page }) => {
@@ -105,6 +121,8 @@ test('sur une petite hauteur, la scène de la preuve ne déborde pas silencieuse
     { width: 1024, height: 700 },
     { width: 1280, height: 800 },
     { width: 1280, height: 600 },
+    // 1280 × 560 : un 1280 × 720 amputé de la barre d'onglets et de la barre de favoris.
+    { width: 1280, height: 560 },
   ]
   const pireCasPreuve = '/configurateur?seo&seo-local&perf&a11y&rgpd&legal&migration&domaine'
 
@@ -112,8 +130,8 @@ test('sur une petite hauteur, la scène de la preuve ne déborde pas silencieuse
     await page.setViewportSize(taille)
     await page.goto(pireCasPreuve)
     await page.getByTestId('onglet-preuve').click()
-    // `objet-scene`, pas `apercu` : depuis la Task 11, c'est lui qui écrête, l'aperçu se
-    // contente d'accueillir la barre d'onglets et de lui laisser le reste en flex.
+    // `objet-scene`, pas `apercu` : c'est lui qui écrête, l'aperçu se contente d'accueillir
+    // la barre d'onglets et de lui laisser le reste en flex.
     const debordement = await page
       .getByTestId('objet-scene')
       .evaluate((el) => el.scrollHeight - el.clientHeight)
