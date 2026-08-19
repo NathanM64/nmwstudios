@@ -1,6 +1,45 @@
 import { expect, test } from '@playwright/test'
 import { dansLaFenetre } from './fenetre'
 
+type Page = import('@playwright/test').Page
+
+/** Écart, en pixels logiques, entre le relevé publié par le document et la mise en page réelle.
+ *  Les ancres de frontière ne bougent qu'une fois une partie plus haute qu'une fenêtre : ce sont
+ *  les ancres internes qui trahissent une mesure périmée, et elles ne visent encore rien. */
+async function ecartDuReleve(page: Page): Promise<number> {
+  return page.getByTestId('rouleau').evaluate((rouleau) => {
+    const releve = JSON.parse(rouleau.dataset.mesures!) as Record<string, number>
+    const echelle = parseFloat(getComputedStyle(rouleau.parentElement!).scale) || 1
+    const haut = rouleau.getBoundingClientRect().top
+    let pire = 0
+    for (const el of rouleau.querySelectorAll<HTMLElement>('[data-ancre]')) {
+      const reel = (el.getBoundingClientRect().top - haut) / echelle
+      pire = Math.max(pire, Math.abs(reel - releve[el.dataset.ancre!]))
+    }
+    return pire
+  })
+}
+
+/** Décalages réels, tels que la mise en page les donne, indépendamment de ce que le document
+ *  en a relevé. Sert à constater qu'une bascule a bien déplacé quelque chose. */
+async function offsetsReels(page: Page): Promise<string> {
+  return page.getByTestId('rouleau').evaluate((rouleau) => {
+    const echelle = parseFloat(getComputedStyle(rouleau.parentElement!).scale) || 1
+    const haut = rouleau.getBoundingClientRect().top
+    return [...rouleau.querySelectorAll<HTMLElement>('[data-ancre]')]
+      .map((el) => `${el.dataset.ancre}:${Math.round((el.getBoundingClientRect().top - haut) / echelle)}`)
+      .join(' ')
+  })
+}
+
+/** Tant qu'une animation d'entrée court, le relevé et la mise en page bougent ensemble, et un
+ *  écart nul ne prouverait rien : c'est une fois posée que la position doit être la bonne. */
+async function animationsFinies(page: Page): Promise<void> {
+  await page
+    .getByTestId('rouleau')
+    .evaluate((r) => Promise.all(r.getAnimations({ subtree: true }).map((a) => a.finished)).then(() => undefined))
+}
+
 test.beforeEach(async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 })
   await page.goto('/configurateur')
@@ -56,6 +95,14 @@ test('le texte de la maquette ne descend jamais sous les seuils du projet', asyn
     })
     expect(tailles.length, `aucun texte mesuré à ${largeur}`).toBeGreaterThan(10)
     expect(Math.min(...tailles), `plus petit texte à ${largeur}`).toBeGreaterThanOrEqual(10)
+
+    // Le texte courant, second seuil : les entrées de navigation, comme le filet d'origine.
+    const courant = await page.getByTestId('site-nav').evaluate((nav) => {
+      const echelle = parseFloat(getComputedStyle(nav.closest('[data-testid="maquette"]')!).scale) || 1
+      return [...nav.querySelectorAll('li')].map((n) => parseFloat(getComputedStyle(n).fontSize) * echelle)
+    })
+    expect(courant.length, `aucun texte courant mesuré à ${largeur}`).toBeGreaterThan(0)
+    expect(Math.min(...courant), `texte courant à ${largeur}`).toBeGreaterThanOrEqual(11)
   }
 })
 
@@ -81,6 +128,40 @@ test('rien n’est rogné à l’intérieur d’une partie', async ({ page }) =>
       .map((n) => n.dataset.testid ?? n.className)
   )
   expect(rognes).toEqual([])
+})
+
+// Pire cas mesuré : sur ce métier, la seule bascule en anglais remonte six ancres de 25 à 55 px,
+// les deux repères de partie compris, la partie du site dépassant alors une fenêtre.
+const CHARGE =
+  '/configurateur?langue=3&blog&article=10&formulaire&redaction=15&reprise&rdv&newsletter&paiement&photos&visuels&membre&pages=4'
+
+test('le relevé des ancres suit la mise en page, animations d’entrée comprises', async ({ page }) => {
+  // Un rectangle lu pendant qu'une animation d'entrée court situe l'ancre là où elle passe :
+  // mesuré à 9 px de trop sur les actualités avant correction, et jamais repris ensuite.
+  await page.goto(CHARGE)
+  await animationsFinies(page)
+  await expect.poll(() => ecartDuReleve(page), { message: 'au chargement' }).toBeLessThan(2)
+})
+
+test('le relevé des ancres suit un changement de style, de métier et de langue', async ({ page }) => {
+  // Chaque bascule est d'abord constatée sur la mise en page réelle. Sans ce constat, le premier
+  // sondage tombe avant que le changement ait pris, et un écart nul ne prouve rien.
+  const bascule = async (agir: () => Promise<unknown>, quoi: string) => {
+    const avant = await offsetsReels(page)
+    await agir()
+    await expect.poll(() => offsetsReels(page), { message: `${quoi} n’a déplacé aucune ancre` }).not.toBe(avant)
+    await expect.poll(() => ecartDuReleve(page), { message: `relevé périmé après ${quoi}` }).toBeLessThan(2)
+  }
+
+  // Le style ne passe par aucune prop du document, la langue vit dans l'état interne de
+  // SceneSite : sans observateur sur les porteurs d'ancres, rien ne remesure.
+  await animationsFinies(page)
+  await bascule(() => page.getByTestId('selecteur-style').selectOption('franc'), 'le style')
+
+  await page.goto(CHARGE)
+  await animationsFinies(page)
+  await bascule(() => page.getByTestId('selecteur-domaine').selectOption('vtc'), 'le métier')
+  await bascule(() => page.getByTestId('site-langue').selectOption('en'), 'la langue')
 })
 
 test('le mouvement réduit pose la position sans transition', async ({ page }) => {

@@ -2,6 +2,7 @@ import { expect, test } from '@playwright/test'
 import { OPTIONS, SOCLE_ID } from '../../lib/config/catalogue'
 import { calculer, formaterEuros } from '../../lib/config/devis'
 import { sceneDeOption } from '../../lib/config/scenes'
+import { dansLaFenetre } from './fenetre'
 
 test('cocher tout le catalogue dans l’ordre garde aperçu, scène et total cohérents', async ({ page }) => {
   test.slow()
@@ -31,10 +32,13 @@ test('cocher tout le catalogue dans l’ordre garde aperçu, scène et total coh
     await expect(page.getByTestId('prix')).toHaveText(formaterEuros(attendu.total))
   }
 
-  // Toutes les scènes restent regardables une fois tout coché.
+  // Toutes les parties restent atteignables une fois tout coché. `objet-scene` ne dirait plus
+  // rien ici : c'est la fenêtre, visible quelle que soit la position du rouleau.
   for (const scene of ['site', 'preuve', 'deroule']) {
     await page.getByTestId(`onglet-${scene}`).click()
-    await expect(page.getByTestId('objet-scene')).toBeVisible()
+    await expect.poll(() => dansLaFenetre(page, `partie-${scene}`), {
+      message: `la partie ${scene} n’est pas entrée dans la fenêtre`,
+    }).toBe(true)
   }
 })
 

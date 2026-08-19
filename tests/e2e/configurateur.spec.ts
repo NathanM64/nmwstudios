@@ -282,14 +282,15 @@ test('cocher une option visible garde la scène du site', async ({ page }) => {
   await page.goto('/configurateur')
   await page.getByRole('checkbox', { name: 'Un blog' }).check()
   await expect(page.getByTestId('site-blog')).toBeVisible()
-  await expect(page.getByTestId('site-nav')).toBeVisible()
+  // `toBeVisible` est désormais vrai en permanence : les trois parties sont montées.
+  await expect.poll(() => dansLaFenetre(page, 'site-nav')).toBe(true)
 })
 
 test('les vignettes ramènent à la scène du site', async ({ page }) => {
   await page.goto('/configurateur')
   await page.getByRole('checkbox', { name: 'Fondations SEO' }).check()
   await page.getByRole('button', { name: 'Le site', exact: true }).click()
-  await expect(page.getByTestId('site-nav')).toBeVisible()
+  await expect.poll(() => dansLaFenetre(page, 'site-nav')).toBe(true)
 })
 
 test('la scène du site garde tout ce qui a été coché', async ({ page }) => {
