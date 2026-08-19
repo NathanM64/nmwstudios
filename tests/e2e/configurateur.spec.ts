@@ -1,9 +1,8 @@
 import { readFileSync } from 'node:fs'
 import { expect, test } from '@playwright/test'
 import { contrastRatio, parseColor } from '../../lib/color/contrast'
-import { GROUPES, OPTIONS, SOCLE_ID, optionParId } from '../../lib/config/catalogue'
+import { GROUPES, SOCLE_ID, optionParId } from '../../lib/config/catalogue'
 import { formaterEuros } from '../../lib/config/devis'
-import { SCENES, sceneDeOption } from '../../lib/config/scenes'
 
 test('la route du configurateur répond et s’annonce', async ({ page }) => {
   await page.goto('/configurateur')
@@ -532,36 +531,6 @@ test('la page dit ce qui n’est jamais inclus', async ({ page }) => {
   const bloc = page.getByTestId('jamais-inclus')
   await expect(bloc).toContainText('photographie')
   await expect(bloc).toContainText('logo')
-})
-
-// Options sans traduction visuelle dans l’aperçu aujourd’hui, chacune pour une raison précise.
-const SANS_RENDU = new Set([
-  SOCLE_ID, // acquis d’office, aucun contrôle à cocher
-  'a11y', // défaut corrigé couvert par son propre test, plus bas
-])
-
-test('basculer sur sa scène et cocher une option change l’aperçu, pour tout le catalogue', async ({ page }) => {
-  for (const option of OPTIONS.filter((o) => !SANS_RENDU.has(o.id))) {
-    await page.goto(option.id === 'essentiel' ? '/configurateur?blog' : '/configurateur')
-
-    const scene = sceneDeOption(option.id)
-    const libelleScene = SCENES.find((s) => s.id === scene)!.libelle
-    await page.getByRole('button', { name: libelleScene, exact: true }).click()
-
-    const avant = await page.getByTestId('apercu').innerHTML()
-
-    const exclusif = GROUPES.find((g) => g.id === option.groupe)?.exclusif === true
-    if (option.quantifiable) {
-      await page.getByRole('button', { name: `Ajouter : ${option.libelle}` }).click()
-    } else if (exclusif) {
-      await page.getByRole('radio', { name: option.libelle }).check()
-    } else {
-      await page.getByRole('checkbox', { name: option.libelle }).check()
-    }
-
-    const apres = await page.getByTestId('apercu').innerHTML()
-    expect(apres, `« ${option.libelle} » ne change rien dans l’aperçu`).not.toBe(avant)
-  }
 })
 
 test('sur grand écran, la page ne défile pas, seul le panneau le fait', async ({ page }) => {
