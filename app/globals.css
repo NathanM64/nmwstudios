@@ -123,34 +123,47 @@ body {
   box-shadow: var(--shadow-elevated);
 }
 
-/* La maquette est dessinée une fois à taille lisible dans un cadre logique, puis mise à
-   l'échelle pour occuper la place disponible : seule l'échelle varie, jamais les tailles. */
+/* Fenêtre sur un document plus haut qu'elle. La largeur logique est fixe : une page se dessine
+   pour une largeur, une fois. Seule l'échelle varie, et seule la largeur la décide. */
 .cadre-maquette {
   container-type: size;
+  /* `clip` et non `hidden` : la fenêtre serait sinon une boîte défilable, et la page logique,
+     large de 60rem avant sa mise à l'échelle, s'y ferait pousser de côté par un focus. */
+  overflow: clip;
+  max-width: 60rem;
+  margin-inline: auto;
 }
 
 .maquette-echelle {
-  width: 100%;
-  height: 100%;
-  /* Texte courant de la maquette, et espacements dérivés de lui (Tailwind pose
-     toutes ses unités d'espacement en multiples de --spacing). */
-  font-size: 0.8125rem;
-  --spacing: 0.40625rem;
+  width: 60rem;
+  /* Texte courant de la maquette, et espacements dérivés de lui : Tailwind pose toutes ses
+     unités d'espacement en multiples de --spacing. */
+  font-size: 1rem;
+  --spacing: 0.5rem;
+  --echelle: min(100cqw / 60rem, 1);
+  /* La fenêtre reste peinte même quand le document est plus court qu'elle. */
+  min-height: calc(100cqh / var(--echelle));
+  scale: var(--echelle);
+  transform-origin: top left;
 }
 
-/* Propriété `scale`, jamais `transform` : le keyframe `apparait` finit sur
-   `transform: none` et écraserait une transformation posée ici.
-   Plancher à 0,615 : en deçà, le texte rendu passerait sous les 8 px d'avant refonte.
-   Ce plancher cède sous 40rem de cadre logique, largeur en deçà de laquelle la maquette
-   ne tient plus : sur un téléphone, mieux vaut réduire encore que d'écrêter. */
-@supports (scale: calc(1px / 1px)) {
-  .maquette-echelle {
-    --echelle: clamp(min(0.615, 100cqw / 40rem), min(100cqw / 64rem, 100cqh / 48.75rem), 1);
-    width: calc(100cqw / var(--echelle));
-    height: calc(100cqh / var(--echelle));
-    scale: var(--echelle);
-    transform-origin: top left;
-  }
+/* Le rouleau porte la position, en pixels logiques. Posée sur l'élément mis à l'échelle, une
+   translation serait comptée en pixels d'écran : la composition applique `translate` dans le
+   repère du parent, après le `scale`. */
+.maquette-rouleau {
+  transition: translate var(--dur-page) var(--ease-out);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .maquette-rouleau { transition: none; }
+}
+
+/* Une partie vaut au moins une fenêtre : c'est ce qui fait du repère d'une partie une position
+   réellement atteignable, et ce qui rend aux scènes la hauteur libre qu'elles répartissent. */
+.maquette-partie {
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100cqh / var(--echelle));
 }
 
 /* ── Habillage de la maquette ──
@@ -185,15 +198,10 @@ body {
 }
 
 .m-sous-titre { font-size: var(--m-sous-titre-taille); line-height: 1.25; color: var(--m-texte); }
-/* Chapeau borné : sept métiers dans quatre langues n'ont pas des accroches de la même
-   longueur, et sans borne le pire cas dépend du texte plutôt que de la mise en page. */
 .m-chapeau {
   font-size: var(--m-corps-taille);
   line-height: 1.45;
   color: var(--m-texte-sourd);
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
   overflow: hidden;
 }
 .m-corps { font-size: var(--m-texte-taille); line-height: 1.35; color: var(--m-texte); }
@@ -273,10 +281,6 @@ body {
   line-height: 1.3;
 }
 
- /* Pastille bornée : quinze noms de pages d'un métier bavard tenaient sur six lignes,
-    et la hauteur de la scène dépendait alors du texte, pas de la mise en page. */
-.m-puce-borne { max-width: calc(var(--m-densite) * 8rem); }
-
 .m-puce {
   border: 1px solid var(--m-bord);
   border-radius: var(--m-rayon);
@@ -287,37 +291,6 @@ body {
 
 .m-reperes { border: 1px dashed var(--m-accent); }
 
-/* Cadre en bandeau : la page se resserre au lieu de déborder. Le seuil est un rapport,
-   pas une hauteur : le rapport dit si la page a de quoi respirer, et il est le même dans
-   le cadre logique et à l'écran, ce qu'une hauteur en pixels ne serait pas dès que le
-   plancher d'échelle mord. Le texte courant n'y touche pas : son plancher de 10 px se
-   mesure en 1440 × 900, où ce cadre-là n'existe pas. */
-/* Les bandes basses s'empilent quand la page a de la hauteur, et passent en deux colonnes
-   quand elle n'en a pas. C'est la place libre en largeur qui paie la hauteur manquante. */
-.m-bas {
-  display: grid;
-  grid-template-columns: 1fr;
-  align-content: start;
-}
-
-@container (max-aspect-ratio: 6 / 5) {
-  .m-aplat { min-height: calc(var(--m-densite) * 2rem); }
-  .m-titre { font-size: calc(var(--m-titre-taille) * 0.72); }
-  .m-air { gap: calc(var(--m-densite) * 0.28rem); }
-  .m-marge { padding: calc(var(--m-densite) * 0.5rem) calc(var(--m-densite) * 0.7rem); }
-}
-
-@container (min-aspect-ratio: 19 / 10) {
-  .m-bas { grid-template-columns: 1.05fr 1fr; }
-  .m-aplat { min-height: calc(var(--m-densite) * 1.25rem); }
-  .m-ligne { padding: 0 calc(var(--m-densite) * 0.4rem); }
-  .m-chiffre { font-size: calc(var(--m-chiffre-taille) * 0.7); }
-  .m-titre { font-size: calc(var(--m-titre-taille) * 0.62); }
-  .m-chapeau { font-size: var(--m-texte-taille); -webkit-line-clamp: 1; }
-  .m-air { gap: calc(var(--m-densite) * 0.21rem); }
-  .m-air-serre { gap: calc(var(--m-densite) * 0.16rem); }
-  .m-marge { padding: calc(var(--m-densite) * 0.36rem) calc(var(--m-densite) * 0.7rem); }
-}
 .m-teinte { background-color: color-mix(in srgb, var(--m-accent) 16%, transparent); }
 /* Couloir du chronogramme : assez marqué pour que le temps non employé se voie, assez
    discret pour ne pas concurrencer les barres. */

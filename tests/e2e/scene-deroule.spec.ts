@@ -110,9 +110,10 @@ test('cadrage, formation et livraison accélérée cochés ensemble restent tous
   await expect(page.getByTestId('deroule-evenement').first()).toBeVisible()
 })
 
-// `overflow-hidden` écrête en silence, `toBeVisible` de Playwright ne détecte pas cet
-// écrêtage par un ancêtre. Même gabarit que « La preuve », pire cas propre au déroulé.
-test('sur une petite hauteur, la scène du déroulé ne déborde pas silencieusement de son cadre', async ({ page }) => {
+// Le débordement du cadre est passé à document-defilant.spec.ts. Reste le confinement des
+// jalons, qui n'appartient qu'à cette scène : un repère ponctuel posé à `left: 100%` dépasse
+// sa piste de sa propre largeur.
+test('les jalons restent confinés dans leur piste, du pire cas au défaut', async ({ page }) => {
   const resolutions = [
     { width: 1366, height: 768 },
     { width: 1024, height: 700 },
@@ -128,17 +129,6 @@ test('sur une petite hauteur, la scène du déroulé ne déborde pas silencieuse
     await page.setViewportSize(taille)
     await page.goto(pireCasDeroule)
     await page.getByTestId('onglet-deroule').click()
-    // `objet-scene` porte le cadre logique : ses mesures sont en unités non mises à
-    // l'échelle, donc plus sévères à l'écran que la tolérance ne le laisse croire.
-    // L'animation d'entrée part de translateY(0.25rem) et gonfle la mesure de 4 px
-    // tant qu'elle court : on attend qu'elle finisse, faute de quoi 4 px de tolérance
-    // seraient dus à elle seule et masqueraient un vrai débordement de la même taille.
-    const debordement = await page.getByTestId('objet-scene').evaluate(async (el) => {
-      await Promise.all(el.getAnimations({ subtree: true }).map((a) => a.finished))
-      return Math.max(el.scrollHeight - el.clientHeight, el.scrollWidth - el.clientWidth)
-    })
-    expect(debordement, `débordement à ${taille.width}x${taille.height}`).toBeLessThanOrEqual(2)
-
     const contexte = `pire cas ${taille.width}x${taille.height}`
     await confine(page, 'deroule-livraison', contexte)
     await confine(page, 'deroule-fantome', contexte)

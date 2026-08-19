@@ -19,7 +19,7 @@ test('chaque barre porte son nom', async ({ page }) => {
 })
 
 test('la scène du déroulé remplit son cadre, sans bande vide notable', async ({ page }) => {
-  const vide = await page.getByTestId('objet-scene').evaluate(pireBandeVide)
+  const vide = await page.getByTestId('partie-deroule').evaluate(pireBandeVide)
   expect(vide).toBeLessThan(0.25)
 })
 

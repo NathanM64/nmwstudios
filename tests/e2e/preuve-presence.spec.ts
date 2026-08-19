@@ -27,6 +27,6 @@ test('les lignes retenues portent l’accent du style, les autres restent lisibl
 test('la scène de la preuve remplit son cadre, sans bande vide notable', async ({ page }) => {
   await page.goto('/configurateur?seo&perf&rgpd')
   await page.getByTestId('onglet-preuve').click()
-  const vide = await page.getByTestId('objet-scene').evaluate(pireBandeVide)
+  const vide = await page.getByTestId('partie-preuve').evaluate(pireBandeVide)
   expect(vide).toBeLessThan(0.25)
 })

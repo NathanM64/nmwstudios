@@ -7,11 +7,6 @@ import { DOMAINE_DEFAUT, editorialDe, type DomaineId } from '@/lib/config/domain
 
 const PAGES_SOCLE = 3
 
-/** Une barre de menu ne montre pas quinze entrées : au-delà, le reste se compte.
- *  C'est aussi ce qui borne la hauteur du bandeau, la plus variable de la scène,
- *  puisque les sept métiers n'ont pas des noms de pages de la même longueur. */
-const NAV_VISIBLES = 9
-
 export function SceneSite({ config, domaine = DOMAINE_DEFAUT }: { config: Configuration; domaine?: DomaineId }) {
   const tranches = config.pages ?? 0
   const langues = config.langue ?? 0
@@ -34,24 +29,21 @@ export function SceneSite({ config, domaine = DOMAINE_DEFAUT }: { config: Config
   const t = HABILLAGE[active]
   const e = editorialDe(domaine, active)
   const libelles = e.pages.slice(0, PAGES_SOCLE + tranches * 3)
-  const visibles = libelles.slice(0, NAV_VISIBLES)
-  const reste = libelles.length - visibles.length
 
   return (
     <div className="animate-apparait m-air m-marge flex min-w-0 flex-1 flex-col">
-      <header className="flex min-w-0 items-baseline gap-3">
+      <header data-ancre="site-navigation" className="flex min-w-0 items-baseline gap-3">
         <span data-testid="site-enseigne" className="m-enseigne shrink-0">
           {e.enseigne}
         </span>
         <div className="flex min-w-0 flex-1 flex-wrap items-center justify-end gap-x-3 gap-y-0.5">
           <nav data-testid="site-nav">
             <ul className="flex flex-wrap justify-end gap-x-2 gap-y-0.5">
-              {visibles.map((page) => (
+              {libelles.map((page) => (
                 <li key={page} className="animate-glisse m-menu">
                   {page}
                 </li>
               ))}
-              {reste > 0 && <li className="animate-glisse m-menu">+{reste}</li>}
             </ul>
           </nav>
           {langues > 0 && (
@@ -97,7 +89,7 @@ export function SceneSite({ config, domaine = DOMAINE_DEFAUT }: { config: Config
       <div className="m-air flex min-h-0 flex-1 flex-col">
         {/* Bande haute : l'aplat prend la hauteur libre, les services prennent la leur.
             Aucun centrage, donc aucune bande vide, et rien ne se comprime sous son contenu. */}
-        <div data-testid="site-cadre" className="m-aplat relative shrink grow basis-0 overflow-hidden">
+        <div data-testid="site-cadre" data-ancre="site-contenu" className="m-aplat relative shrink grow basis-0 overflow-hidden">
           {photos > 0 && (
             <>
               {/* Le travail sur la photo, jamais la photo : rien à produire graphiquement. */}
@@ -115,14 +107,14 @@ export function SceneSite({ config, domaine = DOMAINE_DEFAUT }: { config: Config
           )}
         </div>
 
-        <div className="m-air m-bas shrink-0">
+        <div className="m-air flex shrink-0 flex-col">
         <div data-testid="site-services" className="m-air grid shrink-0 grid-cols-3">
           {e.services.map((service, i) => (
             <div key={service.nom} data-testid="site-service" className="m-filet-haut flex min-w-0 gap-2 pt-1">
               <span className="m-mono shrink-0">{String(i + 1).padStart(2, '0')}</span>
               <div className="min-w-0">
                 <p className="m-sous-titre truncate">{service.nom}</p>
-                <p className="m-legende line-clamp-2">{service.texte}</p>
+                <p className="m-legende">{service.texte}</p>
               </div>
             </div>
           ))}
@@ -131,7 +123,7 @@ export function SceneSite({ config, domaine = DOMAINE_DEFAUT }: { config: Config
         {/* Bande de services achetés : chaque carte prend sa part de la largeur, ou toute la
             ligne si ses voisines sont absentes. Conditions indépendantes, aucune cascade. */}
         <div className="m-air flex shrink-0 flex-wrap items-stretch">
-          <section data-testid="site-formulaire" className="m-carte m-air-serre flex min-w-0 flex-[1.6] flex-col px-2 py-1">
+          <section data-testid="site-formulaire" data-ancre="site-contact" className="m-carte m-air-serre flex min-w-0 flex-[1.6] flex-col px-2 py-1">
             <div className="flex flex-wrap items-baseline gap-x-2 gap-y-0.5">
               <p className="m-surtitre">{e.blocsRepris[2]}</p>
               {formulaire > 0 && (
@@ -194,7 +186,7 @@ export function SceneSite({ config, domaine = DOMAINE_DEFAUT }: { config: Config
                 {/* Une page nommée par unité : sans elle, quinze pages rédigées rendent le même écran qu'une. */}
                 <span data-testid="site-redaction" className="flex min-w-0 flex-1 basis-0 flex-wrap items-baseline gap-1">
                   {e.pages.slice(0, redaction).map((page) => (
-                    <span key={page} data-testid="site-page-redigee" className="animate-glisse m-puce m-puce-borne truncate px-1.5">
+                    <span key={page} data-testid="site-page-redigee" className="animate-glisse m-puce px-1.5">
                       {page}
                     </span>
                   ))}
@@ -215,7 +207,7 @@ export function SceneSite({ config, domaine = DOMAINE_DEFAUT }: { config: Config
         )}
 
         {(blog > 0 || articles > 0) && (
-          <section data-testid="site-blog" className="animate-construit m-air-serre flex shrink-0 flex-col">
+          <section data-testid="site-blog" data-ancre="site-actualites" className="animate-construit m-air-serre flex shrink-0 flex-col">
             {/* Pleine largeur et 5 colonnes : 10 articles tiennent sur 2 lignes avec des titres
                 encore lisibles, ce qu'une demi-colonne ne permettait pas. */}
             <div className="flex items-baseline gap-2">

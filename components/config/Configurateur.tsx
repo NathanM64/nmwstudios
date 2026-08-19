@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { PanneauOptions } from '@/components/config/PanneauOptions'
 import { BarrePrix } from '@/components/config/BarrePrix'
 import { Apercu } from '@/components/config/Apercu'
@@ -9,7 +9,8 @@ import { RecapitulatifFinal } from '@/components/config/RecapitulatifFinal'
 import { JamaisInclus } from '@/components/config/JamaisInclus'
 import type { Configuration } from '@/lib/config/devis'
 import { decoder, encoder } from '@/lib/config/url'
-import type { SceneId } from '@/lib/config/scenes'
+import { premiereAncreDe, type SceneId } from '@/lib/config/scenes'
+import type { Cible } from '@/lib/config/defilement'
 import { DOMAINE_DEFAUT, type DomaineId } from '@/lib/config/domaines'
 import { STYLE_DEFAUT, type StyleId } from '@/lib/config/styles'
 
@@ -18,7 +19,7 @@ export const CONFIG_DEPART: Configuration = { essentiel: 1 }
 
 export function Configurateur() {
   const [config, setConfig] = useState<Configuration>(CONFIG_DEPART)
-  const [scene, setScene] = useState<SceneId>('site')
+  const [cible, setCible] = useState<Cible>({ ancre: 'site-haut', progression: 0 })
   // Métier et direction de style ne vivent pas dans l'URL : ils ne changent ni le prix ni le devis.
   const [domaine, setDomaine] = useState<DomaineId>(DOMAINE_DEFAUT)
   const [style, setStyle] = useState<StyleId>(STYLE_DEFAUT)
@@ -27,6 +28,10 @@ export function Configurateur() {
   const [pret, setPret] = useState(false)
   const [copie, setCopie] = useState<'succes' | 'echec' | null>(null)
   const [recapVisible, setRecapVisible] = useState(false)
+
+  const surPartie = useCallback((partie: SceneId) => {
+    setCible({ ancre: premiereAncreDe(partie), progression: 0 })
+  }, [])
 
   const grilleRef = useRef<HTMLDivElement>(null)
   const panneauRef = useRef<HTMLDivElement>(null)
@@ -46,7 +51,7 @@ export function Configurateur() {
     if (!grille || !panneau) return
 
     const rediriger = (event: WheelEvent) => {
-      if (!window.matchMedia('(min-width: 1024px)').matches) return
+      if (!window.matchMedia('(min-width: 1280px)').matches) return
       if (panneau.contains(event.target as Node)) return
       const max = panneau.scrollHeight - panneau.clientHeight
       const suivant = Math.min(Math.max(panneau.scrollTop + event.deltaY, 0), max)
@@ -90,31 +95,31 @@ export function Configurateur() {
   }, [config])
 
   return (
-    <main className="pb-24 lg:flex lg:min-h-0 lg:flex-1 lg:flex-col lg:pb-0">
+    <main className="pb-24 xl:flex xl:min-h-0 xl:flex-1 xl:flex-col xl:pb-0">
       <div
         ref={grilleRef}
         data-testid="grille-configurateur"
-        className="grid gap-8 px-5 sm:px-8 lg:min-h-0 lg:flex-1 lg:grid-cols-[minmax(0,1fr)_26rem] lg:overflow-hidden lg:pb-4"
+        className="grid gap-8 px-5 sm:px-8 xl:min-h-0 xl:flex-1 xl:grid-cols-[minmax(0,1fr)_26rem] xl:overflow-hidden xl:pb-4"
       >
         <div
           data-testid="colonne-apercu"
-          className="sticky top-20 min-w-0 self-start lg:static lg:flex lg:min-h-0 lg:flex-col lg:self-auto"
+          className="sticky top-20 min-w-0 self-start xl:static xl:flex xl:min-h-0 xl:flex-col xl:self-auto"
         >
           <Apercu
             config={config}
-            scene={scene}
+            cible={cible}
             domaine={domaine}
             style={style}
-            onChange={setScene}
+            onPartie={surPartie}
             onDomaine={setDomaine}
             onStyle={setStyle}
           />
         </div>
 
-        <div ref={panneauRef} data-testid="colonne-options" className="min-w-0 lg:min-h-0 lg:overflow-y-auto lg:pr-2">
+        <div ref={panneauRef} data-testid="colonne-options" className="min-w-0 xl:min-h-0 xl:overflow-y-auto xl:pr-2">
           <h1 className="text-2xl font-semibold tracking-tight">Configurez votre site</h1>
           <div className="mt-6">
-            <PanneauOptions config={config} onChange={setConfig} onScene={setScene} />
+            <PanneauOptions config={config} onChange={setConfig} onScene={surPartie} />
           </div>
 
           <Recapitulatif config={config} />

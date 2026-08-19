@@ -156,7 +156,7 @@ export function SceneDeroule({ config }: { config: Configuration }) {
           ` au lieu de ${formaterSemaines(deroule.livraisonSansExpress)} sans la livraison accélérée`}
       </p>
 
-      <div className="m-air-serre flex shrink-0 flex-col">
+      <div data-ancre="deroule-mensuel" className="m-air-serre flex shrink-0 flex-col">
         <div className="flex items-baseline gap-3">
           <p className="m-surtitre">Chaque mois, après la livraison</p>
           <span className="m-filet h-px flex-1" />

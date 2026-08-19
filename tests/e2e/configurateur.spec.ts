@@ -3,6 +3,7 @@ import { expect, test } from '@playwright/test'
 import { contrastRatio, parseColor } from '../../lib/color/contrast'
 import { GROUPES, SOCLE_ID, optionParId } from '../../lib/config/catalogue'
 import { formaterEuros } from '../../lib/config/devis'
+import { dansLaFenetre } from './fenetre'
 
 test('la route du configurateur répond et s’annonce', async ({ page }) => {
   await page.goto('/configurateur')
@@ -200,7 +201,9 @@ test('la langue supplémentaire ajoute un sélecteur qui bascule l’aperçu', a
 
 test('la formule récurrente peuple la bande mensuelle', async ({ page }) => {
   await page.goto('/configurateur')
-  await expect(page.getByTestId('deroule-mois')).toHaveCount(0)
+  // La bande existe toujours, montée avec le reste du document : c'est son contenu qui
+  // dépend de la formule, et « 4 h » n'appartient qu'à Sérénité et au-dessus.
+  await expect(page.getByTestId('deroule-mois')).not.toContainText('4 h')
   await page.getByRole('radio', { name: 'Sérénité' }).check()
   await expect(page.getByTestId('deroule-mois')).toContainText('4 h')
 })
@@ -272,7 +275,7 @@ test('cocher le référencement bascule l’aperçu sur « La preuve »', async 
   await expect(page.getByTestId('site-nav')).toBeVisible()
   await page.getByRole('checkbox', { name: 'Fondations SEO' }).check()
   await expect(page.getByTestId('preuve-serp')).toBeVisible()
-  await expect(page.getByTestId('site-nav')).toHaveCount(0)
+  await expect.poll(() => dansLaFenetre(page, 'site-nav')).toBe(false)
 })
 
 test('cocher une option visible garde la scène du site', async ({ page }) => {
@@ -363,7 +366,7 @@ test('l’onglet « Le déroulé » atteint sa scène sans rien cocher', async (
   await page.goto('/configurateur')
   await page.getByRole('button', { name: 'Le déroulé', exact: true }).click()
   await expect(page.getByTestId('deroule-construction')).toBeVisible()
-  await expect(page.getByTestId('site-nav')).toHaveCount(0)
+  await expect.poll(() => dansLaFenetre(page, 'site-nav')).toBe(false)
 })
 
 test('la scène du déroulé propose un repli sans rien cocher, puis assume l’auto-gestion', async ({ page }) => {
@@ -553,39 +556,6 @@ test('l’aperçu remplit la hauteur disponible entre l’en-tête et la barre d
   // Avant correction, `self-start` figeait l’aperçu à sa hauteur minimale plutôt
   // que de suivre la hauteur de la grille, qu’on lit ici sur le panneau voisin.
   expect(apercu.height).toBeGreaterThan(panneau.height * 0.7)
-})
-
-// `overflow-hidden` écrête en silence, `toBeVisible` ne détecte pas cet écrêtage par un
-// ancêtre. Même gabarit dans scene-preuve.spec.ts et scene-deroule.spec.ts.
-test('sur une petite hauteur, la scène du site ne déborde pas silencieusement de son cadre', async ({ page }) => {
-  const resolutions = [
-    { width: 1366, height: 768 },
-    { width: 1024, height: 700 },
-    { width: 1280, height: 800 },
-    { width: 1280, height: 600 },
-    // 1280 × 560 : un 1280 × 720 amputé de la barre d'onglets et de la barre de favoris.
-    { width: 1280, height: 560 },
-  ]
-  // `redaction=15` : le pire cas nomme quinze pages rédigées, pas une seule.
-  const pireCasSite =
-    '/configurateur?pages=4&langue=3&redaction=15&reprise&photos&visuels&blog&article=10&membre&formulaire&rdv&newsletter&paiement'
-
-  for (const taille of resolutions) {
-    await page.setViewportSize(taille)
-    await page.goto(pireCasSite)
-    // `objet-scene` porte le cadre logique : ses mesures sont en unités non mises à
-    // l'échelle, donc plus sévères à l'écran que la tolérance ne le laisse croire.
-    // L'animation d'entrée part de translateY(0.25rem) et gonfle la mesure de 4 px
-    // tant qu'elle court : on attend qu'elle finisse, faute de quoi 4 px de tolérance
-    // seraient dus à elle seule et masqueraient un vrai débordement de la même taille.
-    const debordement = await page.getByTestId('objet-scene').evaluate(async (el) => {
-      await Promise.all(el.getAnimations({ subtree: true }).map((a) => a.finished))
-      return Math.max(el.scrollHeight - el.clientHeight, el.scrollWidth - el.clientWidth)
-    })
-    // Tolérance ramenée de 6 à 2 px : les 6 px absorbaient l'animation d'entrée, désormais
-    // attendue ; il ne reste que l'arrondi d'une hauteur logique fractionnaire.
-    expect(debordement, `débordement à ${taille.width}x${taille.height}`).toBeLessThanOrEqual(2)
-  }
 })
 
 test('la molette défile le panneau même quand le curseur est sur l’aperçu', async ({ page }) => {

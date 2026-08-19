@@ -112,33 +112,3 @@ test('les huit contrôles cochés ensemble passent tous au vert, sans en faire d
     await expect(page.getByTestId(testid)).toBeVisible()
   }
 })
-
-// `overflow-hidden` écrête en silence, `toBeVisible` ne voit pas ce rognage.
-// Même gabarit que la scène du site, pire cas propre à « La preuve ».
-test('sur une petite hauteur, la scène de la preuve ne déborde pas silencieusement de son cadre', async ({ page }) => {
-  const resolutions = [
-    { width: 1366, height: 768 },
-    { width: 1024, height: 700 },
-    { width: 1280, height: 800 },
-    { width: 1280, height: 600 },
-    // 1280 × 560 : un 1280 × 720 amputé de la barre d'onglets et de la barre de favoris.
-    { width: 1280, height: 560 },
-  ]
-  const pireCasPreuve = '/configurateur?seo&seo-local&perf&a11y&rgpd&legal&migration&domaine'
-
-  for (const taille of resolutions) {
-    await page.setViewportSize(taille)
-    await page.goto(pireCasPreuve)
-    await page.getByTestId('onglet-preuve').click()
-    // `objet-scene` porte le cadre logique : ses mesures sont en unités non mises à
-    // l'échelle, donc plus sévères à l'écran que la tolérance ne le laisse croire.
-    // L'animation d'entrée part de translateY(0.25rem) et gonfle la mesure de 4 px
-    // tant qu'elle court : on attend qu'elle finisse, faute de quoi 4 px de tolérance
-    // seraient dus à elle seule et masqueraient un vrai débordement de la même taille.
-    const debordement = await page.getByTestId('objet-scene').evaluate(async (el) => {
-      await Promise.all(el.getAnimations({ subtree: true }).map((a) => a.finished))
-      return Math.max(el.scrollHeight - el.clientHeight, el.scrollWidth - el.clientWidth)
-    })
-    expect(debordement, `débordement à ${taille.width}x${taille.height}`).toBeLessThanOrEqual(2)
-  }
-})

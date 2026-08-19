@@ -8,7 +8,7 @@ export const metadata = {
 
 export default function Page() {
   return (
-    <div className="lg:flex lg:h-dvh lg:flex-col lg:overflow-hidden">
+    <div className="xl:flex xl:h-dvh xl:flex-col xl:overflow-hidden">
       <EnteteConfigurateur />
       <Configurateur />
     </div>
