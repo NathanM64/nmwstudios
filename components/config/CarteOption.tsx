@@ -77,8 +77,7 @@ export function CarteOption({
             type="button"
             aria-label={`Retirer : ${option.libelle}`}
             onClick={() => onPoser(option.id, Math.max(0, quantite - 1))}
-            // 45px = 32 (légende) + 1 (bordure carte) + 12 (padding carte) : le bouton est en flux normal, pas absolu comme l'input des cases.
-            className="h-11 w-11 scroll-mt-[45px] rounded-md border border-border text-base leading-none"
+            className="h-11 w-11 rounded-md border border-border text-base leading-none"
           >
             &minus;
           </button>
@@ -95,7 +94,7 @@ export function CarteOption({
             type="button"
             aria-label={`Ajouter : ${option.libelle}`}
             onClick={() => onPoser(option.id, Math.min(option.quantifiable!.max, quantite + 1))}
-            className="h-11 w-11 scroll-mt-[45px] rounded-md border border-border text-base leading-none"
+            className="h-11 w-11 rounded-md border border-border text-base leading-none"
           >
             +
           </button>
@@ -126,8 +125,7 @@ export function CarteOption({
         }
         // `sr-only` viderait la zone cliquable (clip-path) : l'input doit
         // couvrir toute la carte pour rester la vraie cible du clic direct.
-        // 33px = 32 (légende) + 1 (bordure carte) : l'input absolu est calé sur la boîte de padding, pas la bordure.
-        className="absolute inset-0 z-10 scroll-mt-[33px] cursor-pointer opacity-0"
+        className="absolute inset-0 z-10 cursor-pointer opacity-0"
       />
       {corps}
     </label>

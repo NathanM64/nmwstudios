@@ -54,6 +54,12 @@
     radial-gradient(760px 460px at 92% 2%, rgba(168, 120, 255, 0.18), transparent 58%),
     radial-gradient(680px 520px at 78% 60%, rgba(96, 214, 214, 0.09), transparent 62%),
     radial-gradient(720px 560px at 6% 92%, rgba(168, 120, 255, 0.1), transparent 60%);
+
+  /* Hauteur mesurée de la légende collante du configurateur (text-xs/py-2). */
+  --legende-h: 2rem;
+  /* + 13px, écart mesuré entre le bord de la carte et le bouton du pas-à-pas (le plus grand des deux cibles focalisables, l'input n'en a qu'1) :
+     scroll-padding aligne la cible focalisée, pas la carte, donc la carte doit avoir sa propre marge pour ne jamais passer sous la légende. */
+  --carte-scroll-pt: calc(var(--legende-h) + 13px);
 }
 
 [data-theme='light'] {
@@ -75,6 +81,8 @@ html[data-theme='light'] {
 html {
   background-color: var(--color-canvas);
   color-scheme: dark;
+  /* Sans préfixe de largeur : sous `lg`, c'est le document qui défile, pas colonne-options. */
+  scroll-padding-top: var(--carte-scroll-pt);
 }
 
 body {

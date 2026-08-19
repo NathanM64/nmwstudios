@@ -65,3 +65,38 @@ test('en régime tablette, la carte atteinte en tabulation arrière n’est pas 
   const legende = (await page.getByTestId('legende-fonctionnel').boundingBox())!
   expect(carte.y).toBeGreaterThanOrEqual(legende.y + legende.height)
 })
+
+test('en régime mobile, la carte atteinte en tabulation arrière n’est pas recouverte non plus', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 700 })
+  await page.goto('/configurateur')
+
+  // Largeur où le relecteur a relevé le plus de recouvrements (21 sur 90 tabulations arrière).
+  await page.getByRole('button', { name: 'Copier le lien' }).focus()
+  const cible = page.getByRole('checkbox', { name: 'Espace membre' })
+  for (let i = 0; i < 90 && !(await cible.evaluate((n) => n === document.activeElement)); i++) {
+    await page.keyboard.press('Shift+Tab')
+  }
+  await expect(cible).toBeFocused()
+
+  const carte = (await page.getByTestId('carte-membre').boundingBox())!
+  const legende = (await page.getByTestId('legende-fonctionnel').boundingBox())!
+  expect(carte.y).toBeGreaterThanOrEqual(legende.y + legende.height)
+})
+
+test('un bouton du pas-à-pas atteint en tabulation arrière n’est pas recouvert non plus', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 700 })
+  await page.goto('/configurateur')
+
+  // Cible un bouton +/-, pas une case : son décalage par rapport au bord de la
+  // carte diffère (13px, contre 1px pour l'input), déjà mesuré comme le pire cas.
+  await page.getByRole('button', { name: 'Copier le lien' }).focus()
+  const cible = page.getByRole('button', { name: 'Ajouter : J’écris vos textes' })
+  for (let i = 0; i < 90 && !(await cible.evaluate((n) => n === document.activeElement)); i++) {
+    await page.keyboard.press('Shift+Tab')
+  }
+  await expect(cible).toBeFocused()
+
+  const carte = (await page.getByTestId('carte-redaction').boundingBox())!
+  const legende = (await page.getByTestId('legende-contenu').boundingBox())!
+  expect(carte.y).toBeGreaterThanOrEqual(legende.y + legende.height)
+})
