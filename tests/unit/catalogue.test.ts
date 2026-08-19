@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { GROUPES, OPTIONS, SOCLE_ID, optionParId } from '@/lib/config/catalogue'
-import { PAGES_SUP } from '@/components/config/scenes/SceneSite'
+import { LANGUES, TEXTES } from '@/lib/config/maquette'
 
 describe('catalogue', () => {
   it('expose un socle à 1500 €', () => {
@@ -35,11 +35,27 @@ describe('catalogue', () => {
     for (const option of recurrentes) expect(option.carte?.length).toBeGreaterThan(0)
   })
 
-  it('fournit assez de pages nommées dans l’aperçu pour la quantité maximale de tranches', () => {
-    // Couplage assumé : PAGES_SUP alimente le rendu jusqu'à `max` tranches de 3 pages.
-    const max = optionParId('pages')?.quantifiable?.max
-    expect(max).toBeGreaterThan(0)
-    expect(PAGES_SUP.length).toBeGreaterThanOrEqual(max! * 3)
+  it('nomme assez de pages dans chaque langue pour les tranches et les textes rédigés', () => {
+    // Couplage assumé : `TEXTES[langue].pages` alimente la navigation (3 + max × 3 entrées)
+    // et la liste des pages rédigées (une par unité de `redaction`).
+    const tranches = optionParId('pages')!.quantifiable!.max
+    const redigees = optionParId('redaction')!.quantifiable!.max
+    for (const langue of LANGUES) {
+      const attendu = Math.max(3 + tranches * 3, redigees)
+      expect(TEXTES[langue].pages.length, `pages manquantes en ${langue}`).toBeGreaterThanOrEqual(attendu)
+      expect(new Set(TEXTES[langue].pages).size, `doublon de page en ${langue}`).toBe(TEXTES[langue].pages.length)
+    }
+  })
+
+  it('offre assez d’articles nommés dans chaque langue pour la quantité maximale', () => {
+    const max = optionParId('article')!.quantifiable!.max
+    for (const langue of LANGUES) {
+      expect(TEXTES[langue].articles.length, `articles manquants en ${langue}`).toBeGreaterThanOrEqual(max)
+    }
+  })
+
+  it('offre une langue de maquette de plus que le maximum de l’option, le français compris', () => {
+    expect(LANGUES.length).toBe(optionParId('langue')!.quantifiable!.max + 1)
   })
 
   it("marque le groupe du récurrent comme exclusif", () => {

@@ -269,7 +269,7 @@ test('l’aperçu reste visible quand on fait défiler les options', async ({ pa
   await expect(page.getByTestId('site-nav')).toBeInViewport()
 })
 
-test('cocher le référencement bascule l’aperçu sur la scène de recherche', async ({ page }) => {
+test('cocher le référencement bascule l’aperçu sur « La preuve »', async ({ page }) => {
   await page.goto('/configurateur')
   await expect(page.getByTestId('site-nav')).toBeVisible()
   await page.getByRole('checkbox', { name: 'Fondations SEO' }).check()
@@ -308,7 +308,7 @@ test('la vignette de la scène active porte aria-pressed, les autres non', async
   await expect(page.getByRole('button', { name: 'La preuve', exact: true })).toHaveAttribute('aria-pressed', 'true')
 })
 
-test('la scène de recherche ne montre l’extrait qu’une fois le référencement acheté', async ({ page }) => {
+test('« La preuve » ne montre l’extrait qu’une fois le référencement acheté', async ({ page }) => {
   await page.goto('/configurateur')
   // Bascule de scène seule, sans toucher la configuration : isole la garde de la scène.
   await page.getByRole('button', { name: 'La preuve', exact: true }).click()
@@ -317,7 +317,7 @@ test('la scène de recherche ne montre l’extrait qu’une fois le référencem
   await expect(page.getByTestId('preuve-serp')).toBeVisible()
 })
 
-test('la scène technique ne montre la vitesse et le domaine qu’une fois achetés, chacun indépendamment', async ({ page }) => {
+test('« La preuve » ne montre la vitesse et le domaine qu’une fois achetés, chacun indépendamment', async ({ page }) => {
   await page.goto('/configurateur')
   await page.getByRole('button', { name: 'La preuve', exact: true }).click()
   await expect(page.getByTestId('preuve-cascade')).toHaveCount(0)
@@ -345,7 +345,7 @@ test('la migration affiche la redirection des adresses de l’ancien site', asyn
   await expect(page.getByTestId('preuve-redirections')).toContainText('301')
 })
 
-test('le RGPD affiche une bannière de consentement dans la scène conformité', async ({ page }) => {
+test('le RGPD affiche une bannière de consentement dans « La preuve »', async ({ page }) => {
   await page.goto('/configurateur')
   await page.getByRole('button', { name: 'La preuve', exact: true }).click()
   await expect(page.getByTestId('preuve-rgpd')).toHaveCount(0)
@@ -361,7 +361,7 @@ test('les mentions légales affichent une ligne de pied de page', async ({ page 
   await expect(page.getByTestId('preuve-legal')).toContainText('Mentions légales')
 })
 
-test('la vignette « Déroulé » atteint la scène du déroulé sans rien cocher', async ({ page }) => {
+test('l’onglet « Le déroulé » atteint sa scène sans rien cocher', async ({ page }) => {
   await page.goto('/configurateur')
   await page.getByRole('button', { name: 'Le déroulé', exact: true }).click()
   await expect(page.getByTestId('deroule-construction')).toBeVisible()
@@ -557,25 +557,26 @@ test('l’aperçu remplit la hauteur disponible entre l’en-tête et la barre d
   expect(apercu.height).toBeGreaterThan(panneau.height * 0.7)
 })
 
-// Aucun défilement interne à l'aperçu : `overflow-hidden` écrête en silence, et
-// `toBeVisible` de Playwright ne détecte pas cet écrêtage par un ancêtre.
-// « La preuve » et « Le déroulé » portent le même risque une fois enrichies :
-// même gabarit de test, pire cas d'options composé pour leur propre scène.
+// `overflow-hidden` écrête en silence, `toBeVisible` ne détecte pas cet écrêtage par un
+// ancêtre. Même gabarit dans scene-preuve.spec.ts et scene-deroule.spec.ts.
 test('sur une petite hauteur, la scène du site ne déborde pas silencieusement de son cadre', async ({ page }) => {
   const resolutions = [
     { width: 1366, height: 768 },
     { width: 1024, height: 700 },
     { width: 1280, height: 800 },
     { width: 1280, height: 600 },
+    // 1280 × 560 : un 1280 × 720 amputé de la barre d'onglets et de la barre de favoris.
+    { width: 1280, height: 560 },
   ]
+  // `redaction=15` : le pire cas nomme quinze pages rédigées, pas une seule.
   const pireCasSite =
-    '/configurateur?pages=4&langue=3&redaction&reprise&photos&visuels&blog&article=10&membre&formulaire&rdv&newsletter&paiement'
+    '/configurateur?pages=4&langue=3&redaction=15&reprise&photos&visuels&blog&article=10&membre&formulaire&rdv&newsletter&paiement'
 
   for (const taille of resolutions) {
     await page.setViewportSize(taille)
     await page.goto(pireCasSite)
-    // `objet-scene`, pas `apercu` : depuis la Task 11, c'est lui qui écrête, l'aperçu se
-    // contente d'accueillir la barre d'onglets et de lui laisser le reste en flex.
+    // `objet-scene`, pas `apercu` : c'est lui qui écrête, l'aperçu se contente d'accueillir
+    // la barre d'onglets et de lui laisser le reste en flex.
     const debordement = await page
       .getByTestId('objet-scene')
       .evaluate((el) => el.scrollHeight - el.clientHeight)

@@ -36,11 +36,54 @@ test('rédaction et reprise cochées ensemble restent visibles toutes les deux',
   await expect(page.getByTestId('site-reprise')).toBeVisible()
 })
 
+// Tout le texte, pas la seule navigation : titres, blocs repris, créneaux, newsletter,
+// articles et étiquettes du cadre image doivent suivre le sélecteur.
 test('le sélecteur de langue bascule tout le texte de la maquette', async ({ page }) => {
-  await page.getByRole('button', { name: 'Ajouter : Une langue de plus' }).click()
-  const avant = await page.getByTestId('site-nav').textContent()
+  await page.goto(
+    '/configurateur?langue=1&redaction=3&reprise&photos&visuels&blog&article=2&membre&formulaire&rdv&newsletter&paiement'
+  )
+  const maquette = page.getByTestId('objet-scene')
+
+  for (const texte of ['Accueil', 'Charpentier à Bègles', 'Textes rédigés', 'Nos services', 'Actualités',
+    'Quel bois pour une extension ?', 'recadrée et allégée', 'visuel sous licence', 'Pièce jointe',
+    'Réserver un créneau', '9 h', 'S’inscrire', 'Régler en ligne', 'Connexion']) {
+    await expect(maquette, `« ${texte} » manque avant la bascule`).toContainText(texte)
+  }
+
   await page.getByTestId('site-langue').selectOption('en')
-  await expect(page.getByTestId('site-nav')).not.toHaveText(avant!)
+
+  for (const texte of ['Home', 'Carpenter in Bègles', 'Pages written', 'Our services', 'News',
+    'Which timber for an extension?', 'cropped and compressed', 'licensed image', 'Attachment',
+    'Book a slot', '9 am', 'Sign up', 'Pay online', 'Log in']) {
+    await expect(maquette, `« ${texte} » manque après la bascule`).toContainText(texte)
+  }
+
+  for (const reste of ['Charpentier à Bègles', 'Nos services', 'Réserver un créneau', 'Actualités']) {
+    await expect(maquette, `« ${reste} » est resté en français`).not.toContainText(reste)
+  }
+})
+
+test('chaque langue achetée ajoute une entrée au sélecteur', async ({ page }) => {
+  await page.goto('/configurateur?langue=1')
+  await expect(page.getByTestId('site-langue').locator('option')).toHaveCount(2)
+  await page.goto('/configurateur?langue=3')
+  await expect(page.getByTestId('site-langue').locator('option')).toHaveCount(4)
+})
+
+test('retirer la langue ramène la maquette en français, sans la laisser bloquée', async ({ page }) => {
+  await page.goto('/configurateur?langue=1&redaction=1')
+  await page.getByTestId('site-langue').selectOption('en')
+  await expect(page.getByTestId('site-texte')).toContainText('Carpenter')
+  await page.getByRole('button', { name: 'Retirer : Une langue de plus' }).click()
+  await expect(page.getByTestId('site-langue')).toHaveCount(0)
+  await expect(page.getByTestId('site-texte')).toContainText('Charpentier')
+})
+
+test('chaque page rédigée se nomme dans la maquette', async ({ page }) => {
+  await page.goto('/configurateur?redaction=1')
+  await expect(page.getByTestId('site-page-redigee')).toHaveCount(1)
+  await page.goto('/configurateur?redaction=15')
+  await expect(page.getByTestId('site-page-redigee')).toHaveCount(15)
 })
 
 test('l’espace membre pose un bouton de connexion', async ({ page }) => {
