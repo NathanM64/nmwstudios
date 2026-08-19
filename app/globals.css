@@ -68,6 +68,14 @@
   --input-scroll-mt: calc(var(--legende-h) + 1px);
 }
 
+/* Sous 40rem le pas-à-pas passe sous le titre de la carte : son bouton est alors à 85 px du
+   bord haut, pire cas mesuré sur les quatre cartes quantifiables entre 320 et 600 px. */
+@media (width < 40rem) {
+  :root {
+    --carte-scroll-pt: calc(var(--legende-h) + 85px);
+  }
+}
+
 [data-theme='light'] {
   --shadow-elevated: 0 24px 60px -30px rgba(20, 20, 40, 0.28),
     0 2px 10px -6px rgba(20, 20, 40, 0.16),
@@ -104,6 +112,51 @@ body {
   border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-elevated);
+}
+
+/* La maquette est dessinée une fois à taille lisible dans un cadre logique, puis mise à
+   l'échelle pour occuper la place disponible : seule l'échelle varie, jamais les tailles. */
+.cadre-maquette {
+  container-type: size;
+}
+
+.maquette-echelle {
+  width: 100%;
+  height: 100%;
+  /* Texte courant de la maquette, et espacements dérivés de lui (Tailwind pose
+     toutes ses unités d'espacement en multiples de --spacing). */
+  font-size: 0.8125rem;
+  --spacing: 0.40625rem;
+}
+
+/* Propriété `scale`, jamais `transform` : le keyframe `apparait` finit sur
+   `transform: none` et écraserait une transformation posée ici.
+   Plancher à 0,615 : en deçà, le texte rendu passerait sous les 8 px d'avant refonte.
+   Ce plancher cède sous 40rem de cadre logique, largeur en deçà de laquelle la maquette
+   ne tient plus : sur un téléphone, mieux vaut réduire encore que d'écrêter. */
+@supports (scale: calc(1px / 1px)) {
+  .maquette-echelle {
+    --echelle: clamp(min(0.615, 100cqw / 40rem), min(100cqw / 64rem, 100cqh / 48.75rem), 1);
+    width: calc(100cqw / var(--echelle));
+    height: calc(100cqh / var(--echelle));
+    scale: var(--echelle);
+    transform-origin: top left;
+  }
+}
+
+/* En-tête de groupe collant : pas de bande posée sur l'ambiance, mais le fond de page
+   lui-même, repeint à l'identique (`fixed` le cale sur le viewport comme celui du body),
+   puis fondu vers le bas pour que les cartes s'estompent au lieu de passer sous une arête. */
+.entete-groupe::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 -0.75rem 0;
+  z-index: -1;
+  pointer-events: none;
+  background-color: var(--color-canvas);
+  background-image: var(--ambient);
+  background-attachment: fixed;
+  mask-image: linear-gradient(to bottom, #000 calc(100% - 0.75rem), transparent);
 }
 
 /* Pas de transition de vue : le navigateur y remplace la page par des captures

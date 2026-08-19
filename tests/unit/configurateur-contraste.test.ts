@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs'
 import { describe, expect, it } from 'vitest'
 import { composite, contrastRatio } from '@/lib/color/contrast'
-import { readTokens, solid, surfaceOverCanvas, worstAmbientColor } from './tokens'
+import { ambientOverCanvas, readTokens, solid, surfaceOverCanvas, worstAmbientColor } from './tokens'
 
 const THEMES = [
   { nom: 'sombre', tokens: readTokens('app/globals.css', '@theme'), entete: ':root' },
@@ -30,6 +30,11 @@ describe('compositions d’états du configurateur', () => {
     it(`tient le texte sur l’état actif posé sur le verre en thème ${nom}`, () => {
       const actif = composite(solid(tokens, '--color-accent'), 0.2, verre)
       expect(contrastRatio(solid(tokens, '--color-foreground'), actif)).toBeGreaterThanOrEqual(4.5)
+    })
+
+    // La légende collante ne pose plus de bande : son titre se lit sur le fond de page lui-même.
+    it(`tient le titre de groupe collant sur le fond de page en thème ${nom}`, () => {
+      expect(contrastRatio(solid(tokens, '--color-accent'), ambientOverCanvas(tokens, ambient))).toBeGreaterThanOrEqual(4.5)
     })
 
     it(`tient le libellé de carte sur l’état retenu en thème ${nom}`, () => {
@@ -72,4 +77,16 @@ describe('opacité posée dans une scène de l’aperçu', () => {
       expect(contrastRatio(rendu, maquette)).toBeGreaterThanOrEqual(4.5)
     })
   }
+})
+
+// Le fond blanc de la légende collante est parti d'une classe, pas d'un jeton : les compositions
+// ci-dessus ne l'auraient pas vu revenir.
+describe('fond de la légende collante', () => {
+  const source = readFileSync('components/config/PanneauOptions.tsx', 'utf8')
+
+  it('la légende ne repose ni sur un aplat de canevas ni sur un flou', () => {
+    expect(source).toMatch(/entete-groupe/)
+    expect(source, 'aplat de canevas revenu sur la légende').not.toMatch(/bg-canvas/)
+    expect(source, 'flou revenu sur la légende').not.toMatch(/backdrop-blur/)
+  })
 })

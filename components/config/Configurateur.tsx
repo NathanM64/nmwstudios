@@ -93,12 +93,12 @@ export function Configurateur() {
       >
         <div
           data-testid="colonne-apercu"
-          className="sticky top-20 self-start lg:static lg:flex lg:min-h-0 lg:flex-col lg:self-auto"
+          className="sticky top-20 min-w-0 self-start lg:static lg:flex lg:min-h-0 lg:flex-col lg:self-auto"
         >
           <Apercu config={config} scene={scene} onChange={setScene} />
         </div>
 
-        <div ref={panneauRef} data-testid="colonne-options" className="lg:min-h-0 lg:overflow-y-auto lg:pr-2">
+        <div ref={panneauRef} data-testid="colonne-options" className="min-w-0 lg:min-h-0 lg:overflow-y-auto lg:pr-2">
           <h1 className="text-2xl font-semibold tracking-tight">Configurez votre site</h1>
           <div className="mt-6">
             <PanneauOptions config={config} onChange={setConfig} onScene={setScene} />

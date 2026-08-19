@@ -128,12 +128,16 @@ test('sur une petite hauteur, la scène du déroulé ne déborde pas silencieuse
     await page.setViewportSize(taille)
     await page.goto(pireCasDeroule)
     await page.getByTestId('onglet-deroule').click()
-    // `objet-scene`, pas `apercu` : c'est lui qui écrête, l'aperçu se contente d'accueillir
-    // la barre d'onglets et de lui laisser le reste en flex.
-    const debordement = await page
-      .getByTestId('objet-scene')
-      .evaluate((el) => el.scrollHeight - el.clientHeight)
-    expect(debordement, `débordement à ${taille.width}x${taille.height}`).toBeLessThanOrEqual(6)
+    // `objet-scene` porte le cadre logique : ses mesures sont en unités non mises à
+    // l'échelle, donc plus sévères à l'écran que la tolérance ne le laisse croire.
+    // L'animation d'entrée part de translateY(0.25rem) et gonfle la mesure de 4 px
+    // tant qu'elle court : on attend qu'elle finisse, faute de quoi 4 px de tolérance
+    // seraient dus à elle seule et masqueraient un vrai débordement de la même taille.
+    const debordement = await page.getByTestId('objet-scene').evaluate(async (el) => {
+      await Promise.all(el.getAnimations({ subtree: true }).map((a) => a.finished))
+      return Math.max(el.scrollHeight - el.clientHeight, el.scrollWidth - el.clientWidth)
+    })
+    expect(debordement, `débordement à ${taille.width}x${taille.height}`).toBeLessThanOrEqual(2)
 
     const contexte = `pire cas ${taille.width}x${taille.height}`
     await confine(page, 'deroule-livraison', contexte)

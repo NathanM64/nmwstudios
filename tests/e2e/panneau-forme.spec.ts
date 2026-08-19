@@ -100,3 +100,38 @@ test('un bouton du pas-à-pas atteint en tabulation arrière n’est pas recouve
   const legende = (await page.getByTestId('legende-contenu').boundingBox())!
   expect(carte.y).toBeGreaterThanOrEqual(legende.y + legende.height)
 })
+
+// Le propriétaire voit une barre de défilement classique, qui prend sa largeur au contenu.
+// Playwright n'en pose pas : on la simule en retirant au panneau la largeur qu'elle coûte.
+// Sans cette simulation, la marge négative de 4 px de l'en-tête ne se voyait nulle part.
+test('le panneau ne prend aucun ascenseur horizontal, barre de défilement classique comprise', async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 })
+  await page.goto('/configurateur')
+
+  for (const perte of [0, 15, 17]) {
+    const debordement = await page.getByTestId('colonne-options').evaluate((el, perte) => {
+      el.style.width = `${el.clientWidth - perte}px`
+      const mesure = el.scrollWidth - el.clientWidth
+      el.style.width = ''
+      return mesure
+    }, perte)
+    expect(debordement, `barre de ${perte} px`).toBeLessThanOrEqual(0)
+  }
+})
+
+test('en dessous de lg, ni le panneau ni le document ne débordent en largeur', async ({ page }) => {
+  for (const taille of [
+    { width: 900, height: 800 },
+    { width: 768, height: 900 },
+    { width: 390, height: 700 },
+    { width: 320, height: 700 },
+  ]) {
+    await page.setViewportSize(taille)
+    await page.goto('/configurateur')
+    const doc = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)
+    expect(doc, `document à ${taille.width}`).toBeLessThanOrEqual(0)
+
+    const panneau = await page.getByTestId('colonne-options').evaluate((el) => el.scrollWidth - el.clientWidth)
+    expect(panneau, `panneau à ${taille.width}`).toBeLessThanOrEqual(0)
+  }
+})

@@ -30,12 +30,12 @@ export function SceneSite({ config }: { config: Configuration }) {
 
   return (
     <div className="animate-apparait flex flex-1 flex-col">
-      <header className="flex items-center justify-between gap-3 border-b border-border px-3 py-1">
+      <header className="flex flex-wrap items-center justify-between gap-3 border-b border-border px-3 py-1">
         <span className="h-3 w-14 rounded-sm bg-accent/70" />
         <div data-testid="site-nav">
           <ul className="flex flex-wrap gap-2">
             {libelles.map((page) => (
-              <li key={page} className="animate-apparait text-[0.5rem] text-muted-foreground">
+              <li key={page} className="animate-apparait text-[0.8125rem] text-muted-foreground">
                 {page}
               </li>
             ))}
@@ -47,7 +47,7 @@ export function SceneSite({ config }: { config: Configuration }) {
             value={active}
             onChange={(e) => setLangue(e.target.value as Langue)}
             aria-label="Langue de l’aperçu"
-            className="animate-apparait rounded-sm border border-border bg-transparent text-[0.5rem]"
+            className="animate-apparait rounded-sm border border-border bg-transparent text-[0.8125rem]"
           >
             {offertes.map((code) => (
               <option key={code} value={code}>
@@ -57,7 +57,7 @@ export function SceneSite({ config }: { config: Configuration }) {
           </select>
         )}
         {(config.membre ?? 0) > 0 && (
-          <span data-testid="site-connexion" className="animate-apparait rounded-sm border border-border px-1.5 py-0.5 text-[0.5rem]">
+          <span data-testid="site-connexion" className="animate-apparait rounded-sm border border-border px-1.5 py-0.5 text-[0.8125rem]">
             {t.connexion}
           </span>
         )}
@@ -74,16 +74,16 @@ export function SceneSite({ config }: { config: Configuration }) {
 
         {redaction > 0 && (
           <div data-testid="site-texte" className="animate-apparait">
-            <p className="text-[0.8rem] leading-tight text-foreground">{t.titre}</p>
-            <p className="text-[0.6rem] leading-snug text-muted-foreground">{t.corps}</p>
+            <p className="text-[1.3125rem] leading-tight text-foreground">{t.titre}</p>
+            <p className="text-[1rem] leading-snug text-muted-foreground">{t.corps}</p>
             {/* Une page nommée par unité : sans elle, quinze pages rédigées rendent le même écran qu'une. */}
             <div data-testid="site-redaction" className="mt-0.5 flex flex-wrap items-center gap-x-1 gap-y-0.5">
-              <span className="text-[0.45rem] uppercase tracking-wider text-accent">{t.redigees}</span>
+              <span className="text-[0.75rem] uppercase tracking-wider text-accent">{t.redigees}</span>
               {t.pages.slice(0, redaction).map((page) => (
                 <span
                   key={page}
                   data-testid="site-page-redigee"
-                  className="rounded-sm border border-border px-1 text-[0.45rem] leading-tight text-muted-foreground"
+                  className="rounded-sm border border-border px-1 text-[0.75rem] leading-tight text-muted-foreground"
                 >
                   {page}
                 </span>
@@ -95,7 +95,7 @@ export function SceneSite({ config }: { config: Configuration }) {
         {reprise > 0 && (
           <ul data-testid="site-reprise" className="animate-apparait flex flex-col gap-0.5">
             {t.blocsRepris.map((bloc) => (
-              <li key={bloc} className="rounded-sm border border-border px-2 text-[0.55rem] leading-tight text-muted-foreground">
+              <li key={bloc} className="rounded-sm border border-border px-2 text-[0.875rem] leading-tight text-muted-foreground">
                 {bloc}
               </li>
             ))}
@@ -108,13 +108,13 @@ export function SceneSite({ config }: { config: Configuration }) {
               {/* Le travail sur la photo, jamais la photo : rien à produire graphiquement. */}
               <span data-testid="site-reperes" className="animate-apparait absolute inset-2 border border-accent" />
               {/* Aucun chiffre : un poids annoncé serait une mesure inventée. */}
-              <span data-testid="site-poids" className="animate-apparait absolute bottom-0.5 left-1/2 -translate-x-1/2 rounded-sm bg-canvas/80 px-1 text-[0.5rem] text-accent">
+              <span data-testid="site-poids" className="animate-apparait absolute bottom-0.5 left-1/2 -translate-x-1/2 rounded-sm bg-canvas/80 px-1 text-[0.8125rem] text-accent">
                 {t.photo}
               </span>
             </>
           )}
           {visuels > 0 && (
-            <span data-testid="site-visuels" className="animate-apparait absolute bottom-0.5 left-1 rounded-sm bg-canvas/80 px-1 text-[0.5rem] text-muted-foreground">
+            <span data-testid="site-visuels" className="animate-apparait absolute bottom-0.5 left-1 rounded-sm bg-canvas/80 px-1 text-[0.8125rem] text-muted-foreground">
               {t.visuel}
             </span>
           )}
@@ -122,14 +122,14 @@ export function SceneSite({ config }: { config: Configuration }) {
 
         {(blog > 0 || articles > 0) && (
           <section data-testid="site-blog" className="animate-apparait mt-auto">
-            <p className="text-[0.5rem] uppercase tracking-wider text-accent">{t.actualites}</p>
+            <p className="text-[0.8125rem] uppercase tracking-wider text-accent">{t.actualites}</p>
             {/* 5 colonnes : 10 articles au maximum tiennent sur 2 lignes plutôt que 4, sans quoi le cadre déborde. */}
             <div className="grid grid-cols-5 gap-0.5">
               {articles > 0
                 ? t.articles.slice(0, articles).map((article) => (
                     <div key={article.requete} data-testid="site-article" className="rounded-sm border border-border px-0.5">
-                      <p className="text-[0.5rem] leading-tight text-foreground">{article.titre}</p>
-                      <p className="font-mono text-[0.45rem] leading-tight text-accent">{article.requete}</p>
+                      <p className="text-[0.8125rem] leading-tight text-foreground">{article.titre}</p>
+                      <p className="font-mono text-[0.75rem] leading-tight text-accent">{article.requete}</p>
                     </div>
                   ))
                 : [0, 1, 2].map((i) => <div key={i} className="h-5 rounded-sm border border-border" />)}
@@ -144,7 +144,7 @@ export function SceneSite({ config }: { config: Configuration }) {
             {formulaire > 0 && (
               <div data-testid="site-etapes" className="animate-apparait mb-0.5 flex gap-1">
                 {[1, 2, 3].map((n) => (
-                  <span key={n} className="rounded-sm bg-accent/20 px-1 font-mono text-[0.45rem] leading-tight text-accent">
+                  <span key={n} className="rounded-sm bg-accent/20 px-1 font-mono text-[0.75rem] leading-tight text-accent">
                     {n}
                   </span>
                 ))}
@@ -156,23 +156,23 @@ export function SceneSite({ config }: { config: Configuration }) {
               ))}
             </div>
             {formulaire > 0 && (
-              <p className="animate-apparait text-[0.45rem] leading-tight text-muted-foreground">{t.pieceJointe}</p>
+              <p className="animate-apparait text-[0.75rem] leading-tight text-muted-foreground">{t.pieceJointe}</p>
             )}
           </section>
 
           {newsletter > 0 && (
             <section data-testid="site-newsletter" className="animate-apparait flex items-center gap-1 self-start rounded-sm bg-surface-raised p-1">
               <span className="h-1 flex-1 rounded-sm bg-foreground/12" />
-              <span className="rounded-sm bg-accent/20 px-1 text-[0.45rem] leading-tight text-accent">{t.inscrire}</span>
+              <span className="rounded-sm bg-accent/20 px-1 text-[0.75rem] leading-tight text-accent">{t.inscrire}</span>
             </section>
           )}
 
           {rdv > 0 && (
             <section data-testid="site-rdv" className={`animate-apparait ${paiement > 0 ? '' : 'col-span-2'}`}>
-              <p className="text-[0.5rem] uppercase tracking-wider text-accent">{t.reserver}</p>
+              <p className="text-[0.8125rem] uppercase tracking-wider text-accent">{t.reserver}</p>
               <div className="grid grid-cols-6 gap-0.5">
                 {t.creneaux.map((h) => (
-                  <span key={h} data-testid="site-creneau" className="rounded-sm border border-border text-center text-[0.45rem] leading-tight text-muted-foreground">
+                  <span key={h} data-testid="site-creneau" className="rounded-sm border border-border text-center text-[0.75rem] leading-tight text-muted-foreground">
                     {h}
                   </span>
                 ))}
@@ -182,7 +182,7 @@ export function SceneSite({ config }: { config: Configuration }) {
 
           {paiement > 0 && (
             <section data-testid="site-paiement" className={`animate-apparait flex items-center justify-between self-start rounded-sm border border-border px-1 py-0.5 ${rdv > 0 ? '' : 'col-span-2'}`}>
-              <span className="text-[0.5rem] leading-tight text-muted-foreground">{t.regler}</span>
+              <span className="text-[0.8125rem] leading-tight text-muted-foreground">{t.regler}</span>
               <span className="flex gap-1">
                 {/* Logos dessinés, aucune marque reproduite. */}
                 <span className="h-1.5 w-3 rounded-[2px] bg-foreground/25" />

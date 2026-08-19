@@ -47,7 +47,7 @@ export function SceneDeroule({ config }: { config: Configuration }) {
   return (
     <div className="animate-apparait flex flex-1 flex-col gap-6 p-3">
       <div className="flex flex-col gap-2">
-        <p className="text-[0.5rem] uppercase tracking-wider text-accent">Déroulé du projet</p>
+        <p className="text-[0.8125rem] uppercase tracking-wider text-accent">Déroulé du projet</p>
 
         <div
           data-testid="deroule-piste"
@@ -59,21 +59,21 @@ export function SceneDeroule({ config }: { config: Configuration }) {
           {deroule.cadrage > 0 && (
             <div
               data-testid="deroule-cadrage"
-              className="animate-apparait absolute top-0.5 bottom-0.5 min-w-[3px] rounded-sm bg-accent-2/60"
+              className="animate-apparait absolute top-0.5 bottom-0.5 min-w-[5px] rounded-sm bg-accent-2/60"
               style={{ left: 0, width: pct(deroule.cadrage) }}
             />
           )}
 
           <div
             data-testid="deroule-construction"
-            className="absolute top-0.5 bottom-0.5 min-w-[3px] rounded-sm bg-accent/60"
+            className="absolute top-0.5 bottom-0.5 min-w-[5px] rounded-sm bg-accent/60"
             style={{ left: pct(deroule.cadrage), width: pct(deroule.construction) }}
           />
 
           {deroule.formation > 0 && (
             <div
               data-testid="deroule-formation"
-              className="animate-apparait absolute top-0.5 bottom-0.5 min-w-[3px] rounded-sm bg-accent-2/60"
+              className="animate-apparait absolute top-0.5 bottom-0.5 min-w-[5px] rounded-sm bg-accent-2/60"
               style={{ left: pct(deroule.livraison), width: pct(deroule.formation) }}
             />
           )}
@@ -98,7 +98,7 @@ export function SceneDeroule({ config }: { config: Configuration }) {
           />
         </div>
 
-        <p className="text-[0.5rem] leading-tight text-muted-foreground">
+        <p className="text-[0.8125rem] leading-tight text-muted-foreground">
           Livraison à {formaterSemaines(deroule.livraison)}
           {deroule.livraison < deroule.livraisonSansExpress &&
             ` au lieu de ${formaterSemaines(deroule.livraisonSansExpress)} sans la livraison accélérée`}
@@ -106,7 +106,7 @@ export function SceneDeroule({ config }: { config: Configuration }) {
       </div>
 
       <div className="mt-auto flex flex-col gap-2">
-        <p className="text-[0.5rem] uppercase tracking-wider text-accent">Chaque mois, après la livraison</p>
+        <p className="text-[0.8125rem] uppercase tracking-wider text-accent">Chaque mois, après la livraison</p>
         <div data-testid="deroule-mois" className="flex flex-col gap-1">
           {evenements.length > 0 && (
             <div className="flex flex-wrap gap-1">
@@ -114,7 +114,7 @@ export function SceneDeroule({ config }: { config: Configuration }) {
                 <span
                   key={e}
                   data-testid="deroule-evenement"
-                  className="rounded-sm border border-border px-1.5 py-0.5 text-[0.5rem] leading-tight text-muted-foreground"
+                  className="rounded-sm border border-border px-1.5 py-0.5 text-[0.8125rem] leading-tight text-muted-foreground"
                 >
                   {e}
                 </span>
@@ -129,20 +129,20 @@ export function SceneDeroule({ config }: { config: Configuration }) {
                   <span
                     key={e}
                     data-testid="deroule-charge"
-                    className="rounded-sm border border-dashed border-border-strong px-1.5 py-0.5 text-[0.5rem] leading-tight text-muted-foreground"
+                    className="rounded-sm border border-dashed border-border-strong px-1.5 py-0.5 text-[0.8125rem] leading-tight text-muted-foreground"
                   >
                     {e}
                   </span>
                 ))}
               </div>
-              <p className="text-[0.5rem] leading-tight text-muted-foreground">
+              <p className="text-[0.8125rem] leading-tight text-muted-foreground">
                 Personne ne passe : le site est à vous, et vous vous en occupez.
               </p>
             </div>
           )}
 
           {!formule && (
-            <p className="text-[0.5rem] leading-tight text-muted-foreground">
+            <p className="text-[0.8125rem] leading-tight text-muted-foreground">
               Après la livraison, à vous de dire qui s’en occupe.
             </p>
           )}

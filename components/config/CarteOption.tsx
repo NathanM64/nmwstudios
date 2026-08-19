@@ -66,7 +66,8 @@ export function CarteOption({
 
   if (option.quantifiable) {
     return (
-      <div data-testid={`carte-${option.id}`} className={`${CARTE} ${retenu ? RETENU : REPOS}`}>
+      // Le pas-à-pas passe sous le titre en dessous de 640 px : côte à côte, il pousse la page.
+      <div data-testid={`carte-${option.id}`} className={`${CARTE} ${retenu ? RETENU : REPOS} max-sm:flex-col`}>
         {teinte}
         <span className="flex flex-col gap-1">
           <span className="text-sm">{option.libelle}</span>
@@ -99,7 +100,7 @@ export function CarteOption({
           >
             +
           </button>
-          <span className="w-20 shrink-0 text-right font-mono text-xs text-muted-foreground">
+          <span className="w-16 shrink-0 text-right font-mono text-xs text-muted-foreground">
             {suffixePrix(option)}
           </span>
         </span>

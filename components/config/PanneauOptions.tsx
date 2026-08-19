@@ -34,7 +34,7 @@ export function PanneauOptions({
           <div
             id={`legende-${groupe.id}`}
             data-testid={`legende-${groupe.id}`}
-            className="sticky top-0 z-10 -mx-1 bg-canvas/85 px-1 py-2 font-mono text-xs uppercase tracking-[0.08em] text-accent backdrop-blur-sm"
+            className="entete-groupe sticky top-0 z-10 py-2 font-mono text-xs uppercase tracking-[0.08em] text-accent"
           >
             {groupe.titre}
           </div>
