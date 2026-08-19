@@ -189,9 +189,9 @@ test('le contraste mesuré ne s’affiche que si l’accessibilité est retenue'
 
 test('le SEO affiche l’extrait de résultat de recherche', async ({ page }) => {
   await page.goto('/configurateur')
-  await expect(page.getByTestId('apercu-seo')).toHaveCount(0)
+  await expect(page.getByTestId('preuve-serp')).toHaveCount(0)
   await page.getByRole('checkbox', { name: 'Fondations SEO' }).check()
-  await expect(page.getByTestId('apercu-seo')).toBeVisible()
+  await expect(page.getByTestId('preuve-serp')).toBeVisible()
 })
 
 test('la langue supplémentaire ajoute un sélecteur qui bascule l’aperçu', async ({ page }) => {
@@ -274,7 +274,7 @@ test('cocher le référencement bascule l’aperçu sur la scène de recherche',
   await page.goto('/configurateur')
   await expect(page.getByTestId('site-nav')).toBeVisible()
   await page.getByRole('checkbox', { name: 'Fondations SEO' }).check()
-  await expect(page.getByTestId('apercu-seo')).toBeVisible()
+  await expect(page.getByTestId('preuve-serp')).toBeVisible()
   await expect(page.getByTestId('site-nav')).toHaveCount(0)
 })
 
@@ -313,53 +313,53 @@ test('la scène de recherche ne montre l’extrait qu’une fois le référencem
   await page.goto('/configurateur')
   // Bascule de scène seule, sans toucher la configuration : isole la garde de la scène.
   await page.getByRole('button', { name: 'La preuve', exact: true }).click()
-  await expect(page.getByTestId('apercu-seo')).toHaveCount(0)
+  await expect(page.getByTestId('preuve-serp')).toHaveCount(0)
   await page.getByRole('checkbox', { name: 'Fondations SEO' }).check()
-  await expect(page.getByTestId('apercu-seo')).toBeVisible()
+  await expect(page.getByTestId('preuve-serp')).toBeVisible()
 })
 
-test('la scène technique ne montre perf et domaine qu’une fois achetés, chacun indépendamment', async ({ page }) => {
+test('la scène technique ne montre la vitesse et le domaine qu’une fois achetés, chacun indépendamment', async ({ page }) => {
   await page.goto('/configurateur')
   await page.getByRole('button', { name: 'La preuve', exact: true }).click()
-  await expect(page.getByTestId('apercu-perf')).toHaveCount(0)
-  await expect(page.getByTestId('apercu-domaine')).toHaveCount(0)
+  await expect(page.getByTestId('preuve-cascade')).toHaveCount(0)
+  await expect(page.getByTestId('preuve-domaine')).toHaveCount(0)
   await page.getByRole('checkbox', { name: 'Domaine et e-mails professionnels' }).check()
-  await expect(page.getByTestId('apercu-domaine')).toBeVisible()
-  await expect(page.getByTestId('apercu-perf')).toHaveCount(0)
+  await expect(page.getByTestId('preuve-domaine')).toBeVisible()
+  await expect(page.getByTestId('preuve-cascade')).toHaveCount(0)
 })
 
 test('le référencement local affiche une fiche d’établissement, sans contredire le SEO', async ({ page }) => {
   await page.goto('/configurateur')
   await page.getByRole('button', { name: 'La preuve', exact: true }).click()
-  await expect(page.getByTestId('apercu-recherche-vide')).toBeVisible()
+  const ligne = page.getByTestId('preuve-ligne').filter({ hasText: 'Fiche locale et horaires' })
+  await expect(ligne).toHaveAttribute('data-retenu', 'non')
   await page.getByRole('checkbox', { name: 'Référencement local' }).check()
-  await expect(page.getByTestId('apercu-seo-local')).toContainText('Bègles')
-  await expect(page.getByTestId('apercu-recherche-vide')).toHaveCount(0)
+  await expect(ligne).toContainText('Bègles')
+  await expect(page.getByTestId('preuve-serp')).toHaveCount(0)
 })
 
 test('la migration affiche la redirection des adresses de l’ancien site', async ({ page }) => {
   await page.goto('/configurateur')
   await page.getByRole('button', { name: 'La preuve', exact: true }).click()
-  await expect(page.getByTestId('apercu-technique-vide')).toBeVisible()
+  await expect(page.getByTestId('preuve-redirections')).toHaveCount(0)
   await page.getByRole('checkbox', { name: 'Migration de votre site actuel' }).check()
-  await expect(page.getByTestId('apercu-migration')).toContainText('redirigées')
-  await expect(page.getByTestId('apercu-technique-vide')).toHaveCount(0)
+  await expect(page.getByTestId('preuve-redirections')).toContainText('301')
 })
 
 test('le RGPD affiche une bannière de consentement dans la scène conformité', async ({ page }) => {
   await page.goto('/configurateur')
   await page.getByRole('button', { name: 'La preuve', exact: true }).click()
-  await expect(page.getByTestId('apercu-rgpd')).toHaveCount(0)
+  await expect(page.getByTestId('preuve-rgpd')).toHaveCount(0)
   await page.getByRole('checkbox', { name: 'Conformité RGPD' }).check()
-  await expect(page.getByTestId('apercu-rgpd')).toBeVisible()
+  await expect(page.getByTestId('preuve-rgpd')).toBeVisible()
 })
 
 test('les mentions légales affichent une ligne de pied de page', async ({ page }) => {
   await page.goto('/configurateur')
   await page.getByRole('button', { name: 'La preuve', exact: true }).click()
-  await expect(page.getByTestId('apercu-legal')).toHaveCount(0)
+  await expect(page.getByTestId('preuve-legal')).toHaveCount(0)
   await page.getByRole('checkbox', { name: 'Mentions légales et CGV' }).check()
-  await expect(page.getByTestId('apercu-legal')).toContainText('Mentions légales')
+  await expect(page.getByTestId('preuve-legal')).toContainText('Mentions légales')
 })
 
 test('la vignette « Déroulé » atteint la scène de planification sans rien cocher', async ({ page }) => {
