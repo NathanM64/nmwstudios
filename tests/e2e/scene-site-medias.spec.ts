@@ -24,6 +24,23 @@ test('les visuels sous licence remplissent le cadre et s’annoncent comme subst
   await expect(page.getByTestId('site-visuels')).toBeVisible()
 })
 
+test('photos et visuels cochés ensemble affichent deux étiquettes qui ne se recouvrent pas', async ({ page }) => {
+  // photos et visuels ne s'excluent pas : la visibilité seule ne verrait pas un chevauchement.
+  await page.getByRole('checkbox', { name: 'Je retouche vos photos', exact: true }).check()
+  await page.getByRole('checkbox', { name: 'Visuels sous licence', exact: true }).check()
+  await expect(page.getByTestId('site-poids')).toBeVisible()
+  await expect(page.getByTestId('site-visuels')).toBeVisible()
+
+  const poids = (await page.getByTestId('site-poids').boundingBox())!
+  const visuels = (await page.getByTestId('site-visuels').boundingBox())!
+  const chevauchement =
+    poids.x < visuels.x + visuels.width &&
+    poids.x + poids.width > visuels.x &&
+    poids.y < visuels.y + visuels.height &&
+    poids.y + poids.height > visuels.y
+  expect(chevauchement).toBe(false)
+})
+
 test('le blog ouvre une grille d’actualités vide', async ({ page }) => {
   await expect(page.getByTestId('site-blog')).toHaveCount(0)
   await page.getByRole('checkbox', { name: 'Un blog', exact: true }).check()
