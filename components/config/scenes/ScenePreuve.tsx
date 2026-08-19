@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import type { Configuration } from '@/lib/config/devis'
 import { contrastRatio, parseColor } from '@/lib/color/contrast'
 import { lireChargement } from '@/lib/config/mesure'
+import { DOMAINE_DEFAUT, editorialDe, type DomaineId } from '@/lib/config/domaines'
 
 /** Contraste réellement rendu : lu sur le DOM, jamais écrit en dur. */
 function useContrasteMesure(): number | null {
@@ -37,7 +38,9 @@ const CONTROLES = [
   { id: 'domaine', nom: 'Adresse et certificat' },
 ] as const
 
-export function ScenePreuve({ config }: { config: Configuration }) {
+export function ScenePreuve({ config, domaine = DOMAINE_DEFAUT }: { config: Configuration; domaine?: DomaineId }) {
+  // Cette scène n'a pas de sélecteur de langue : elle reste en français, comme le reste de ses libellés.
+  const recherche = editorialDe(domaine, 'fr').recherche
   const ratio = useContrasteMesure()
   const [vitesse, setVitesse] = useState<number | null>(null)
 
@@ -71,8 +74,8 @@ export function ScenePreuve({ config }: { config: Configuration }) {
               {retenu && controle.id === 'seo' && (
                 <div data-testid="preuve-serp" className="animate-apparait rounded-sm border border-border px-1 py-0.5">
                   <p className="text-[0.75rem] leading-tight text-accent">votre-nom.fr</p>
-                  <p className="text-[0.75rem] leading-tight text-foreground">Votre métier à Bègles · devis gratuit</p>
-                  <p className="text-[0.75rem] leading-tight text-muted-foreground">Description reprise de votre page d’accueil.</p>
+                  <p className="text-[0.75rem] leading-tight text-foreground">{recherche.titre}</p>
+                  <p className="text-[0.75rem] leading-tight text-muted-foreground">{recherche.description}</p>
                 </div>
               )}
 

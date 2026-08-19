@@ -1,4 +1,6 @@
 import { expect, test } from '@playwright/test'
+import { DOMAINE_DEFAUT, EDITORIAL } from '../../lib/config/domaines'
+import { HABILLAGE, type Langue } from '../../lib/config/maquette'
 
 test.beforeEach(async ({ page }) => {
   await page.goto('/configurateur')
@@ -38,27 +40,38 @@ test('rédaction et reprise cochées ensemble restent visibles toutes les deux',
 
 // Tout le texte, pas la seule navigation : titres, blocs repris, créneaux, newsletter,
 // articles et étiquettes du cadre image doivent suivre le sélecteur.
+// Les chaînes viennent du domaine par défaut, pas d'un littéral : une relecture des textes
+// ne doit pas rendre ce test faux, seulement le faire porter sur les nouveaux mots.
+const attendu = (langue: Langue) => {
+  const e = EDITORIAL[DOMAINE_DEFAUT][langue]
+  const h = HABILLAGE[langue]
+  return [e.pages[0], e.titre, h.redigees, e.blocsRepris[0], h.actualites, e.articles[0].titre,
+    h.photo, h.visuel, h.pieceJointe, h.reserver, h.creneaux[0], h.inscrire, h.regler, h.connexion]
+}
+
 test('le sélecteur de langue bascule tout le texte de la maquette', async ({ page }) => {
   await page.goto(
     '/configurateur?langue=1&redaction=3&reprise&photos&visuels&blog&article=2&membre&formulaire&rdv&newsletter&paiement'
   )
   const maquette = page.getByTestId('objet-scene')
 
-  for (const texte of ['Accueil', 'Charpentier à Bègles', 'Textes rédigés', 'Nos services', 'Actualités',
-    'Quel bois pour une extension ?', 'recadrée et allégée', 'visuel sous licence', 'Pièce jointe',
-    'Réserver un créneau', '9 h', 'S’inscrire', 'Régler en ligne', 'Connexion']) {
+  for (const texte of attendu('fr')) {
     await expect(maquette, `« ${texte} » manque avant la bascule`).toContainText(texte)
   }
 
   await page.getByTestId('site-langue').selectOption('en')
 
-  for (const texte of ['Home', 'Carpenter in Bègles', 'Pages written', 'Our services', 'News',
-    'Which timber for an extension?', 'cropped and compressed', 'licensed image', 'Attachment',
-    'Book a slot', '9 am', 'Sign up', 'Pay online', 'Log in']) {
+  for (const texte of attendu('en')) {
     await expect(maquette, `« ${texte} » manque après la bascule`).toContainText(texte)
   }
 
-  for (const reste of ['Charpentier à Bègles', 'Nos services', 'Réserver un créneau', 'Actualités']) {
+  const propresAuFrancais = [
+    EDITORIAL[DOMAINE_DEFAUT].fr.titre,
+    EDITORIAL[DOMAINE_DEFAUT].fr.blocsRepris[0],
+    HABILLAGE.fr.reserver,
+    HABILLAGE.fr.actualites,
+  ]
+  for (const reste of propresAuFrancais) {
     await expect(maquette, `« ${reste} » est resté en français`).not.toContainText(reste)
   }
 })
@@ -73,10 +86,10 @@ test('chaque langue achetée ajoute une entrée au sélecteur', async ({ page })
 test('retirer la langue ramène la maquette en français, sans la laisser bloquée', async ({ page }) => {
   await page.goto('/configurateur?langue=1&redaction=1')
   await page.getByTestId('site-langue').selectOption('en')
-  await expect(page.getByTestId('site-texte')).toContainText('Carpenter')
+  await expect(page.getByTestId('objet-scene')).toContainText(EDITORIAL[DOMAINE_DEFAUT].en.titre)
   await page.getByRole('button', { name: 'Retirer : Une langue de plus' }).click()
   await expect(page.getByTestId('site-langue')).toHaveCount(0)
-  await expect(page.getByTestId('site-texte')).toContainText('Charpentier')
+  await expect(page.getByTestId('objet-scene')).toContainText(EDITORIAL[DOMAINE_DEFAUT].fr.titre)
 })
 
 test('chaque page rédigée se nomme dans la maquette', async ({ page }) => {

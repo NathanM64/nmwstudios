@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { GROUPES, OPTIONS, SOCLE_ID, optionParId } from '@/lib/config/catalogue'
-import { LANGUES, TEXTES } from '@/lib/config/maquette'
+import { LANGUES } from '@/lib/config/maquette'
+import { DOMAINES, EDITORIAL } from '@/lib/config/domaines'
 
 describe('catalogue', () => {
   it('expose un socle à 1500 €', () => {
@@ -36,21 +37,27 @@ describe('catalogue', () => {
   })
 
   it('nomme assez de pages dans chaque langue pour les tranches et les textes rédigés', () => {
-    // Couplage assumé : `TEXTES[langue].pages` alimente la navigation (3 + max × 3 entrées)
-    // et la liste des pages rédigées (une par unité de `redaction`).
+    // Couplage assumé : `EDITORIAL[domaine][langue].pages` alimente la navigation
+    // (3 + max × 3 entrées) et la liste des pages rédigées (une par unité de `redaction`).
     const tranches = optionParId('pages')!.quantifiable!.max
     const redigees = optionParId('redaction')!.quantifiable!.max
-    for (const langue of LANGUES) {
-      const attendu = Math.max(3 + tranches * 3, redigees)
-      expect(TEXTES[langue].pages.length, `pages manquantes en ${langue}`).toBeGreaterThanOrEqual(attendu)
-      expect(new Set(TEXTES[langue].pages).size, `doublon de page en ${langue}`).toBe(TEXTES[langue].pages.length)
+    const attendu = Math.max(3 + tranches * 3, redigees)
+    for (const domaine of DOMAINES) {
+      for (const langue of LANGUES) {
+        const pages = EDITORIAL[domaine.id][langue].pages
+        expect(pages.length, `pages manquantes pour ${domaine.id} en ${langue}`).toBeGreaterThanOrEqual(attendu)
+        expect(new Set(pages).size, `doublon de page pour ${domaine.id} en ${langue}`).toBe(pages.length)
+      }
     }
   })
 
   it('offre assez d’articles nommés dans chaque langue pour la quantité maximale', () => {
     const max = optionParId('article')!.quantifiable!.max
-    for (const langue of LANGUES) {
-      expect(TEXTES[langue].articles.length, `articles manquants en ${langue}`).toBeGreaterThanOrEqual(max)
+    for (const domaine of DOMAINES) {
+      for (const langue of LANGUES) {
+        const articles = EDITORIAL[domaine.id][langue].articles
+        expect(articles.length, `articles manquants pour ${domaine.id} en ${langue}`).toBeGreaterThanOrEqual(max)
+      }
     }
   })
 

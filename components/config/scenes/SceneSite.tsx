@@ -2,11 +2,12 @@
 
 import { useState } from 'react'
 import type { Configuration } from '@/lib/config/devis'
-import { LANGUES, TEXTES, type Langue } from '@/lib/config/maquette'
+import { HABILLAGE, LANGUES, type Langue } from '@/lib/config/maquette'
+import { DOMAINE_DEFAUT, editorialDe, type DomaineId } from '@/lib/config/domaines'
 
 const PAGES_SOCLE = 3
 
-export function SceneSite({ config }: { config: Configuration }) {
+export function SceneSite({ config, domaine = DOMAINE_DEFAUT }: { config: Configuration; domaine?: DomaineId }) {
   const tranches = config.pages ?? 0
   const langues = config.langue ?? 0
   const redaction = config.redaction ?? 0
@@ -25,8 +26,9 @@ export function SceneSite({ config }: { config: Configuration }) {
   // est encore payée : retirer l'option ne laisse pas la maquette bloquée en anglais.
   const offertes = LANGUES.slice(0, Math.min(langues, LANGUES.length - 1) + 1)
   const active = offertes.includes(langue) ? langue : 'fr'
-  const t = TEXTES[active]
-  const libelles = t.pages.slice(0, PAGES_SOCLE + tranches * 3)
+  const t = HABILLAGE[active]
+  const e = editorialDe(domaine, active)
+  const libelles = e.pages.slice(0, PAGES_SOCLE + tranches * 3)
 
   return (
     <div className="animate-apparait flex flex-1 flex-col">
@@ -74,12 +76,12 @@ export function SceneSite({ config }: { config: Configuration }) {
 
         {redaction > 0 && (
           <div data-testid="site-texte" className="animate-apparait">
-            <p className="text-[1.3125rem] leading-tight text-foreground">{t.titre}</p>
-            <p className="text-[1rem] leading-snug text-muted-foreground">{t.corps}</p>
+            <p className="text-[1.3125rem] leading-tight text-foreground">{e.titre}</p>
+            <p className="text-[1rem] leading-snug text-muted-foreground">{e.corps}</p>
             {/* Une page nommée par unité : sans elle, quinze pages rédigées rendent le même écran qu'une. */}
             <div data-testid="site-redaction" className="mt-0.5 flex flex-wrap items-center gap-x-1 gap-y-0.5">
               <span className="text-[0.75rem] uppercase tracking-wider text-accent">{t.redigees}</span>
-              {t.pages.slice(0, redaction).map((page) => (
+              {e.pages.slice(0, redaction).map((page) => (
                 <span
                   key={page}
                   data-testid="site-page-redigee"
@@ -94,7 +96,7 @@ export function SceneSite({ config }: { config: Configuration }) {
 
         {reprise > 0 && (
           <ul data-testid="site-reprise" className="animate-apparait flex flex-col gap-0.5">
-            {t.blocsRepris.map((bloc) => (
+            {e.blocsRepris.map((bloc) => (
               <li key={bloc} className="rounded-sm border border-border px-2 text-[0.875rem] leading-tight text-muted-foreground">
                 {bloc}
               </li>
@@ -126,7 +128,7 @@ export function SceneSite({ config }: { config: Configuration }) {
             {/* 5 colonnes : 10 articles au maximum tiennent sur 2 lignes plutôt que 4, sans quoi le cadre déborde. */}
             <div className="grid grid-cols-5 gap-0.5">
               {articles > 0
-                ? t.articles.slice(0, articles).map((article) => (
+                ? e.articles.slice(0, articles).map((article) => (
                     <div key={article.requete} data-testid="site-article" className="rounded-sm border border-border px-0.5">
                       <p className="text-[0.8125rem] leading-tight text-foreground">{article.titre}</p>
                       <p className="font-mono text-[0.75rem] leading-tight text-accent">{article.requete}</p>
