@@ -44,7 +44,7 @@ export function Recapitulatif({ config }: { config: Configuration }) {
       </ul>
 
       <p className="mt-4 font-mono">
-        {formaterEuros(devis.bas)} – {formaterEuros(devis.haut)}
+        {formaterEuros(devis.total)}
         {devis.mensuel > 0 && ` puis ${formaterEuros(devis.mensuel)}/mois`}
       </p>
 

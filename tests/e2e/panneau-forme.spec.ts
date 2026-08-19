@@ -21,7 +21,7 @@ test('le prix du socle se distingue typographiquement du delta d’une option', 
 
 test('le total de la barre domine tous les prix d’option', async ({ page }) => {
   await page.goto('/configurateur')
-  const total = page.getByTestId('fourchette')
+  const total = page.getByTestId('prix')
   const blog = page.getByTestId('carte-blog').locator('.font-mono')
 
   const tailleTotal = await total.evaluate((n) => parseFloat(getComputedStyle(n).fontSize))

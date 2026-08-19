@@ -62,26 +62,22 @@ test('choisir une formule remplace la précédente dans le montant mensuel', asy
   await expect(page.getByTestId('mensuel')).toContainText('190')
 })
 
-test('la barre affiche la fourchette et le mensuel ensemble', async ({ page }) => {
+test('la barre affiche le prix et le mensuel ensemble', async ({ page }) => {
   await page.goto('/configurateur')
   await page.getByRole('radio', { name: 'Essentiel' }).check()
-  await expect(page.getByTestId('fourchette')).toContainText('€')
+  await expect(page.getByTestId('prix')).toContainText('€')
   await expect(page.getByTestId('mensuel')).toContainText('90')
 })
 
-test('la fourchette monte quand on ajoute une option', async ({ page }) => {
+test('le prix monte quand on ajoute une option', async ({ page }) => {
   await page.goto('/configurateur')
-  const lireBornes = async () => {
-    const texte = (await page.getByTestId('fourchette').textContent()) ?? ''
-    const [bas, haut] = texte.split('–').map((partie) => Number(partie.replace(/\D/g, '')))
-    return { bas, haut }
-  }
-  const avant = await lireBornes()
+  const lirePrix = async () =>
+    Number(((await page.getByTestId('prix').textContent()) ?? '').replace(/\D/g, ''))
+
+  const avant = await lirePrix()
   await page.getByRole('checkbox', { name: 'Un blog' }).check()
-  const apres = await lireBornes()
-  // Une régression qui soustrairait ferait aussi « changer » le texte : on compare les bornes elles-mêmes.
-  expect(apres.bas).toBeGreaterThan(avant.bas)
-  expect(apres.haut).toBeGreaterThan(avant.haut)
+  // Une régression qui soustrairait ferait aussi « changer » le texte : on compare les nombres.
+  await expect.poll(lirePrix).toBe(avant + 700)
 })
 
 test('le delta annonce le montant ajouté', async ({ page }) => {
@@ -96,13 +92,13 @@ test('changer de formule récurrente déclenche aussi un delta, sur le mensuel',
   await expect(page.getByTestId('delta')).toHaveText('+300 €/mois')
 })
 
-test('la fourchette et le mensuel s’annoncent aux lecteurs d’écran', async ({ page }) => {
+test('le prix et le mensuel s’annoncent aux lecteurs d’écran', async ({ page }) => {
   await page.goto('/configurateur')
-  await expect(page.getByTestId('fourchette')).toHaveAttribute('aria-live', 'polite')
+  await expect(page.getByTestId('prix')).toHaveAttribute('aria-live', 'polite')
   await expect(page.getByTestId('mensuel')).toHaveAttribute('aria-live', 'polite')
 })
 
-test('le delta n’est pas annoncé, décoratif et redondant avec la fourchette', async ({ page }) => {
+test('le delta n’est pas annoncé, décoratif et redondant avec le prix', async ({ page }) => {
   await page.goto('/configurateur')
   await page.getByRole('checkbox', { name: 'Un blog' }).check()
   await expect(page.getByTestId('delta')).not.toHaveAttribute('aria-live', 'polite')
@@ -116,7 +112,7 @@ test('ouvrir un lien de configuration partagé n’affiche aucun delta fantôme'
 test('la barre reste visible sans défilement', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 })
   await page.goto('/configurateur')
-  await expect(page.getByTestId('fourchette')).toBeInViewport()
+  await expect(page.getByTestId('prix')).toBeInViewport()
 })
 
 test('l’aperçu montre trois entrées de navigation par défaut', async ({ page }) => {
@@ -410,7 +406,7 @@ test('le dock des sections d’accueil n’apparaît pas sur le configurateur', 
 
 test('aucune adresse n’est jamais demandée, le récapitulatif s’envoie par la messagerie du visiteur', async ({ page }) => {
   await page.goto('/configurateur')
-  await expect(page.getByTestId('fourchette')).toBeVisible()
+  await expect(page.getByTestId('prix')).toBeVisible()
   // .first() : le récapitulatif final de fin de panneau reprend aussi ce bouton.
   await page.getByRole('button', { name: 'Recevoir le récapitulatif' }).first().click()
   await expect(page.getByRole('textbox', { name: /adresse e-mail/i })).toHaveCount(0)

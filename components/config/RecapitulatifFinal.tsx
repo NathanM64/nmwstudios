@@ -21,7 +21,7 @@ export function RecapitulatifFinal({
   return (
     <div ref={ref} data-testid="recapitulatif-final" className="panel mt-12 flex flex-col gap-4 p-6">
       <p aria-live="polite" className="font-mono text-lg tabular-nums">
-        {formaterEuros(devis.bas)} – {formaterEuros(devis.haut)}
+        {formaterEuros(devis.total)}
       </p>
       {devis.mensuel > 0 && (
         <p aria-live="polite" className="font-mono text-sm text-muted-foreground tabular-nums">

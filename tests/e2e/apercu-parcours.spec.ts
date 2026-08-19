@@ -28,7 +28,7 @@ test('cocher tout le catalogue dans l’ordre garde aperçu, scène et total coh
     // Comparaison sur la chaîne formatée : « 1 500 € » porte une espace de milliers,
     // qu'un découpage naïf du nombre brut ne retrouverait jamais.
     const attendu = calculer(config)
-    await expect(page.getByTestId('fourchette')).toContainText(formaterEuros(attendu.bas))
+    await expect(page.getByTestId('prix')).toHaveText(formaterEuros(attendu.total))
   }
 
   // Toutes les scènes restent regardables une fois tout coché.
@@ -43,7 +43,7 @@ test('le récapitulatif final reprend les mêmes montants que la barre', async (
   await page.getByRole('checkbox', { name: 'Espace membre', exact: true }).check()
   await page.getByRole('checkbox', { name: 'Paiement en ligne', exact: true }).check()
 
-  const barre = await page.getByTestId('fourchette').textContent()
+  const barre = await page.getByTestId('prix').textContent()
   await page.getByTestId('recapitulatif-final').scrollIntoViewIfNeeded()
-  await expect(page.getByTestId('recapitulatif-final')).toContainText(barre!.split('–')[0].trim())
+  await expect(page.getByTestId('recapitulatif-final')).toContainText(barre!.trim())
 })

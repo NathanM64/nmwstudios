@@ -48,8 +48,8 @@ export function BarrePrix({
     >
       <div className="mx-auto flex w-full max-w-5xl items-baseline justify-between gap-4">
         <p className="flex min-w-0 flex-wrap items-baseline gap-x-3">
-          <span data-testid="fourchette" aria-live="polite" className="font-mono text-2xl tabular-nums">
-            {formaterEuros(devis.bas)} – {formaterEuros(devis.haut)}
+          <span data-testid="prix" aria-live="polite" className="font-mono text-2xl tabular-nums">
+            {formaterEuros(devis.total)}
           </span>
           {delta && (
             <span

@@ -5,15 +5,10 @@ export type Configuration = Record<string, number>
 export type Devis = {
   base: number
   total: number
-  bas: number
-  haut: number
   mensuel: number
 }
 
 export const CONFIG_VIDE: Configuration = {}
-
-/** Borne haute de la fourchette : 15 % au-dessus du total, pour couvrir l’imprévu du brief. */
-const MARGE_HAUTE = 1.15
 
 /** Quantité effective : plafonnée pour les quantifiables, ramenée à 1 sinon. */
 function quantite(option: Option, brute: number): number {
@@ -38,13 +33,7 @@ export function calculer(config: Configuration): Devis {
 
   const total = Math.round(base * (1 + pourcentage / 100))
 
-  return {
-    base,
-    total,
-    mensuel,
-    bas: Math.floor(total / 100) * 100,
-    haut: Math.ceil((total * MARGE_HAUTE) / 100) * 100,
-  }
+  return { base, total, mensuel }
 }
 
 export function formaterEuros(montant: number): string {

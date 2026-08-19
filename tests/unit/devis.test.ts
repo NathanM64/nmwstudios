@@ -41,18 +41,16 @@ describe('calculer', () => {
     expect(devis.total).toBe(Math.round(1500 * 1.3))
   })
 
-  it('encadre le total par une fourchette arrondie à la centaine', () => {
-    const devis = calculer({ pages: 2, seo: 1 })
-    expect(devis.total).toBe(3300)
-    expect(devis.bas).toBe(3300)
-    expect(devis.haut).toBe(3800)
+  // Prix ferme depuis le 19/08/2026 : le total affiché est la somme exacte du catalogue,
+  // sans arrondi ni marge. Chaque option a un prix arrêté, la somme aussi.
+  it('donne la somme exacte du catalogue, y compris hors multiple de cent', () => {
+    expect(calculer({ pages: 2, seo: 1 }).total).toBe(3300)
+    expect(calculer({ redaction: 1 }).total).toBe(1650)
   })
 
-  it('arrondit bas et haut sur un total non-multiple de cent', () => {
-    const devis = calculer({ redaction: 1 })
-    expect(devis.total).toBe(1650)
-    expect(devis.bas).toBe(1600)
-    expect(devis.haut).toBe(1900)
+  it("n'expose plus de bornes", () => {
+    // Une borne réintroduite en silence redonnerait au visiteur deux nombres sans raison.
+    expect(Object.keys(calculer({ blog: 1 })).sort()).toEqual(['base', 'mensuel', 'total'])
   })
 
   it('expose la base hors pourcentage', () => {
