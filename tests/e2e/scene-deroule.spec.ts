@@ -10,6 +10,22 @@ async function largeur(page: import('@playwright/test').Page, testId: string) {
   return boite!.width
 }
 
+// Un repère ponctuel a sa propre largeur : `left: 100%` seul le fait dépasser la piste de ce
+// même montant. N'agit que si le repère existe (le fantôme n'apparaît pas hors accélération).
+async function confine(page: import('@playwright/test').Page, testId: string, contexte: string) {
+  const locator = page.getByTestId(testId)
+  // `.boundingBox()` attend l'élément au lieu de rendre null : le fantôme est absent
+  // hors accélération, `count()` évite un timeout de 30 s à chaque appel dans ce cas.
+  if ((await locator.count()) === 0) return
+  const boite = await locator.boundingBox()
+  if (!boite) return
+  const piste = (await page.getByTestId('deroule-piste').boundingBox())!
+  expect(boite.x, `${testId} déborde à gauche de sa piste (${contexte})`).toBeGreaterThanOrEqual(piste.x - 0.5)
+  expect(boite.x + boite.width, `${testId} déborde à droite de sa piste (${contexte})`).toBeLessThanOrEqual(
+    piste.x + piste.width + 0.5
+  )
+}
+
 test('la construction est toujours présente, même sans option', async ({ page }) => {
   await expect(page.getByTestId('deroule-construction')).toBeVisible()
   await expect(page.getByTestId('deroule-cadrage')).toHaveCount(0)
@@ -92,5 +108,16 @@ test('sur une petite hauteur, la scène du déroulé ne déborde pas silencieuse
       .getByTestId('apercu')
       .evaluate((el) => el.scrollHeight - el.clientHeight)
     expect(debordement, `débordement à ${taille.width}x${taille.height}`).toBeLessThanOrEqual(6)
+
+    const contexte = `pire cas ${taille.width}x${taille.height}`
+    await confine(page, 'deroule-livraison', contexte)
+    await confine(page, 'deroule-fantome', contexte)
   }
+
+  // État par défaut : deroule-livraison est à `left: 100%`, exactement le cas qui dépassait.
+  await page.setViewportSize({ width: 1280, height: 800 })
+  await page.goto('/configurateur')
+  await page.getByTestId('onglet-deroule').click()
+  await confine(page, 'deroule-livraison', 'état par défaut')
+  await confine(page, 'deroule-fantome', 'état par défaut')
 })

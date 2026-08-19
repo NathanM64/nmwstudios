@@ -13,9 +13,13 @@ const EVENEMENTS: Record<string, string[]> = {
   partenaire: ['Sauvegarde quotidienne', 'Mises à jour et correctifs', 'Surveillance', 'Intervention sous 4 h', 'Évolutions', 'Rapport mensuel'],
 }
 
-/** Pire cas du catalogue entier, cadrage et formation compris : sert d'échelle fixe à la piste.
- *  Sans elle, une option lourde ne changerait que la part du total, jamais la largeur en pixels. */
-const CONFIG_MAX: Configuration = Object.fromEntries(OPTIONS.map((o) => [o.id, o.quantifiable?.max ?? 1]))
+/** Pire cas réel du catalogue, cadrage et formation compris, express décoché : la livraison
+ *  accélérée raccourcit la construction, elle ne peut jamais allonger le plafond. Sert d'échelle
+ *  fixe à la piste ; sans elle, une option lourde ne changerait que la part du total, jamais la
+ *  largeur en pixels. */
+const CONFIG_MAX: Configuration = Object.fromEntries(
+  OPTIONS.map((o) => [o.id, o.id === 'express' ? 0 : (o.quantifiable?.max ?? 1)])
+)
 const ECHELLE_SEMAINES = calculerDeroule(CONFIG_MAX).total
 
 function formaterSemaines(semaines: number): string {
@@ -32,12 +36,21 @@ export function SceneDeroule({ config }: { config: Configuration }) {
   // une option lourde élargit la barre en pixels, pas seulement sa part du total.
   const pct = (semaines: number) => `${(semaines / deroule.total) * 100}%`
 
+  // Un repère ponctuel a une largeur propre : à `left: 100%`, il dépasse la piste de sa propre
+  // largeur. translateX(-P%) où P est le même pourcentage recule le bord qui sort d'autant,
+  // sans jamais reculer plus qu'il ne faut à gauche : confinement exact à toute position.
+  const decalage = (semaines: number) => `translateX(-${(semaines / deroule.total) * 100}%)`
+
   return (
     <div className="animate-apparait flex flex-1 flex-col gap-6 p-3">
       <div className="flex flex-col gap-2">
         <p className="text-[0.5rem] uppercase tracking-wider text-accent">Déroulé du projet</p>
 
-        <div className="relative h-5" style={{ width: `${Math.min(100, (deroule.total / ECHELLE_SEMAINES) * 100)}%` }}>
+        <div
+          data-testid="deroule-piste"
+          className="relative h-5"
+          style={{ width: `${Math.min(100, (deroule.total / ECHELLE_SEMAINES) * 100)}%` }}
+        >
           <div className="absolute inset-x-0 top-1/2 h-px -translate-y-1/2 bg-border" />
 
           {deroule.cadrage > 0 && (
@@ -65,15 +78,20 @@ export function SceneDeroule({ config }: { config: Configuration }) {
           {deroule.livraison < deroule.livraisonSansExpress && (
             <span
               data-testid="deroule-fantome"
-              style={{ left: `${(deroule.livraisonSansExpress / deroule.total) * 100}%` }}
+              style={{
+                left: `${(deroule.livraisonSansExpress / deroule.total) * 100}%`,
+                transform: decalage(deroule.livraisonSansExpress),
+              }}
               className="absolute -top-1 -bottom-1 w-px bg-muted-foreground"
             />
           )}
 
+          {/* Pas d'`animate-apparait` : son keyframe force `transform: none` à la fin, ce qui
+              écraserait le décalage de confinement ci-dessous. */}
           <span
             data-testid="deroule-livraison"
-            className="animate-apparait absolute -top-1 -bottom-1 w-0.5 rounded-full bg-accent"
-            style={{ left: pct(deroule.livraison) }}
+            className="absolute -top-1 -bottom-1 w-0.5 rounded-full bg-accent"
+            style={{ left: pct(deroule.livraison), transform: decalage(deroule.livraison) }}
           />
         </div>
 
