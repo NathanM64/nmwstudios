@@ -4,7 +4,7 @@ import { useEffect, useRef } from 'react'
 import { CarteOption } from '@/components/config/CarteOption'
 import { GROUPES, OPTIONS, type GroupeId } from '@/lib/config/catalogue'
 import type { Configuration } from '@/lib/config/devis'
-import { SCENE_PAR_GROUPE, sceneDeOption, type SceneId } from '@/lib/config/scenes'
+import { ANCRE_PAR_GROUPE, partieDeAncre, sceneDeOption, type SceneId } from '@/lib/config/scenes'
 
 /** Ligne de lecture, en part de la hauteur de fenêtre : le groupe qui la franchit est celui
  *  qu'on est en train de lire, et c'est aussi là que se cale son en-tête collant. */
@@ -63,7 +63,7 @@ export function PanneauOptions({
       // Au montage on note le groupe sans commuter : un lien partagé a déjà choisi sa scène.
       const premier = dernierGroupe.current === null
       dernierGroupe.current = courant
-      if (!premier) onScene(SCENE_PAR_GROUPE[courant])
+      if (!premier) onScene(partieDeAncre(ANCRE_PAR_GROUPE[courant]))
     }
 
     releve.current = relever

@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test'
 import { GROUPES } from '../../lib/config/catalogue'
-import { SCENE_PAR_GROUPE } from '../../lib/config/scenes'
+import { ANCRE_PAR_GROUPE, partieDeAncre } from '../../lib/config/scenes'
 import { calculer, formaterEuros } from '../../lib/config/devis'
 import { CONFIG_DEPART } from '../../components/config/Configurateur'
 
@@ -32,7 +32,7 @@ test('chaque groupe amène sa propre scène', async ({ page }) => {
   for (const groupe of GROUPES) {
     await amener(page, groupe.id)
     await expect(
-      page.getByTestId(`onglet-${SCENE_PAR_GROUPE[groupe.id]}`),
+      page.getByTestId(`onglet-${partieDeAncre(ANCRE_PAR_GROUPE[groupe.id])}`),
       `le groupe « ${groupe.titre} » n’amène pas sa scène`
     ).toHaveAttribute('aria-pressed', 'true')
   }
