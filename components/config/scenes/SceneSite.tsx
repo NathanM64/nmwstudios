@@ -47,11 +47,11 @@ export function SceneSite({ config, domaine = DOMAINE_DEFAUT }: { config: Config
           <nav data-testid="site-nav">
             <ul className="flex flex-wrap justify-end gap-x-2 gap-y-0.5">
               {visibles.map((page) => (
-                <li key={page} className="animate-apparait m-menu">
+                <li key={page} className="animate-glisse m-menu">
                   {page}
                 </li>
               ))}
-              {reste > 0 && <li className="animate-apparait m-menu">+{reste}</li>}
+              {reste > 0 && <li className="animate-glisse m-menu">+{reste}</li>}
             </ul>
           </nav>
           {langues > 0 && (
@@ -70,7 +70,7 @@ export function SceneSite({ config, domaine = DOMAINE_DEFAUT }: { config: Config
             </select>
           )}
           {(config.membre ?? 0) > 0 && (
-            <span data-testid="site-connexion" className="animate-apparait m-puce px-1.5">
+            <span data-testid="site-connexion" className="animate-glisse m-puce px-1.5">
               {t.connexion}
             </span>
           )}
@@ -101,15 +101,15 @@ export function SceneSite({ config, domaine = DOMAINE_DEFAUT }: { config: Config
           {photos > 0 && (
             <>
               {/* Le travail sur la photo, jamais la photo : rien à produire graphiquement. */}
-              <span data-testid="site-reperes" className="animate-apparait m-reperes absolute inset-3" />
+              <span data-testid="site-reperes" className="animate-glisse m-reperes absolute inset-3" />
               {/* Aucun chiffre : un poids annoncé serait une mesure inventée. */}
-              <span data-testid="site-poids" className="animate-apparait m-etiquette absolute right-1.5 bottom-1.5 px-1.5">
+              <span data-testid="site-poids" className="animate-glisse m-etiquette absolute right-1.5 bottom-1.5 px-1.5">
                 {t.photo}
               </span>
             </>
           )}
           {visuels > 0 && (
-            <span data-testid="site-visuels" className="animate-apparait m-etiquette absolute bottom-1.5 left-1.5 px-1.5">
+            <span data-testid="site-visuels" className="animate-glisse m-etiquette absolute bottom-1.5 left-1.5 px-1.5">
               {t.visuel}
             </span>
           )}
@@ -135,7 +135,7 @@ export function SceneSite({ config, domaine = DOMAINE_DEFAUT }: { config: Config
             <div className="flex flex-wrap items-baseline gap-x-2 gap-y-0.5">
               <p className="m-surtitre">{e.blocsRepris[2]}</p>
               {formulaire > 0 && (
-                <div data-testid="site-etapes" className="animate-apparait flex gap-1">
+                <div data-testid="site-etapes" className="animate-construit flex gap-1">
                   {[1, 2, 3].map((n) => (
                     <span key={n} className="m-jeton m-mono px-1.5">
                       {n}
@@ -143,7 +143,7 @@ export function SceneSite({ config, domaine = DOMAINE_DEFAUT }: { config: Config
                   ))}
                 </div>
               )}
-              {formulaire > 0 && <p className="animate-apparait m-legende">{t.pieceJointe}</p>}
+              {formulaire > 0 && <p className="animate-construit m-legende">{t.pieceJointe}</p>}
             </div>
             <div className="flex items-center gap-1">
               {[0, 1, 2].map((i) => (
@@ -154,14 +154,14 @@ export function SceneSite({ config, domaine = DOMAINE_DEFAUT }: { config: Config
           </section>
 
           {newsletter > 0 && (
-            <section data-testid="site-newsletter" className="animate-apparait m-carte flex min-w-0 flex-1 items-center gap-1.5 px-2 py-1.5">
+            <section data-testid="site-newsletter" className="animate-construit m-carte flex min-w-0 flex-1 items-center gap-1.5 px-2 py-1.5">
               <span className="m-champ h-3 min-w-0 flex-1" />
               <span className="m-plein shrink-0 px-1.5">{t.inscrire}</span>
             </section>
           )}
 
           {rdv > 0 && (
-            <section data-testid="site-rdv" className="animate-apparait m-air-serre flex min-w-0 flex-1 flex-col">
+            <section data-testid="site-rdv" className="animate-construit m-air-serre flex min-w-0 flex-1 flex-col">
               <p className="m-surtitre">{t.reserver}</p>
               <div className="flex flex-wrap gap-0.5">
                 {t.creneaux.map((h) => (
@@ -174,7 +174,7 @@ export function SceneSite({ config, domaine = DOMAINE_DEFAUT }: { config: Config
           )}
 
           {paiement > 0 && (
-            <section data-testid="site-paiement" className="animate-apparait m-carte flex min-w-0 flex-1 items-center justify-between gap-2 px-2 py-1.5">
+            <section data-testid="site-paiement" className="animate-construit m-carte flex min-w-0 flex-1 items-center justify-between gap-2 px-2 py-1.5">
               <span className="m-corps truncate">{t.regler}</span>
               <span className="flex shrink-0 gap-1">
                 {/* Logos dessinés, aucune marque reproduite. */}
@@ -189,12 +189,12 @@ export function SceneSite({ config, domaine = DOMAINE_DEFAUT }: { config: Config
         {(redaction > 0 || reprise > 0) && (
           <div className="m-air-serre flex shrink-0 flex-col">
             {redaction > 0 && (
-              <div data-testid="site-texte" className="animate-apparait flex min-w-0 flex-wrap items-baseline gap-x-2 gap-y-0.5">
+              <div data-testid="site-texte" className="animate-construit flex min-w-0 flex-wrap items-baseline gap-x-2 gap-y-0.5">
                 <span className="m-surtitre">{t.redigees}</span>
                 {/* Une page nommée par unité : sans elle, quinze pages rédigées rendent le même écran qu'une. */}
                 <span data-testid="site-redaction" className="flex min-w-0 flex-1 basis-0 flex-wrap items-baseline gap-1">
                   {e.pages.slice(0, redaction).map((page) => (
-                    <span key={page} data-testid="site-page-redigee" className="m-puce m-puce-borne truncate px-1.5">
+                    <span key={page} data-testid="site-page-redigee" className="animate-glisse m-puce m-puce-borne truncate px-1.5">
                       {page}
                     </span>
                   ))}
@@ -203,7 +203,7 @@ export function SceneSite({ config, domaine = DOMAINE_DEFAUT }: { config: Config
             )}
 
             {reprise > 0 && (
-              <ul data-testid="site-reprise" className="animate-apparait flex flex-wrap gap-1">
+              <ul data-testid="site-reprise" className="animate-construit flex flex-wrap gap-1">
                 {e.blocsRepris.map((bloc) => (
                   <li key={bloc} className="m-puce px-1.5">
                     {bloc}
@@ -215,7 +215,7 @@ export function SceneSite({ config, domaine = DOMAINE_DEFAUT }: { config: Config
         )}
 
         {(blog > 0 || articles > 0) && (
-          <section data-testid="site-blog" className="animate-apparait m-air-serre flex shrink-0 flex-col">
+          <section data-testid="site-blog" className="animate-construit m-air-serre flex shrink-0 flex-col">
             {/* Pleine largeur et 5 colonnes : 10 articles tiennent sur 2 lignes avec des titres
                 encore lisibles, ce qu'une demi-colonne ne permettait pas. */}
             <div className="flex items-baseline gap-2">

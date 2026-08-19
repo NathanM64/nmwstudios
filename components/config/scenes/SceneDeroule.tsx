@@ -122,7 +122,7 @@ export function SceneDeroule({ config }: { config: Configuration }) {
               ) : (
                 <div
                   data-testid={`deroule-${rangee.id}`}
-                  className={`animate-apparait absolute top-[32%] bottom-[32%] ${rangee.seconde ? 'm-barre-2' : 'm-barre'}`}
+                  className={`absolute top-[32%] bottom-[32%] ${rangee.seconde ? 'animate-allonge m-barre-2' : 'm-barre'}`}
                   style={{ left: part(rangee.depart), width: part(rangee.duree) }}
                 />
               )}
@@ -138,13 +138,13 @@ export function SceneDeroule({ config }: { config: Configuration }) {
                 left: part(deroule.livraisonSansExpress),
                 translate: decalage(deroule.livraisonSansExpress),
               }}
-              className="animate-apparait m-trait-sourd absolute inset-y-0 w-px"
+              className="animate-apparait m-jalon m-trait-sourd absolute inset-y-0 w-px"
             />
           )}
 
           <span
             data-testid="deroule-livraison"
-            className="animate-apparait m-barre absolute inset-y-0 w-0.5"
+            className="animate-apparait m-jalon m-barre absolute inset-y-0 w-0.5"
             style={{ left: part(deroule.livraison), translate: decalage(deroule.livraison) }}
           />
         </div>
@@ -165,7 +165,7 @@ export function SceneDeroule({ config }: { config: Configuration }) {
           {evenements.length > 0 && (
             <div className="flex flex-wrap gap-1">
               {evenements.map((e) => (
-                <span key={e} data-testid="deroule-evenement" className="m-puce px-1.5">
+                <span key={e} data-testid="deroule-evenement" className="animate-glisse m-puce px-1.5">
                   {e}
                 </span>
               ))}

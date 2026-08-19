@@ -1,6 +1,6 @@
 'use client'
 
-import { Fragment, useEffect, useState } from 'react'
+import { Fragment, useEffect, useRef, useState } from 'react'
 import type { Configuration } from '@/lib/config/devis'
 import { contrastRatio, parseColor } from '@/lib/color/contrast'
 import { lireChargement } from '@/lib/config/mesure'
@@ -27,6 +27,38 @@ function useContrasteMesure(): number | null {
   return ratio
 }
 
+/** Compteur qui s'incrémente au lieu de sauter. La durée suit l'écart : sans cela, passer de
+ *  zéro à huit se lirait aussi vite qu'un plus un. */
+function useCompteur(cible: number): { valeur: number; anime: boolean } {
+  const [valeur, setValeur] = useState(0)
+  const depart = useRef(0)
+
+  useEffect(() => {
+    const reduit = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    const debut = depart.current
+    if (reduit || debut === cible) {
+      setValeur(cible)
+      depart.current = cible
+      return
+    }
+
+    const duree = Math.min(700, 180 + 70 * Math.abs(cible - debut))
+    const t0 = performance.now()
+    let image = 0
+    const pas = () => {
+      const avance = Math.min(1, (performance.now() - t0) / duree)
+      const courant = Math.round(debut + (cible - debut) * avance)
+      setValeur(courant)
+      depart.current = courant
+      if (avance < 1) image = requestAnimationFrame(pas)
+    }
+    image = requestAnimationFrame(pas)
+    return () => cancelAnimationFrame(image)
+  }, [cible])
+
+  return { valeur, anime: valeur !== cible }
+}
+
 const CONTROLES = [
   { id: 'seo', nom: 'Vous apparaissez dans les résultats' },
   { id: 'seo-local', nom: 'Fiche locale et horaires' },
@@ -50,14 +82,19 @@ export function ScenePreuve({ config, domaine = DOMAINE_DEFAUT }: { config: Conf
   }, [])
 
   const retenus = CONTROLES.filter((controle) => (config[controle.id] ?? 0) > 0).length
+  const compteur = useCompteur(retenus)
 
   return (
     <div className="animate-apparait m-air-serre m-marge flex flex-1 flex-col">
       {/* Le compteur domine, les huit lignes se rangent dessous. Sur une ligne avec son
           libellé plutôt qu'au-dessus : le cadre en bandeau ne paie pas deux fois. */}
       <div className="flex shrink-0 items-baseline gap-3">
-        <p data-testid="preuve-score" className="m-chiffre shrink-0">
-          {retenus} / {CONTROLES.length}
+        <p
+          data-testid="preuve-score"
+          data-anime={compteur.anime ? 'oui' : 'non'}
+          className="m-chiffre shrink-0"
+        >
+          {compteur.valeur} / {CONTROLES.length}
         </p>
         <div className="min-w-0 flex-1">
           <p className="m-surtitre">contrôles retenus</p>
@@ -85,7 +122,7 @@ export function ScenePreuve({ config, domaine = DOMAINE_DEFAUT }: { config: Conf
               </div>
 
               {retenu && controle.id === 'seo' && (
-                <div data-testid="preuve-serp" className="animate-apparait flex flex-col">
+                <div data-testid="preuve-serp" className="animate-construit flex flex-col">
                   <p className="m-mono m-sourd">votre-nom.fr</p>
                   <p className="m-sous-titre m-accent truncate">{recherche.titre}</p>
                   <p className="m-legende line-clamp-1">{recherche.description}</p>
@@ -99,7 +136,7 @@ export function ScenePreuve({ config, domaine = DOMAINE_DEFAUT }: { config: Conf
               {retenu && controle.id === 'perf' && (
                 <>
                   {/* Artefact visuel, aucune requête simulée : la mesure vient du texte en dessous. */}
-                  <div data-testid="preuve-cascade" className="animate-apparait m-cascade flex flex-col gap-0.5">
+                  <div data-testid="preuve-cascade" className="animate-construit m-cascade flex flex-col gap-0.5">
                     {[100, 65, 40, 20].map((largeur, i) => (
                       <span key={i} className="m-barre h-0.5" style={{ width: `${largeur}%` }} />
                     ))}

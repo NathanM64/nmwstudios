@@ -383,6 +383,43 @@ body {
   .animate-delta { animation: none; opacity: 1; }
 }
 
+/* ── Le mouvement de construction ──
+   Le geste dit ce qui est acheté : une section se construit depuis le bas, une entrée de
+   navigation se glisse, une barre de temps s'allonge jusqu'à sa nouvelle durée.
+   Seuls `opacity`, `translate` et `scale` sont animés. Jamais `transform` : le keyframe
+   `apparait` finit sur `transform: none` et écraserait toute translation posée en style. */
+@keyframes construit {
+  from { opacity: 0; translate: 0 0.5rem; }
+  to   { opacity: 1; translate: 0 0; }
+}
+
+@keyframes glisse {
+  from { opacity: 0; translate: -0.4rem 0; }
+  to   { opacity: 1; translate: 0 0; }
+}
+
+@keyframes allonge {
+  from { scale: 0 1; }
+  to   { scale: 1 1; }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .animate-construit { animation: construit var(--dur-std) var(--ease-out) both; }
+  .animate-glisse { animation: glisse var(--dur-micro) var(--ease-out) both; }
+  .animate-allonge { animation: allonge var(--dur-std) var(--ease-out) both; transform-origin: left center; }
+}
+
+/* Une barre déjà posée ne réapparaît pas, elle s'allonge : c'est une transition, pas une
+   animation, parce que seule une transition rejoue sur un changement de valeur. */
+.m-barre,
+.m-barre-2 {
+  transition: width var(--dur-std) var(--ease-out), left var(--dur-std) var(--ease-out);
+}
+
+.m-jalon {
+  transition: left var(--dur-std) var(--ease-out), translate var(--dur-std) var(--ease-out);
+}
+
 @keyframes apparait {
   from { opacity: 0; transform: translateY(0.25rem); }
   to   { opacity: 1; transform: none; }
