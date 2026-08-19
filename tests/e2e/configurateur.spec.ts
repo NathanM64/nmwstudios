@@ -262,7 +262,9 @@ test('l’aperçu reste visible quand on fait défiler les options', async ({ pa
   await page.setViewportSize({ width: 1280, height: 800 })
   await page.goto('/configurateur')
   await page.getByRole('radio', { name: 'Partenaire' }).scrollIntoViewIfNeeded()
-  await expect(page.getByTestId('site-nav')).toBeInViewport()
+  // Le repère est la maquette elle-même, pas un artefact de scène : défiler jusqu'au suivi
+  // mensuel amène désormais « Le déroulé », où la navigation du site n'existe pas.
+  await expect(page.getByTestId('objet-scene')).toBeInViewport()
 })
 
 test('cocher le référencement bascule l’aperçu sur « La preuve »', async ({ page }) => {
