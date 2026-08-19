@@ -122,13 +122,13 @@ test('la barre reste visible sans défilement', async ({ page }) => {
 
 test('l’aperçu montre trois entrées de navigation par défaut', async ({ page }) => {
   await page.goto('/configurateur')
-  await expect(page.getByTestId('apercu-nav').getByRole('listitem')).toHaveCount(3)
+  await expect(page.getByTestId('site-nav').getByRole('listitem')).toHaveCount(3)
 })
 
 test('ajouter une tranche de pages enrichit la navigation de l’aperçu', async ({ page }) => {
   await page.goto('/configurateur')
   await page.getByRole('button', { name: 'Ajouter : 3 pages de plus' }).click()
-  await expect(page.getByTestId('apercu-nav').getByRole('listitem')).toHaveCount(6)
+  await expect(page.getByTestId('site-nav').getByRole('listitem')).toHaveCount(6)
 })
 
 test('cocher le blog fait apparaître la section actualités dans l’aperçu', async ({ page }) => {
@@ -140,9 +140,9 @@ test('cocher le blog fait apparaître la section actualités dans l’aperçu', 
 
 test('cocher l’espace membre ajoute le bouton de connexion dans l’aperçu', async ({ page }) => {
   await page.goto('/configurateur')
-  await expect(page.getByTestId('apercu-connexion')).toHaveCount(0)
+  await expect(page.getByTestId('site-connexion')).toHaveCount(0)
   await page.getByRole('checkbox', { name: 'Espace membre' }).check()
-  await expect(page.getByTestId('apercu-connexion')).toBeVisible()
+  await expect(page.getByTestId('site-connexion')).toBeVisible()
 })
 
 test('l’accessibilité affiche un ratio de contraste mesuré et conforme', async ({ page }) => {
@@ -196,11 +196,11 @@ test('le SEO affiche l’extrait de résultat de recherche', async ({ page }) =>
 
 test('la langue supplémentaire ajoute un sélecteur qui bascule l’aperçu', async ({ page }) => {
   await page.goto('/configurateur')
-  await expect(page.getByTestId('apercu-langue')).toHaveCount(0)
+  await expect(page.getByTestId('site-langue')).toHaveCount(0)
   await page.getByRole('button', { name: 'Ajouter : Une langue de plus' }).click()
-  await expect(page.getByTestId('apercu-langue')).toBeVisible()
-  await page.getByTestId('apercu-langue').selectOption('en')
-  await expect(page.getByTestId('apercu-nav')).toContainText('Home')
+  await expect(page.getByTestId('site-langue')).toBeVisible()
+  await page.getByTestId('site-langue').selectOption('en')
+  await expect(page.getByTestId('site-nav')).toContainText('Home')
 })
 
 test('la formule récurrente affiche sa carte d’état', async ({ page }) => {
@@ -267,29 +267,29 @@ test('l’aperçu reste visible quand on fait défiler les options', async ({ pa
   await page.setViewportSize({ width: 1280, height: 800 })
   await page.goto('/configurateur')
   await page.getByRole('radio', { name: 'Partenaire' }).scrollIntoViewIfNeeded()
-  await expect(page.getByTestId('apercu-nav')).toBeInViewport()
+  await expect(page.getByTestId('site-nav')).toBeInViewport()
 })
 
 test('cocher le référencement bascule l’aperçu sur la scène de recherche', async ({ page }) => {
   await page.goto('/configurateur')
-  await expect(page.getByTestId('apercu-nav')).toBeVisible()
+  await expect(page.getByTestId('site-nav')).toBeVisible()
   await page.getByRole('checkbox', { name: 'Fondations SEO' }).check()
   await expect(page.getByTestId('apercu-seo')).toBeVisible()
-  await expect(page.getByTestId('apercu-nav')).toHaveCount(0)
+  await expect(page.getByTestId('site-nav')).toHaveCount(0)
 })
 
 test('cocher une option visible garde la scène du site', async ({ page }) => {
   await page.goto('/configurateur')
   await page.getByRole('checkbox', { name: 'Un blog' }).check()
   await expect(page.getByTestId('apercu-blog')).toBeVisible()
-  await expect(page.getByTestId('apercu-nav')).toBeVisible()
+  await expect(page.getByTestId('site-nav')).toBeVisible()
 })
 
 test('les vignettes ramènent à la scène du site', async ({ page }) => {
   await page.goto('/configurateur')
   await page.getByRole('checkbox', { name: 'Fondations SEO' }).check()
   await page.getByRole('button', { name: 'Le site', exact: true }).click()
-  await expect(page.getByTestId('apercu-nav')).toBeVisible()
+  await expect(page.getByTestId('site-nav')).toBeVisible()
 })
 
 test('la scène du site garde tout ce qui a été coché', async ({ page }) => {
@@ -366,7 +366,7 @@ test('la vignette « Déroulé » atteint la scène de planification sans rien c
   await page.goto('/configurateur')
   await page.getByRole('button', { name: 'Le déroulé', exact: true }).click()
   await expect(page.getByTestId('apercu-planning')).toBeVisible()
-  await expect(page.getByTestId('apercu-nav')).toHaveCount(0)
+  await expect(page.getByTestId('site-nav')).toHaveCount(0)
 })
 
 test('la scène « Au quotidien » propose un repli sans rien cocher, puis la carte de l’auto-gestion', async ({ page }) => {
@@ -536,7 +536,7 @@ test('la page dit ce qui n’est jamais inclus', async ({ page }) => {
 // Options sans traduction visuelle dans l’aperçu aujourd’hui, chacune pour une raison précise.
 const SANS_RENDU = new Set([
   SOCLE_ID, // acquis d’office, aucun contrôle à cocher
-  'redaction', 'reprise', 'photos', 'visuels', // le contenu réel n’est pas simulé, le gabarit reste fixe
+  'photos', 'visuels', // le contenu réel n’est pas simulé, le gabarit reste fixe
   'formulaire', 'newsletter', 'paiement', // aucune traduction dans la scène « site » aujourd’hui
   'article', // se lit sur le blog publié, pas dans cet aperçu
   'a11y', // défaut corrigé couvert par son propre test, plus bas
