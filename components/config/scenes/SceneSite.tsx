@@ -56,13 +56,22 @@ export function SceneSite({ config }: { config: Configuration }) {
       </header>
 
       <div className="flex flex-1 flex-col gap-2 p-4">
-        {redaction > 0 ? (
+        {/* Rédaction et reprise se cumulent : la cascade ne sert que le repli commun. */}
+        {redaction === 0 && reprise === 0 && (
+          <>
+            <div className="h-3 w-2/3 rounded-sm bg-foreground/25" />
+            <div className="h-2 w-1/2 rounded-sm bg-foreground/15" />
+          </>
+        )}
+
+        {redaction > 0 && (
           <div data-testid="site-texte" className="animate-apparait">
             <p className="text-sm text-foreground">{TEXTE_ECRIT.titre}</p>
             <p className="mt-1 text-[0.62rem] leading-relaxed text-muted-foreground">{TEXTE_ECRIT.corps}</p>
           </div>
-        ) : reprise > 0 ? (
-          // Reprise : les blocs existants se réordonnent, ils ne se réécrivent pas.
+        )}
+
+        {reprise > 0 && (
           <ul data-testid="site-reprise" className="animate-apparait flex flex-col gap-1">
             {BLOCS_REPRIS.map((bloc) => (
               <li key={bloc} className="rounded-sm border border-border px-2 py-1 text-[0.6rem] text-muted-foreground">
@@ -70,11 +79,6 @@ export function SceneSite({ config }: { config: Configuration }) {
               </li>
             ))}
           </ul>
-        ) : (
-          <>
-            <div className="h-3 w-2/3 rounded-sm bg-foreground/25" />
-            <div className="h-2 w-1/2 rounded-sm bg-foreground/15" />
-          </>
         )}
 
         {(config.rdv ?? 0) > 0 && (

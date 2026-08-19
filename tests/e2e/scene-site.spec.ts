@@ -29,6 +29,13 @@ test('la reprise réordonne les blocs existants au lieu d’écrire du neuf', as
   await expect(page.getByTestId('site-texte')).toHaveCount(0)
 })
 
+test('rédaction et reprise cochées ensemble restent visibles toutes les deux', async ({ page }) => {
+  await page.getByRole('button', { name: 'Ajouter : J’écris vos textes' }).click()
+  await page.getByRole('checkbox', { name: 'Je reprends vos textes existants', exact: true }).check()
+  await expect(page.getByTestId('site-texte')).toBeVisible()
+  await expect(page.getByTestId('site-reprise')).toBeVisible()
+})
+
 test('le sélecteur de langue bascule tout le texte de la maquette', async ({ page }) => {
   await page.getByRole('button', { name: 'Ajouter : Une langue de plus' }).click()
   const avant = await page.getByTestId('site-nav').textContent()
