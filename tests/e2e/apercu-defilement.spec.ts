@@ -19,8 +19,17 @@ async function position(page: import('@playwright/test').Page) {
 }
 
 /** Attend que la translation cesse de bouger. Elle passe par une transition de 320 ms : une
- *  référence prise pendant le mouvement ferait passer un test sur le seul élan de la précédente. */
-async function positionPosee(page: import('@playwright/test').Page) {
+ *  référence prise pendant le mouvement ferait passer un test sur le seul élan de la précédente.
+ *
+ *  `depuis` est la position d'avant le geste, quand celui-ci doit déplacer la page : deux
+ *  échantillons égaux ne disent pas si la page s'est posée ou si elle n'est pas encore partie,
+ *  et sans ce constat préalable une position jamais partie passerait pour une position posée. */
+async function positionPosee(page: import('@playwright/test').Page, depuis?: number) {
+  if (depuis !== undefined) {
+    await expect
+      .poll(() => position(page), { message: 'la page n’a pas bougé' })
+      .not.toBe(depuis)
+  }
   let precedente = NaN
   await expect
     .poll(
@@ -34,6 +43,11 @@ async function positionPosee(page: import('@playwright/test').Page) {
     )
     .toBe(true)
   return precedente
+}
+
+/** Décalages des ancres tels que le document les a relevés, en pixels logiques arrondis. */
+async function offsetsPublies(page: import('@playwright/test').Page): Promise<Record<string, number>> {
+  return page.getByTestId('rouleau').evaluate((n: HTMLElement) => JSON.parse(n.dataset.mesures!))
 }
 
 /** Ce qui reste du document sous la fenêtre, en pixels logiques. */
@@ -91,12 +105,19 @@ test('le défilement reprend la main sur un choix d’onglet', async ({ page }) 
 
 test('la page descend continûment, pas par sauts de partie', async ({ page }) => {
   await page.goto('/configurateur')
+  const avant = await position(page)
   await amener(page, 'volume')
-  const debut = await positionPosee(page)
+  const debut = await positionPosee(page, avant)
 
   // Un cran de défilement à l'intérieur du même groupe doit déjà déplacer la page.
   await page.locator('[data-testid="colonne-options"]').evaluate((n) => n.scrollBy(0, 120))
-  await expect.poll(() => position(page)).toBeGreaterThan(debut)
+  const arrivee = await positionPosee(page, debut)
+  expect(arrivee).toBeGreaterThan(debut)
+
+  // Et sans avoir atteint l'ancre d'arrivée : la page interpole, elle ne saute pas. Deux pixels
+  // de marge, `data-mesures` arrondissant ; l'écart attendu se compte en dizaines de pixels.
+  const contenu = (await offsetsPublies(page))['site-contenu']
+  expect(arrivee, `la page a sauté jusqu’à site-contenu, à ${contenu}`).toBeLessThan(contenu - 2)
 
   // Et sans avoir atteint le groupe suivant : la page n'a pas sauté à l'ancre d'après.
   await expect(page.getByTestId('onglet-site')).toHaveAttribute('aria-pressed', 'true')
@@ -104,8 +125,9 @@ test('la page descend continûment, pas par sauts de partie', async ({ page }) =
 
 test('deux groupes visant la même ancre ne déplacent pas la page', async ({ page }) => {
   await page.goto('/configurateur')
+  const avant = await position(page)
   await amener(page, 'visibilite')
-  const surLeRapport = await positionPosee(page)
+  const surLeRapport = await positionPosee(page, avant)
 
   // `visibilite` et `conformite` visent tous deux le rapport : traverser le premier ne doit
   // pas emmener la page ailleurs. Seul `technique`, dernier avant le déroulé, s'en approche.
@@ -120,4 +142,20 @@ test('la fin du catalogue atteint le bas du document', async ({ page }) => {
   await page.locator('[data-testid="colonne-options"]').evaluate((n) => n.scrollBy(0, 4000))
   // Le bas du document doit être atteignable : sinon la dernière partie reste inaccessible.
   await expect.poll(() => resteSousLeBas(page)).toBeLessThan(4)
+})
+
+test('cocher une option garde sa scène au delà du rattrapage du relevé', async ({ page }) => {
+  await page.goto('/configurateur')
+
+  // `express` est la seule option dont la scène n'est pas celle de son groupe : elle montre le
+  // déroulé quand `technique` vise le rapport. Le demi-tour s'y voit, il est muet ailleurs.
+  await page.getByRole('checkbox', { name: 'Livraison accélérée', exact: true }).check()
+  await expect(page.getByTestId('onglet-deroule')).toHaveAttribute('aria-pressed', 'true')
+  await expect.poll(() => dansLaFenetre(page, 'partie-deroule')).toBe(true)
+
+  // Attente franche au delà des 500 ms de suspension et des 16 ms du rattrapage : le clic a fait
+  // défiler le panneau, et cette lecture subie ne doit pas reprendre la main après coup.
+  await page.waitForTimeout(900)
+  await expect(page.getByTestId('onglet-deroule')).toHaveAttribute('aria-pressed', 'true')
+  expect(await dansLaFenetre(page, 'partie-deroule')).toBe(true)
 })

@@ -34,8 +34,9 @@ export const PanneauOptions = memo(function PanneauOptions({
   const suspenduJusqua = useRef(0)
   const rattrapage = useRef(0)
 
-  // Le rattrapage est ce qui évite qu'un défilement fait pendant la suspension reste sans
-  // effet : à la fin de la fenêtre, on relit la position une dernière fois.
+  // Le rattrapage resynchronise la référence à la fin de la fenêtre : cocher une option
+  // quantifiable change la hauteur du groupe sans qu'aucun défilement ne soit émis, et l'écart
+  // passerait sinon pour une lecture du visiteur au premier défilement suivant.
   const suspendreLeReleve = () => {
     suspenduJusqua.current = Date.now() + SUSPENSION_MS
     clearTimeout(rattrapage.current)
@@ -56,7 +57,6 @@ export const PanneauOptions = memo(function PanneauOptions({
     if (!racine) return
 
     const relever = () => {
-      if (Date.now() < suspenduJusqua.current) return
       const ligne = window.innerHeight * LIGNE_DE_LECTURE
       let courant: HTMLElement | null = null
       for (const section of racine.querySelectorAll<HTMLElement>('[data-groupe]')) {
@@ -72,12 +72,14 @@ export const PanneauOptions = memo(function PanneauOptions({
       const groupe = courant.dataset.groupe as GroupeId
 
       if (groupe === dernierGroupe.current && progression === derniereProgression.current) return
-      // Au montage on note la lecture sans l'émettre : le premier groupe a déjà franchi la ligne,
-      // et émettre ferait glisser la page de quelques pixels avant le premier geste.
-      const premier = dernierGroupe.current === null
+      // La référence s'écrit toujours, l'émission non. Au montage le premier groupe a déjà franchi
+      // la ligne, et émettre ferait glisser la page avant le premier geste. Pendant la suspension
+      // c'est le clic qui a fait défiler le panneau : sortir sans écrire laisserait ce défilement
+      // subi passer pour une lecture, et reprendre la main sur le choix une demi-seconde plus tard.
+      const muet = dernierGroupe.current === null || Date.now() < suspenduJusqua.current
       dernierGroupe.current = groupe
       derniereProgression.current = progression
-      if (!premier) onLecture({ groupe, progression })
+      if (!muet) onLecture({ groupe, progression })
     }
 
     releve.current = relever
