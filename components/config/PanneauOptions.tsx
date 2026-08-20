@@ -9,7 +9,7 @@ import type { Cible } from '@/lib/config/defilement'
 
 /** Ligne de lecture, en part de la hauteur de fenêtre : le groupe qui la franchit est celui
  *  qu'on est en train de lire, et c'est aussi là que se cale son en-tête collant. */
-const LIGNE_DE_LECTURE = 0.3
+export const LIGNE_DE_LECTURE = 0.3
 
 /** Un choix délibéré gagne pendant ce délai. Cocher une option amène son ancre, mais fait aussi
  *  défiler le panneau jusqu'à la carte, jusqu'à trois fois : mise en vue, focus, puis

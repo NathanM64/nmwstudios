@@ -1,7 +1,8 @@
 'use client'
 
+import { useState } from 'react'
 import type { Configuration } from '@/lib/config/devis'
-import { partieDeAncre, type SceneId } from '@/lib/config/scenes'
+import { SCENES, type SceneId } from '@/lib/config/scenes'
 import type { Cible } from '@/lib/config/defilement'
 import type { DomaineId } from '@/lib/config/domaines'
 import { styleParId, type StyleId } from '@/lib/config/styles'
@@ -26,13 +27,14 @@ export function Apercu({
   onDomaine: (domaine: DomaineId) => void
   onStyle: (style: StyleId) => void
 }) {
+  // Nommée par la fenêtre et non par la cible : en fin de traversée d'un groupe, le rouleau est
+  // arrivé sur la partie suivante alors que l'ancre visée appartient encore à la précédente.
+  const [partieVue, setPartieVue] = useState<SceneId>(SCENES[0].id)
+
   return (
     <div data-testid="apercu" className="panel flex min-h-[26rem] w-full flex-col overflow-hidden xl:min-h-0 xl:flex-1">
-      <div className="border-b border-border px-3 py-1.5">
-        <div className="flex flex-wrap items-center justify-between gap-2">
-          <VignettesScene scene={partieDeAncre(cible.ancre)} onChange={onPartie} />
-          <p className="font-mono text-xs uppercase tracking-[0.08em] text-muted-foreground">aperçu, pas votre futur site</p>
-        </div>
+      <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-1 border-b border-border px-3 py-1.5">
+        <VignettesScene partie={partieVue} onPartie={onPartie} />
         <SelecteursMaquette domaine={domaine} style={style} onDomaine={onDomaine} onStyle={onStyle} />
       </div>
       {/* Enveloppe : elle donne à la fenêtre sa hauteur, explicite sous xl et prise sur la
@@ -62,10 +64,17 @@ export function Apercu({
             }
             className="maquette-echelle"
           >
-            <DocumentMaquette config={config} domaine={domaine} cible={cible} />
+            <DocumentMaquette config={config} domaine={domaine} cible={cible} onPartieVue={setPartieVue} />
           </div>
         </div>
       </div>
+
+      <p
+        data-testid="mention-style"
+        className="px-3 pb-2 font-mono text-xs uppercase tracking-[0.08em] text-muted-foreground"
+      >
+        Aperçu, pas votre futur site : la vôtre sera dessinée pour vous
+      </p>
     </div>
   )
 }

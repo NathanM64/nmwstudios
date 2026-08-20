@@ -45,16 +45,24 @@ test('changer de style change la palette sans changer le texte', async ({ page }
   await expect(titre).toHaveText(texte!)
 })
 
-test('la mention rappelle que la vôtre sera dessinée pour vous', async ({ page }) => {
-  // Sans elle, le sélecteur se lit comme un choix de gabarit, ce que tout le
-  // positionnement du site contredit.
-  await expect(page.getByTestId('mention-style')).toContainText('dessin')
+test('le bandeau tient sur une seule ligne', async ({ page }) => {
+  const onglet = (await page.getByTestId('onglet-site').boundingBox())!
+  const selecteur = (await page.getByTestId('selecteur-domaine-declencheur').boundingBox())!
+  // Même ligne : leurs centres verticaux se recouvrent.
+  const centre = (b: { y: number; height: number }) => b.y + b.height / 2
+  expect(Math.abs(centre(onglet) - centre(selecteur))).toBeLessThan(onglet.height / 2)
 })
 
-test('les onglets de scène restent au premier plan du bandeau', async ({ page }) => {
-  const onglet = await page.getByTestId('onglet-site').boundingBox()
-  const selecteur = await page.getByTestId('selecteur-domaine-declencheur').boundingBox()
-  expect(onglet!.y).toBeLessThanOrEqual(selecteur!.y)
+test('la mention est une légende, posée sous le cadre', async ({ page }) => {
+  const cadre = (await page.getByTestId('objet-scene').boundingBox())!
+  const mention = (await page.getByTestId('mention-style').boundingBox())!
+  expect(mention.y).toBeGreaterThanOrEqual(cadre.y + cadre.height - 1)
+})
+
+test('la mention dit les deux choses en une phrase', async ({ page }) => {
+  const mention = page.getByTestId('mention-style')
+  await expect(mention).toContainText('pas votre futur site')
+  await expect(mention).toContainText('dessin')
 })
 
 // Les `<option>` d'un `<select>` natif sont dessinées par le système : hors fond et couleur,

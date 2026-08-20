@@ -7,8 +7,8 @@ import { SelectListe } from '@/components/ui/SelectListe'
 const OPTIONS_DOMAINE = DOMAINES.map((d) => ({ valeur: d.id, libelle: d.libelle }))
 const OPTIONS_STYLE = STYLES.map((s) => ({ valeur: s.id, libelle: s.libelle }))
 
-/** Ligne discrète sous les onglets de scène : sans cette hiérarchie, le bandeau devient une
- *  barre d'outils et l'aperçu perd son statut d'objet. */
+/** Bout de ligne discret du bandeau : la mention qui accompagnait ces sélecteurs est descendue
+ *  sous le cadre, en légende de l'objet. */
 export function SelecteursMaquette({
   domaine,
   style,
@@ -21,7 +21,7 @@ export function SelecteursMaquette({
   onStyle: (style: StyleId) => void
 }) {
   return (
-    <div className="mt-1.5 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted-foreground">
+    <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted-foreground">
       <SelectListe
         testId="selecteur-domaine"
         etiquette="Métier"
@@ -37,11 +37,6 @@ export function SelecteursMaquette({
         options={OPTIONS_STYLE}
         onChange={(valeur) => onStyle(valeur as StyleId)}
       />
-
-      {/* Une direction, pas un modèle : la nuance protège le positionnement de studio. */}
-      <p data-testid="mention-style" className="font-mono uppercase tracking-[0.08em]">
-        la vôtre sera dessinée pour vous
-      </p>
     </div>
   )
 }

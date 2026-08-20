@@ -3,12 +3,23 @@ import { GROUPES } from '../../lib/config/catalogue'
 import { ANCRE_PAR_GROUPE, partieDeAncre } from '../../lib/config/scenes'
 import { calculer, formaterEuros } from '../../lib/config/devis'
 import { CONFIG_DEPART } from '../../components/config/Configurateur'
-import { dansLaFenetre } from './fenetre'
+import { LIGNE_DE_LECTURE } from '../../components/config/PanneauOptions'
+import { dansLaFenetre, partieAuHautDeLaFenetre } from './fenetre'
 
 /** `block: 'start'` plutôt que `scrollIntoViewIfNeeded` : ce dernier fait le défilement
  *  minimal, et laisserait le groupe sous la ligne de lecture. */
 async function amener(page: import('@playwright/test').Page, groupe: string) {
   await page.locator(`[data-groupe="${groupe}"]`).evaluate((el) => el.scrollIntoView({ block: 'start' }))
+}
+
+/** Amène la ligne de lecture au bas d'un groupe : sa traversée est alors achevée, et la page
+ *  a rejoint l'ancre du groupe suivant. Le groupe d'après reste sous la ligne, séparé par la
+ *  gouttière du panneau, donc c'est bien celui-ci qui est lu. */
+async function finDuGroupe(page: import('@playwright/test').Page, groupe: string) {
+  await page.locator(`[data-groupe="${groupe}"]`).evaluate((el, ligne) => {
+    const colonne = document.querySelector('[data-testid="colonne-options"]') as HTMLElement
+    colonne.scrollBy(0, el.getBoundingClientRect().bottom - window.innerHeight * ligne)
+  }, LIGNE_DE_LECTURE)
 }
 
 async function position(page: import('@playwright/test').Page) {
@@ -159,3 +170,28 @@ test('cocher une option garde sa scène au delà du rattrapage du relevé', asyn
   await expect(page.getByTestId('onglet-deroule')).toHaveAttribute('aria-pressed', 'true')
   expect(await dansLaFenetre(page, 'partie-deroule')).toBe(true)
 })
+
+// Les seules traversées qui changent de partie : l'ancre du groupe et celle du groupe suivant
+// n'y sont pas dans la même. Dérivé du catalogue, une ancre de plus le rejoindra sans retouche.
+const TRAVERSEES = GROUPES.flatMap((groupe, rang) => {
+  const suivant = GROUPES[rang + 1]
+  if (!suivant) return []
+  const depart = partieDeAncre(ANCRE_PAR_GROUPE[groupe.id])
+  const arrivee = partieDeAncre(ANCRE_PAR_GROUPE[suivant.id])
+  return depart === arrivee ? [] : [{ groupe: groupe.id, titre: groupe.titre, arrivee }]
+})
+
+for (const traversee of TRAVERSEES) {
+  test(`au bout du groupe « ${traversee.titre} », le repère pressé nomme la partie atteinte`, async ({ page }) => {
+    await page.goto('/configurateur')
+    const avant = await position(page)
+    await finDuGroupe(page, traversee.groupe)
+    // La traversée change de partie : la page bouge forcément, et juger avant qu'elle se pose
+    // reviendrait à lire une image de transition.
+    await positionPosee(page, avant)
+
+    await expect(page.getByTestId(`onglet-${traversee.arrivee}`)).toHaveAttribute('aria-pressed', 'true')
+    // Et le bandeau ne ment pas : la partie nommée est bien celle que la fenêtre montre.
+    expect(await partieAuHautDeLaFenetre(page)).toBe(traversee.arrivee)
+  })
+}

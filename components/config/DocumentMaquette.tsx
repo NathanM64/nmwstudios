@@ -4,7 +4,7 @@ import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import type { Configuration } from '@/lib/config/devis'
 import type { DomaineId } from '@/lib/config/domaines'
 import { SCENES, type AncreId, type SceneId } from '@/lib/config/scenes'
-import { partiesActives, positionCible, type Cible, type Mesures } from '@/lib/config/defilement'
+import { partieAuHaut, partiesActives, positionCible, positionMax, type Cible, type Mesures } from '@/lib/config/defilement'
 import { SceneSite } from '@/components/config/scenes/SceneSite'
 import { ScenePreuve } from '@/components/config/scenes/ScenePreuve'
 import { SceneDeroule } from '@/components/config/scenes/SceneDeroule'
@@ -23,10 +23,14 @@ export function DocumentMaquette({
   config,
   domaine,
   cible,
+  onPartieVue,
 }: {
   config: Configuration
   domaine: DomaineId
   cible: Cible
+  /** La position n'est connue qu'ici, une fois le document mesuré : le bandeau la reçoit pour
+   *  nommer la partie qu'il montre au lieu de celle que la cible visait. */
+  onPartieVue: (partie: SceneId) => void
 }) {
   const rouleauRef = useRef<HTMLDivElement>(null)
   const [mesures, setMesures] = useState<Mesures>(VIDE)
@@ -94,6 +98,11 @@ export function DocumentMaquette({
   // Décalages publiés : tant qu'aucun repère ne vise une ancre interne, une mesure périmée ne
   // se verrait nulle part, et rien ne dirait que la Task 4 part d'un relevé faux.
   const releve = Object.fromEntries(Object.entries(mesures.offsets).map(([a, o]) => [a, Math.round(o!)]))
+
+  const partieVue = partieAuHaut(bornes, position, positionMax(mesures))
+  useEffect(() => {
+    if (partieVue) onPartieVue(partieVue)
+  }, [partieVue, onPartieVue])
 
   return (
     <div
