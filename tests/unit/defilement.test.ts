@@ -98,6 +98,20 @@ describe('partie au haut de la fenêtre', () => {
     expect(partieAuHaut(BORNES, 1299.9, 1299.9)).toBe('deroule')
   })
 
+  it('ne nomme pas encore la dernière partie à un dixième de pixel du bas', () => {
+    // Le rabattement se compare toujours à la position : il ne déclare pas une partie atteinte
+    // du seul fait que son haut frôle la position la plus basse.
+    expect(partieAuHaut(BORNES, 1299.9, 1300)).toBe('preuve')
+  })
+
+  it('ne rabat pas une partie plus courte qu’une fenêtre', () => {
+    // Au delà du pixel ce n'est plus du bruit de mesure. Rabattre sans borne nommerait ici la
+    // dernière partie du document alors que le bord haut de la fenêtre est encore dans la
+    // première : un mensonge franc, pas un dixième de pixel.
+    const COURTES = { site: { haut: 0, bas: 800 }, preuve: { haut: 800, bas: 1300 }, deroule: { haut: 1300, bas: 1400 } }
+    expect(partieAuHaut(COURTES, 700, 700)).toBe('site')
+  })
+
   it('ne nomme rien tant que rien n’est mesuré', () => {
     expect(partieAuHaut({}, 0, 0)).toBeUndefined()
   })

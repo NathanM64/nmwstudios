@@ -29,6 +29,8 @@ export function VignettesScene({
             }`}
           >
             {s.libelle}
+            {/* Soulignement de l'actif, pas une jauge : il double le liseré du bouton et ne porte
+                aucun avancement. Rien ici ne se remplit avec la progression. */}
             <span
               aria-hidden="true"
               className={`mt-1 block h-px w-full transition-colors duration-(--dur-micro) ${
