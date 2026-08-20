@@ -129,12 +129,12 @@ export function Configurateur() {
           />
         </div>
 
-        {/* `scroll-pb-16` couvre les 57 px de la barre de prix : sans cette réserve, la mise en
-            vue minimale d'un champ atteint par Tab le laisse derrière elle. */}
+        {/* La colonne n'est conteneur de défilement qu'au-dessus de 1280 : la réserve sous la barre
+            de prix n'y vaut qu'à partir de `xl`, la racine s'en charge en dessous. */}
         <div
           ref={panneauRef}
           data-testid="colonne-options"
-          className="min-w-0 xl:min-h-0 xl:scroll-pb-16 xl:overflow-y-auto xl:pr-2"
+          className="min-w-0 xl:min-h-0 xl:scroll-pb-(--barre-scroll-pb) xl:overflow-y-auto xl:pr-2"
         >
           <h1 className="text-2xl font-semibold tracking-tight">Configurez votre site</h1>
           <div className="mt-6">

@@ -63,6 +63,16 @@
   /* + 1px seulement pour l'input des cases à cocher : en position absolue, il est calé sur la boîte
      de padding de la carte, pas sa bordure, contrairement au bouton qui est en flux normal. */
   --input-scroll-mt: calc(var(--legende-h) + 1px);
+  /* Barre de prix : 57 px mesurés, au pire cas de montant, arrondis au cran supérieur. Source
+     unique, lue par la colonne d'options au-dessus de 1280 et par la racine en dessous. */
+  --barre-scroll-pb: 4rem;
+}
+
+/* Sous 1280 la barre de prix est fixe et la racine est le conteneur de défilement : sans cette
+   réserve, un champ atteint au clavier se pose derrière elle. `:has` la borne aux seules pages
+   qui rendent la barre, `BarrePrix` étant le seul endroit du dépôt qui la pose. */
+html:has([data-testid='barre-prix']) {
+  scroll-padding-bottom: var(--barre-scroll-pb);
 }
 
 /* Sous 40rem le pas-à-pas passe sous le titre de la carte : son bouton est alors à 85 px du

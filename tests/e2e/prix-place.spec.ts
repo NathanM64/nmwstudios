@@ -10,6 +10,9 @@ test('au-dessus de 1280, le prix est aligné sur la colonne d’options', async 
   // Le prix était en bas à gauche, sous l'aperçu, pendant que la main travaillait à droite.
   expect(prix.x).toBeGreaterThanOrEqual(colonne.x - 1)
   expect(prix.x + prix.width).toBeLessThanOrEqual(colonne.x + colonne.width + 1)
+  // Et en pied de colonne, pas en pied de fenêtre : une barre restée accrochée à la fenêtre
+  // garderait la même position horizontale et passerait les deux assertions ci-dessus.
+  expect(prix.y + prix.height).toBeCloseTo(colonne.y + colonne.height, 0)
 })
 
 test('le prix reste visible sans faire défiler', async ({ page }) => {
@@ -30,30 +33,69 @@ test('en dessous de 1280, le prix reprend la pleine largeur', async ({ page }) =
   expect(prix.x).toBeLessThan(1)
 })
 
-test('au-dessus de 1280, la barre ne recouvre pas le champ atteint au clavier', async ({ page }) => {
-  await page.setViewportSize({ width: 1440, height: 900 })
-  await page.goto('/configurateur')
-  await page.locator('[data-testid="colonne-options"] input').first().focus()
+/** Presse une touche de tabulation en boucle et relève les champs de la colonne qui finissent
+ *  derrière un bloc opaque : la barre de prix en pied, l'en-tête collant de leur groupe en tête.
+ *  Rend aussi le compte des champs examinés, sans quoi un ordre de tabulation changé viderait la
+ *  campagne sans la faire rougir. */
+async function campagneClavier(page: import('@playwright/test').Page, touche: string) {
+  if (touche === 'Shift+Tab') {
+    // Remonter demande du contenu au-dessus : on part du dernier bouton de la colonne.
+    await page.getByTestId('recapitulatif-final').scrollIntoViewIfNeeded()
+    await page.locator('[data-testid="recapitulatif-final"] button').first().focus()
+  } else {
+    await page.locator('[data-testid="colonne-options"] input').first().focus()
+  }
 
-  // La barre colle au bas du conteneur de défilement : sans réserve de défilement, la mise en
-  // vue minimale d’un champ atteint par Tab le laisse derrière elle, opaque.
   const recouverts: string[] = []
+  let examines = 0
   for (let i = 0; i < 40; i++) {
-    await page.keyboard.press('Tab')
-    const recouvert = await page.evaluate(() => {
+    await page.keyboard.press(touche)
+    const releve = await page.evaluate(() => {
       const actif = document.activeElement as HTMLElement | null
       const colonne = document.querySelector('[data-testid="colonne-options"]') as HTMLElement
-      const barre = document.querySelector('[data-testid="barre-prix"]') as HTMLElement
-      if (!actif || !colonne.contains(actif) || barre.contains(actif)) return null
-      if (getComputedStyle(barre).display === 'none') return null
-      const a = actif.getBoundingClientRect()
-      const b = barre.getBoundingClientRect()
-      const chevauchement = Math.min(a.bottom, b.bottom) - Math.max(a.top, b.top)
-      if (chevauchement <= 0) return null
-      const carte = actif.closest('[data-testid]')?.getAttribute('data-testid') ?? actif.tagName
-      return `${carte} sous ${Math.round(chevauchement)} px de barre`
+      if (!actif || !colonne.contains(actif)) return null
+      const cible = actif.closest('[data-testid]')?.getAttribute('data-testid') ?? actif.tagName
+      const boite = actif.getBoundingClientRect()
+      const sous = (bloc: HTMLElement | null, nom: string) => {
+        if (!bloc || getComputedStyle(bloc).display === 'none' || bloc.contains(actif)) return null
+        const b = bloc.getBoundingClientRect()
+        const chevauchement = Math.min(boite.bottom, b.bottom) - Math.max(boite.top, b.top)
+        return chevauchement > 0 ? `${cible} sous ${Math.round(chevauchement)} px de ${nom}` : null
+      }
+      return {
+        barre: sous(document.querySelector('[data-testid="barre-prix"]'), 'barre'),
+        entete: sous(actif.closest('fieldset')?.querySelector('.entete-groupe') ?? null, 'en-tête'),
+      }
     })
-    if (recouvert) recouverts.push(recouvert)
+    if (!releve) continue
+    examines++
+    for (const cas of [releve.barre, releve.entete]) if (cas) recouverts.push(cas)
   }
-  expect(recouverts).toEqual([])
+  return { examines, recouverts }
+}
+
+// Les deux côtés de la bascule : au-dessus de 1280 la réserve est posée sur la colonne, en dessous
+// sur la racine. Les deux sens de tabulation : `Tab` descend derrière la barre, `Maj+Tab` remonte
+// derrière l'en-tête collant du groupe.
+for (const largeur of [1440, 1100]) {
+  for (const touche of ['Tab', 'Shift+Tab']) {
+    test(`à ${largeur}, ${touche} ne laisse aucun champ derrière un bloc opaque`, async ({ page }) => {
+      await page.setViewportSize({ width: largeur, height: 900 })
+      await page.goto('/configurateur')
+
+      const { examines, recouverts } = await campagneClavier(page, touche)
+      expect(recouverts).toEqual([])
+      // Sans ce plancher la campagne serait creuse : chaque tour sorti de la colonne rend `null`
+      // en silence, et un tableau vide ne dirait plus si un seul champ a été examiné.
+      expect(examines).toBeGreaterThan(30)
+    })
+  }
+}
+
+test('la réserve de défilement ne déborde pas sur les pages sans barre de prix', async ({ page }) => {
+  // La règle est bornée par `:has` à la présence de la barre : l'accueil garde ses ancres.
+  await page.goto('/')
+  await expect(page.locator('html')).toHaveCSS('scroll-padding-bottom', 'auto')
+  await page.goto('/configurateur')
+  await expect(page.locator('html')).toHaveCSS('scroll-padding-bottom', '64px')
 })
