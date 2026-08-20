@@ -44,9 +44,9 @@ export function BarrePrix({
   return (
     <div
       data-testid="barre-prix"
-      className={`fixed inset-x-0 bottom-0 z-40 border-t border-border bg-canvas px-5 py-3 sm:px-8 lg:static lg:shrink-0${masquee ? ' hidden' : ''}`}
+      className={`sticky bottom-0 z-40 border-t border-border bg-canvas px-5 py-3 max-xl:fixed max-xl:inset-x-0 max-xl:bottom-0 sm:px-8 xl:px-0${masquee ? ' hidden' : ''}`}
     >
-      <div className="mx-auto flex w-full max-w-5xl items-baseline justify-between gap-4">
+      <div className="flex w-full items-baseline justify-between gap-4">
         <p className="flex min-w-0 flex-wrap items-baseline gap-x-3">
           <span data-testid="prix" aria-live="polite" className="font-mono text-2xl tabular-nums">
             {formaterEuros(devis.total)}

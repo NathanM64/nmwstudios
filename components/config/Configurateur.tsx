@@ -129,7 +129,13 @@ export function Configurateur() {
           />
         </div>
 
-        <div ref={panneauRef} data-testid="colonne-options" className="min-w-0 xl:min-h-0 xl:overflow-y-auto xl:pr-2">
+        {/* `scroll-pb-16` couvre les 57 px de la barre de prix : sans cette réserve, la mise en
+            vue minimale d'un champ atteint par Tab le laisse derrière elle. */}
+        <div
+          ref={panneauRef}
+          data-testid="colonne-options"
+          className="min-w-0 xl:min-h-0 xl:scroll-pb-16 xl:overflow-y-auto xl:pr-2"
+        >
           <h1 className="text-2xl font-semibold tracking-tight">Configurez votre site</h1>
           <div className="mt-6">
             <PanneauOptions config={config} onChange={setConfig} onCible={setCible} onLecture={surLecture} />
@@ -140,10 +146,10 @@ export function Configurateur() {
           <JamaisInclus />
 
           <RecapitulatifFinal ref={recapRef} config={config} copie={copie} onCopier={copierLien} />
+
+          <BarrePrix config={config} pret={pret} masquee={recapVisible} />
         </div>
       </div>
-
-      <BarrePrix config={config} pret={pret} masquee={recapVisible} />
     </main>
   )
 }
