@@ -33,10 +33,31 @@ test('en dessous de 1280, le prix reprend la pleine largeur', async ({ page }) =
   expect(prix.x).toBeLessThan(1)
 })
 
+/** Inventaire des cibles réellement atteignables par Tab dans la colonne : un radio non coché
+ *  n'est jamais un arrêt, seul celui du groupe qui porte le focus l'est. C'est ce que la
+ *  campagne garde réellement, insensible à ce qui vit hors de la colonne. */
+async function inventaireColonne(page: import('@playwright/test').Page) {
+  return page.locator('[data-testid="colonne-options"]').evaluate((colonne) => {
+    const noms = new Set<string>()
+    let compte = 0
+    for (const el of colonne.querySelectorAll<HTMLElement>('input, button, a[href], select, textarea, [tabindex]')) {
+      if (el.tabIndex < 0 || (el as HTMLButtonElement).disabled) continue
+      const boite = el.getBoundingClientRect()
+      if (boite.width === 0 && boite.height === 0) continue
+      if (el instanceof HTMLInputElement && el.type === 'radio') {
+        if (noms.has(el.name)) continue
+        noms.add(el.name)
+      }
+      compte++
+    }
+    return compte
+  })
+}
+
 /** Presse une touche de tabulation en boucle et relève les champs de la colonne qui finissent
  *  derrière un bloc opaque : la barre de prix en pied, l'en-tête collant de leur groupe en tête.
- *  Rend aussi le compte des champs examinés, sans quoi un ordre de tabulation changé viderait la
- *  campagne sans la faire rougir. */
+ *  Rend aussi le compte des champs examinés face à l'inventaire réel de la colonne, sans quoi un
+ *  ordre de tabulation changé viderait la campagne sans la faire rougir. */
 async function campagneClavier(page: import('@playwright/test').Page, touche: string) {
   if (touche === 'Shift+Tab') {
     // Remonter demande du contenu au-dessus : on part du dernier bouton de la colonne.
@@ -46,9 +67,12 @@ async function campagneClavier(page: import('@playwright/test').Page, touche: st
     await page.locator('[data-testid="colonne-options"] input').first().focus()
   }
 
+  const attendus = await inventaireColonne(page)
   const recouverts: string[] = []
   let examines = 0
-  for (let i = 0; i < 40; i++) {
+  // Le plafond n'est qu'une garde-fou : la boucle s'arrête dès la colonne couverte, ce qui la
+  // rend insensible au nombre de cibles focalisables posées ailleurs sur la page.
+  for (let i = 0; i < 150 && examines < attendus; i++) {
     await page.keyboard.press(touche)
     const releve = await page.evaluate(() => {
       const actif = document.activeElement as HTMLElement | null
@@ -71,7 +95,7 @@ async function campagneClavier(page: import('@playwright/test').Page, touche: st
     examines++
     for (const cas of [releve.barre, releve.entete]) if (cas) recouverts.push(cas)
   }
-  return { examines, recouverts }
+  return { examines, attendus, recouverts }
 }
 
 // Les deux côtés de la bascule : au-dessus de 1280 la réserve est posée sur la colonne, en dessous
@@ -83,11 +107,12 @@ for (const largeur of [1440, 1100]) {
       await page.setViewportSize({ width: largeur, height: 900 })
       await page.goto('/configurateur')
 
-      const { examines, recouverts } = await campagneClavier(page, touche)
+      const { examines, attendus, recouverts } = await campagneClavier(page, touche)
       expect(recouverts).toEqual([])
       // Sans ce plancher la campagne serait creuse : chaque tour sorti de la colonne rend `null`
-      // en silence, et un tableau vide ne dirait plus si un seul champ a été examiné.
-      expect(examines).toBeGreaterThan(30)
+      // en silence, et un tableau vide ne dirait plus si un seul champ a été examiné. Le plancher
+      // est l'inventaire mesuré de la colonne, pas un nombre deviné hors contexte.
+      expect(examines).toBe(attendus)
     })
   }
 }
