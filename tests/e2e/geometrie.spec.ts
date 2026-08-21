@@ -6,9 +6,8 @@ import { hydrate } from './fenetre'
 /** Relevé jetable : il constate au pixel que déplacer le JSX vers des blocs ne déplace aucun
  *  dessin. Muet sans `RELEVE`, sinon il tomberait à chaque passe ordinaire. Supprimé au lot 2. */
 
-// 1024 et 1920 rendent tous deux le palier bureau (colonne empilée à 932 px, côte à côte à
-// 1380 px) : mesuré dans tests/e2e/maquette-largeur.spec.ts. 768 est repris de cette même table
-// pour couvrir le palier tablette (colonne à 676 px).
+// Seuils du conteneur de la maquette, pas de la fenêtre : 1024 et 1920 rendaient tous deux le
+// palier bureau. Repris de la table mesurée dans tests/e2e/maquette-largeur.spec.ts.
 const LARGEURS = [390, 768, 1920]
 
 const CONFIGS = {
