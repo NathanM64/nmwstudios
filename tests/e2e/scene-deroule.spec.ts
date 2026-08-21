@@ -10,8 +10,17 @@ async function largeur(page: import('@playwright/test').Page, testId: string) {
 }
 
 /** Largeur une fois posée : `width` passe par une transition, et une référence prise pendant
- *  qu'elle court fait comparer deux images de mouvement. */
-async function largeurPosee(page: import('@playwright/test').Page, testId: string) {
+ *  qu'elle court fait comparer deux images de mouvement.
+ *
+ *  `depuis` est la largeur d'avant le geste, quand celui-ci doit la changer : deux échantillons
+ *  égaux ne disent pas si la barre s'est posée ou si elle n'est pas encore partie, et sans ce
+ *  constat préalable une largeur jamais partie passerait pour une largeur posée. */
+async function largeurPosee(page: import('@playwright/test').Page, testId: string, depuis?: number) {
+  if (depuis !== undefined) {
+    await expect
+      .poll(() => largeur(page, testId), { message: `la largeur de ${testId} n’a pas bougé` })
+      .not.toBe(depuis)
+  }
   let precedente = NaN
   await expect
     .poll(
@@ -74,8 +83,9 @@ test('le repère de livraison garde son fondu d’entrée', async ({ page }) => 
 })
 
 test('la livraison accélérée comprime la barre et laisse un fantôme', async ({ page }) => {
+  const repos = await largeur(page, 'deroule-construction')
   await page.getByRole('checkbox', { name: 'Espace membre', exact: true }).check()
-  const avant = await largeurPosee(page, 'deroule-construction')
+  const avant = await largeurPosee(page, 'deroule-construction', repos)
   await expect(page.getByTestId('deroule-fantome')).toHaveCount(0)
   await page.getByRole('checkbox', { name: 'Livraison accélérée', exact: true }).check()
   await expect(page.getByTestId('deroule-fantome')).toBeVisible()

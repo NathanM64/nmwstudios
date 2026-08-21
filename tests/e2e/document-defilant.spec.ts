@@ -85,11 +85,13 @@ test('au départ, seule la partie du site est dans la fenêtre', async ({ page }
 // Le défilement du formulaire a remplacé les repères de position : c'est le seul chemin qui
 // déplace la page sans toucher à la configuration.
 test('défiler le formulaire amène une partie dans la fenêtre et en sort l’autre', async ({ page }) => {
+  // Sondages et non constats immédiats : l'aide rend la main dès que la partie visée croise la
+  // fenêtre, ce qui peut arriver en pleine transition, quand l'autre la croise encore.
   await amenerLaPartie(page, 'deroule')
-  expect(await dansLaFenetre(page, 'partie-site')).toBe(false)
+  await expect.poll(() => dansLaFenetre(page, 'partie-site')).toBe(false)
 
   await amenerLaPartie(page, 'site')
-  expect(await dansLaFenetre(page, 'partie-deroule')).toBe(false)
+  await expect.poll(() => dansLaFenetre(page, 'partie-deroule')).toBe(false)
 })
 
 /** Plus petite taille de texte peinte dans le rouleau, en pixels d'écran : la mise à l'échelle
@@ -253,7 +255,7 @@ test('ce qui sort de la fenêtre est inerte', async ({ page }) => {
   expect(await prendLeFocus(), 'le site est dans la fenêtre et déjà hors du clavier').toBe(true)
 
   await amenerLaPartie(page, 'deroule')
-  expect(await dansLaFenetre(page, 'partie-site')).toBe(false)
+  await expect.poll(() => dansLaFenetre(page, 'partie-site')).toBe(false)
   await expect(page.getByTestId('partie-site')).toHaveAttribute('inert', '')
   expect(await prendLeFocus(), 'le sélecteur d’une partie sortie prend encore le focus').toBe(false)
   await expect(page.getByTestId('partie-deroule')).not.toHaveAttribute('inert', '')
