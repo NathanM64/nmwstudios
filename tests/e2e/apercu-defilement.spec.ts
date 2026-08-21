@@ -17,7 +17,8 @@ async function amener(page: import('@playwright/test').Page, groupe: string) {
  *  gouttière du panneau, donc c'est bien celui-ci qui est lu. */
 async function finDuGroupe(page: import('@playwright/test').Page, groupe: string) {
   await page.locator(`[data-groupe="${groupe}"]`).evaluate((el, ligne) => {
-    const colonne = document.querySelector('[data-testid="colonne-options"]') as HTMLElement
+    const colonne = document.querySelector<HTMLElement>('[data-testid="colonne-options"]')
+    if (!colonne) throw new Error('colonne-options introuvable')
     colonne.scrollBy(0, el.getBoundingClientRect().bottom - window.innerHeight * ligne)
   }, LIGNE_DE_LECTURE)
 }
@@ -155,7 +156,7 @@ test('la fin du catalogue atteint le bas du document', async ({ page }) => {
   await expect.poll(() => resteSousLeBas(page)).toBeLessThan(4)
 })
 
-test('cocher une option garde sa scène au delà du rattrapage du relevé', async ({ page }) => {
+test('cocher une option garde sa scène au delà de la suspension du relevé', async ({ page }) => {
   await page.goto('/configurateur')
 
   // `express` est la seule option dont la scène n'est pas celle de son groupe : elle montre le
@@ -164,8 +165,8 @@ test('cocher une option garde sa scène au delà du rattrapage du relevé', asyn
   await expect(page.getByTestId('onglet-deroule')).toHaveAttribute('aria-pressed', 'true')
   await expect.poll(() => dansLaFenetre(page, 'partie-deroule')).toBe(true)
 
-  // Attente franche au delà des 500 ms de suspension et des 16 ms du rattrapage : le clic a fait
-  // défiler le panneau, et cette lecture subie ne doit pas reprendre la main après coup.
+  // Attente franche au delà des 500 ms de suspension : le clic a fait défiler le panneau, et
+  // cette lecture subie ne doit pas reprendre la main une fois la suspension levée.
   await page.waitForTimeout(900)
   await expect(page.getByTestId('onglet-deroule')).toHaveAttribute('aria-pressed', 'true')
   expect(await dansLaFenetre(page, 'partie-deroule')).toBe(true)

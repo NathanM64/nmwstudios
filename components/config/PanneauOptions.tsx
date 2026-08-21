@@ -14,7 +14,10 @@ export const LIGNE_DE_LECTURE = 0.3
 /** Un choix délibéré gagne pendant ce délai. Cocher une option amène son ancre, mais fait aussi
  *  défiler le panneau jusqu'à la carte, jusqu'à trois fois : mise en vue, focus, puis
  *  réancrage du navigateur après le rendu. Sans cette suspension, ce défilement subi
- *  reprendrait la main sur le choix qui vient de l'émettre. */
+ *  reprendrait la main sur le choix qui vient de l'émettre.
+ *
+ *  Effet de bord assumé : un geste de défilement entamé et achevé dans ce délai est perdu, les
+ *  relevés y étant muets et rien ne rejouant la position. Le cran suivant la rétablit. */
 const SUSPENSION_MS = 500
 
 export const PanneauOptions = memo(function PanneauOptions({
@@ -31,25 +34,14 @@ export const PanneauOptions = memo(function PanneauOptions({
   const racineRef = useRef<HTMLDivElement>(null)
   const dernierGroupe = useRef<GroupeId | null>(null)
   const derniereProgression = useRef<number | null>(null)
-  const releve = useRef<() => void>(() => {})
   const suspenduJusqua = useRef(0)
-  const rattrapage = useRef(0)
-
-  // Le rattrapage relit la géométrie à la fin de la fenêtre, et n'émet que si elle a changé
-  // depuis la dernière écriture. Aucun geste ne la change aujourd'hui, une carte gardant sa
-  // hauteur à toute quantité : il ne rattrape rien, et s'il émettait il contredirait le choix.
-  const suspendreLeReleve = () => {
-    suspenduJusqua.current = Date.now() + SUSPENSION_MS
-    clearTimeout(rattrapage.current)
-    rattrapage.current = window.setTimeout(() => releve.current(), SUSPENSION_MS + 16)
-  }
 
   // L'ancre de l'option, pas la tête de sa partie : un article se voit dans les actualités,
   // la livraison accélérée sur la ligne de temps. Le relevé se suspend, sans quoi le
   // défilement provoqué par le clic lui-même reprendrait la main aussitôt.
   const poser = (id: string, n: number) => {
     onChange({ ...config, [id]: n })
-    suspendreLeReleve()
+    suspenduJusqua.current = Date.now() + SUSPENSION_MS
     onCible({ ancre: ancreDeOption(id), progression: 0 })
   }
 
@@ -84,7 +76,6 @@ export const PanneauOptions = memo(function PanneauOptions({
       if (!muet) onLecture({ groupe, progression })
     }
 
-    releve.current = relever
     relever()
 
     let attente = 0
@@ -96,14 +87,13 @@ export const PanneauOptions = memo(function PanneauOptions({
       })
     }
 
-    // `capture` : au-dessus de `lg` le panneau a son propre défilement, qui ne remonte pas à `window`.
+    // `capture` : au-dessus de `xl` le panneau a son propre défilement, qui ne remonte pas à `window`.
     window.addEventListener('scroll', auDefilement, true)
     window.addEventListener('resize', auDefilement)
     return () => {
       window.removeEventListener('scroll', auDefilement, true)
       window.removeEventListener('resize', auDefilement)
       if (attente) cancelAnimationFrame(attente)
-      clearTimeout(rattrapage.current)
     }
   }, [onLecture])
 
@@ -112,7 +102,7 @@ export const PanneauOptions = memo(function PanneauOptions({
     for (const o of OPTIONS) if (o.groupe === groupe) delete suivant[o.id]
     suivant[id] = 1
     onChange(suivant)
-    suspendreLeReleve()
+    suspenduJusqua.current = Date.now() + SUSPENSION_MS
     onCible({ ancre: ancreDeOption(id), progression: 0 })
   }
 
