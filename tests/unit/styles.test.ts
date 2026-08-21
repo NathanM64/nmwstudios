@@ -5,7 +5,14 @@ import { STYLES, STYLE_DEFAUT, styleParId } from '@/lib/config/styles'
 const REQUISES = [
   '--m-fond', '--m-fond-2', '--m-texte', '--m-texte-sourd', '--m-accent',
   '--m-accent-contraste', '--m-bord', '--m-titre-famille', '--m-corps-famille',
-  '--m-titre-graisse', '--m-titre-taille', '--m-rayon', '--m-densite',
+  '--m-titre-graisse', '--m-titre-taille-base', '--m-rayon', '--m-densite-base',
+] as const
+
+/** Les huit valeurs que le palier multiplie. `styles.ts` ne pose que le `-base` : poser la
+ *  dérivée en ligne écraserait le calcul de `.maquette-page` et figerait le palier. */
+const DERIVEES = [
+  '--m-titre-taille', '--m-sous-titre-taille', '--m-corps-taille', '--m-texte-taille',
+  '--m-menu-taille', '--m-legende-taille', '--m-chiffre-taille', '--m-densite',
 ] as const
 
 describe('directions de style', () => {
@@ -23,6 +30,15 @@ describe('directions de style', () => {
     for (const style of STYLES) {
       for (const nom of REQUISES) {
         expect(style.variables[nom], `${style.id} sans ${nom}`).toBeTruthy()
+      }
+    }
+  })
+
+  it('ne pose aucune dérivée du palier en ligne', () => {
+    for (const style of STYLES) {
+      for (const nom of DERIVEES) {
+        expect(style.variables[nom], `${style.id} pose ${nom} en ligne`).toBeUndefined()
+        expect(style.variables[`${nom}-base`], `${style.id} sans ${nom}-base`).toBeTruthy()
       }
     }
   })

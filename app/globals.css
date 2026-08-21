@@ -148,7 +148,24 @@ body {
   /* Texte courant de la maquette, et espacements dérivés de lui : Tailwind pose toutes ses
      unités d'espacement en multiples de --spacing. */
   font-size: 1rem;
-  --spacing: 0.5rem;
+  /* Deux boutons commandent la densité. `styles.ts` pose les valeurs `-base` en ligne par
+     direction, ces huit dérivées les multiplient : les 14 sites de lecture et les 7 rythmes
+     suivent sans être touchés. Multiplication et non `em`, qui composerait sur les classes
+     imbriquées.
+     Deux et non un : un multiplicateur unique conserve le rapport de 4 pour 1 entre le titre et
+     la légende, qui est un rapport de bureau. Un site étroit comprime son échelle, il ne la
+     réduit pas. Mesuré : à 0,7 partout la légende tombe à 9,8 px, sous le plancher du projet. */
+  --m-palier-type: 0.75;
+  --m-palier-titre: 0.55;
+  --m-titre-taille: calc(var(--m-titre-taille-base) * var(--m-palier-titre));
+  --m-chiffre-taille: calc(var(--m-chiffre-taille-base) * var(--m-palier-titre));
+  --m-sous-titre-taille: calc(var(--m-sous-titre-taille-base) * var(--m-palier-type));
+  --m-corps-taille: calc(var(--m-corps-taille-base) * var(--m-palier-type));
+  --m-texte-taille: calc(var(--m-texte-taille-base) * var(--m-palier-type));
+  --m-menu-taille: calc(var(--m-menu-taille-base) * var(--m-palier-type));
+  --m-legende-taille: calc(var(--m-legende-taille-base) * var(--m-palier-type));
+  --m-densite: calc(var(--m-densite-base) * var(--m-palier-type));
+  --spacing: calc(0.5rem * var(--m-palier-type));
   /* Palier de mise en page. Le CSS en est la seule source, les filets le lisent ici. */
   --palier: telephone;
   /* La fenêtre reste peinte même quand le document est plus court qu'elle. */
@@ -158,11 +175,11 @@ body {
 /* Seuils du dessin, pas ceux du monde réel : à 1024 empilé la maquette fait 932 px et doit être
    en bureau, alors que la fenêtre dirait tablette. */
 @container maquette (min-width: 500px) {
-  .maquette-page { --palier: tablette; }
+  .maquette-page { --m-palier-type: 0.85; --m-palier-titre: 0.72; --palier: tablette; }
 }
 
 @container maquette (min-width: 700px) {
-  .maquette-page { --palier: bureau; }
+  .maquette-page { --m-palier-type: 1; --m-palier-titre: 1; --palier: bureau; }
 }
 
 /* Contenu d'une section, plafonné et centré comme sur un vrai site : sans lui une ligne de texte

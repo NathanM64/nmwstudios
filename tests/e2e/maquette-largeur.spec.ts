@@ -59,3 +59,49 @@ test('à 1024 empilé, la maquette est en bureau alors que la fenêtre dit table
   expect(maquette, 'largeur de maquette à 1024').toBeGreaterThan(700)
   expect(await palier(page)).toBe('bureau')
 })
+
+/** Taille du titre principal de la maquette, en pixels d'écran. */
+async function tailleDuTitre(page: Page): Promise<number> {
+  return page.getByTestId('site-titre').evaluate((n) => parseFloat(getComputedStyle(n).fontSize))
+}
+
+/** Rapport entre le titre et le plus petit texte de la maquette. C'est lui le sujet : un
+ *  multiplicateur unique le conserverait, alors qu'un site étroit comprime son échelle. */
+async function rapportTypographique(page: Page): Promise<number> {
+  const titre = await tailleDuTitre(page)
+  const legende = await page
+    .getByTestId('site-nav')
+    .evaluate((n) => parseFloat(getComputedStyle(n.querySelector('li')!).fontSize))
+  return titre / legende
+}
+
+test("le palier comprime l'échelle typographique, il ne la réduit pas", async ({ page }) => {
+  await page.goto('/configurateur')
+
+  await page.setViewportSize({ width: 1920, height: 900 })
+  const bureau = await tailleDuTitre(page)
+  const rapportBureau = await rapportTypographique(page)
+  expect(bureau, 'titre en bureau').toBeGreaterThan(48)
+
+  await page.setViewportSize({ width: 390, height: 900 })
+  const telephone = await tailleDuTitre(page)
+  // Un titre de 56 px dans un cadre de 322 tient sur quatre lignes.
+  expect(telephone, 'titre en téléphone').toBeLessThan(bureau * 0.7)
+  expect(telephone, 'titre en téléphone').toBeGreaterThanOrEqual(24)
+  // Le constat qui distingue deux boutons d'un seul : un seul garderait ce rapport constant.
+  expect(await rapportTypographique(page), 'rapport en téléphone').toBeLessThan(rapportBureau * 0.9)
+})
+
+test('les espacements suivent le palier, pas seulement le texte', async ({ page }) => {
+  await page.goto('/configurateur')
+  const marge = () =>
+    page.getByTestId('site-titre').evaluate((n) => {
+      const bloc = n.closest('.m-marge') as HTMLElement
+      return parseFloat(getComputedStyle(bloc).paddingLeft)
+    })
+
+  await page.setViewportSize({ width: 1920, height: 900 })
+  const bureau = await marge()
+  await page.setViewportSize({ width: 390, height: 900 })
+  expect(await marge(), 'marge en téléphone').toBeLessThan(bureau * 0.8)
+})
