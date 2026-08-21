@@ -117,7 +117,7 @@ export function DocumentMaquette({
           inert={!actives.has(partie.id)}
           className="maquette-partie"
         >
-          <div className="m-marge flex shrink-0 items-baseline gap-3">
+          <div className="m-marge m-contenu flex shrink-0 items-baseline gap-3">
             <p className="m-surtitre">{partie.libelle}</p>
             <span className="m-filet h-px flex-1" />
           </div>

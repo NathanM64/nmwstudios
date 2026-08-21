@@ -37,7 +37,7 @@ export const SceneSite = memo(function SceneSite({
   const libelles = e.pages.slice(0, PAGES_SOCLE + tranches * 3)
 
   return (
-    <div className="animate-apparait m-air m-marge flex min-w-0 flex-1 flex-col">
+    <div className="animate-apparait m-air m-marge m-contenu flex min-w-0 flex-1 flex-col">
       <header data-ancre="site-navigation" className="flex min-w-0 items-baseline gap-3">
         <span data-testid="site-enseigne" className="m-enseigne shrink-0">
           {e.enseigne}

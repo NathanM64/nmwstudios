@@ -27,8 +27,8 @@ export function Apercu({
           data-testid="objet-scene"
           className="cadre-maquette flex-1 rounded-md border border-border-strong shadow-(--shadow-elevated)"
         >
-          {/* Page mise à l'échelle : elle porte la palette du style et rien du site.
-              Les scènes ne lisent que des variables `--m-*` posées ici. */}
+          {/* La page porte la palette du style et rien du site : les scènes ne lisent que
+              des variables `--m-*` posées ici. */}
           <div
             data-testid="maquette"
             style={
@@ -44,7 +44,7 @@ export function Apercu({
                 colorScheme: 'var(--m-schema)',
               } as React.CSSProperties
             }
-            className="maquette-echelle"
+            className="maquette-page"
           >
             <DocumentMaquette config={config} domaine={domaine} cible={cible} />
           </div>

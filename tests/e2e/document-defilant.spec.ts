@@ -131,18 +131,11 @@ test('le texte de la maquette tient les seuils du projet de 1024 à 1920', async
   }
 })
 
-test('à 390, le plus petit texte de la maquette est épinglé sous le seuil', async ({ page }) => {
-  // Valeur mesurée, pas visée : la mise en page mobile compacte la maquette bien sous les 10 px
-  // du lot A, et c'est au lot B de la reprendre. Ce test rougira le jour où il aura gagné.
+test('à 390, le plus petit texte de la maquette tient le plancher du projet', async ({ page }) => {
+  // Épinglé à 4,7 px jusqu'au 21/08/2026, sous le plancher, avec pour commentaire qu'il rougirait
+  // le jour où il aurait gagné. Le socle à largeur variable est ce jour.
   await page.setViewportSize({ width: 390, height: 900 })
-  expect(await plusPetitTexte(page), 'plus petit texte à 390').toBeCloseTo(4.7, 1)
-})
-
-test('la maquette ne dépasse jamais sa taille naturelle', async ({ page }) => {
-  await page.setViewportSize({ width: 1920, height: 1080 })
-  const echelle = await page.getByTestId('maquette').evaluate((n) => parseFloat(getComputedStyle(n).scale))
-  expect(echelle).toBeLessThanOrEqual(1)
-  expect(echelle).toBeGreaterThan(0.9)
+  expect(await plusPetitTexte(page), 'plus petit texte à 390').toBeGreaterThanOrEqual(10)
 })
 
 test('rien n’est rogné à l’intérieur d’une partie', async ({ page }) => {

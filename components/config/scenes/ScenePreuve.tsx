@@ -91,7 +91,7 @@ export const ScenePreuve = memo(function ScenePreuve({
   const compteur = useCompteur(retenus)
 
   return (
-    <div className="animate-apparait m-air-serre m-marge flex flex-1 flex-col">
+    <div className="animate-apparait m-air-serre m-marge m-contenu flex flex-1 flex-col">
       {/* Le compteur domine, les huit lignes se rangent dessous. Sur une ligne avec son
           libellé plutôt qu'au-dessus : le cadre en bandeau ne paie pas deux fois. */}
       <div className="flex shrink-0 items-baseline gap-3">

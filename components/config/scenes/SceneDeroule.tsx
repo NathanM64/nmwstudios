@@ -63,7 +63,7 @@ export const SceneDeroule = memo(function SceneDeroule({ config }: { config: Con
   const lignes = { gridTemplateRows: `repeat(${rangees.length}, minmax(0, 1fr))` }
 
   return (
-    <div className="animate-apparait m-air m-marge flex flex-1 flex-col">
+    <div className="animate-apparait m-air m-marge m-contenu flex flex-1 flex-col">
       <div className="flex shrink-0 items-baseline gap-3">
         <p className="m-surtitre">Déroulé du projet</p>
         <span className="m-filet h-px flex-1" />

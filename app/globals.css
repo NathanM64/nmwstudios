@@ -133,28 +133,44 @@ body {
   box-shadow: var(--shadow-elevated);
 }
 
-/* Fenêtre sur un document plus haut qu'elle. La largeur logique est fixe : une page se dessine
-   pour une largeur, une fois. Seule l'échelle varie, et seule la largeur la décide. */
+/* Fenêtre sur un document plus haut qu'elle. La maquette est un site, pas l'image d'un site :
+   elle reçoit la largeur réelle de sa colonne et se met en page dessus. */
 .cadre-maquette {
   container-type: size;
-  /* `clip` et non `hidden` : la fenêtre serait sinon une boîte défilable, et la page logique,
-     large de 60rem avant sa mise à l'échelle, s'y ferait pousser de côté par un focus. */
+  container-name: maquette;
+  /* `clip` et non `hidden` : la fenêtre serait sinon une boîte défilable, et un focus y
+     pousserait la page de côté. */
   overflow: clip;
-  max-width: 60rem;
-  margin-inline: auto;
 }
 
-.maquette-echelle {
-  width: 60rem;
+.maquette-page {
+  width: 100%;
   /* Texte courant de la maquette, et espacements dérivés de lui : Tailwind pose toutes ses
      unités d'espacement en multiples de --spacing. */
   font-size: 1rem;
   --spacing: 0.5rem;
-  --echelle: min(100cqw / 60rem, 1);
+  /* Palier de mise en page. Le CSS en est la seule source, les filets le lisent ici. */
+  --palier: telephone;
   /* La fenêtre reste peinte même quand le document est plus court qu'elle. */
-  min-height: calc(100cqh / var(--echelle));
-  scale: var(--echelle);
-  transform-origin: top left;
+  min-height: 100cqh;
+}
+
+/* Seuils du dessin, pas ceux du monde réel : à 1024 empilé la maquette fait 932 px et doit être
+   en bureau, alors que la fenêtre dirait tablette. */
+@container maquette (min-width: 500px) {
+  .maquette-page { --palier: tablette; }
+}
+
+@container maquette (min-width: 700px) {
+  .maquette-page { --palier: bureau; }
+}
+
+/* Contenu d'une section, plafonné et centré comme sur un vrai site : sans lui une ligne de texte
+   ferait 1380 px de large à 1920. */
+.m-contenu {
+  width: 100%;
+  max-width: 68.75rem;
+  margin-inline: auto;
 }
 
 /* Le rouleau porte la position, en pixels logiques. Posée sur l'élément mis à l'échelle, une
@@ -173,7 +189,7 @@ body {
 .maquette-partie {
   display: flex;
   flex-direction: column;
-  min-height: calc(100cqh / var(--echelle));
+  min-height: 100cqh;
 }
 
 /* ── Habillage de la maquette ──
