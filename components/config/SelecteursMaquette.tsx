@@ -7,8 +7,8 @@ import { SelectListe } from '@/components/ui/SelectListe'
 const OPTIONS_DOMAINE = DOMAINES.map((d) => ({ valeur: d.id, libelle: d.libelle }))
 const OPTIONS_STYLE = STYLES.map((s) => ({ valeur: s.id, libelle: s.libelle }))
 
-/** Bout de ligne discret du bandeau : la mention qui accompagnait ces sélecteurs est descendue
- *  sous le cadre, en légende de l'objet. */
+/** Bloc de tête de la colonne d'options. Les groupes qui le suivent portent tous un prix, pas
+ *  lui : le liseré tireté l'en distingue, et la mention le dit, la seule forme ne suffisant pas. */
 export function SelecteursMaquette({
   domaine,
   style,
@@ -21,22 +21,30 @@ export function SelecteursMaquette({
   onStyle: (style: StyleId) => void
 }) {
   return (
-    <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted-foreground">
-      <SelectListe
-        testId="selecteur-domaine"
-        etiquette="Métier"
-        valeur={domaine}
-        options={OPTIONS_DOMAINE}
-        onChange={(valeur) => onDomaine(valeur as DomaineId)}
-      />
+    <div data-testid="reglages-maquette" className="rounded-md border border-dashed border-border p-3">
+      <p className="text-xs text-muted-foreground">
+        Ces deux réglages changent l’aperçu. Ils ne changent pas le prix.
+      </p>
 
-      <SelectListe
-        testId="selecteur-style"
-        etiquette="Direction"
-        valeur={style}
-        options={OPTIONS_STYLE}
-        onChange={(valeur) => onStyle(valeur as StyleId)}
-      />
+      {/* Un par ligne, jamais côte à côte : « VTC et transport de personnes » passe à la ligne
+          dans cette colonne, et la hauteur du bloc décalerait les groupes que le relevé mesure. */}
+      <div className="mt-3 flex flex-col items-start gap-2 text-xs text-muted-foreground">
+        <SelectListe
+          testId="selecteur-domaine"
+          etiquette="Métier"
+          valeur={domaine}
+          options={OPTIONS_DOMAINE}
+          onChange={(valeur) => onDomaine(valeur as DomaineId)}
+        />
+
+        <SelectListe
+          testId="selecteur-style"
+          etiquette="Direction"
+          valeur={style}
+          options={OPTIONS_STYLE}
+          onChange={(valeur) => onStyle(valeur as StyleId)}
+        />
+      </div>
     </div>
   )
 }

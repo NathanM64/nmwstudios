@@ -25,8 +25,8 @@ const useEffetDeMiseEnPage = typeof window === 'undefined' ? useEffect : useLayo
  *
  * ⚠️ Le `<select>` natif reste dans le DOM, invisible : il porte la valeur, l'événement
  * `change` et le repère de test, ce qui garde `selectOption` de Playwright opérant.
- * ⚠️ Portail obligatoire : le bandeau de l'aperçu est en `overflow-hidden`, un volet posé
- * en flux y serait rogné sans que rien ne le signale.
+ * ⚠️ Portail obligatoire : la colonne d'options écrête son débordement pour défiler, un volet
+ * posé en flux y serait rogné sans que rien ne le signale.
  */
 export function SelectListe({
   valeur,

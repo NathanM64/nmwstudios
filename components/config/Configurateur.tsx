@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { PanneauOptions } from '@/components/config/PanneauOptions'
 import { BarrePrix } from '@/components/config/BarrePrix'
 import { Apercu } from '@/components/config/Apercu'
+import { SelecteursMaquette } from '@/components/config/SelecteursMaquette'
 import { Recapitulatif } from '@/components/config/Recapitulatif'
 import { RecapitulatifFinal } from '@/components/config/RecapitulatifFinal'
 import { JamaisInclus } from '@/components/config/JamaisInclus'
@@ -118,15 +119,7 @@ export function Configurateur() {
           data-testid="colonne-apercu"
           className="sticky top-20 min-w-0 self-start xl:static xl:flex xl:min-h-0 xl:flex-col xl:self-auto"
         >
-          <Apercu
-            config={config}
-            cible={cible}
-            domaine={domaine}
-            style={style}
-            onPartie={surPartie}
-            onDomaine={setDomaine}
-            onStyle={setStyle}
-          />
+          <Apercu config={config} cible={cible} domaine={domaine} style={style} onPartie={surPartie} />
         </div>
 
         {/* La colonne n'est conteneur de défilement qu'au-dessus de 1280 : la réserve sous la barre
@@ -137,6 +130,11 @@ export function Configurateur() {
           className="min-w-0 xl:min-h-0 xl:scroll-pb-(--barre-scroll-pb) xl:overflow-y-auto xl:pr-2"
         >
           <h1 className="text-2xl font-semibold tracking-tight">Configurez votre site</h1>
+
+          <div className="mt-6">
+            <SelecteursMaquette domaine={domaine} style={style} onDomaine={setDomaine} onStyle={setStyle} />
+          </div>
+
           <div className="mt-6">
             <PanneauOptions config={config} onChange={setConfig} onCible={setCible} onLecture={surLecture} />
           </div>

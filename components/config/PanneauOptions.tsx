@@ -35,6 +35,10 @@ export const PanneauOptions = memo(function PanneauOptions({
   const dernierGroupe = useRef<GroupeId | null>(null)
   const derniereProgression = useRef<number | null>(null)
   const suspenduJusqua = useRef(0)
+  // Le relevé du montage est muet : émettre ferait glisser la page avant le premier geste. Un
+  // drapeau, pas `dernierGroupe` encore nul : sans groupe au-dessus de la ligne au repos, ce
+  // dernier restait armé et avalait le premier geste entier.
+  const amorce = useRef(true)
 
   // L'ancre de l'option, pas la tête de sa partie : un article se voit dans les actualités,
   // la livraison accélérée sur la ligne de temps. Le relevé se suspend, sans quoi le
@@ -56,6 +60,9 @@ export const PanneauOptions = memo(function PanneauOptions({
       for (const section of racine.querySelectorAll<HTMLElement>('[data-groupe]')) {
         if (section.getBoundingClientRect().top <= ligne) courant = section
       }
+      // Consommée même sans groupe au-dessus de la ligne, sinon rien n'amorce jamais le pilote.
+      const amorceEnCours = amorce.current
+      amorce.current = false
       if (!courant) return
 
       const boite = courant.getBoundingClientRect()
@@ -66,11 +73,10 @@ export const PanneauOptions = memo(function PanneauOptions({
       const groupe = courant.dataset.groupe as GroupeId
 
       if (groupe === dernierGroupe.current && progression === derniereProgression.current) return
-      // La référence s'écrit toujours, l'émission non. Au montage le premier groupe a déjà franchi
-      // la ligne, et émettre ferait glisser la page avant le premier geste. Pendant la suspension
-      // c'est le clic qui a fait défiler le panneau : sortir sans écrire laisserait ce défilement
-      // subi passer pour une lecture, et reprendre la main sur le choix une demi-seconde plus tard.
-      const muet = dernierGroupe.current === null || Date.now() < suspenduJusqua.current
+      // La référence s'écrit toujours, l'émission non. Pendant la suspension c'est le clic qui a
+      // fait défiler le panneau : sortir sans écrire laisserait ce défilement subi passer pour une
+      // lecture, et reprendre la main sur le choix une demi-seconde plus tard.
+      const muet = amorceEnCours || Date.now() < suspenduJusqua.current
       dernierGroupe.current = groupe
       derniereProgression.current = progression
       if (!muet) onLecture({ groupe, progression })

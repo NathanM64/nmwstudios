@@ -7,12 +7,39 @@ test.beforeEach(async ({ page }) => {
   await page.goto('/configurateur')
 })
 
-test('les deux sélecteurs vivent dans le bandeau de l’aperçu', async ({ page }) => {
+test('les deux sélecteurs vivent dans la colonne d’options, plus dans le bandeau', async ({ page }) => {
   // Le repère porte le `<select>` natif, invisible et conservé pour la valeur : la présence
   // se vérifie donc sur le déclencheur, seul élément réellement peint.
+  const colonne = page.getByTestId('colonne-options')
+  await expect(colonne.getByTestId('selecteur-domaine-declencheur')).toBeVisible()
+  await expect(colonne.getByTestId('selecteur-style-declencheur')).toBeVisible()
+
+  // Et nulle part ailleurs : le bandeau de l’aperçu ne les porte plus.
   const apercu = page.getByTestId('apercu')
-  await expect(apercu.getByTestId('selecteur-domaine-declencheur')).toBeVisible()
-  await expect(apercu.getByTestId('selecteur-style-declencheur')).toBeVisible()
+  await expect(apercu.getByTestId('selecteur-domaine-declencheur')).toHaveCount(0)
+  await expect(apercu.getByTestId('selecteur-style-declencheur')).toHaveCount(0)
+})
+
+test('le bloc se pose sous le titre et au dessus du premier groupe', async ({ page }) => {
+  const bloc = page.getByTestId('reglages-maquette')
+  // Les deux déclencheurs vivent dans ce bloc, pas seulement quelque part dans la colonne.
+  await expect(bloc.getByTestId('selecteur-domaine-declencheur')).toBeVisible()
+  await expect(bloc.getByTestId('selecteur-style-declencheur')).toBeVisible()
+
+  const titre = (await page.getByRole('heading', { name: 'Configurez votre site' }).boundingBox())!
+  const boite = (await bloc.boundingBox())!
+  const premier = (await page.locator('[data-groupe]').first().boundingBox())!
+  expect(boite.y).toBeGreaterThanOrEqual(titre.y + titre.height - 1)
+  expect(boite.y + boite.height).toBeLessThanOrEqual(premier.y + 1)
+})
+
+test('le bloc dit en toutes lettres qu’il ne touche pas au devis', async ({ page }) => {
+  const bloc = page.getByTestId('reglages-maquette')
+  // La seule mise en forme ne suffit pas : posé au-dessus de groupes qui affichent tous un
+  // prix, le bloc doit dire lui-même qu’il n’en porte aucun.
+  await expect(bloc).toContainText('aperçu')
+  await expect(bloc).toContainText(/prix|devis/)
+  await expect(bloc).not.toContainText('€')
 })
 
 test('le sélecteur de domaine propose les sept métiers', async ({ page }) => {
@@ -45,12 +72,18 @@ test('changer de style change la palette sans changer le texte', async ({ page }
   await expect(titre).toHaveText(texte!)
 })
 
-test('le bandeau tient sur une seule ligne', async ({ page }) => {
-  const onglet = (await page.getByTestId('onglet-site').boundingBox())!
-  const selecteur = (await page.getByTestId('selecteur-domaine-declencheur').boundingBox())!
-  // Même ligne : leurs centres verticaux se recouvrent.
-  const centre = (b: { y: number; height: number }) => b.y + b.height / 2
-  expect(Math.abs(centre(onglet) - centre(selecteur))).toBeLessThan(onglet.height / 2)
+test('la hauteur du bloc ne dépend pas des valeurs choisies', async ({ page }) => {
+  // Le bloc est posé au-dessus de tout ce que le relevé de lecture mesure : une hauteur qui
+  // change avec le libellé retenu décalerait tous les groupes sous la ligne de lecture. Le plus
+  // long des métiers le prouve, c'est lui qui passait à la ligne quand les deux étaient côte à côte.
+  const bloc = page.getByTestId('reglages-maquette')
+  const hauteur = async () => (await bloc.boundingBox())!.height
+  const depart = await hauteur()
+
+  const plusLong = [...DOMAINES].sort((a, b) => b.libelle.length - a.libelle.length)[0]
+  await page.getByTestId('selecteur-domaine').selectOption(plusLong.id)
+  await expect(page.getByTestId('selecteur-domaine-declencheur')).toHaveText(plusLong.libelle)
+  expect(await hauteur(), `hauteur du bloc sur « ${plusLong.libelle} »`).toBe(depart)
 })
 
 test('la mention est une légende, posée sous le cadre et dans le panneau', async ({ page }) => {

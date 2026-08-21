@@ -90,6 +90,19 @@ test('faire défiler le formulaire fait suivre l’aperçu, sans rien cocher', a
   await expect(page.getByTestId('prix')).toHaveText(formaterEuros(calculer(CONFIG_DEPART).total))
 })
 
+test('sous 1280, le premier geste depuis le repos fait déjà suivre l’aperçu', async ({ page }) => {
+  // Sous 1280 la racine défile et l’aperçu occupe le haut : au repos aucun groupe n’a franchi la
+  // ligne de lecture. Le relevé du montage doit se consommer quand même, sinon rien n’amorce le
+  // pilote et ce seul geste est avalé. Même état de repos qu’au-dessus de 1280 depuis que le bloc
+  // des réglages pousse le premier groupe sous la ligne.
+  await page.setViewportSize({ width: 1024, height: 720 })
+  await page.goto('/configurateur')
+  await expect(page.getByTestId('onglet-site')).toHaveAttribute('aria-pressed', 'true')
+  const avant = await position(page)
+  await amener(page, 'volume')
+  expect(await positionPosee(page, avant)).toBeGreaterThan(avant)
+})
+
 test('chaque groupe amène sa propre scène', async ({ page }) => {
   await page.goto('/configurateur')
   for (const groupe of GROUPES) {
