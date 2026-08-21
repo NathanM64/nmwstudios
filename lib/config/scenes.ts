@@ -8,27 +8,30 @@ export const SCENES: readonly { id: SceneId; libelle: string }[] = [
   { id: 'deroule', libelle: 'Le déroulé' },
 ] as const
 
-export type AncreId =
-  | 'site-haut'
-  | 'site-navigation'
-  | 'site-contenu'
-  | 'site-actualites'
-  | 'site-contact'
-  | 'preuve-haut'
-  | 'deroule-haut'
-  | 'deroule-mensuel'
-
-/** Ordre du document. L'interpolation va d'une ancre à la suivante de cette liste. */
-export const ANCRES: readonly { id: AncreId; partie: SceneId }[] = [
+/** Ordre du document, vérifié contre les décalages publiés par `tests/e2e/document-defilant`.
+ *  Cette liste ne dit pas où va l'interpolation : la destination est posée par `Cible.vers`. */
+export const ANCRES = [
   { id: 'site-haut', partie: 'site' },
   { id: 'site-navigation', partie: 'site' },
   { id: 'site-contenu', partie: 'site' },
-  { id: 'site-actualites', partie: 'site' },
   { id: 'site-contact', partie: 'site' },
+  { id: 'site-actualites', partie: 'site' },
   { id: 'preuve-haut', partie: 'preuve' },
   { id: 'deroule-haut', partie: 'deroule' },
   { id: 'deroule-mensuel', partie: 'deroule' },
-] as const
+] as const satisfies readonly { id: string; partie: SceneId }[]
+
+/** Dérivée de la liste, jamais écrite à la main : une ancre oubliée dans `ANCRES` ne peut plus
+ *  se glisser dans l'union et faire interpoler vers la mauvaise partie. */
+export type AncreId = (typeof ANCRES)[number]['id']
+
+/** Ancre de tête de chaque partie, celle que porte l'enveloppe. Écrite et non concaténée : un
+ *  identifiant fabriqué au gabarit échappe au contrôle de type. */
+export const ANCRE_DE_TETE: Record<SceneId, AncreId> = {
+  site: 'site-haut',
+  preuve: 'preuve-haut',
+  deroule: 'deroule-haut',
+}
 
 export const ANCRE_PAR_GROUPE: Record<GroupeId, AncreId> = {
   socle: 'site-haut',
@@ -54,10 +57,11 @@ const ANCRE_PAR_OPTION: Partial<Record<string, AncreId>> = {
   express: 'deroule-haut',
 }
 
-const PARTIE = new Map(ANCRES.map((a) => [a.id, a.partie]))
+// `AncreId` étant dérivée de `ANCRES`, toute ancre est ici : pas de repli à prévoir.
+const PARTIE = new Map<AncreId, SceneId>(ANCRES.map((a) => [a.id, a.partie]))
 
 export function partieDeAncre(ancre: AncreId): SceneId {
-  return PARTIE.get(ancre) ?? 'site'
+  return PARTIE.get(ancre)!
 }
 
 export function premiereAncreDe(partie: SceneId): AncreId {

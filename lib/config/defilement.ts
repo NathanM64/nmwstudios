@@ -4,6 +4,10 @@ import type { AncreId, SceneId } from '@/lib/config/scenes'
  *  document : trois groupes visent la même ancre, et déduire ferait déborder sur la suivante. */
 export type Cible = { ancre: AncreId; vers?: AncreId; progression: number }
 
+/** Haut et bas de chaque partie, en pixels logiques depuis le haut du rouleau. Partiel pour la
+ *  même raison que les décalages : une partie non rendue n'a pas de bornes. */
+export type Bornes = Partial<Record<SceneId, { haut: number; bas: number }>>
+
 export type Mesures = {
   /** Décalage de chaque ancre depuis le haut du rouleau, en pixels logiques. Partiel : un bloc
    *  dont l'option n'est pas retenue n'est pas rendu, donc son ancre n'existe pas. */
@@ -30,7 +34,7 @@ export function positionCible(cible: Cible, mesures: Mesures): number {
 }
 
 export function partiesActives(
-  bornes: Partial<Record<SceneId, { haut: number; bas: number }>>,
+  bornes: Bornes,
   position: number,
   hauteurFenetre: number
 ): SceneId[] {
@@ -54,7 +58,7 @@ const TOLERANCE_MESURE = 1
  *  en bas nommerait encore l'avant-dernière partie. Le rabattement se compare toujours à
  *  `position` et ne déclare jamais une partie atteinte d'office. */
 export function partieAuHaut(
-  bornes: Partial<Record<SceneId, { haut: number; bas: number }>>,
+  bornes: Bornes,
   position: number,
   max: number
 ): SceneId | undefined {

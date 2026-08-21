@@ -3,8 +3,8 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import type { Configuration } from '@/lib/config/devis'
 import type { DomaineId } from '@/lib/config/domaines'
-import { SCENES, type AncreId, type SceneId } from '@/lib/config/scenes'
-import { partieAuHaut, partiesActives, positionCible, positionMax, type Cible, type Mesures } from '@/lib/config/defilement'
+import { ANCRE_DE_TETE, SCENES, type AncreId, type SceneId } from '@/lib/config/scenes'
+import { partieAuHaut, partiesActives, positionCible, positionMax, type Bornes, type Cible, type Mesures } from '@/lib/config/defilement'
 import { SceneSite } from '@/components/config/scenes/SceneSite'
 import { ScenePreuve } from '@/components/config/scenes/ScenePreuve'
 import { SceneDeroule } from '@/components/config/scenes/SceneDeroule'
@@ -13,9 +13,6 @@ import { SceneDeroule } from '@/components/config/scenes/SceneDeroule'
 const useEffetDeMiseEnPage = typeof window === 'undefined' ? useEffect : useLayoutEffect
 
 const VIDE: Mesures = { offsets: {}, hauteurDocument: 0, hauteurFenetre: 0 }
-
-/** Haut et bas de chaque partie, en pixels logiques depuis le haut du rouleau. */
-type Bornes = Partial<Record<SceneId, { haut: number; bas: number }>>
 
 const PREFIXE_PARTIE = 'partie-'
 
@@ -114,7 +111,7 @@ export function DocumentMaquette({
     >
       <div
         data-testid="partie-site"
-        data-ancre="site-haut"
+        data-ancre={ANCRE_DE_TETE.site}
         inert={!actives.has('site')}
         className="maquette-partie"
       >
@@ -125,7 +122,7 @@ export function DocumentMaquette({
         <div
           key={partie.id}
           data-testid={`partie-${partie.id}`}
-          data-ancre={`${partie.id}-haut`}
+          data-ancre={ANCRE_DE_TETE[partie.id]}
           inert={!actives.has(partie.id)}
           className="maquette-partie"
         >

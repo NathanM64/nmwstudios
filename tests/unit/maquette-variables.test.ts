@@ -1,8 +1,11 @@
 import { readFileSync, readdirSync } from 'node:fs'
-import { join } from 'node:path'
+import { basename, join } from 'node:path'
 import { describe, expect, it } from 'vitest'
 
 const DOSSIER = 'components/config/scenes'
+/** `DocumentMaquette` écrit du balisage de maquette hors du dossier des scènes, et c'est lui qui
+ *  portera la structure des scènes hautes : la règle doit le couvrir aussi. */
+const HORS_DOSSIER = ['components/config/DocumentMaquette.tsx']
 const CSS = readFileSync('app/globals.css', 'utf8')
 
 /** Couleurs littérales, tailles et rayons en dur : tout doit passer par les variables `--m-*`,
@@ -23,14 +26,18 @@ const INTERDITS = [
 const HORS_MAQUETTE = new Set(['m-auto'])
 
 describe('orthogonalité du style', () => {
-  const fichiers = readdirSync(DOSSIER).filter((f) => f.endsWith('.tsx'))
+  const scenes = readdirSync(DOSSIER)
+    .filter((f) => f.endsWith('.tsx'))
+    .map((f) => join(DOSSIER, f))
+  const chemins = [...scenes, ...HORS_DOSSIER]
 
   it('trouve les composants de scène', () => {
-    expect(fichiers.length).toBeGreaterThanOrEqual(3)
+    expect(scenes.length).toBeGreaterThanOrEqual(3)
   })
 
-  for (const fichier of fichiers) {
-    const source = readFileSync(join(DOSSIER, fichier), 'utf8')
+  for (const chemin of chemins) {
+    const fichier = basename(chemin)
+    const source = readFileSync(chemin, 'utf8')
 
     it(`n'écrit aucune couleur, taille ni rayon en dur dans ${fichier}`, () => {
       for (const motif of INTERDITS) {

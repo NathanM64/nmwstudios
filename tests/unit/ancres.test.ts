@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest'
 import { GROUPES, OPTIONS } from '@/lib/config/catalogue'
 import {
   ANCRES,
+  ANCRE_DE_TETE,
   ANCRE_PAR_GROUPE,
   SCENES,
   ancreDeOption,
@@ -26,13 +27,11 @@ const SCENE_ATTENDUE: Record<string, string> = {
 }
 
 describe('ancres du document', () => {
-  it('range les ancres dans l’ordre du document', () => {
-    // L'interpolation va de l'ancre courante à la suivante : un ordre faux ferait remonter
-    // la page au lieu de la faire descendre.
-    const parties = ANCRES.map((a) => a.partie)
-    expect(parties).toEqual([...parties].sort((a, b) =>
-      SCENES.findIndex((s) => s.id === a) - SCENES.findIndex((s) => s.id === b)
-    ))
+  it('fait avancer les ancres des groupes dans le sens du document', () => {
+    // Descendre le catalogue doit descendre la page : une ancre de groupe placée au-dessus de
+    // celle du groupe précédent la ferait remonter, et rien d'autre ne le verrait.
+    const rangs = GROUPES.map((g) => ANCRES.findIndex((a) => a.id === ANCRE_PAR_GROUPE[g.id]))
+    expect(rangs).toEqual([...rangs].sort((a, b) => a - b))
   })
 
   it('rattache chaque ancre à une partie déclarée', () => {
@@ -50,6 +49,14 @@ describe('ancres du document', () => {
   it('donne à chaque partie une première ancre, qui lui appartient', () => {
     for (const scene of SCENES) {
       expect(partieDeAncre(premiereAncreDe(scene.id))).toBe(scene.id)
+    }
+  })
+
+  it('fait de la tête d’une partie sa première ancre', () => {
+    // Presser un repère vise `premiereAncreDe` ; l'enveloppe de la partie porte `ANCRE_DE_TETE`.
+    // Les voir diverger, c'est viser une ancre interne ou en poser deux au même endroit.
+    for (const scene of SCENES) {
+      expect(ANCRE_DE_TETE[scene.id], scene.id).toBe(premiereAncreDe(scene.id))
     }
   })
 
