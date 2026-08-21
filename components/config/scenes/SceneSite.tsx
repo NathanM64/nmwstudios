@@ -4,15 +4,18 @@ import { memo, useState } from 'react'
 import type { Configuration } from '@/lib/config/devis'
 import { HABILLAGE, LANGUES, type Langue } from '@/lib/config/maquette'
 import { DOMAINE_REPLI, editorialDe, type DomaineId } from '@/lib/config/domaines'
+import type { Geste } from '@/lib/config/styles'
 
 const PAGES_SOCLE = 3
 
 export const SceneSite = memo(function SceneSite({
   config,
   domaine = DOMAINE_REPLI,
+  geste,
 }: {
   config: Configuration
   domaine?: DomaineId
+  geste: Geste
 }) {
   const tranches = config.pages ?? 0
   const langues = config.langue ?? 0
@@ -37,7 +40,15 @@ export const SceneSite = memo(function SceneSite({
   const libelles = e.pages.slice(0, PAGES_SOCLE + tranches * 3)
 
   return (
-    <div className="animate-apparait m-air m-marge m-contenu flex min-w-0 flex-1 flex-col">
+    <div className="animate-apparait m-contenu flex min-w-0 flex-1">
+      {geste === 'rail' && (
+        <div data-testid="geste-rail" className="m-rail shrink-0">
+          <span className="m-rail-nom">{e.enseigne}</span>
+        </div>
+      )}
+      <div className="m-air m-marge flex min-w-0 flex-1 flex-col">
+      {geste === 'bandeau' && <div data-testid="geste-bandeau" className="m-bandeau" />}
+      {geste === 'aplat' && <div data-testid="geste-aplat" className="m-aplat-tete" />}
       <header data-ancre="site-navigation" className="flex min-w-0 items-baseline gap-3">
         <span data-testid="site-enseigne" className="m-enseigne shrink-0">
           {e.enseigne}
@@ -79,7 +90,10 @@ export const SceneSite = memo(function SceneSite({
 
       {/* Héros : hauteur au contenu, jamais centrée. C'est la place libre en dessous qui
           s'étire, donc cocher une option ne déplace pas le titre. */}
-      <div className="flex shrink-0 flex-col gap-1">
+      <div
+        {...(geste === 'centre' ? { 'data-testid': 'geste-centre' } : {})}
+        className={`flex shrink-0 flex-col gap-1${geste === 'centre' ? ' m-centre' : ''}`}
+      >
         <p className="m-surtitre">{e.surtitre}</p>
         <p data-testid="site-titre" className="m-titre">
           {e.titre}
@@ -233,6 +247,9 @@ export const SceneSite = memo(function SceneSite({
           </section>
         )}
         </div>
+
+        {geste === 'bande' && <div data-testid="geste-bande" className="m-bande shrink-0" />}
+      </div>
       </div>
     </div>
   )

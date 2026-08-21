@@ -209,6 +209,55 @@ body {
   min-height: 100cqh;
 }
 
+/* ── Gestes de signature des directions ──
+   Un seul bloc de structure par direction, et une direction n'en pose jamais deux.
+   Marges négatives : les gestes sortent du rembourrage de la scène pour aller de bord à bord. */
+
+/* Enseigne : le nom peint sur un bandeau plein, souligné d'un filet laiton. */
+.m-bandeau {
+  margin: calc(var(--m-densite) * -0.7rem) calc(var(--m-densite) * -1rem) calc(var(--m-densite) * 0.2rem);
+  height: calc(var(--m-densite) * 0.9rem);
+  background: var(--m-texte);
+  border-bottom: 3px solid var(--m-accent-2);
+}
+
+/* Affiche : un aplat plein en tête, le seul de la page. */
+.m-aplat-tete {
+  margin: calc(var(--m-densite) * -0.7rem) calc(var(--m-densite) * -1rem) calc(var(--m-densite) * 0.3rem);
+  height: calc(var(--m-densite) * 1.6rem);
+  background: var(--m-accent);
+}
+
+/* Nocturne : un rail qui porte le nom debout et ne défile pas avec la page. */
+.m-rail {
+  width: calc(var(--m-densite) * 2.2rem);
+  border-right: 1px solid var(--m-bord);
+  display: flex;
+  justify-content: center;
+  padding-block: calc(var(--m-densite) * 0.7rem);
+}
+
+.m-rail-nom {
+  writing-mode: vertical-rl;
+  font-size: var(--m-legende-taille);
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--m-texte-sourd);
+}
+
+/* Velours : le héros centré, seule composition symétrique des cinq. */
+.m-centre {
+  align-items: center;
+  text-align: center;
+}
+
+/* Clinique : une seule zone teintée sur toute la page, et elle traverse de bord à bord. */
+.m-bande {
+  margin: calc(var(--m-densite) * 0.4rem) calc(var(--m-densite) * -1rem) calc(var(--m-densite) * -0.7rem);
+  height: calc(var(--m-densite) * 1.1rem);
+  background: var(--m-accent-2);
+}
+
 /* ── Habillage de la maquette ──
    Le style n'existe que comme variables `--m-*`, posées sur la racine par Apercu.tsx.
    Ces classes sont le seul endroit où ces variables se lisent : les scènes n'écrivent

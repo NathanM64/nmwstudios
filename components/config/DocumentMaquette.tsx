@@ -3,6 +3,7 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import type { Configuration } from '@/lib/config/devis'
 import type { DomaineId } from '@/lib/config/domaines'
+import type { Geste } from '@/lib/config/styles'
 import { ANCRE_DE_TETE, SCENES, type AncreId, type SceneId } from '@/lib/config/scenes'
 import { partiesActives, positionCible, type Bornes, type Cible, type Mesures } from '@/lib/config/defilement'
 import { SceneSite } from '@/components/config/scenes/SceneSite'
@@ -19,11 +20,13 @@ const PREFIXE_PARTIE = 'partie-'
 export function DocumentMaquette({
   config,
   domaine,
+  geste,
   cible,
 }: {
   config: Configuration
   domaine: DomaineId
   cible: Cible
+  geste: Geste
 }) {
   const rouleauRef = useRef<HTMLDivElement>(null)
   const [mesures, setMesures] = useState<Mesures>(VIDE)
@@ -106,7 +109,7 @@ export function DocumentMaquette({
         inert={!actives.has('site')}
         className="maquette-partie"
       >
-        <SceneSite config={config} domaine={domaine} />
+        <SceneSite config={config} domaine={domaine} geste={geste} />
       </div>
 
       {SCENES.slice(1).map((partie, i) => (

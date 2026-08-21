@@ -46,7 +46,7 @@ export function Apercu({
             }
             className="maquette-page"
           >
-            <DocumentMaquette config={config} domaine={domaine} cible={cible} />
+            <DocumentMaquette config={config} domaine={domaine} cible={cible} geste={styleParId(style)!.geste} />
           </div>
         </div>
       </div>
@@ -55,7 +55,7 @@ export function Apercu({
         data-testid="mention-style"
         className="px-3 pb-2 font-mono text-xs uppercase tracking-[0.08em] text-muted-foreground"
       >
-        Aperçu, pas votre futur site : la vôtre sera dessinée pour vous
+        Aperçu, pas votre futur site : le vôtre sera dessinée pour vous
       </p>
     </div>
   )
