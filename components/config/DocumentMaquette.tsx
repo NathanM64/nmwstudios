@@ -85,7 +85,7 @@ export function DocumentMaquette({
     }
   }, [config, domaine])
 
-  const position = positionCible(cible, mesures)
+  const position = positionCible(cible, mesures, bornes)
   // Avant la première mesure la fenêtre est haute de zéro et aucune partie ne la croise :
   // sans ce repli, le premier rendu serait intégralement inerte.
   const actives = new Set(

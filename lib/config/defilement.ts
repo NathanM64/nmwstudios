@@ -1,4 +1,4 @@
-import type { AncreId, SceneId } from '@/lib/config/scenes'
+import { partieDeAncre, type AncreId, type SceneId } from '@/lib/config/scenes'
 
 /** `vers` est la destination de l'interpolation, explicite et non déduite de l'ordre du
  *  document : trois groupes visent la même ancre, et déduire ferait déborder sur la suivante. */
@@ -24,13 +24,24 @@ function positionMax(mesures: Mesures): number {
   return Math.max(0, mesures.hauteurDocument - mesures.hauteurFenetre)
 }
 
-export function positionCible(cible: Cible, mesures: Mesures): number {
+export function positionCible(cible: Cible, mesures: Mesures, bornes: Bornes): number {
   const depart = mesures.offsets[cible.ancre]
   if (depart === undefined) return 0
 
-  const arrivee = (cible.vers === undefined ? undefined : mesures.offsets[cible.vers]) ?? depart
-  const brut = depart + (arrivee - depart) * borner(cible.progression, 0, 1)
-  return borner(brut, 0, positionMax(mesures))
+  // Lecture : interpolation vers l'ancre du groupe suivant, sans borne de partie. La borner
+  // figerait le parcours à la fin d'une partie, et la suivante ne serait jamais atteinte.
+  if (cible.vers !== undefined) {
+    const arrivee = mesures.offsets[cible.vers] ?? depart
+    const brut = depart + (arrivee - depart) * borner(cible.progression, 0, 1)
+    return borner(brut, 0, positionMax(mesures))
+  }
+
+  // Pose : jamais au delà de la fin de la partie visée. Une partie vaut au moins une fenêtre,
+  // et poser un repère bas y ferait entrer la partie d'après.
+  const borne = bornes[partieDeAncre(cible.ancre)]
+  const plancher = borne === undefined ? 0 : borne.haut
+  const plafond = borne === undefined ? depart : Math.max(borne.haut, borne.bas - mesures.hauteurFenetre)
+  return borner(borner(depart, plancher, plafond), 0, positionMax(mesures))
 }
 
 export function partiesActives(

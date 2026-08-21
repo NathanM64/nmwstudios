@@ -1,7 +1,7 @@
 import { expect, test } from '@playwright/test'
 import { ANCRES, SCENES, ancreDeOption } from '../../lib/config/scenes'
 import { SUSPENSION_MS } from '../../components/config/PanneauOptions'
-import { amenerLaPartie, dansLaFenetre, ecartAAncre, hydrate } from './fenetre'
+import { amenerLaPartie, dansLaFenetre, ecartALaVisee, hydrate } from './fenetre'
 import { STYLES, STYLE_DEFAUT } from '../../lib/config/styles'
 
 /** N'importe quelle direction sauf celle par défaut. Dérivée : écrire un identifiant
@@ -244,21 +244,20 @@ test('le mouvement réduit pose la position sans transition', async ({ page }) =
   expect(propriete).toBe('none')
 })
 
-test('cocher une option amène son ancre dans la fenêtre', async ({ page }) => {
+test('cocher une option pose la page là où le modèle le demande', async ({ page }) => {
   await page.getByRole('checkbox', { name: 'Un blog', exact: true }).check()
   await expect.poll(() => dansLaFenetre(page, 'site-blog')).toBe(true)
   // La partie du site tient dans une fenêtre : le blog s'y voit même sans rien viser, et le
-  // seul constat ci-dessus passerait aussi bien sur la page laissée en haut. C'est la position
-  // posée qui dit que l'ancre de l'option est visée, et non la tête de sa partie.
+  // seul constat ci-dessus passerait aussi bien sur la page laissée en haut. Depuis le lot 2,
+  // viser ne pose plus l'ancre en tête : la page s'arrête à la fin de la partie, sans quoi la
+  // preuve entrerait dans la fenêtre sous les actualités.
   const ancreDuBlog = ancreDeOption('blog')
-  await expect.poll(() => ecartAAncre(page, ancreDuBlog), { message: `écart à ${ancreDuBlog}` }).toBeLessThan(2)
+  await expect.poll(() => ecartALaVisee(page, ancreDuBlog), { message: `écart à ${ancreDuBlog}` }).toBeLessThan(2)
 
-  // Attente franche au delà de la suspension. Un sondage se contente de sa fin de transition, à
-  // 320 ms, et ne verrait pas le demi-tour d'après : l'ancre du groupe de « Un blog » est la
-  // navigation, pas les actualités, et l'écart se compte en centaines de pixels sans qu'on ait
-  // quitté la partie du site.
+  // Attente franche au delà de la suspension. Un sondage se contente de sa fin de transition et
+  // ne verrait pas le demi-tour d'après.
   await page.waitForTimeout(SUSPENSION_MS + 400)
-  expect(await ecartAAncre(page, ancreDuBlog), `écart à ${ancreDuBlog}`).toBeLessThan(2)
+  expect(await ecartALaVisee(page, ancreDuBlog), `écart à ${ancreDuBlog}`).toBeLessThan(2)
 })
 
 test('cocher un contrôle technique amène le rapport', async ({ page }) => {

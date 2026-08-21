@@ -47,24 +47,38 @@ export async function partieAuHautDeLaFenetre(page: Page): Promise<string | null
   })
 }
 
-/** Écart, en pixels logiques, entre la position posée du rouleau et celle que cette ancre
- *  commande. Zéro veut dire que c'est bien elle qui est en haut de la fenêtre.
+/** Écart, en pixels logiques, entre la position posée du rouleau et celle que viser cette ancre
+ *  commande. Zéro veut dire que la page est posée là où le modèle le demande.
  *
- *  L'attendu est rabattu sur la position la plus basse, comme `positionCible` le fait : une
- *  ancre plus basse que ce plancher n'est pas atteignable, et `deroule-mensuel` est dans ce cas.
+ *  L'attendu est recalculé ici depuis les rectangles réels : la partie qui porte l'ancre, sa
+ *  hauteur, celle de la fenêtre et le plancher du document. Aucun calcul n'est partagé avec la
+ *  production, et le relevé publié n'est pas consulté.
  *
- *  Une ancre absente du relevé rend `Infinity` et non `NaN` : les ancres conditionnelles vont
- *  se multiplier, et un `NaN` sondé expire sur un message qui ne dit pas laquelle manque. */
-export async function ecartAAncre(page: Page, ancre: string): Promise<number> {
+ *  Une ancre absente du DOM rend `Infinity` et non `NaN` : les ancres conditionnelles sont
+ *  nombreuses, et un `NaN` sondé expire sur un message qui ne dit pas laquelle manque. */
+export async function ecartALaVisee(page: Page, ancre: string): Promise<number> {
   return page.getByTestId('rouleau').evaluate((rouleau: HTMLElement, a) => {
-    const releve = JSON.parse(rouleau.dataset.mesures!) as Record<string, number>
-    if (releve[a] === undefined) return Number.POSITIVE_INFINITY
+    const cible = rouleau.querySelector<HTMLElement>(`[data-ancre="${a}"]`)
+    if (!cible) return Number.POSITIVE_INFINITY
     const fenetre = rouleau.closest('.cadre-maquette')
     if (!fenetre) throw new Error('cadre-maquette introuvable')
+    const partie = cible.closest<HTMLElement>('[data-testid^="partie-"]')
+    if (!partie) throw new Error(`l’ancre ${a} n’est dans aucune partie`)
+
     const echelle = parseFloat(getComputedStyle(rouleau.parentElement!).scale) || 1
-    const max = Math.max(0, rouleau.offsetHeight - fenetre.clientHeight / echelle)
+    const haut = rouleau.getBoundingClientRect().top
+    const depuisLeHaut = (v: number) => (v - haut) / echelle
+    const hauteurFenetre = fenetre.clientHeight / echelle
+
+    const offset = depuisLeHaut(cible.getBoundingClientRect().top)
+    const pHaut = depuisLeHaut(partie.getBoundingClientRect().top)
+    const pBas = depuisLeHaut(partie.getBoundingClientRect().bottom)
+    const plafond = Math.max(pHaut, pBas - hauteurFenetre)
+    const max = Math.max(0, rouleau.offsetHeight - hauteurFenetre)
+
+    const attendu = Math.min(Math.max(Math.min(Math.max(offset, pHaut), plafond), 0), max)
     const y = Math.abs(parseFloat(getComputedStyle(rouleau).translate.split(' ')[1] ?? '0'))
-    return Math.abs(y - Math.min(releve[a], max))
+    return Math.abs(y - attendu)
   }, ancre)
 }
 
