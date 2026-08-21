@@ -22,6 +22,9 @@ async function palier(page: Page): Promise<string> {
 // Table écrite à la main, pas dérivée du CSS : c'est elle l'oracle, `--palier` est l'observation.
 // Colonne = fenêtre moins 540 côte à côte, moins 92 empilée, moins 68 sous `sm` où la grille
 // passe de `px-8` à `px-5`. Mesuré le 21/08/2026, la passation annonçait 92 partout.
+const TOUT_COCHE =
+  '/configurateur?pages=4&langue=3&redaction=15&reprise&photos&visuels&blog&article=10&membre&formulaire&rdv&newsletter&paiement&seo&seo-local&perf&a11y&rgpd&legal&migration&domaine&cadrage&formation&express&partenaire'
+
 const ATTENDU = [
   { fenetre: 1920, maquette: 1380, palier: 'bureau' },
   { fenetre: 1600, maquette: 1060, palier: 'bureau' },
@@ -104,4 +107,55 @@ test('les espacements suivent le palier, pas seulement le texte', async ({ page 
   const bureau = await marge()
   await page.setViewportSize({ width: 390, height: 900 })
   expect(await marge(), 'marge en téléphone').toBeLessThan(bureau * 0.8)
+})
+
+test('rien ne déborde horizontalement de la maquette, à toutes les largeurs', async ({ page }) => {
+  // Tout coché : la configuration de départ ne rend pas la moitié du catalogue, et c'est
+  // justement ce qui déborde en premier.
+  await page.goto(TOUT_COCHE)
+  for (const cas of ATTENDU) {
+    await page.setViewportSize({ width: cas.fenetre, height: 900 })
+    const debords = await page.getByTestId('rouleau').evaluate((rouleau) => {
+      const cadre = rouleau.closest('.cadre-maquette')!.getBoundingClientRect()
+      return [...rouleau.querySelectorAll<HTMLElement>('*')]
+        .filter((n) => {
+          const b = n.getBoundingClientRect()
+          return b.width > 0 && (b.right > cadre.right + 1 || b.left < cadre.left - 1)
+        })
+        .map((n) => n.dataset.testid ?? n.className)
+        .slice(0, 6)
+    })
+    expect(debords, `débordements à ${cas.fenetre}`).toEqual([])
+  }
+})
+
+/** Grilles qui partagent la place, c'est à dire à colonnes égales. Celles dont les colonnes sont
+ *  dimensionnées au contenu, comme `.m-table`, ne sont pas des grilles de cartes et ne suivent
+ *  pas la règle du palier. */
+async function grillesEgales(page: Page): Promise<{ nom: string; colonnes: number }[]> {
+  return page.getByTestId('rouleau').evaluate((rouleau) =>
+    [...rouleau.querySelectorAll<HTMLElement>('*')]
+      .filter((n) => getComputedStyle(n).display.includes('grid'))
+      .map((n) => ({
+        nom: n.dataset.testid ?? n.className.slice(0, 40),
+        pistes: getComputedStyle(n).gridTemplateColumns.split(' ').map(parseFloat),
+      }))
+      .filter(({ pistes }) => Math.max(...pistes) - Math.min(...pistes) < 1)
+      .map(({ nom, pistes }) => ({ nom, colonnes: pistes.length }))
+  )
+}
+
+// Règle de mise en page, pas seuil arbitraire : un téléphone ne montre pas trois cartes de front,
+// une tablette pas cinq. Mesuré avant écriture, à 390 la grille de cinq tombe à 54 px par colonne
+// et celle de trois à 94.
+const PLAFOND = { telephone: 2, tablette: 3, bureau: 99 } as const
+
+test('aucune grille ne garde plus de colonnes que son palier n’en permet', async ({ page }) => {
+  await page.goto(TOUT_COCHE)
+  for (const cas of ATTENDU) {
+    await page.setViewportSize({ width: cas.fenetre, height: 900 })
+    const plafond = PLAFOND[cas.palier as keyof typeof PLAFOND]
+    const trop = (await grillesEgales(page)).filter((g) => g.colonnes > plafond)
+    expect(trop, `à ${cas.fenetre}, palier ${cas.palier}, plafond ${plafond}`).toEqual([])
+  }
 })

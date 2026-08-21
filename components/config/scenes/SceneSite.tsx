@@ -114,7 +114,7 @@ export const SceneSite = memo(function SceneSite({
         </div>
 
         <div className="m-air flex shrink-0 flex-col">
-        <div data-testid="site-services" className="m-air grid shrink-0 grid-cols-3">
+        <div data-testid="site-services" className="m-air grid shrink-0 grid-cols-1 @min-[500px]/maquette:grid-cols-3">
           {e.services.map((service, i) => (
             <div key={service.nom} data-testid="site-service" className="m-filet-haut flex min-w-0 gap-2 pt-1">
               <span className="m-mono shrink-0">{String(i + 1).padStart(2, '0')}</span>
@@ -220,7 +220,7 @@ export const SceneSite = memo(function SceneSite({
               <p className="m-surtitre">{t.actualites}</p>
               <span className="m-filet h-px flex-1" />
             </div>
-            <div className="grid grid-cols-5 gap-1">
+            <div className="grid grid-cols-2 gap-1 @min-[500px]/maquette:grid-cols-3 @min-[700px]/maquette:grid-cols-5">
               {articles > 0
                 ? e.articles.slice(0, articles).map((article) => (
                     <div key={article.requete} data-testid="site-article" className="m-carte min-w-0 px-1.5">

@@ -138,11 +138,11 @@ test('à 390, le plus petit texte de la maquette tient le plancher du projet', a
   expect(await plusPetitTexte(page), 'plus petit texte à 390').toBeGreaterThanOrEqual(10)
 })
 
-test('rien n’est rogné à l’intérieur d’une partie', async ({ page }) => {
-  // Seul le rognage vertical est un défaut : onze `truncate` écrêtent horizontalement à
-  // dessein. La fenêtre écrête le document, c'est son travail ; à l'intérieur d'une partie
-  // un contenu coupé en hauteur disparaît sans le dire, et `toBeVisible` ne le verrait pas.
-  const rognes = await page.getByTestId('rouleau').evaluate((rouleau) =>
+/** Repères écrêtés en hauteur à l'intérieur d'une partie. Seul le rognage vertical est un
+ *  défaut : la fenêtre écrête le document, c'est son travail, alors qu'à l'intérieur d'une
+ *  partie un contenu coupé en hauteur disparaît sans le dire. */
+async function rognes(page: Page): Promise<string[]> {
+  return page.getByTestId('rouleau').evaluate((rouleau) =>
     [...rouleau.querySelectorAll<HTMLElement>('*')]
       // L'aplat de l'image écrête ses repères de recadrage, et c'est voulu.
       .filter((n) => n.dataset.testid !== 'site-cadre' && !n.closest('[data-testid="site-cadre"]'))
@@ -152,8 +152,24 @@ test('rien n’est rogné à l’intérieur d’une partie', async ({ page }) =>
       .filter((n) => n.scrollHeight - n.clientHeight > 1)
       .map((n) => n.dataset.testid ?? n.className)
   )
-  expect(rognes).toEqual([])
+}
+
+test('rien n’est rogné à l’intérieur d’une partie', async ({ page }) => {
+  const compte = () => page.getByTestId('rouleau').evaluate((r) => r.querySelectorAll('*').length)
+  const depart = await compte()
+  expect(await rognes(page), 'configuration de départ').toEqual([])
+
+  // Sans cette passe, la moitié du catalogue reste hors filet : `preuve-serp` n'est pas rendu du
+  // tout au départ, et le rognage vertical est la façon dont une option vendue disparaît en
+  // silence. Les dix `truncate` écrêtent horizontalement, à dessein.
+  await page.goto(TOUT_COCHE)
+  // La passe ne vaut que si elle examine autre chose : un lien mort la rendrait creuse.
+  expect(await compte(), 'tout coché ne rend pas plus que le départ').toBeGreaterThan(depart)
+  expect(await rognes(page), 'tout coché').toEqual([])
 })
+
+const TOUT_COCHE =
+  '/configurateur?pages=4&langue=3&redaction=15&reprise&photos&visuels&blog&article=10&membre&formulaire&rdv&newsletter&paiement&seo&seo-local&perf&a11y&rgpd&legal&migration&domaine&cadrage&formation&express&partenaire'
 
 // Pire cas mesuré : sur ce métier, la seule bascule en anglais remonte six ancres de 25 à 55 px,
 // les deux repères de partie compris, la partie du site dépassant alors une fenêtre.
