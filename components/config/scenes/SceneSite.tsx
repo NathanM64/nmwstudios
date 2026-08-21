@@ -117,7 +117,7 @@ export const SceneSite = memo(function SceneSite({
           data-testid="site-cadre"
           data-ancre="site-contenu"
           className="m-photo relative shrink grow basis-0 overflow-hidden"
-          style={{ backgroundImage: `url(/maquette/${domaine}.avif)` }}
+          style={{ '--m-photo-fond': `url(/maquette/${domaine}.avif)` } as React.CSSProperties}
         >
           {photos > 0 && (
             <>

@@ -343,6 +343,13 @@ body {
 .m-photo {
   background-color: var(--m-fond-2);
   border: 1px solid var(--m-bord);
+  /* Voile de la direction composé au dessus de la photo : la même image appartient aux cinq
+     palettes au lieu d'y être posée. `background-image` porte les deux, le voile en premier. */
+  background-image: linear-gradient(
+      color-mix(in oklab, var(--m-photo-teinte) calc(var(--m-photo-voile) * 100%), transparent),
+      color-mix(in oklab, var(--m-photo-teinte) calc(var(--m-photo-voile) * 100%), transparent)
+    ),
+    var(--m-photo-fond, none);
   background-size: cover;
   background-position: center;
   border-radius: var(--m-rayon-2);

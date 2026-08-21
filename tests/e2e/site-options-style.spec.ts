@@ -50,7 +50,12 @@ test('le cadre image porte une image servie, pas un rectangle vide', async ({ pa
   // promesse : une image réellement servie, qui remplit sa place.
   expect(cadre.image, 'aucune image de fond').not.toBe('none')
   expect(cadre.image, 'image non servie depuis le dossier des métiers').toContain('/maquette/')
-  expect(cadre.taille, 'image qui flotte au lieu de remplir').toBe('cover')
+  // Deux couches depuis le voile de direction : chacune doit remplir, pas seulement la première.
+  expect(
+    cadre.taille.split(',').map((t) => t.trim()),
+    'une couche flotte au lieu de remplir'
+  ).not.toContain('auto')
+  expect(cadre.taille, 'aucune couche ne remplit').toContain('cover')
   expect(cadre.fond, 'aucun fond sous l’image').not.toBe('rgba(0, 0, 0, 0)')
 })
 

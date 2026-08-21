@@ -49,6 +49,8 @@ export const STYLES: readonly Style[] = [
       '--m-aplat':
         'radial-gradient(90% 80% at 18% 10%, #E8C98A 0%, rgba(232, 201, 138, 0) 62%), linear-gradient(158deg, #7C8A5B 0%, #3E5340 52%, #16261F 100%)',
       '--m-ombre': '0 1px 2px rgba(14, 42, 34, 0.06), 0 14px 32px -20px rgba(14, 42, 34, 0.35)',
+      '--m-photo-teinte': '#C79A43',
+      '--m-photo-voile': '0.22',
     },
   },
   {
@@ -84,6 +86,8 @@ export const STYLES: readonly Style[] = [
       '--m-aplat':
         'radial-gradient(90% 110% at 78% 6%, #F2EADC 0%, rgba(242, 234, 220, 0) 58%), linear-gradient(150deg, #A8B5A4 0%, #6C7F6E 48%, #39463C 100%)',
       '--m-ombre': '0 1px 2px rgba(27, 30, 28, 0.05), 0 16px 36px -24px rgba(27, 30, 28, 0.3)',
+      '--m-photo-teinte': '#3E5C48',
+      '--m-photo-voile': '0.18',
     },
   },
   {
@@ -119,6 +123,8 @@ export const STYLES: readonly Style[] = [
       '--m-aplat':
         'radial-gradient(120% 100% at 30% 0%, #D9D2C4 0%, rgba(217, 210, 196, 0) 55%), linear-gradient(155deg, #8F927F 0%, #5B6156 45%, #2A2C26 100%)',
       '--m-ombre': '0 1px 2px rgba(24, 23, 18, 0.05), 0 20px 44px -28px rgba(24, 23, 18, 0.32)',
+      '--m-photo-teinte': '#9A9384',
+      '--m-photo-voile': '0.30',
     },
   },
   {
@@ -154,6 +160,8 @@ export const STYLES: readonly Style[] = [
       '--m-aplat':
         'radial-gradient(90% 130% at 82% 0%, rgba(208, 131, 85, 0.55) 0%, rgba(208, 131, 85, 0) 62%), linear-gradient(160deg, #2C3A43 0%, #1A2229 48%, #0D1114 100%)',
       '--m-ombre': '0 1px 0 rgba(233, 229, 219, 0.06), 0 18px 40px -24px rgba(0, 0, 0, 0.9)',
+      '--m-photo-teinte': '#D08355',
+      '--m-photo-voile': '0.42',
     },
   },
   {
@@ -189,6 +197,8 @@ export const STYLES: readonly Style[] = [
       '--m-aplat':
         'radial-gradient(100% 110% at 12% 0%, #F0C9A2 0%, rgba(240, 201, 162, 0) 58%), linear-gradient(145deg, #8FA0C9 0%, #3C4E92 46%, #1C265C 100%)',
       '--m-ombre': '0 1px 2px rgba(17, 16, 20, 0.06), 0 14px 30px -20px rgba(36, 56, 200, 0.4)',
+      '--m-photo-teinte': '#2438C8',
+      '--m-photo-voile': '0.34',
     },
   },
 ] as const

@@ -53,7 +53,9 @@ describe('orthogonalité du style', () => {
 
     it(`ne référence aucune classe de maquette inexistante dans ${fichier}`, () => {
       // Une classe mal orthographiée ne fait rien du tout, et rien ne le signale à l'écran.
-      const classes = [...new Set(source.match(/\bm-[a-z][a-z0-9-]*/g) ?? [])].filter(
+      // Le tiret devant exclut les propriétés personnalisées : `--m-photo-fond` est une
+      // variable, pas une classe, et l'exiger dans le CSS n'aurait aucun sens.
+      const classes = [...new Set(source.match(/(?<!-)\bm-[a-z][a-z0-9-]*/g) ?? [])].filter(
         (c) => !HORS_MAQUETTE.has(c)
       )
       expect(classes.length).toBeGreaterThan(0)

@@ -29,3 +29,19 @@ test('les cinq gestes sont tous atteints par au moins une direction', () => {
   // Un geste déclaré et jamais posé serait du code mort que le filet ci-dessus ne verrait pas.
   expect(new Set(STYLES.map((s) => s.geste)).size).toBe(Object.keys(REPERE).length)
 })
+
+test('la photo est traitée différemment par chaque direction', async ({ page }) => {
+  // Sans traitement, la même photo paraît à l'identique dans cinq palettes et sent la banque
+  // d'images posée là. Le constat porte sur ce qui est peint, pas sur la variable déclarée.
+  await page.goto('/configurateur?photos&visuels')
+  await hydrate(page)
+  const vus = new Set<string>()
+  for (const style of STYLES) {
+    await page.getByTestId('selecteur-style').selectOption(style.id)
+    await expect
+      .poll(() => page.getByTestId('site-cadre').evaluate((n) => getComputedStyle(n).backgroundImage))
+      .toContain('gradient')
+    vus.add(await page.getByTestId('site-cadre').evaluate((n) => getComputedStyle(n).backgroundImage))
+  }
+  expect(vus.size, `traitements distincts : ${vus.size}`).toBe(STYLES.length)
+})
