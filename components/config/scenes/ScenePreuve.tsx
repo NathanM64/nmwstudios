@@ -4,7 +4,7 @@ import { Fragment, memo, useEffect, useRef, useState } from 'react'
 import type { Configuration } from '@/lib/config/devis'
 import { contrastRatio, parseColor } from '@/lib/color/contrast'
 import { lireChargement } from '@/lib/config/mesure'
-import { DOMAINE_DEFAUT, editorialDe, type DomaineId } from '@/lib/config/domaines'
+import { DOMAINE_REPLI, editorialDe, type DomaineId } from '@/lib/config/domaines'
 
 /** Contraste réellement rendu : lu sur le DOM, jamais écrit en dur. */
 function useContrasteMesure(): number | null {
@@ -72,7 +72,7 @@ const CONTROLES = [
 
 export const ScenePreuve = memo(function ScenePreuve({
   config,
-  domaine = DOMAINE_DEFAUT,
+  domaine = DOMAINE_REPLI,
 }: {
   config: Configuration
   domaine?: DomaineId

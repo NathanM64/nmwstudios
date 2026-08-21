@@ -13,7 +13,7 @@ import { decoder, encoder } from '@/lib/config/url'
 import { GROUPES, type GroupeId } from '@/lib/config/catalogue'
 import { ANCRE_PAR_GROUPE } from '@/lib/config/scenes'
 import type { Cible } from '@/lib/config/defilement'
-import { DOMAINE_DEFAUT, type DomaineId } from '@/lib/config/domaines'
+import { DOMAINE_OUVERTURE, type DomaineId } from '@/lib/config/domaines'
 import { STYLE_DEFAUT, type StyleId } from '@/lib/config/styles'
 
 /** Le suivi mensuel est proposé d’emblée, et se refuse par « Je m’en occupe moi-même ». */
@@ -23,7 +23,7 @@ export function Configurateur() {
   const [config, setConfig] = useState<Configuration>(CONFIG_DEPART)
   const [cible, setCible] = useState<Cible>({ ancre: 'site-haut', progression: 0 })
   // Métier et direction de style ne vivent pas dans l'URL : ils ne changent ni le prix ni le devis.
-  const [domaine, setDomaine] = useState<DomaineId>(DOMAINE_DEFAUT)
+  const [domaine, setDomaine] = useState<DomaineId>(DOMAINE_OUVERTURE)
   const [style, setStyle] = useState<StyleId>(STYLE_DEFAUT)
   // Faux tant que l'URL n'a pas été lue : la barre de prix s'en sert pour ne pas
   // animer un delta sur la configuration initiale d'un lien partagé.

@@ -3,13 +3,13 @@
 import { memo, useState } from 'react'
 import type { Configuration } from '@/lib/config/devis'
 import { HABILLAGE, LANGUES, type Langue } from '@/lib/config/maquette'
-import { DOMAINE_DEFAUT, editorialDe, type DomaineId } from '@/lib/config/domaines'
+import { DOMAINE_REPLI, editorialDe, type DomaineId } from '@/lib/config/domaines'
 
 const PAGES_SOCLE = 3
 
 export const SceneSite = memo(function SceneSite({
   config,
-  domaine = DOMAINE_DEFAUT,
+  domaine = DOMAINE_REPLI,
 }: {
   config: Configuration
   domaine?: DomaineId

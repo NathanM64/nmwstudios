@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test'
-import { DOMAINE_DEFAUT, EDITORIAL } from '../../lib/config/domaines'
+import { DOMAINE_OUVERTURE, EDITORIAL } from '../../lib/config/domaines'
 import { HABILLAGE, type Langue } from '../../lib/config/maquette'
 
 test.beforeEach(async ({ page }) => {
@@ -43,7 +43,7 @@ test('rédaction et reprise cochées ensemble restent visibles toutes les deux',
 // Les chaînes viennent du domaine par défaut, pas d'un littéral : une relecture des textes
 // ne doit pas rendre ce test faux, seulement le faire porter sur les nouveaux mots.
 const attendu = (langue: Langue) => {
-  const e = EDITORIAL[DOMAINE_DEFAUT][langue]
+  const e = EDITORIAL[DOMAINE_OUVERTURE][langue]
   const h = HABILLAGE[langue]
   return [e.pages[0], e.titre, h.redigees, e.blocsRepris[0], h.actualites, e.articles[0].titre,
     h.photo, h.visuel, h.pieceJointe, h.reserver, h.creneaux[0], h.inscrire, h.regler, h.connexion]
@@ -66,8 +66,8 @@ test('le sélecteur de langue bascule tout le texte de la maquette', async ({ pa
   }
 
   const propresAuFrancais = [
-    EDITORIAL[DOMAINE_DEFAUT].fr.titre,
-    EDITORIAL[DOMAINE_DEFAUT].fr.blocsRepris[0],
+    EDITORIAL[DOMAINE_OUVERTURE].fr.titre,
+    EDITORIAL[DOMAINE_OUVERTURE].fr.blocsRepris[0],
     HABILLAGE.fr.reserver,
     HABILLAGE.fr.actualites,
   ]
@@ -86,10 +86,10 @@ test('chaque langue achetée ajoute une entrée au sélecteur', async ({ page })
 test('retirer la langue ramène la maquette en français, sans la laisser bloquée', async ({ page }) => {
   await page.goto('/configurateur?langue=1&redaction=1')
   await page.getByTestId('site-langue').selectOption('en')
-  await expect(page.getByTestId('objet-scene')).toContainText(EDITORIAL[DOMAINE_DEFAUT].en.titre)
+  await expect(page.getByTestId('objet-scene')).toContainText(EDITORIAL[DOMAINE_OUVERTURE].en.titre)
   await page.getByRole('button', { name: 'Retirer : Une langue de plus' }).click()
   await expect(page.getByTestId('site-langue')).toHaveCount(0)
-  await expect(page.getByTestId('objet-scene')).toContainText(EDITORIAL[DOMAINE_DEFAUT].fr.titre)
+  await expect(page.getByTestId('objet-scene')).toContainText(EDITORIAL[DOMAINE_OUVERTURE].fr.titre)
 })
 
 test('chaque page rédigée se nomme dans la maquette', async ({ page }) => {

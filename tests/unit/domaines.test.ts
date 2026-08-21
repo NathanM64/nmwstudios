@@ -1,12 +1,21 @@
 import { describe, expect, it } from 'vitest'
 import { LANGUES } from '@/lib/config/maquette'
-import { DOMAINES, DOMAINE_DEFAUT, EDITORIAL, editorialDe } from '@/lib/config/domaines'
+import { DOMAINES, DOMAINE_OUVERTURE, DOMAINE_REPLI, EDITORIAL, editorialDe } from '@/lib/config/domaines'
 import { optionParId } from '@/lib/config/catalogue'
 
 describe('domaines de la maquette', () => {
   it('en déclare sept, dont le générique', () => {
     expect(DOMAINES).toHaveLength(7)
-    expect(DOMAINES.map((d) => d.id)).toContain(DOMAINE_DEFAUT)
+    expect(DOMAINES.map((d) => d.id)).toContain(DOMAINE_REPLI)
+  })
+
+  it('ouvre sur un métier écrit et se replie sur le métier générique', () => {
+    // Deux rôles, deux constantes : le configurateur ouvre sur un vrai métier pour que la
+    // première image soit un site crédible, mais un identifiant inconnu doit retomber sur le
+    // contenu générique et non sur un bistrot.
+    expect(DOMAINE_OUVERTURE).toBe('restaurant')
+    expect(DOMAINE_REPLI).toBe('autre')
+    expect(DOMAINES.map((d) => d.id)).toContain(DOMAINE_OUVERTURE)
   })
 
   it('donne un libellé non vide à chacun', () => {
@@ -75,6 +84,6 @@ describe('domaines de la maquette', () => {
   })
 
   it('retombe sur le domaine générique pour un identifiant inconnu', () => {
-    expect(editorialDe('licorne', 'fr')).toEqual(EDITORIAL[DOMAINE_DEFAUT].fr)
+    expect(editorialDe('licorne', 'fr')).toEqual(EDITORIAL[DOMAINE_REPLI].fr)
   })
 })

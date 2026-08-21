@@ -26,7 +26,13 @@ export const DOMAINES = [
   { id: 'autre', libelle: 'Autre activité' },
 ] as const satisfies readonly { id: DomaineId; libelle: string }[]
 
-export const DOMAINE_DEFAUT: DomaineId = 'autre'
+/** Ce sur quoi le configurateur ouvre. Un métier écrit et non le générique : la première image
+ *  que voit un visiteur doit être un site crédible, pas un gabarit. */
+export const DOMAINE_OUVERTURE: DomaineId = 'restaurant'
+
+/** Ce sur quoi un identifiant inconnu retombe. Générique par nécessité : servir un bistrot à qui
+ *  demande un métier absent serait faux. */
+export const DOMAINE_REPLI: DomaineId = 'autre'
 
 /** Entreprises fictives, aucune référence ni avis réels. Aucun chiffre présenté comme une
  *  mesure de NMW Studios : les délais cités appartiennent à l’entreprise inventée. */
@@ -778,5 +784,5 @@ export const EDITORIAL: Record<DomaineId, Record<Langue, Editorial>> = {
 /** Un identifiant inconnu retombe sur le domaine générique : un lien partagé trafiqué
  *  ne doit pas rendre une maquette à trous. */
 export function editorialDe(domaine: string, langue: Langue): Editorial {
-  return EDITORIAL[domaine as DomaineId]?.[langue] ?? EDITORIAL[DOMAINE_DEFAUT][langue]
+  return EDITORIAL[domaine as DomaineId]?.[langue] ?? EDITORIAL[DOMAINE_REPLI][langue]
 }
