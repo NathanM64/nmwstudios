@@ -1,5 +1,6 @@
 import AxeBuilder from '@axe-core/playwright'
 import { expect, test, type Page } from '@playwright/test'
+import { STYLES, STYLE_DEFAUT } from '../../lib/config/styles'
 import { SCENES } from '../../lib/config/scenes'
 import { amenerLaPartie } from './fenetre'
 
@@ -89,6 +90,25 @@ test('aucune violation axe sérieuse sur les trois scènes de l’aperçu, tout 
       const results = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa']).analyze()
       const serious = results.violations.filter((v) => v.impact === 'serious' || v.impact === 'critical')
       expect(serious, `scène ${scene.id} en thème ${theme} : ${JSON.stringify(serious, null, 2)}`).toEqual([])
+    }
+  }
+})
+
+// Le test ci-dessus ne voit que la direction par défaut. Les quatre autres n'étaient gardées que
+// par un filet unitaire sur le fond nu, qui a laissé passer une sourdine à 4,06 sur un jeton le
+// 21/08/2026. Ici c'est la page qui juge, sur les paires réellement peintes.
+test('aucune violation axe sérieuse dans les quatre directions non par défaut', async ({ page }) => {
+  const toutCoche =
+    '/configurateur?pages=4&langue=3&redaction=15&reprise&photos&visuels&blog&article=10&membre&formulaire&rdv&newsletter&paiement&seo&seo-local&perf&a11y&rgpd&legal&migration&domaine&cadrage&formation&express&partenaire'
+  for (const style of STYLES.filter((s) => s.id !== STYLE_DEFAUT)) {
+    for (const scene of SCENES) {
+      await page.goto(toutCoche)
+      await page.getByTestId('selecteur-style').selectOption(style.id)
+      await amenerLaPartie(page, scene.id)
+      await fonduTermine(page)
+      const results = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa']).analyze()
+      const serious = results.violations.filter((v) => v.impact === 'serious' || v.impact === 'critical')
+      expect(serious, `${style.id} sur ${scene.id} : ${JSON.stringify(serious, null, 2)}`).toEqual([])
     }
   }
 })

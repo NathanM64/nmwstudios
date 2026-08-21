@@ -2,6 +2,11 @@ import { expect, test } from '@playwright/test'
 import { ANCRES, SCENES, ancreDeOption } from '../../lib/config/scenes'
 import { SUSPENSION_MS } from '../../components/config/PanneauOptions'
 import { amenerLaPartie, dansLaFenetre, ecartAAncre } from './fenetre'
+import { STYLES, STYLE_DEFAUT } from '../../lib/config/styles'
+
+/** N'importe quelle direction sauf celle par défaut. Dérivée : écrire un identifiant
+ *  en dur casse ce test au prochain renommage de direction. */
+const AUTRE_DIRECTION = STYLES.find((s) => s.id !== STYLE_DEFAUT)!.id
 
 type Page = import('@playwright/test').Page
 
@@ -216,7 +221,7 @@ test('le relevé des ancres suit un changement de style, de métier et de langue
   // Le style ne passe par aucune prop du document, la langue vit dans l'état interne de
   // SceneSite : sans observateur sur les porteurs d'ancres, rien ne remesure.
   await animationsFinies(page)
-  await bascule(() => page.getByTestId('selecteur-style').selectOption('franc'), 'le style')
+  await bascule(() => page.getByTestId('selecteur-style').selectOption(AUTRE_DIRECTION), 'le style')
 
   await page.goto(CHARGE)
   await animationsFinies(page)

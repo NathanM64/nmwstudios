@@ -1,7 +1,11 @@
 import { expect, test } from '@playwright/test'
 import { DOMAINES } from '../../lib/config/domaines'
-import { STYLES, styleParId } from '../../lib/config/styles'
+import { STYLES, STYLE_DEFAUT, styleParId } from '../../lib/config/styles'
 import { contrastRatio, parseColor } from '../../lib/color/contrast'
+
+/** N'importe quelle direction sauf celle par défaut. Dérivée : écrire un identifiant
+ *  en dur casse ce test au prochain renommage de direction. */
+const AUTRE_DIRECTION = STYLES.find((s) => s.id !== STYLE_DEFAUT)!.id
 
 test.beforeEach(async ({ page }) => {
   await page.goto('/configurateur')
@@ -64,7 +68,7 @@ test('changer de style change la palette sans changer le texte', async ({ page }
   const texte = await titre.textContent()
   const fondAvant = await page.getByTestId('maquette').evaluate((n) => getComputedStyle(n).backgroundColor)
 
-  await page.getByTestId('selecteur-style').selectOption('premium')
+  await page.getByTestId('selecteur-style').selectOption(AUTRE_DIRECTION)
 
   await expect
     .poll(() => page.getByTestId('maquette').evaluate((n) => getComputedStyle(n).backgroundColor))

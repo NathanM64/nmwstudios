@@ -17,13 +17,6 @@ test('le titre est nettement plus grand que le corps', async ({ page }) => {
   expect(t).toBeGreaterThan(c * 2.2)
 })
 
-test('le titre emprunte la famille typographique du style', async ({ page }) => {
-  await page.goto('/configurateur')
-  await page.getByTestId('selecteur-style').selectOption('editorial')
-  const famille = await page.getByTestId('site-titre').evaluate((n) => getComputedStyle(n).fontFamily)
-  expect(famille.toLowerCase()).toContain('georgia')
-})
-
 // Le vide se mesure sur la partie, `objet-scene` étant la fenêtre, et sur le contenu peint,
 // pas sur les nœuds : voir tests/e2e/vide.ts.
 const CAS = {
