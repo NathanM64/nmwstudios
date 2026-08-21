@@ -131,7 +131,7 @@ export const ScenePreuve = memo(function ScenePreuve({
                 <div data-testid="preuve-serp" className="animate-construit flex flex-col">
                   <p className="m-mono m-sourd">votre-nom.fr</p>
                   <p className="m-sous-titre m-accent truncate">{recherche.titre}</p>
-                  <p className="m-legende line-clamp-1">{recherche.description}</p>
+                  <p className="m-legende">{recherche.description}</p>
                 </div>
               )}
 

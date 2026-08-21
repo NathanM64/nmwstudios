@@ -212,7 +212,6 @@ body {
   font-size: var(--m-corps-taille);
   line-height: 1.45;
   color: var(--m-texte-sourd);
-  overflow: hidden;
 }
 .m-corps { font-size: var(--m-texte-taille); line-height: 1.35; color: var(--m-texte); }
 .m-menu { font-size: var(--m-menu-taille); line-height: 1.3; color: var(--m-texte-sourd); }

@@ -70,6 +70,7 @@ async function campagneClavier(page: import('@playwright/test').Page, touche: st
   const attendus = await inventaireColonne(page)
   const recouverts: string[] = []
   let examines = 0
+  let avecEntete = 0
   // Le plafond n'est qu'une garde-fou : la boucle s'arrête dès la colonne couverte, ce qui la
   // rend insensible au nombre de cibles focalisables posées ailleurs sur la page.
   for (let i = 0; i < 150 && examines < attendus; i++) {
@@ -86,16 +87,19 @@ async function campagneClavier(page: import('@playwright/test').Page, touche: st
         const chevauchement = Math.min(boite.bottom, b.bottom) - Math.max(boite.top, b.top)
         return chevauchement > 0 ? `${cible} sous ${Math.round(chevauchement)} px de ${nom}` : null
       }
+      const entete = actif.closest('fieldset')?.querySelector<HTMLElement>('.entete-groupe') ?? null
       return {
         barre: sous(document.querySelector('[data-testid="barre-prix"]'), 'barre'),
-        entete: sous(actif.closest('fieldset')?.querySelector('.entete-groupe') ?? null, 'en-tête'),
+        entete: sous(entete, 'en-tête'),
+        aEntete: entete !== null,
       }
     })
     if (!releve) continue
     examines++
+    if (releve.aEntete) avecEntete++
     for (const cas of [releve.barre, releve.entete]) if (cas) recouverts.push(cas)
   }
-  return { examines, attendus, recouverts }
+  return { examines, attendus, avecEntete, recouverts }
 }
 
 // Les deux côtés de la bascule : au-dessus de 1280 la réserve est posée sur la colonne, en dessous
@@ -103,12 +107,15 @@ async function campagneClavier(page: import('@playwright/test').Page, touche: st
 // derrière l'en-tête collant du groupe.
 for (const largeur of [1440, 1100]) {
   for (const touche of ['Tab', 'Shift+Tab']) {
-    test(`à ${largeur}, ${touche} ne laisse aucun champ derrière un bloc opaque`, async ({ page }) => {
+    test(`à ${largeur}, ${touche} ne laisse aucun champ derrière la barre de prix ni son en-tête de groupe`, async ({ page }) => {
       await page.setViewportSize({ width: largeur, height: 900 })
       await page.goto('/configurateur')
 
-      const { examines, attendus, recouverts } = await campagneClavier(page, touche)
+      const { examines, attendus, avecEntete, recouverts } = await campagneClavier(page, touche)
       expect(recouverts).toEqual([])
+      // La branche en-tête meurt en silence si le `fieldset` ou la classe change : `sous(null)`
+      // rend `null` sans que le compteur de champs examinés bouge.
+      expect(avecEntete, 'aucun champ examiné n’a trouvé l’en-tête de son groupe').toBeGreaterThan(0)
       // Sans ce plancher la campagne serait creuse : chaque tour sorti de la colonne rend `null`
       // en silence, et un tableau vide ne dirait plus si un seul champ a été examiné. Le plancher
       // est l'inventaire mesuré de la colonne, pas un nombre deviné hors contexte.

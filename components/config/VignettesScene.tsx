@@ -12,7 +12,7 @@ export function VignettesScene({
   onPartie: (partie: SceneId) => void
 }) {
   return (
-    <div role="group" aria-label="Point de vue de l’aperçu" className="flex flex-wrap items-center gap-2">
+    <div role="group" aria-label="Position dans l’aperçu" className="flex flex-wrap items-center gap-2">
       {SCENES.map((s) => {
         const actif = s.id === partie
         return (

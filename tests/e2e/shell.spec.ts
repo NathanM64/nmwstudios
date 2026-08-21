@@ -71,8 +71,8 @@ for (const chemin of ['/', '/configurateur']) {
   })
 }
 
-// Les trois scènes de l'aperçu ne coexistent pas dans le DOM : sans cette passe, deux tiers
-// du catalogue échapperaient au balayage, dont les huit lignes de « La preuve ».
+// Les trois scènes coexistent, mais `inert` retire du balayage celles qui sont hors de la
+// fenêtre : sans cette passe, deux tiers du catalogue y échapperaient, dont « La preuve ».
 test('aucune violation axe sérieuse sur les trois scènes de l’aperçu, tout coché', async ({ page }) => {
   const toutCoche =
     '/configurateur?pages=4&langue=3&redaction=15&reprise&photos&visuels&blog&article=10&membre&formulaire&rdv&newsletter&paiement&seo&seo-local&perf&a11y&rgpd&legal&migration&domaine&cadrage&formation&express&partenaire'

@@ -44,7 +44,7 @@ export function BarrePrix({
   return (
     <div
       data-testid="barre-prix"
-      className={`sticky bottom-0 z-40 border-t border-border bg-canvas px-5 py-3 max-xl:fixed max-xl:inset-x-0 max-xl:bottom-0 sm:px-8 xl:px-0${masquee ? ' hidden' : ''}`}
+      className={`sticky bottom-0 z-40 border-t border-border bg-canvas px-5 py-3 max-xl:fixed max-xl:inset-x-0 sm:px-8 xl:px-0${masquee ? ' hidden' : ''}`}
     >
       <div className="flex w-full items-baseline justify-between gap-4">
         <p className="flex min-w-0 flex-wrap items-baseline gap-x-3">

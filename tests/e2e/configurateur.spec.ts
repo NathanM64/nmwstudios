@@ -265,8 +265,8 @@ test('l’aperçu reste visible quand on fait défiler les options', async ({ pa
   await page.setViewportSize({ width: 1280, height: 800 })
   await page.goto('/configurateur')
   await page.getByRole('radio', { name: 'Partenaire' }).scrollIntoViewIfNeeded()
-  // Le repère est la maquette elle-même, pas un artefact de scène : défiler jusqu'au suivi
-  // mensuel amène désormais « Le déroulé », où la navigation du site n'existe pas.
+  // Le repère est la fenêtre elle-même, pas un artefact de scène : défiler jusqu'au suivi
+  // mensuel sort la navigation du site de la fenêtre sans la retirer du DOM.
   await expect(page.getByTestId('objet-scene')).toBeInViewport()
 })
 

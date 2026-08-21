@@ -53,10 +53,14 @@ test('le bandeau tient sur une seule ligne', async ({ page }) => {
   expect(Math.abs(centre(onglet) - centre(selecteur))).toBeLessThan(onglet.height / 2)
 })
 
-test('la mention est une légende, posée sous le cadre', async ({ page }) => {
+test('la mention est une légende, posée sous le cadre et dans le panneau', async ({ page }) => {
   const cadre = (await page.getByTestId('objet-scene').boundingBox())!
   const mention = (await page.getByTestId('mention-style').boundingBox())!
   expect(mention.y).toBeGreaterThanOrEqual(cadre.y + cadre.height - 1)
+  // Le panneau est `overflow-hidden` : sous son bas, la mention est peinte nulle part et
+  // aucune des assertions de texte ci-dessous ne s'en apercevrait.
+  const panneau = (await page.getByTestId('apercu').boundingBox())!
+  expect(mention.y + mention.height).toBeLessThanOrEqual(panneau.y + panneau.height + 1)
 })
 
 test('la mention dit les deux choses en une phrase', async ({ page }) => {
