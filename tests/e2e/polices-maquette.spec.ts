@@ -1,5 +1,6 @@
 import { expect, test, type Page } from '@playwright/test'
 import { STYLES } from '../../lib/config/styles'
+import { hydrate } from './fenetre'
 
 /** Famille réellement peinte sur le titre de la maquette. Le piège du dépôt est qu'une variable
  *  de police vide ne casse rien : la pile de secours prend le relais en silence. */
@@ -19,10 +20,14 @@ const ATTENDU: Record<string, string> = {
 for (const style of STYLES) {
   test(`la police de titre de ${style.id} est réellement appliquée`, async ({ page }) => {
     await page.goto('/configurateur')
+    await hydrate(page)
     await page.getByTestId('selecteur-style').selectOption(style.id)
-    const famille = await famillePeinte(page)
     expect(ATTENDU[style.id], `aucune police attendue déclarée pour ${style.id}`).toBeTruthy()
-    expect(famille, `${style.id} peint ${famille}`).toContain(ATTENDU[style.id])
+    // Sondage et non lecture sèche : `selectOption` rend la main avant que React ait repeint,
+    // et une lecture immédiate rend la famille de la direction précédente.
+    await expect
+      .poll(() => famillePeinte(page), { message: `${style.id} ne peint pas ${ATTENDU[style.id]}` })
+      .toContain(ATTENDU[style.id])
   })
 }
 
@@ -30,9 +35,11 @@ test('les cinq directions ne peignent pas la même police de titre', async ({ pa
   // Sans ce constat, sept variables vides passeraient le test précédent le jour où toutes
   // retomberaient sur la même pile de secours.
   await page.goto('/configurateur')
+    await hydrate(page)
   const vues = new Set<string>()
   for (const style of STYLES) {
     await page.getByTestId('selecteur-style').selectOption(style.id)
+    await expect.poll(() => famillePeinte(page)).toContain(ATTENDU[style.id])
     vues.add(await famillePeinte(page))
   }
   expect(vues.size, `familles distinctes : ${[...vues].join(' | ')}`).toBe(STYLES.length)

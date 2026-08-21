@@ -109,10 +109,18 @@ export const SceneSite = memo(function SceneSite({
       <div className="m-air flex min-h-0 flex-1 flex-col">
         {/* Bande haute : l'aplat prend la hauteur libre, les services prennent la leur.
             Aucun centrage, donc aucune bande vide, et rien ne se comprime sous son contenu. */}
-        <div data-testid="site-cadre" data-ancre="site-contenu" className="m-aplat relative shrink grow basis-0 overflow-hidden">
+        {/* Photo réelle du métier, en licence libre, à la place du dégradé. Conditionner sa
+            présence à l'achat de `photos` ou `visuels` a été essayé et défait : les deux options
+            rendaient alors la même image. Les distinguer demande l'état inachevé complet, textes
+            compris, et c'est le lot 3 qui le porte. */}
+        <div
+          data-testid="site-cadre"
+          data-ancre="site-contenu"
+          className="m-photo relative shrink grow basis-0 overflow-hidden"
+          style={{ backgroundImage: `url(/maquette/${domaine}.avif)` }}
+        >
           {photos > 0 && (
             <>
-              {/* Le travail sur la photo, jamais la photo : rien à produire graphiquement. */}
               <span data-testid="site-reperes" className="animate-glisse m-reperes absolute inset-3" />
               {/* Aucun chiffre : un poids annoncé serait une mesure inventée. */}
               <span data-testid="site-poids" className="animate-glisse m-etiquette absolute right-1.5 bottom-1.5 px-1.5">

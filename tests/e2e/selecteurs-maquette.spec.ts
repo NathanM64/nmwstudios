@@ -2,6 +2,7 @@ import { expect, test } from '@playwright/test'
 import { DOMAINES } from '../../lib/config/domaines'
 import { STYLES, STYLE_DEFAUT, styleParId } from '../../lib/config/styles'
 import { contrastRatio, parseColor } from '../../lib/color/contrast'
+import { hydrate } from './fenetre'
 
 /** N'importe quelle direction sauf celle par défaut. Dérivée : écrire un identifiant
  *  en dur casse ce test au prochain renommage de direction. */
@@ -9,6 +10,7 @@ const AUTRE_DIRECTION = STYLES.find((s) => s.id !== STYLE_DEFAUT)!.id
 
 test.beforeEach(async ({ page }) => {
   await page.goto('/configurateur')
+    await hydrate(page)
 })
 
 test('les deux sélecteurs vivent dans la colonne d’options, pas dans l’aperçu', async ({ page }) => {
@@ -167,18 +169,27 @@ test('le volet se pilote au clavier et se ferme sur Échap', async ({ page }) =>
 for (const style of STYLES) {
   test(`le sélecteur de langue de la maquette suit la direction ${style.id}`, async ({ page }) => {
     await page.goto('/configurateur?langue=2')
+    await hydrate(page)
     await page.getByTestId('selecteur-style').selectOption(style.id)
+
+    const attendu = (nom: string) => {
+      const { r, g, b } = parseColor(styleParId(style.id)!.variables[nom]).rgb
+      return `rgb(${r}, ${g}, ${b})`
+    }
+
+    // `selectOption` rend la main avant que React ait repeint : une lecture immédiate rend la
+    // palette de la direction précédente. Sondage d'abord, mesure ensuite.
+    await expect
+      .poll(() => page.getByTestId('site-langue').evaluate((n) => getComputedStyle(n).backgroundColor), {
+        message: `le sélecteur ne prend pas le fond de ${style.id}`,
+      })
+      .toBe(attendu('--m-fond'))
 
     const mesure = await page.getByTestId('site-langue').evaluate((n) => ({
       fond: getComputedStyle(n).backgroundColor,
       encre: getComputedStyle(n).color,
       schema: getComputedStyle(n).colorScheme,
     }))
-
-    const attendu = (nom: string) => {
-      const { r, g, b } = parseColor(styleParId(style.id)!.variables[nom]).rgb
-      return `rgb(${r}, ${g}, ${b})`
-    }
     expect(mesure.fond).toBe(attendu('--m-fond'))
     expect(mesure.encre).toBe(attendu('--m-texte'))
     // Sans schéma explicite, le système peint un volet sombre sous un texte sombre.

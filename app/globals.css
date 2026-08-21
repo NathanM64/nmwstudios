@@ -338,6 +338,17 @@ body {
 .m-ligne { padding: calc(var(--m-densite) * 0.16rem) calc(var(--m-densite) * 0.4rem); }
 .m-filet { background-color: var(--m-bord); }
 .m-filet-haut { border-top: 1px solid var(--m-bord); }
+/* Emplacement de la photo du métier. `cover` et non `contain` : un site ne montre pas une image
+   flottant dans une boîte, il la fait remplir sa place. */
+.m-photo {
+  background-color: var(--m-fond-2);
+  border: 1px solid var(--m-bord);
+  background-size: cover;
+  background-position: center;
+  border-radius: var(--m-rayon-2);
+  min-height: calc(var(--m-densite) * 2.75rem);
+}
+
 .m-aplat {
   background-color: var(--m-fond-2);
   background-image: var(--m-aplat);

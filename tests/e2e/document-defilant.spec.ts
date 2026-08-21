@@ -1,7 +1,7 @@
 import { expect, test } from '@playwright/test'
 import { ANCRES, SCENES, ancreDeOption } from '../../lib/config/scenes'
 import { SUSPENSION_MS } from '../../components/config/PanneauOptions'
-import { amenerLaPartie, dansLaFenetre, ecartAAncre } from './fenetre'
+import { amenerLaPartie, dansLaFenetre, ecartAAncre, hydrate } from './fenetre'
 import { STYLES, STYLE_DEFAUT } from '../../lib/config/styles'
 
 /** N'importe quelle direction sauf celle par défaut. Dérivée : écrire un identifiant
@@ -58,6 +58,7 @@ async function animationsFinies(page: Page): Promise<void> {
 test.beforeEach(async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 })
   await page.goto('/configurateur')
+    await hydrate(page)
 })
 
 test('les trois parties vivent dans un seul document', async ({ page }) => {
@@ -168,6 +169,7 @@ test('rien n’est rogné à l’intérieur d’une partie', async ({ page }) =>
   // tout au départ, et le rognage vertical est la façon dont une option vendue disparaît en
   // silence. Les dix `truncate` écrêtent horizontalement, à dessein.
   await page.goto(TOUT_COCHE)
+    await hydrate(page)
   // La passe ne vaut que si elle examine autre chose : un lien mort la rendrait creuse.
   expect(await compte(), 'tout coché ne rend pas plus que le départ').toBeGreaterThan(depart)
   expect(await rognes(page), 'tout coché').toEqual([])
@@ -185,6 +187,7 @@ test('les ancres sont déclarées dans l’ordre du document', async ({ page }) 
   // `ANCRES` est ce que l'auteur d'une ancre nouvelle lira pour savoir où la sienne se range :
   // l'ordre déclaré doit être celui que la mise en page produit, mesuré et non affirmé.
   await page.goto(CHARGE)
+    await hydrate(page)
   await animationsFinies(page)
   const releve = await page
     .getByTestId('rouleau')
@@ -204,6 +207,7 @@ test('le relevé des ancres suit la mise en page, animations d’entrée compris
   // Un rectangle lu pendant qu'une animation d'entrée court situe l'ancre là où elle passe :
   // mesuré à 9 px de trop sur les actualités avant correction, et jamais repris ensuite.
   await page.goto(CHARGE)
+    await hydrate(page)
   await animationsFinies(page)
   await expect.poll(() => ecartDuReleve(page), { message: 'au chargement' }).toBeLessThan(2)
 })
@@ -224,6 +228,7 @@ test('le relevé des ancres suit un changement de style, de métier et de langue
   await bascule(() => page.getByTestId('selecteur-style').selectOption(AUTRE_DIRECTION), 'le style')
 
   await page.goto(CHARGE)
+    await hydrate(page)
   await animationsFinies(page)
   await bascule(() => page.getByTestId('selecteur-domaine').selectOption('vtc'), 'le métier')
   await bascule(() => page.getByTestId('site-langue').selectOption('en'), 'la langue')
@@ -232,6 +237,7 @@ test('le relevé des ancres suit un changement de style, de métier et de langue
 test('le mouvement réduit pose la position sans transition', async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' })
   await page.goto('/configurateur')
+    await hydrate(page)
   // La propriété, pas la durée : la remise à zéro globale du projet pose déjà 0,01 ms en
   // `!important` sur tout, et une durée lue ne dirait rien de la règle du rouleau.
   const propriete = await page.getByTestId('rouleau').evaluate((n) => getComputedStyle(n).transitionProperty)
@@ -263,6 +269,7 @@ test('cocher un contrôle technique amène le rapport', async ({ page }) => {
 test('ce qui sort de la fenêtre est inerte', async ({ page }) => {
   // Sans `inert`, la tabulation atteint le sélecteur de langue d'une partie invisible.
   await page.goto('/configurateur?langue=2')
+    await hydrate(page)
   // `overflow: clip` ne peut pas ramener un élément focalisé à l'écran, contrairement à
   // `hidden` : le sélecteur d'une partie sortie doit être hors d'atteinte, pas seulement invisible.
   const prendLeFocus = () =>

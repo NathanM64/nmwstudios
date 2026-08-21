@@ -105,7 +105,9 @@ export function Configurateur() {
   }, [config])
 
   return (
-    <main className="pb-24 xl:flex xl:min-h-0 xl:flex-1 xl:flex-col xl:pb-0">
+    // `data-pret` sort l'état d'hydratation dans le DOM : avant lui, un `selectOption` change la
+    // valeur du champ sans qu'aucun `onChange` ne parte, et la sélection est perdue en silence.
+    <main data-pret={pret ? 'oui' : 'non'} className="pb-24 xl:flex xl:min-h-0 xl:flex-1 xl:flex-col xl:pb-0">
       <div
         ref={grilleRef}
         data-testid="grille-configurateur"

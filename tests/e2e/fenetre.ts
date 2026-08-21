@@ -111,3 +111,11 @@ async function dureeDuVoyage(page: Page): Promise<number> {
     return brut.endsWith('ms') ? valeur : valeur * 1000
   })
 }
+
+/** Attend que le configurateur soit hydraté. Avant, `selectOption` et `check` changent le DOM
+ *  sans qu'aucun `onChange` ne parte : la sélection est perdue et le test échoue une fois sur
+ *  trois. Mesuré le 21/08/2026 sur `selecteurs-maquette`, sondage expiré à 5 s sur la palette
+ *  de la direction précédente. */
+export async function hydrate(page: Page): Promise<void> {
+  await expect(page.locator('[data-pret]')).toHaveAttribute('data-pret', 'oui')
+}
