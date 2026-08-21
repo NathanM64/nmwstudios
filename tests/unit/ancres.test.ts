@@ -7,12 +7,11 @@ import {
   SCENES,
   ancreDeOption,
   partieDeAncre,
-  premiereAncreDe,
   sceneDeOption,
 } from '@/lib/config/scenes'
 
-/** Scène de chaque option telle qu'elle était avant le passage aux ancres. Les trois filets du
- *  lot A cliquent `onglet-${sceneDeOption(id)}` : cette table est ce qui les garde valides. */
+/** Scène de chaque option telle qu'elle était avant le passage aux ancres : cette table est ce
+ *  qui garde `sceneDeOption` fidèle à la répartition d'origine. */
 const SCENE_ATTENDUE: Record<string, string> = {
   socle: 'site',
   pages: 'site', blog: 'site', langue: 'site',
@@ -46,17 +45,17 @@ describe('ancres du document', () => {
     }
   })
 
-  it('donne à chaque partie une première ancre, qui lui appartient', () => {
+  it('donne à chaque partie une ancre de tête, qui lui appartient', () => {
     for (const scene of SCENES) {
-      expect(partieDeAncre(premiereAncreDe(scene.id))).toBe(scene.id)
+      expect(partieDeAncre(ANCRE_DE_TETE[scene.id]), scene.id).toBe(scene.id)
     }
   })
 
   it('fait de la tête d’une partie sa première ancre', () => {
-    // Presser un repère vise `premiereAncreDe` ; l'enveloppe de la partie porte `ANCRE_DE_TETE`.
-    // Les voir diverger, c'est viser une ancre interne ou en poser deux au même endroit.
+    // L'enveloppe de la partie porte `ANCRE_DE_TETE` : la voir tomber ailleurs qu'en tête de
+    // partie, c'est poser deux ancres au même endroit, et deux décalages égaux au relevé.
     for (const scene of SCENES) {
-      expect(ANCRE_DE_TETE[scene.id], scene.id).toBe(premiereAncreDe(scene.id))
+      expect(ANCRE_DE_TETE[scene.id], scene.id).toBe(ANCRES.find((a) => a.partie === scene.id)!.id)
     }
   })
 

@@ -1,36 +1,24 @@
 'use client'
 
-import { useState } from 'react'
 import type { Configuration } from '@/lib/config/devis'
-import { SCENES, type SceneId } from '@/lib/config/scenes'
 import type { Cible } from '@/lib/config/defilement'
 import type { DomaineId } from '@/lib/config/domaines'
 import { styleParId, type StyleId } from '@/lib/config/styles'
 import { DocumentMaquette } from '@/components/config/DocumentMaquette'
-import { VignettesScene } from '@/components/config/VignettesScene'
 
 export function Apercu({
   config,
   cible,
   domaine,
   style,
-  onPartie,
 }: {
   config: Configuration
   cible: Cible
   domaine: DomaineId
   style: StyleId
-  onPartie: (partie: SceneId) => void
 }) {
-  // Nommée par la fenêtre et non par la cible : en fin de traversée d'un groupe, le rouleau est
-  // arrivé sur la partie suivante alors que l'ancre visée appartient encore à la précédente.
-  const [partieVue, setPartieVue] = useState<SceneId>(SCENES[0].id)
-
   return (
     <div data-testid="apercu" className="panel flex min-h-[26rem] w-full flex-col overflow-hidden xl:min-h-0 xl:flex-1">
-      <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-1 border-b border-border px-3 py-1.5">
-        <VignettesScene partie={partieVue} onPartie={onPartie} />
-      </div>
       {/* Enveloppe : elle donne à la fenêtre sa hauteur, explicite sous xl et prise sur la
           colonne au-dessus. Confinée par `container-type: size`, la fenêtre ne peut pas la
           tenir d'elle-même, et une marge automatique y réduirait sa largeur à zéro. */}
@@ -58,7 +46,7 @@ export function Apercu({
             }
             className="maquette-echelle"
           >
-            <DocumentMaquette config={config} domaine={domaine} cible={cible} onPartieVue={setPartieVue} />
+            <DocumentMaquette config={config} domaine={domaine} cible={cible} />
           </div>
         </div>
       </div>

@@ -1,7 +1,6 @@
 import type { Page } from '@playwright/test'
 import { expect, test } from '@playwright/test'
 import { GROUPES, OPTIONS } from '../../lib/config/catalogue'
-import { sceneDeOption } from '../../lib/config/scenes'
 
 // Repère propre à chaque option : preuve qu'elle garde sa manifestation face à
 // ses voisines de groupe, sans comparer des blocs d'innerHTML entre eux.
@@ -58,7 +57,6 @@ for (const groupe of GROUPES_CUMULABLES) {
     }
 
     for (const option of options) {
-      await page.getByTestId(`onglet-${sceneDeOption(option.id)}`).click()
       await REPERE_PAR_OPTION[option.id](page)
     }
   })

@@ -36,8 +36,7 @@ export const PanneauOptions = memo(function PanneauOptions({
   const derniereProgression = useRef<number | null>(null)
   const suspenduJusqua = useRef(0)
   // Le relevé du montage est muet : émettre ferait glisser la page avant le premier geste. Un
-  // drapeau, pas `dernierGroupe` encore nul : sans groupe au-dessus de la ligne au repos, ce
-  // dernier restait armé et avalait le premier geste entier.
+  // drapeau, pas `dernierGroupe` encore nul, qui reste armé sans groupe au-dessus de la ligne.
   const amorce = useRef(true)
 
   // L'ancre de l'option, pas la tête de sa partie : un article se voit dans les actualités,

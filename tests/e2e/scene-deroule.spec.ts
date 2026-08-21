@@ -2,12 +2,29 @@ import { expect, test } from '@playwright/test'
 
 test.beforeEach(async ({ page }) => {
   await page.goto('/configurateur')
-  await page.getByTestId('onglet-deroule').click()
 })
 
 async function largeur(page: import('@playwright/test').Page, testId: string) {
   const boite = await page.getByTestId(testId).boundingBox()
   return boite!.width
+}
+
+/** Largeur une fois posée : `width` passe par une transition, et une référence prise pendant
+ *  qu'elle court fait comparer deux images de mouvement. */
+async function largeurPosee(page: import('@playwright/test').Page, testId: string) {
+  let precedente = NaN
+  await expect
+    .poll(
+      async () => {
+        const actuelle = await largeur(page, testId)
+        const posee = actuelle === precedente
+        precedente = actuelle
+        return posee
+      },
+      { message: `la largeur de ${testId} ne se pose pas` }
+    )
+    .toBe(true)
+  return precedente
 }
 
 // Un repère ponctuel a sa propre largeur : `left: 100%` seul le fait dépasser la piste de ce
@@ -44,9 +61,6 @@ test('la formation ajoute un jalon après la livraison', async ({ page }) => {
 test('une option lourde allonge visiblement la construction', async ({ page }) => {
   const avant = await largeur(page, 'deroule-construction')
   await page.getByRole('checkbox', { name: 'Espace membre', exact: true }).check()
-  // Espace membre vit dans la scène « Le site » : la cocher y bascule l'aperçu, comportement
-  // existant et voulu ailleurs. On revient sur « Le déroulé » avant de mesurer.
-  await page.getByTestId('onglet-deroule').click()
   await expect.poll(() => largeur(page, 'deroule-construction')).toBeGreaterThan(avant)
 })
 
@@ -61,8 +75,7 @@ test('le repère de livraison garde son fondu d’entrée', async ({ page }) => 
 
 test('la livraison accélérée comprime la barre et laisse un fantôme', async ({ page }) => {
   await page.getByRole('checkbox', { name: 'Espace membre', exact: true }).check()
-  await page.getByTestId('onglet-deroule').click()
-  const avant = await largeur(page, 'deroule-construction')
+  const avant = await largeurPosee(page, 'deroule-construction')
   await expect(page.getByTestId('deroule-fantome')).toHaveCount(0)
   await page.getByRole('checkbox', { name: 'Livraison accélérée', exact: true }).check()
   await expect(page.getByTestId('deroule-fantome')).toBeVisible()
@@ -87,7 +100,6 @@ test('se passer de suivi vide la bande sans laisser un cadre muet', async ({ pag
 // rendaient exactement le même déroulé.
 test('le refus de suivi a sa manifestation, distincte du repli sans rien cocher', async ({ page }) => {
   await page.goto('/configurateur?blog')
-  await page.getByTestId('onglet-deroule').click()
   await expect(page.getByTestId('deroule-sans-suivi')).toHaveCount(0)
 
   await page.getByRole('radio', { name: 'Je m’en occupe moi-même', exact: true }).check()
@@ -128,7 +140,6 @@ test('les jalons restent confinés dans leur piste, du pire cas au défaut', asy
   for (const taille of resolutions) {
     await page.setViewportSize(taille)
     await page.goto(pireCasDeroule)
-    await page.getByTestId('onglet-deroule').click()
     const contexte = `pire cas ${taille.width}x${taille.height}`
     await confine(page, 'deroule-livraison', contexte)
     await confine(page, 'deroule-fantome', contexte)
@@ -137,7 +148,6 @@ test('les jalons restent confinés dans leur piste, du pire cas au défaut', asy
   // État par défaut : deroule-livraison est à `left: 100%`, exactement le cas qui dépassait.
   await page.setViewportSize({ width: 1280, height: 800 })
   await page.goto('/configurateur')
-  await page.getByTestId('onglet-deroule').click()
   await confine(page, 'deroule-livraison', 'état par défaut')
   await confine(page, 'deroule-fantome', 'état par défaut')
 })

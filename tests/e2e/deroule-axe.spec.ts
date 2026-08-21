@@ -3,7 +3,6 @@ import { pireBandeVide } from './vide'
 
 test.beforeEach(async ({ page }) => {
   await page.goto('/configurateur?membre&cadrage&formation&express&serenite')
-  await page.getByTestId('onglet-deroule').click()
 })
 
 test('un axe gradué en semaines surmonte les barres', async ({ page }) => {

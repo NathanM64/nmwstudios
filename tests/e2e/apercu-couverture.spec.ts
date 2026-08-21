@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test'
 import { OPTIONS, SOCLE_ID, optionParId } from '../../lib/config/catalogue'
-import { ancreDeOption, sceneDeOption } from '../../lib/config/scenes'
+import { ancreDeOption } from '../../lib/config/scenes'
 import { ecartAAncre } from './fenetre'
 
 // Le socle est toujours retenu et ne se décoche pas : son effet est la maquette
@@ -20,9 +20,6 @@ for (const option of OPTIONS.filter((o) => o.id !== SOCLE_ID)) {
     if (option.groupe === 'recurrent' && option.id !== 'sans-suivi') {
       await page.getByRole('radio', { name: 'Je m’en occupe moi-même', exact: true }).check()
     }
-
-    const scene = sceneDeOption(option.id)
-    await page.getByTestId(`onglet-${scene}`).click()
 
     const apercu = page.getByTestId('apercu')
     // Empreinte structurelle : les nœuds réellement présents et leurs identifiants de test.

@@ -2,7 +2,6 @@ import { expect, test } from '@playwright/test'
 
 test.beforeEach(async ({ page }) => {
   await page.goto('/configurateur')
-  await page.getByTestId('onglet-preuve').click()
 })
 
 test('le rapport reste un objet plein même sans option retenue', async ({ page }) => {
@@ -37,7 +36,6 @@ test('la vitesse vient de l’API Performance, pas d’une constante', async ({ 
     performance.getEntriesByType = () => [{ duration: 7777, entryType: 'navigation', name: '', startTime: 0, toJSON: () => ({}) }] as never
   })
   await page.goto('/configurateur?perf')
-  await page.getByTestId('onglet-preuve').click()
   await expect(page.getByTestId('preuve-vitesse')).toContainText('7,78')
 })
 

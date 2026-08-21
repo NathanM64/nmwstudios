@@ -1,5 +1,7 @@
 import AxeBuilder from '@axe-core/playwright'
 import { expect, test, type Page } from '@playwright/test'
+import { SCENES } from '../../lib/config/scenes'
+import { amenerLaPartie } from './fenetre'
 
 // `animate-apparait` fait entrer les scènes en fondu : axe lu pendant le fondu mesure une
 // opacité transitoire et rapporte un contraste qui n'existe à aucun moment stable.
@@ -77,16 +79,16 @@ test('aucune violation axe sérieuse sur les trois scènes de l’aperçu, tout 
   const toutCoche =
     '/configurateur?pages=4&langue=3&redaction=15&reprise&photos&visuels&blog&article=10&membre&formulaire&rdv&newsletter&paiement&seo&seo-local&perf&a11y&rgpd&legal&migration&domaine&cadrage&formation&express&partenaire'
   for (const theme of ['dark', 'light'] as const) {
-    for (const scene of ['site', 'preuve', 'deroule']) {
+    for (const scene of SCENES) {
       await page.goto(toutCoche)
       await page.evaluate((t) => {
         document.documentElement.dataset.theme = t
       }, theme)
-      await page.getByTestId(`onglet-${scene}`).click()
+      await amenerLaPartie(page, scene.id)
       await fonduTermine(page)
       const results = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa']).analyze()
       const serious = results.violations.filter((v) => v.impact === 'serious' || v.impact === 'critical')
-      expect(serious, `scène ${scene} en thème ${theme} : ${JSON.stringify(serious, null, 2)}`).toEqual([])
+      expect(serious, `scène ${scene.id} en thème ${theme} : ${JSON.stringify(serious, null, 2)}`).toEqual([])
     }
   }
 })
@@ -99,7 +101,7 @@ test('aucune violation axe sérieuse sur « La preuve » sans rien cocher', asyn
     await page.evaluate((t) => {
       document.documentElement.dataset.theme = t
     }, theme)
-    await page.getByTestId('onglet-preuve').click()
+    await amenerLaPartie(page, 'preuve')
     await fonduTermine(page)
     const results = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa']).analyze()
     const serious = results.violations.filter((v) => v.impact === 'serious' || v.impact === 'critical')

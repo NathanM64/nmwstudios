@@ -7,14 +7,14 @@ test.beforeEach(async ({ page }) => {
   await page.goto('/configurateur')
 })
 
-test('les deux sélecteurs vivent dans la colonne d’options, plus dans le bandeau', async ({ page }) => {
+test('les deux sélecteurs vivent dans la colonne d’options, pas dans l’aperçu', async ({ page }) => {
   // Le repère porte le `<select>` natif, invisible et conservé pour la valeur : la présence
   // se vérifie donc sur le déclencheur, seul élément réellement peint.
   const colonne = page.getByTestId('colonne-options')
   await expect(colonne.getByTestId('selecteur-domaine-declencheur')).toBeVisible()
   await expect(colonne.getByTestId('selecteur-style-declencheur')).toBeVisible()
 
-  // Et nulle part ailleurs : le bandeau de l’aperçu ne les porte plus.
+  // Et nulle part ailleurs : le panneau de l’aperçu ne les porte plus.
   const apercu = page.getByTestId('apercu')
   await expect(apercu.getByTestId('selecteur-domaine-declencheur')).toHaveCount(0)
   await expect(apercu.getByTestId('selecteur-style-declencheur')).toHaveCount(0)
@@ -36,10 +36,10 @@ test('le bloc se pose sous le titre et au dessus du premier groupe', async ({ pa
 test('le bloc dit en toutes lettres qu’il ne touche pas au devis', async ({ page }) => {
   const bloc = page.getByTestId('reglages-maquette')
   // La seule mise en forme ne suffit pas : posé au-dessus de groupes qui affichent tous un
-  // prix, le bloc doit dire lui-même qu’il n’en porte aucun.
+  // prix, le bloc doit dire lui-même qu’il n’en porte aucun. La phrase, pas les mots :
+  // « Ces deux réglages changent l’aperçu et le prix. » contient « prix » et dit l’inverse.
   await expect(bloc).toContainText('aperçu')
-  await expect(bloc).toContainText(/prix|devis/)
-  await expect(bloc).not.toContainText('€')
+  await expect(bloc).toContainText(/ne changent pas le (prix|devis)/)
 })
 
 test('le sélecteur de domaine propose les sept métiers', async ({ page }) => {

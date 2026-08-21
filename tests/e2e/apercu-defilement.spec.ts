@@ -6,6 +6,12 @@ import { CONFIG_DEPART } from '../../components/config/Configurateur'
 import { LIGNE_DE_LECTURE } from '../../components/config/PanneauOptions'
 import { dansLaFenetre, partieAuHautDeLaFenetre } from './fenetre'
 
+/** La partie que la fenêtre montre à son bord haut, attendue : la translation passe par une
+ *  transition, un constat immédiat lirait une image de mouvement. */
+async function attendLaPartie(page: import('@playwright/test').Page, partie: string, message: string) {
+  await expect.poll(() => partieAuHautDeLaFenetre(page), { message }).toBe(partie)
+}
+
 /** `block: 'start'` plutôt que `scrollIntoViewIfNeeded` : ce dernier fait le défilement
  *  minimal, et laisserait le groupe sous la ligne de lecture. */
 async function amener(page: import('@playwright/test').Page, groupe: string) {
@@ -75,16 +81,16 @@ async function resteSousLeBas(page: import('@playwright/test').Page) {
 
 test('faire défiler le formulaire fait suivre l’aperçu, sans rien cocher', async ({ page }) => {
   await page.goto('/configurateur')
-  await expect(page.getByTestId('onglet-site')).toHaveAttribute('aria-pressed', 'true')
+  await attendLaPartie(page, 'site', 'l’aperçu ne s’ouvre pas sur le site')
 
   await amener(page, 'conformite')
-  await expect(page.getByTestId('onglet-preuve')).toHaveAttribute('aria-pressed', 'true')
+  await attendLaPartie(page, 'preuve', 'la conformité n’amène pas le rapport')
 
   await amener(page, 'services')
-  await expect(page.getByTestId('onglet-deroule')).toHaveAttribute('aria-pressed', 'true')
+  await attendLaPartie(page, 'deroule', 'les services n’amènent pas le déroulé')
 
   await amener(page, 'contenu')
-  await expect(page.getByTestId('onglet-site')).toHaveAttribute('aria-pressed', 'true')
+  await attendLaPartie(page, 'site', 'revenir au contenu ne ramène pas le site')
 
   // Rien n'a été coché : le prix est resté celui du départ.
   await expect(page.getByTestId('prix')).toHaveText(formaterEuros(calculer(CONFIG_DEPART).total))
@@ -97,7 +103,7 @@ test('sous 1280, le premier geste depuis le repos fait déjà suivre l’aperçu
   // des réglages pousse le premier groupe sous la ligne.
   await page.setViewportSize({ width: 1024, height: 720 })
   await page.goto('/configurateur')
-  await expect(page.getByTestId('onglet-site')).toHaveAttribute('aria-pressed', 'true')
+  await attendLaPartie(page, 'site', 'l’aperçu ne s’ouvre pas sur le site')
   const avant = await position(page)
   await amener(page, 'volume')
   expect(await positionPosee(page, avant)).toBeGreaterThan(avant)
@@ -107,26 +113,27 @@ test('chaque groupe amène sa propre scène', async ({ page }) => {
   await page.goto('/configurateur')
   for (const groupe of GROUPES) {
     await amener(page, groupe.id)
-    await expect(
-      page.getByTestId(`onglet-${partieDeAncre(ANCRE_PAR_GROUPE[groupe.id])}`),
+    await attendLaPartie(
+      page,
+      partieDeAncre(ANCRE_PAR_GROUPE[groupe.id]),
       `le groupe « ${groupe.titre} » n’amène pas sa scène`
-    ).toHaveAttribute('aria-pressed', 'true')
+    )
   }
 })
 
-test('le défilement reprend la main sur un choix d’onglet', async ({ page }) => {
+test('le défilement reprend la main sur un choix d’option', async ({ page }) => {
   await page.goto('/configurateur')
-  await amener(page, 'conformite')
-  await page.getByTestId('onglet-site').click()
-  await expect(page.getByTestId('onglet-site')).toHaveAttribute('aria-pressed', 'true')
+  // `express` est technique mais se démontre sur le déroulé : le saut s'y voit d'une partie
+  // entière, là où une option de son propre groupe ne bougerait presque pas la page.
+  await page.getByRole('checkbox', { name: 'Livraison accélérée', exact: true }).check()
+  await attendLaPartie(page, 'deroule', 'cocher la livraison accélérée n’amène pas le déroulé')
 
-  // La lecture pilote la position en continu : un choix d'onglet est un saut, pas un verrou,
-  // et le premier cran de défilement redevient la source. La molette part de l'onglet, donc
-  // hors du panneau : c'est la redirection de Configurateur qui la fait descendre le formulaire.
-  await page.mouse.wheel(0, 60)
-  await expect(page.getByTestId('onglet-preuve')).toHaveAttribute('aria-pressed', 'true')
+  // Attente franche au delà des 500 ms de suspension du relevé : la lecture pilote la position
+  // en continu, un choix est un saut et non un verrou, et le geste suivant redevient la source.
+  await page.waitForTimeout(900)
+  await amener(page, 'contenu')
+  await attendLaPartie(page, 'site', 'le défilement ne reprend pas la main sur le choix')
 })
-
 
 test('la page descend continûment, pas par sauts de partie', async ({ page }) => {
   await page.goto('/configurateur')
@@ -145,7 +152,7 @@ test('la page descend continûment, pas par sauts de partie', async ({ page }) =
   expect(arrivee, `la page a sauté jusqu’à site-contenu, à ${contenu}`).toBeLessThan(contenu - 2)
 
   // Et sans avoir atteint le groupe suivant : la page n'a pas sauté à l'ancre d'après.
-  await expect(page.getByTestId('onglet-site')).toHaveAttribute('aria-pressed', 'true')
+  expect(await partieAuHautDeLaFenetre(page)).toBe('site')
 })
 
 test('deux groupes visant la même ancre ne déplacent pas la page', async ({ page }) => {
@@ -175,13 +182,13 @@ test('cocher une option garde sa scène au delà de la suspension du relevé', a
   // `express` est la seule option dont la scène n'est pas celle de son groupe : elle montre le
   // déroulé quand `technique` vise le rapport. Le demi-tour s'y voit, il est muet ailleurs.
   await page.getByRole('checkbox', { name: 'Livraison accélérée', exact: true }).check()
-  await expect(page.getByTestId('onglet-deroule')).toHaveAttribute('aria-pressed', 'true')
-  await expect.poll(() => dansLaFenetre(page, 'partie-deroule')).toBe(true)
+  await attendLaPartie(page, 'deroule', 'cocher la livraison accélérée n’amène pas le déroulé')
+  expect(await dansLaFenetre(page, 'partie-deroule')).toBe(true)
 
   // Attente franche au delà des 500 ms de suspension : le clic a fait défiler le panneau, et
   // cette lecture subie ne doit pas reprendre la main une fois la suspension levée.
   await page.waitForTimeout(900)
-  await expect(page.getByTestId('onglet-deroule')).toHaveAttribute('aria-pressed', 'true')
+  expect(await partieAuHautDeLaFenetre(page)).toBe('deroule')
   expect(await dansLaFenetre(page, 'partie-deroule')).toBe(true)
 })
 
@@ -196,7 +203,7 @@ const TRAVERSEES = GROUPES.flatMap((groupe, rang) => {
 })
 
 for (const traversee of TRAVERSEES) {
-  test(`au bout du groupe « ${traversee.titre} », le repère pressé nomme la partie atteinte`, async ({ page }) => {
+  test(`au bout du groupe « ${traversee.titre} », la fenêtre montre la partie atteinte`, async ({ page }) => {
     await page.goto('/configurateur')
     const avant = await position(page)
     await finDuGroupe(page, traversee.groupe)
@@ -204,8 +211,6 @@ for (const traversee of TRAVERSEES) {
     // reviendrait à lire une image de transition.
     await positionPosee(page, avant)
 
-    await expect(page.getByTestId(`onglet-${traversee.arrivee}`)).toHaveAttribute('aria-pressed', 'true')
-    // Et le bandeau ne ment pas : la partie nommée est bien celle que la fenêtre montre.
     expect(await partieAuHautDeLaFenetre(page)).toBe(traversee.arrivee)
   })
 }

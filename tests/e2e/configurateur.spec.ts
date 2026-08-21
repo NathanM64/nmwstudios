@@ -170,7 +170,6 @@ test('le ratio de contraste est remesuré au changement de thème', async ({ pag
 
 test('le contraste mesuré ne s’affiche que si l’accessibilité est retenue', async ({ page }) => {
   await page.goto('/configurateur')
-  await page.getByTestId('onglet-preuve').click()
 
   const a11y = page.getByRole('checkbox', { name: 'Accessibilité RGAA', exact: true })
 
@@ -282,41 +281,20 @@ test('cocher une option visible garde la scène du site', async ({ page }) => {
   await page.goto('/configurateur')
   await page.getByRole('checkbox', { name: 'Un blog' }).check()
   await expect(page.getByTestId('site-blog')).toBeVisible()
-  // La page vise l'ancre de l'option, pas la tête de sa partie : la navigation peut sortir par
-  // le haut sans qu'on ait quitté le site. `toBeVisible` est vrai en permanence, les trois
-  // parties étant montées : c'est la partie qui doit rester dans la fenêtre.
-  await expect(page.getByTestId('onglet-site')).toHaveAttribute('aria-pressed', 'true')
+  // La page vise l'ancre de l'option, pas la tête de sa partie : `toBeVisible` est vrai en
+  // permanence, les trois parties étant montées, c'est la partie qui doit rester dans la fenêtre.
   await expect.poll(() => dansLaFenetre(page, 'partie-site')).toBe(true)
-})
-
-test('les vignettes ramènent à la scène du site', async ({ page }) => {
-  await page.goto('/configurateur')
-  await page.getByRole('checkbox', { name: 'Fondations SEO' }).check()
-  await page.getByRole('button', { name: 'Le site', exact: true }).click()
-  await expect.poll(() => dansLaFenetre(page, 'site-nav')).toBe(true)
 })
 
 test('la scène du site garde tout ce qui a été coché', async ({ page }) => {
   await page.goto('/configurateur')
   await page.getByRole('checkbox', { name: 'Un blog' }).check()
   await page.getByRole('checkbox', { name: 'Fondations SEO' }).check()
-  await page.getByRole('button', { name: 'Le site', exact: true }).click()
   await expect(page.getByTestId('site-blog')).toBeVisible()
-})
-
-test('la vignette de la scène active porte aria-pressed, les autres non', async ({ page }) => {
-  await page.goto('/configurateur')
-  await expect(page.getByRole('button', { name: 'Le site', exact: true })).toHaveAttribute('aria-pressed', 'true')
-  await expect(page.getByRole('button', { name: 'La preuve', exact: true })).toHaveAttribute('aria-pressed', 'false')
-  await page.getByRole('checkbox', { name: 'Fondations SEO' }).check()
-  await expect(page.getByRole('button', { name: 'Le site', exact: true })).toHaveAttribute('aria-pressed', 'false')
-  await expect(page.getByRole('button', { name: 'La preuve', exact: true })).toHaveAttribute('aria-pressed', 'true')
 })
 
 test('« La preuve » ne montre l’extrait qu’une fois le référencement acheté', async ({ page }) => {
   await page.goto('/configurateur')
-  // Bascule de scène seule, sans toucher la configuration : isole la garde de la scène.
-  await page.getByRole('button', { name: 'La preuve', exact: true }).click()
   await expect(page.getByTestId('preuve-serp')).toHaveCount(0)
   await page.getByRole('checkbox', { name: 'Fondations SEO' }).check()
   await expect(page.getByTestId('preuve-serp')).toBeVisible()
@@ -324,7 +302,6 @@ test('« La preuve » ne montre l’extrait qu’une fois le référencement ach
 
 test('« La preuve » ne montre la vitesse et le domaine qu’une fois achetés, chacun indépendamment', async ({ page }) => {
   await page.goto('/configurateur')
-  await page.getByRole('button', { name: 'La preuve', exact: true }).click()
   await expect(page.getByTestId('preuve-cascade')).toHaveCount(0)
   await expect(page.getByTestId('preuve-domaine')).toHaveCount(0)
   await page.getByRole('checkbox', { name: 'Domaine et e-mails professionnels' }).check()
@@ -334,7 +311,6 @@ test('« La preuve » ne montre la vitesse et le domaine qu’une fois achetés,
 
 test('le référencement local affiche une fiche d’établissement, sans contredire le SEO', async ({ page }) => {
   await page.goto('/configurateur')
-  await page.getByRole('button', { name: 'La preuve', exact: true }).click()
   const ligne = page.getByTestId('preuve-ligne').filter({ hasText: 'Fiche locale et horaires' })
   await expect(ligne).toHaveAttribute('data-retenu', 'non')
   await page.getByRole('checkbox', { name: 'Référencement local' }).check()
@@ -344,7 +320,6 @@ test('le référencement local affiche une fiche d’établissement, sans contre
 
 test('la migration affiche la redirection des adresses de l’ancien site', async ({ page }) => {
   await page.goto('/configurateur')
-  await page.getByRole('button', { name: 'La preuve', exact: true }).click()
   await expect(page.getByTestId('preuve-redirections')).toHaveCount(0)
   await page.getByRole('checkbox', { name: 'Migration de votre site actuel' }).check()
   await expect(page.getByTestId('preuve-redirections')).toContainText('301')
@@ -352,7 +327,6 @@ test('la migration affiche la redirection des adresses de l’ancien site', asyn
 
 test('le RGPD affiche une bannière de consentement dans « La preuve »', async ({ page }) => {
   await page.goto('/configurateur')
-  await page.getByRole('button', { name: 'La preuve', exact: true }).click()
   await expect(page.getByTestId('preuve-rgpd')).toHaveCount(0)
   await page.getByRole('checkbox', { name: 'Conformité RGPD' }).check()
   await expect(page.getByTestId('preuve-rgpd')).toBeVisible()
@@ -360,23 +334,14 @@ test('le RGPD affiche une bannière de consentement dans « La preuve »', async
 
 test('les mentions légales affichent une ligne de pied de page', async ({ page }) => {
   await page.goto('/configurateur')
-  await page.getByRole('button', { name: 'La preuve', exact: true }).click()
   await expect(page.getByTestId('preuve-legal')).toHaveCount(0)
   await page.getByRole('checkbox', { name: 'Mentions légales et CGV' }).check()
   await expect(page.getByTestId('preuve-legal')).toContainText('Mentions légales')
 })
 
-test('l’onglet « Le déroulé » atteint sa scène sans rien cocher', async ({ page }) => {
-  await page.goto('/configurateur')
-  await page.getByRole('button', { name: 'Le déroulé', exact: true }).click()
-  await expect(page.getByTestId('deroule-construction')).toBeVisible()
-  await expect.poll(() => dansLaFenetre(page, 'site-nav')).toBe(false)
-})
-
 test('la scène du déroulé propose un repli sans rien cocher, puis assume l’auto-gestion', async ({ page }) => {
   // Le défaut « essentiel » ne s’applique qu’en l’absence de configuration dans l’URL.
   await page.goto('/configurateur?blog')
-  await page.getByRole('button', { name: 'Le déroulé', exact: true }).click()
   await expect(page.getByTestId('deroule-mois')).toContainText('vous')
   await page.getByRole('radio', { name: 'Essentiel' }).check()
   await expect(page.getByTestId('deroule-evenement')).not.toHaveCount(0)

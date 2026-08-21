@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test'
 import { ANCRES, SCENES, ancreDeOption } from '../../lib/config/scenes'
-import { dansLaFenetre, ecartAAncre } from './fenetre'
+import { amenerLaPartie, dansLaFenetre, ecartAAncre } from './fenetre'
 
 type Page = import('@playwright/test').Page
 
@@ -82,13 +82,14 @@ test('au départ, seule la partie du site est dans la fenêtre', async ({ page }
   expect(await dansLaFenetre(page, 'partie-deroule')).toBe(false)
 })
 
-test('un repère amène sa partie dans la fenêtre', async ({ page }) => {
-  await page.getByTestId('onglet-deroule').click()
-  await expect.poll(() => dansLaFenetre(page, 'partie-deroule')).toBe(true)
+// Le défilement du formulaire a remplacé les repères de position : c'est le seul chemin qui
+// déplace la page sans toucher à la configuration.
+test('défiler le formulaire amène une partie dans la fenêtre et en sort l’autre', async ({ page }) => {
+  await amenerLaPartie(page, 'deroule')
   expect(await dansLaFenetre(page, 'partie-site')).toBe(false)
 
-  await page.getByTestId('onglet-site').click()
-  await expect.poll(() => dansLaFenetre(page, 'partie-site')).toBe(true)
+  await amenerLaPartie(page, 'site')
+  expect(await dansLaFenetre(page, 'partie-deroule')).toBe(false)
 })
 
 /** Plus petite taille de texte peinte dans le rouleau, en pixels d'écran : la mise à l'échelle
@@ -251,15 +252,14 @@ test('ce qui sort de la fenêtre est inerte', async ({ page }) => {
   await expect(page.getByTestId('partie-site')).not.toHaveAttribute('inert', '')
   expect(await prendLeFocus(), 'le site est dans la fenêtre et déjà hors du clavier').toBe(true)
 
-  await page.getByTestId('onglet-deroule').click()
-  await expect.poll(() => dansLaFenetre(page, 'partie-site')).toBe(false)
+  await amenerLaPartie(page, 'deroule')
+  expect(await dansLaFenetre(page, 'partie-site')).toBe(false)
   await expect(page.getByTestId('partie-site')).toHaveAttribute('inert', '')
   expect(await prendLeFocus(), 'le sélecteur d’une partie sortie prend encore le focus').toBe(false)
   await expect(page.getByTestId('partie-deroule')).not.toHaveAttribute('inert', '')
 
   // Le retour rend la partie au clavier : un `inert` jamais retiré la rendrait inatteignable.
-  await page.getByTestId('onglet-site').click()
-  await expect.poll(() => dansLaFenetre(page, 'partie-site')).toBe(true)
+  await amenerLaPartie(page, 'site')
   await expect(page.getByTestId('partie-site')).not.toHaveAttribute('inert', '')
   expect(await prendLeFocus(), 'le site est revenu sans rendre son sélecteur au clavier').toBe(true)
 })

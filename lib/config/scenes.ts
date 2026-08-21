@@ -64,10 +64,6 @@ export function partieDeAncre(ancre: AncreId): SceneId {
   return PARTIE.get(ancre)!
 }
 
-export function premiereAncreDe(partie: SceneId): AncreId {
-  return (ANCRES.find((a) => a.partie === partie) ?? ANCRES[0]).id
-}
-
 export function ancreDeOption(id: string): AncreId {
   const explicite = ANCRE_PAR_OPTION[id]
   if (explicite) return explicite

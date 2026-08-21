@@ -39,7 +39,6 @@ test('le réglage de réduction des animations supprime tout mouvement', async (
 
 test('une barre de temps s’allonge au lieu d’apparaître', async ({ page }) => {
   await page.goto('/configurateur')
-  await page.getByTestId('onglet-deroule').click()
   const transition = await page.getByTestId('deroule-construction').evaluate((n) => getComputedStyle(n).transitionProperty)
   expect(transition).toContain('width')
 })
@@ -58,7 +57,6 @@ const HUIT = '/configurateur?seo&seo-local&perf&a11y&rgpd&legal&migration&domain
 test('le compteur de la preuve s’incrémente au lieu de sauter', async ({ page }) => {
   await page.goto(HUIT)
   const score = page.getByTestId('preuve-score')
-  await page.getByTestId('onglet-preuve').click()
   await expect(score).toHaveAttribute('data-anime', 'oui')
   await expect(score).toHaveText(/^8 \/ 8/)
   await expect(score).toHaveAttribute('data-anime', 'non')
@@ -67,7 +65,6 @@ test('le compteur de la preuve s’incrémente au lieu de sauter', async ({ page
 test('le compteur se pose sans compter quand les animations sont réduites', async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' })
   await page.goto(HUIT)
-  await page.getByTestId('onglet-preuve').click()
   await expect(page.getByTestId('preuve-score')).toHaveAttribute('data-anime', 'non')
   await expect(page.getByTestId('preuve-score')).toHaveText(/^8 \/ 8/)
 })

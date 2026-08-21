@@ -1,8 +1,8 @@
 import { expect, test } from '@playwright/test'
 import { OPTIONS, SOCLE_ID } from '../../lib/config/catalogue'
 import { calculer, formaterEuros } from '../../lib/config/devis'
-import { sceneDeOption } from '../../lib/config/scenes'
-import { dansLaFenetre } from './fenetre'
+import { SCENES, sceneDeOption } from '../../lib/config/scenes'
+import { amenerLaPartie, partieAuHautDeLaFenetre } from './fenetre'
 
 test('cocher tout le catalogue dans l’ordre garde aperçu, scène et total cohérents', async ({ page }) => {
   test.slow()
@@ -23,8 +23,10 @@ test('cocher tout le catalogue dans l’ordre garde aperçu, scène et total coh
       config[option.id] = 1
     }
 
-    // La scène commutée est celle de l'option qu'on vient de poser.
-    await expect(page.getByTestId(`onglet-${sceneDeOption(option.id)}`)).toHaveAttribute('aria-pressed', 'true')
+    // La scène commutée est celle de l'option qu'on vient de poser, lue sur la page peinte.
+    await expect
+      .poll(() => partieAuHautDeLaFenetre(page), { message: `${option.id} n’amène pas sa partie` })
+      .toBe(sceneDeOption(option.id))
 
     // Comparaison sur la chaîne formatée : « 1 500 € » porte une espace de milliers,
     // qu'un découpage naïf du nombre brut ne retrouverait jamais.
@@ -32,14 +34,13 @@ test('cocher tout le catalogue dans l’ordre garde aperçu, scène et total coh
     await expect(page.getByTestId('prix')).toHaveText(formaterEuros(attendu.total))
   }
 
-  // Toutes les parties restent atteignables une fois tout coché. `objet-scene` ne dirait plus
-  // rien ici : c'est la fenêtre, visible quelle que soit la position du rouleau.
-  for (const scene of ['site', 'preuve', 'deroule']) {
-    await page.getByTestId(`onglet-${scene}`).click()
-    await expect.poll(() => dansLaFenetre(page, `partie-${scene}`), {
-      message: `la partie ${scene} n’est pas entrée dans la fenêtre`,
-    }).toBe(true)
-  }
+  // Attente franche au delà des 500 ms de suspension du relevé : le dernier cochage vient de
+  // l'armer, et un geste de défilement achevé dans ce délai est perdu sans être rejoué.
+  await page.waitForTimeout(900)
+
+  // Toutes les parties restent atteignables une fois tout coché, par le défilement du
+  // formulaire : l'aide échoue si la partie visée n'entre pas dans la fenêtre.
+  for (const scene of SCENES) await amenerLaPartie(page, scene.id)
 })
 
 test('le récapitulatif final reprend les mêmes montants que la barre', async ({ page }) => {

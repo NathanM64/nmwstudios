@@ -11,7 +11,7 @@ import { JamaisInclus } from '@/components/config/JamaisInclus'
 import type { Configuration } from '@/lib/config/devis'
 import { decoder, encoder } from '@/lib/config/url'
 import { GROUPES, type GroupeId } from '@/lib/config/catalogue'
-import { ANCRE_PAR_GROUPE, premiereAncreDe, type SceneId } from '@/lib/config/scenes'
+import { ANCRE_PAR_GROUPE } from '@/lib/config/scenes'
 import type { Cible } from '@/lib/config/defilement'
 import { DOMAINE_DEFAUT, type DomaineId } from '@/lib/config/domaines'
 import { STYLE_DEFAUT, type StyleId } from '@/lib/config/styles'
@@ -30,10 +30,6 @@ export function Configurateur() {
   const [pret, setPret] = useState(false)
   const [copie, setCopie] = useState<'succes' | 'echec' | null>(null)
   const [recapVisible, setRecapVisible] = useState(false)
-
-  const surPartie = useCallback((partie: SceneId) => {
-    setCible({ ancre: premiereAncreDe(partie), progression: 0 })
-  }, [])
 
   // Lire un groupe, c'est parcourir la distance qui sépare son ancre de celle du groupe d'après.
   // Le dernier groupe n'a pas de suite : sa cible se pose, elle n'interpole rien.
@@ -119,7 +115,7 @@ export function Configurateur() {
           data-testid="colonne-apercu"
           className="sticky top-20 min-w-0 self-start xl:static xl:flex xl:min-h-0 xl:flex-col xl:self-auto"
         >
-          <Apercu config={config} cible={cible} domaine={domaine} style={style} onPartie={surPartie} />
+          <Apercu config={config} cible={cible} domaine={domaine} style={style} />
         </div>
 
         {/* La colonne n'est conteneur de défilement qu'au-dessus de 1280 : la réserve sous la barre

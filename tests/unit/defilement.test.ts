@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { partieAuHaut, partiesActives, positionCible, type Mesures } from '@/lib/config/defilement'
+import { partiesActives, positionCible, type Mesures } from '@/lib/config/defilement'
 
 const MESURES: Mesures = {
   offsets: { 'site-haut': 0, 'site-navigation': 100, 'preuve-haut': 900, 'deroule-haut': 1400 },
@@ -74,45 +74,5 @@ describe('parties actives', () => {
     // Position exactement égale à `preuve.bas` : c'est le seul cas qui distingue `>` de `>=`,
     // et sans lui la borne pourrait glisser d'une unité sans faire rougir un test.
     expect(partiesActives(BORNES, 1300, 700)).toEqual(['deroule'])
-  })
-})
-
-describe('partie au haut de la fenêtre', () => {
-  const BORNES = { site: { haut: 0, bas: 800 }, preuve: { haut: 800, bas: 1300 }, deroule: { haut: 1300, bas: 2000 } }
-  const MAX = 1300
-
-  it('nomme la partie où tombe le haut de la fenêtre', () => {
-    expect(partieAuHaut(BORNES, 0, MAX)).toBe('site')
-    expect(partieAuHaut(BORNES, 799, MAX)).toBe('site')
-  })
-
-  it('bascule dès que le haut de la fenêtre atteint la partie suivante', () => {
-    // Fin de traversée d'un groupe : le rouleau est intégralement sur la partie d'après, et
-    // c'est elle que le bandeau doit nommer.
-    expect(partieAuHaut(BORNES, 800, MAX)).toBe('preuve')
-  })
-
-  it('nomme la dernière partie quand la position la plus basse reste sous son haut', () => {
-    // Hauteur de fenêtre et hauteur de document ne s'arrondissent pas de la même façon : sans
-    // rabattement, la page arrivée en bas nommerait encore l'avant-dernière partie.
-    expect(partieAuHaut(BORNES, 1299.9, 1299.9)).toBe('deroule')
-  })
-
-  it('ne nomme pas encore la dernière partie à un dixième de pixel du bas', () => {
-    // Le rabattement se compare toujours à la position : il ne déclare pas une partie atteinte
-    // du seul fait que son haut frôle la position la plus basse.
-    expect(partieAuHaut(BORNES, 1299.9, 1300)).toBe('preuve')
-  })
-
-  it('ne rabat pas une partie plus courte qu’une fenêtre', () => {
-    // Au delà du pixel ce n'est plus du bruit de mesure. Rabattre sans borne nommerait ici la
-    // dernière partie du document alors que le bord haut de la fenêtre est encore dans la
-    // première : un mensonge franc, pas un dixième de pixel.
-    const COURTES = { site: { haut: 0, bas: 800 }, preuve: { haut: 800, bas: 1300 }, deroule: { haut: 1300, bas: 1400 } }
-    expect(partieAuHaut(COURTES, 700, 700)).toBe('site')
-  })
-
-  it('ne nomme rien tant que rien n’est mesuré', () => {
-    expect(partieAuHaut({}, 0, 0)).toBeUndefined()
   })
 })
