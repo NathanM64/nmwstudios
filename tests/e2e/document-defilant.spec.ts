@@ -247,8 +247,8 @@ test('le mouvement réduit pose la position sans transition', async ({ page }) =
 test('cocher une option pose la page là où le modèle le demande', async ({ page }) => {
   await page.getByRole('checkbox', { name: 'Un blog', exact: true }).check()
   await expect.poll(() => dansLaFenetre(page, 'site-blog')).toBe(true)
-  // La partie du site tient dans une fenêtre : le blog s'y voit même sans rien viser, et le seul constat de présence vaudrait aussi pour la page laissée en haut.
-  // La pose s'arrête à la fin de la partie visée, sinon la preuve entrerait dans la fenêtre.
+  // La partie du site tient dans une fenêtre : un simple constat de présence ne prouverait rien.
+  // La pose s'arrête à la fin de la partie visée.
   const ancreDuBlog = ancreDeOption('blog')
   await expect.poll(() => ecartALaVisee(page, ancreDuBlog), { message: `écart à ${ancreDuBlog}` }).toBeLessThan(2)
 
