@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test'
-import { SCENES, ancreDeOption } from '../../lib/config/scenes'
-import { dansLaFenetre } from './fenetre'
+import { ANCRES, SCENES, ancreDeOption } from '../../lib/config/scenes'
+import { dansLaFenetre, ecartAAncre } from './fenetre'
 
 type Page = import('@playwright/test').Page
 
@@ -19,15 +19,6 @@ async function ecartDuReleve(page: Page): Promise<number> {
     }
     return pire
   })
-}
-
-/** Écart, en pixels logiques, entre la position posée du rouleau et le décalage publié pour
- *  une ancre. Zéro veut dire que c'est bien cette ancre qui est en haut de la fenêtre. */
-async function ecartAAncre(page: Page, ancre: string): Promise<number> {
-  return page.getByTestId('rouleau').evaluate((rouleau: HTMLElement, a) => {
-    const y = Math.abs(parseFloat(getComputedStyle(rouleau).translate.split(' ')[1] ?? '0'))
-    return Math.abs(y - (JSON.parse(rouleau.dataset.mesures!) as Record<string, number>)[a])
-  }, ancre)
 }
 
 /** Décalages réels, tels que la mise en page les donne, indépendamment de ce que le document
@@ -100,19 +91,26 @@ test('un repère amène sa partie dans la fenêtre', async ({ page }) => {
   await expect.poll(() => dansLaFenetre(page, 'partie-site')).toBe(true)
 })
 
-test('le texte de la maquette ne descend jamais sous les seuils du projet', async ({ page }) => {
-  // Deux seuils, ceux du lot A : 10 px pour tout texte, 11 px pour le texte courant.
-  // Mesurés à toutes les largeurs servies, et non plus à la seule 1440 × 900.
+/** Plus petite taille de texte peinte dans le rouleau, en pixels d'écran : la mise à l'échelle
+ *  de la maquette compte, une taille lue en pixels logiques ne dirait rien de la lisibilité. */
+async function plusPetitTexte(page: Page): Promise<number> {
+  const tailles = await page.getByTestId('rouleau').evaluate((rouleau) => {
+    const echelle = parseFloat(getComputedStyle(rouleau.parentElement!).scale) || 1
+    return [rouleau, ...rouleau.querySelectorAll('*')]
+      .filter((n) => [...n.childNodes].some((c) => c.nodeType === 3 && c.textContent!.trim()))
+      .map((n) => parseFloat(getComputedStyle(n).fontSize) * echelle)
+  })
+  expect(tailles.length, 'aucun texte mesuré').toBeGreaterThan(10)
+  return Math.min(...tailles)
+}
+
+test('le texte de la maquette tient les seuils du projet de 1024 à 1920', async ({ page }) => {
+  // Deux seuils, ceux du lot A : 10 px pour tout texte, 11 px pour le texte courant. La bande
+  // servie descend plus bas que 1024, et le premier seuil y casse vers 780 : voir l'épinglage
+  // à 390 ci-dessous. Ce test ne promet donc que la bande où les seuils tiennent.
   for (const largeur of [1920, 1440, 1280, 1024]) {
     await page.setViewportSize({ width: largeur, height: 900 })
-    const tailles = await page.getByTestId('rouleau').evaluate((rouleau) => {
-      const echelle = parseFloat(getComputedStyle(rouleau.parentElement!).scale) || 1
-      return [rouleau, ...rouleau.querySelectorAll('*')]
-        .filter((n) => [...n.childNodes].some((c) => c.nodeType === 3 && c.textContent!.trim()))
-        .map((n) => parseFloat(getComputedStyle(n).fontSize) * echelle)
-    })
-    expect(tailles.length, `aucun texte mesuré à ${largeur}`).toBeGreaterThan(10)
-    expect(Math.min(...tailles), `plus petit texte à ${largeur}`).toBeGreaterThanOrEqual(10)
+    expect(await plusPetitTexte(page), `plus petit texte à ${largeur}`).toBeGreaterThanOrEqual(10)
 
     // Le texte courant, second seuil : les entrées de navigation, comme le filet d'origine.
     const courant = await page.getByTestId('site-nav').evaluate((nav) => {
@@ -122,6 +120,13 @@ test('le texte de la maquette ne descend jamais sous les seuils du projet', asyn
     expect(courant.length, `aucun texte courant mesuré à ${largeur}`).toBeGreaterThan(0)
     expect(Math.min(...courant), `texte courant à ${largeur}`).toBeGreaterThanOrEqual(11)
   }
+})
+
+test('à 390, le plus petit texte de la maquette est épinglé sous le seuil', async ({ page }) => {
+  // Valeur mesurée, pas visée : la mise en page mobile compacte la maquette bien sous les 10 px
+  // du lot A, et c'est au lot B de la reprendre. Ce test rougira le jour où il aura gagné.
+  await page.setViewportSize({ width: 390, height: 900 })
+  expect(await plusPetitTexte(page), 'plus petit texte à 390').toBeCloseTo(4.7, 1)
 })
 
 test('la maquette ne dépasse jamais sa taille naturelle', async ({ page }) => {
@@ -152,6 +157,25 @@ test('rien n’est rogné à l’intérieur d’une partie', async ({ page }) =>
 // les deux repères de partie compris, la partie du site dépassant alors une fenêtre.
 const CHARGE =
   '/configurateur?langue=3&blog&article=10&formulaire&redaction=15&reprise&rdv&newsletter&paiement&photos&visuels&membre&pages=4'
+
+test('les ancres sont déclarées dans l’ordre du document', async ({ page }) => {
+  // `ANCRES` est ce que l'auteur d'une ancre nouvelle lira pour savoir où la sienne se range :
+  // l'ordre déclaré doit être celui que la mise en page produit, mesuré et non affirmé.
+  await page.goto(CHARGE)
+  await animationsFinies(page)
+  const releve = await page
+    .getByTestId('rouleau')
+    .evaluate((n: HTMLElement) => JSON.parse(n.dataset.mesures!) as Record<string, number>)
+
+  const ids = ANCRES.map((a) => a.id)
+  expect([...Object.keys(releve)].sort(), 'toutes les ancres sont rendues sous cette charge').toEqual(
+    [...ids].sort()
+  )
+  const decalages = ids.map((id) => releve[id])
+  expect(decalages, `décalages dans l’ordre de ANCRES : ${ids.join(' ')}`).toEqual(
+    [...decalages].sort((x, y) => x - y)
+  )
+})
 
 test('le relevé des ancres suit la mise en page, animations d’entrée comprises', async ({ page }) => {
   // Un rectangle lu pendant qu'une animation d'entrée court situe l'ancre là où elle passe :
@@ -185,10 +209,10 @@ test('le relevé des ancres suit un changement de style, de métier et de langue
 test('le mouvement réduit pose la position sans transition', async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' })
   await page.goto('/configurateur')
-  const duree = await page.getByTestId('rouleau').evaluate((n) => getComputedStyle(n).transitionDuration)
-  // Seuil de `transitions.spec.ts` : la remise à zéro globale du projet pose 0,01 ms en
-  // `!important`, qu'aucune règle ne peut ramener à zéro franc.
-  expect(parseFloat(duree)).toBeLessThan(0.001)
+  // La propriété, pas la durée : la remise à zéro globale du projet pose déjà 0,01 ms en
+  // `!important` sur tout, et une durée lue ne dirait rien de la règle du rouleau.
+  const propriete = await page.getByTestId('rouleau').evaluate((n) => getComputedStyle(n).transitionProperty)
+  expect(propriete).toBe('none')
 })
 
 test('cocher une option amène son ancre dans la fenêtre', async ({ page }) => {
@@ -197,14 +221,15 @@ test('cocher une option amène son ancre dans la fenêtre', async ({ page }) => 
   // La partie du site tient dans une fenêtre : le blog s'y voit même sans rien viser, et le
   // seul constat ci-dessus passerait aussi bien sur la page laissée en haut. C'est la position
   // posée qui dit que l'ancre de l'option est visée, et non la tête de sa partie.
-  await expect.poll(() => ecartAAncre(page, ancreDeOption('blog'))).toBeLessThan(2)
+  const ancreDuBlog = ancreDeOption('blog')
+  await expect.poll(() => ecartAAncre(page, ancreDuBlog), { message: `écart à ${ancreDuBlog}` }).toBeLessThan(2)
 
-  // Attente franche au delà des 500 ms de suspension et des 16 ms du rattrapage. Un sondage se
-  // contente de sa fin de transition, à 320 ms, et ne verrait pas le demi-tour d'après : l'ancre
-  // du groupe de « Un blog » est la navigation, pas les actualités, et l'écart se compte en
-  // centaines de pixels sans qu'on ait quitté la partie du site.
+  // Attente franche au delà des 500 ms de suspension. Un sondage se contente de sa fin de
+  // transition, à 320 ms, et ne verrait pas le demi-tour d'après : l'ancre du groupe de « Un
+  // blog » est la navigation, pas les actualités, et l'écart se compte en centaines de pixels
+  // sans qu'on ait quitté la partie du site.
   await page.waitForTimeout(900)
-  expect(await ecartAAncre(page, ancreDeOption('blog'))).toBeLessThan(2)
+  expect(await ecartAAncre(page, ancreDuBlog), `écart à ${ancreDuBlog}`).toBeLessThan(2)
 })
 
 test('cocher un contrôle technique amène le rapport', async ({ page }) => {

@@ -7,9 +7,10 @@ import type { Page } from '@playwright/test'
  *  Piège déjà payé sur ce projet, voir la passation du 19/08/2026. */
 export async function dansLaFenetre(page: Page, repere: string): Promise<boolean> {
   return page.getByTestId('objet-scene').evaluate((fenetre, id) => {
-    const cible = document.querySelector(`[data-testid="${id}"]`)
+    // Recherche bornée à la fenêtre : un repère homonyme posé ailleurs sur la page répondrait.
+    const cible = fenetre.querySelector(`[data-testid="${id}"]`)
     if (!cible) return false
-    // Boîte de contenu, pas boîte de bordure : la fenêtre écrête à l'intérieur de son filet,
+    // Boîte de rembourrage, pas boîte de bordure : la fenêtre écrête à l'intérieur de son filet,
     // et ce pixel de bordure suffit à faire passer la partie d'après pour visible.
     const boite = fenetre.getBoundingClientRect()
     const f = {
@@ -33,7 +34,8 @@ export async function partieAuHautDeLaFenetre(page: Page): Promise<string | null
     const haut = fenetre.getBoundingClientRect().top + fenetre.clientTop
     const prefixe = 'partie-'
     let trouvee: string | null = null
-    for (const el of document.querySelectorAll(`[data-testid^="${prefixe}"]`)) {
+    // Recherche bornée à la fenêtre : les parties ne vivent que dans le rouleau qu'elle contient.
+    for (const el of fenetre.querySelectorAll(`[data-testid^="${prefixe}"]`)) {
       const boite = el.getBoundingClientRect()
       if (boite.top - 1 <= haut && boite.bottom > haut + 1) {
         trouvee = el.getAttribute('data-testid')!.slice(prefixe.length)
@@ -41,4 +43,25 @@ export async function partieAuHautDeLaFenetre(page: Page): Promise<string | null
     }
     return trouvee
   })
+}
+
+/** Écart, en pixels logiques, entre la position posée du rouleau et celle que cette ancre
+ *  commande. Zéro veut dire que c'est bien elle qui est en haut de la fenêtre.
+ *
+ *  L'attendu est rabattu sur la position la plus basse, comme `positionCible` le fait : une
+ *  ancre plus basse que ce plancher n'est pas atteignable, et `deroule-mensuel` est dans ce cas.
+ *
+ *  Une ancre absente du relevé rend `Infinity` et non `NaN` : les ancres conditionnelles vont
+ *  se multiplier, et un `NaN` sondé expire sur un message qui ne dit pas laquelle manque. */
+export async function ecartAAncre(page: Page, ancre: string): Promise<number> {
+  return page.getByTestId('rouleau').evaluate((rouleau: HTMLElement, a) => {
+    const releve = JSON.parse(rouleau.dataset.mesures!) as Record<string, number>
+    if (releve[a] === undefined) return Number.POSITIVE_INFINITY
+    const fenetre = rouleau.closest('.cadre-maquette')
+    if (!fenetre) throw new Error('cadre-maquette introuvable')
+    const echelle = parseFloat(getComputedStyle(rouleau.parentElement!).scale) || 1
+    const max = Math.max(0, rouleau.offsetHeight - fenetre.clientHeight / echelle)
+    const y = Math.abs(parseFloat(getComputedStyle(rouleau).translate.split(' ')[1] ?? '0'))
+    return Math.abs(y - Math.min(releve[a], max))
+  }, ancre)
 }

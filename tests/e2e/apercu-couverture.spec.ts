@@ -1,6 +1,7 @@
 import { expect, test } from '@playwright/test'
 import { OPTIONS, SOCLE_ID, optionParId } from '../../lib/config/catalogue'
-import { sceneDeOption } from '../../lib/config/scenes'
+import { ancreDeOption, sceneDeOption } from '../../lib/config/scenes'
+import { ecartAAncre } from './fenetre'
 
 // Le socle est toujours retenu et ne se décoche pas : son effet est la maquette
 // elle-même, vérifié à part plutôt que masqué par un saut silencieux.
@@ -43,6 +44,13 @@ for (const option of OPTIONS.filter((o) => o.id !== SOCLE_ID)) {
     }
 
     await expect.poll(empreinte, { message: `${option.id} n’ajoute aucun artefact à l’aperçu` }).not.toBe(avant)
+
+    // L'empreinte porte sur tout l'aperçu, et les trois parties sont montées en permanence :
+    // sans ce constat de position, les vingt-neuf options pourraient viser la même ancre.
+    const ancre = ancreDeOption(option.id)
+    await expect
+      .poll(() => ecartAAncre(page, ancre), { message: `${option.id} ne pose pas la page sur ${ancre}` })
+      .toBeLessThan(2)
   })
 }
 
