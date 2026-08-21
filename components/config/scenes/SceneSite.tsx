@@ -128,8 +128,8 @@ export const SceneSite = memo(function SceneSite({
 
         {/* Bande de services achetés : chaque carte prend sa part de la largeur, ou toute la
             ligne si ses voisines sont absentes. Conditions indépendantes, aucune cascade. */}
-        <div className="m-air flex shrink-0 flex-wrap items-stretch">
-          <section data-testid="site-formulaire" data-ancre="site-contact" className="m-carte m-air-serre flex min-w-0 flex-[1.6] flex-col px-2 py-1">
+        <div data-testid="site-bande" className="m-air flex shrink-0 flex-wrap items-stretch">
+          <section data-testid="site-formulaire" data-ancre="site-contact" className="m-carte m-air-serre flex min-w-0 grow-[1.6] basis-full flex-col px-2 py-1 @min-[500px]/maquette:basis-0">
             <div className="flex flex-wrap items-baseline gap-x-2 gap-y-0.5">
               <p className="m-surtitre">{e.blocsRepris[2]}</p>
               {formulaire > 0 && (
@@ -152,14 +152,14 @@ export const SceneSite = memo(function SceneSite({
           </section>
 
           {newsletter > 0 && (
-            <section data-testid="site-newsletter" className="animate-construit m-carte flex min-w-0 flex-1 items-center gap-1.5 px-2 py-1.5">
+            <section data-testid="site-newsletter" className="animate-construit m-carte flex min-w-0 grow basis-full items-center gap-1.5 px-2 py-1.5 @min-[500px]/maquette:basis-0">
               <span className="m-champ h-3 min-w-0 flex-1" />
               <span className="m-plein shrink-0 px-1.5">{t.inscrire}</span>
             </section>
           )}
 
           {rdv > 0 && (
-            <section data-testid="site-rdv" className="animate-construit m-air-serre flex min-w-0 flex-1 flex-col">
+            <section data-testid="site-rdv" className="animate-construit m-air-serre flex min-w-0 grow basis-full flex-col @min-[500px]/maquette:basis-0">
               <p className="m-surtitre">{t.reserver}</p>
               <div className="flex flex-wrap gap-0.5">
                 {t.creneaux.map((h) => (
@@ -172,7 +172,7 @@ export const SceneSite = memo(function SceneSite({
           )}
 
           {paiement > 0 && (
-            <section data-testid="site-paiement" className="animate-construit m-carte flex min-w-0 flex-1 items-center justify-between gap-2 px-2 py-1.5">
+            <section data-testid="site-paiement" className="animate-construit m-carte flex min-w-0 grow basis-full items-center justify-between gap-2 px-2 py-1.5 @min-[500px]/maquette:basis-0">
               <span className="m-corps truncate">{t.regler}</span>
               <span className="flex shrink-0 gap-1">
                 {/* Logos dessinés, aucune marque reproduite. */}

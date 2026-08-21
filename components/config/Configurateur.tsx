@@ -111,9 +111,11 @@ export function Configurateur() {
         data-testid="grille-configurateur"
         className="grid gap-8 px-5 sm:px-8 xl:min-h-0 xl:flex-1 xl:grid-cols-[minmax(0,1fr)_26rem] xl:overflow-hidden xl:pb-4"
       >
+        {/* `z-20` sous `xl` : épinglée, la colonne suit le formulaire dans le DOM, qui se
+            peignait donc par dessus, zone cliquable des cartes comprise. Sous la barre de prix. */}
         <div
           data-testid="colonne-apercu"
-          className="sticky top-20 min-w-0 self-start xl:static xl:flex xl:min-h-0 xl:flex-col xl:self-auto"
+          className="sticky top-20 z-20 min-w-0 self-start xl:static xl:flex xl:min-h-0 xl:flex-col xl:self-auto"
         >
           <Apercu config={config} cible={cible} domaine={domaine} style={style} />
         </div>
