@@ -168,8 +168,8 @@ body {
   .maquette-rouleau { transition: none; }
 }
 
-/* Une partie vaut au moins une fenêtre : c'est ce qui fait du repère d'une partie une position
-   réellement atteignable, et ce qui rend aux scènes la hauteur libre qu'elles répartissent. */
+/* Une partie vaut au moins une fenêtre : ancre de tête réellement atteignable, hauteur libre
+   rendue aux scènes, et deux parties qui ne peuvent jamais cohabiter dans la fenêtre. */
 .maquette-partie {
   display: flex;
   flex-direction: column;

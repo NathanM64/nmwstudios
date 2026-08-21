@@ -18,7 +18,7 @@ export const LIGNE_DE_LECTURE = 0.3
  *
  *  Effet de bord assumé : un geste de défilement entamé et achevé dans ce délai est perdu, les
  *  relevés y étant muets et rien ne rejouant la position. Le cran suivant la rétablit. */
-const SUSPENSION_MS = 500
+export const SUSPENSION_MS = 500
 
 export const PanneauOptions = memo(function PanneauOptions({
   config,

@@ -45,6 +45,13 @@ describe('ancres du document', () => {
     }
   })
 
+  it('donne à chaque partie un groupe qui vise sa tête', () => {
+    // `amenerLaPartie`, de bout en bout, n'a que le défilement du formulaire pour atteindre une
+    // partie : sans groupe visant sa tête, elle lève une exception au lieu d'échouer ici.
+    for (const scene of SCENES)
+      expect(GROUPES.some((g) => ANCRE_PAR_GROUPE[g.id] === ANCRE_DE_TETE[scene.id]), scene.id).toBe(true)
+  })
+
   it('donne à chaque partie une ancre de tête, qui lui appartient', () => {
     for (const scene of SCENES) {
       expect(partieDeAncre(ANCRE_DE_TETE[scene.id]), scene.id).toBe(scene.id)

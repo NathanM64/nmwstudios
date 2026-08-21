@@ -2,6 +2,7 @@ import { expect, test } from '@playwright/test'
 import { OPTIONS, SOCLE_ID } from '../../lib/config/catalogue'
 import { calculer, formaterEuros } from '../../lib/config/devis'
 import { SCENES, sceneDeOption } from '../../lib/config/scenes'
+import { SUSPENSION_MS } from '../../components/config/PanneauOptions'
 import { amenerLaPartie, partieAuHautDeLaFenetre } from './fenetre'
 
 test('cocher tout le catalogue dans l’ordre garde aperçu, scène et total cohérents', async ({ page }) => {
@@ -34,9 +35,9 @@ test('cocher tout le catalogue dans l’ordre garde aperçu, scène et total coh
     await expect(page.getByTestId('prix')).toHaveText(formaterEuros(attendu.total))
   }
 
-  // Attente franche au delà des 500 ms de suspension du relevé : le dernier cochage vient de
-  // l'armer, et un geste de défilement achevé dans ce délai est perdu sans être rejoué.
-  await page.waitForTimeout(900)
+  // Attente franche au delà de la suspension du relevé : le dernier cochage vient de l'armer,
+  // et un geste de défilement achevé dans ce délai est perdu sans être rejoué.
+  await page.waitForTimeout(SUSPENSION_MS + 400)
 
   // Toutes les parties restent atteignables une fois tout coché, par le défilement du
   // formulaire : l'aide échoue si la partie visée n'entre pas dans la fenêtre.

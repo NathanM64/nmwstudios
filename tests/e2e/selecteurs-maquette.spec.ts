@@ -74,16 +74,29 @@ test('changer de style change la palette sans changer le texte', async ({ page }
 
 test('la hauteur du bloc ne dépend pas des valeurs choisies', async ({ page }) => {
   // Le bloc est posé au-dessus de tout ce que le relevé de lecture mesure : une hauteur qui
-  // change avec le libellé retenu décalerait tous les groupes sous la ligne de lecture. Le plus
-  // long des métiers le prouve, c'est lui qui passait à la ligne quand les deux étaient côte à côte.
+  // change avec un libellé retenu décalerait tous les groupes sous la ligne de lecture. À 1280 la
+  // colonne est trop large pour qu'un libellé y passe à la ligne, c'est à 390 que le filet mord.
   const bloc = page.getByTestId('reglages-maquette')
-  const hauteur = async () => (await bloc.boundingBox())!.height
-  const depart = await hauteur()
 
-  const plusLong = [...DOMAINES].sort((a, b) => b.libelle.length - a.libelle.length)[0]
-  await page.getByTestId('selecteur-domaine').selectOption(plusLong.id)
-  await expect(page.getByTestId('selecteur-domaine-declencheur')).toHaveText(plusLong.libelle)
-  expect(await hauteur(), `hauteur du bloc sur « ${plusLong.libelle} »`).toBe(depart)
+  for (const largeur of [1280, 390]) {
+    await page.setViewportSize({ width: largeur, height: 800 })
+    const hauteurs: Record<string, number> = {}
+
+    for (const domaine of DOMAINES) {
+      await page.getByTestId('selecteur-domaine').selectOption(domaine.id)
+      await expect(page.getByTestId('selecteur-domaine-declencheur')).toHaveText(domaine.libelle)
+      hauteurs[domaine.libelle] = (await bloc.boundingBox())!.height
+    }
+
+    for (const style of STYLES) {
+      await page.getByTestId('selecteur-style').selectOption(style.id)
+      await expect(page.getByTestId('selecteur-style-declencheur')).toHaveText(style.libelle)
+      hauteurs[style.libelle] = (await bloc.boundingBox())!.height
+    }
+
+    const releve = JSON.stringify(hauteurs)
+    expect(new Set(Object.values(hauteurs)).size, `hauteurs du bloc à ${largeur} : ${releve}`).toBe(1)
+  }
 })
 
 test('la mention est une légende, posée sous le cadre et dans le panneau', async ({ page }) => {

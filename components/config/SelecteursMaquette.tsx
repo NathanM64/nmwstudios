@@ -26,8 +26,8 @@ export function SelecteursMaquette({
         Ces deux réglages changent l’aperçu. Ils ne changent pas le prix.
       </p>
 
-      {/* Un par ligne, jamais côte à côte : « VTC et transport de personnes » passe à la ligne
-          dans cette colonne, et la hauteur du bloc décalerait les groupes que le relevé mesure. */}
+      {/* Un par ligne, jamais côte à côte : côte à côte, la largeur du déclencheur du métier
+          renvoie la direction à la ligne, et la hauteur du bloc décale les groupes que le relevé mesure. */}
       <div className="mt-3 flex flex-col items-start gap-2 text-xs text-muted-foreground">
         <SelectListe
           testId="selecteur-domaine"

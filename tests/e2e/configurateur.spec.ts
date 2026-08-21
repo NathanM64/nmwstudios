@@ -3,7 +3,8 @@ import { expect, test } from '@playwright/test'
 import { contrastRatio, parseColor } from '../../lib/color/contrast'
 import { GROUPES, SOCLE_ID, optionParId } from '../../lib/config/catalogue'
 import { formaterEuros } from '../../lib/config/devis'
-import { dansLaFenetre } from './fenetre'
+import { SUSPENSION_MS } from '../../components/config/PanneauOptions'
+import { amenerLaPartie, dansLaFenetre } from './fenetre'
 
 test('la route du configurateur répond et s’annonce', async ({ page }) => {
   await page.goto('/configurateur')
@@ -289,8 +290,13 @@ test('cocher une option visible garde la scène du site', async ({ page }) => {
 test('la scène du site garde tout ce qui a été coché', async ({ page }) => {
   await page.goto('/configurateur')
   await page.getByRole('checkbox', { name: 'Un blog' }).check()
+  // Le référencement emmène l'aperçu sur « La preuve » : le sujet est le retour, et lui seul
+  // peut tomber, `site-blog` ne dépendant que du blog et `toBeVisible` ignorant l'écrêtage.
   await page.getByRole('checkbox', { name: 'Fondations SEO' }).check()
-  await expect(page.getByTestId('site-blog')).toBeVisible()
+  // Le retour passe par un défilement, que la suspension du relevé avalerait sans être rejoué.
+  await page.waitForTimeout(SUSPENSION_MS + 400)
+  await amenerLaPartie(page, 'site')
+  expect(await dansLaFenetre(page, 'site-blog')).toBe(true)
 })
 
 test('« La preuve » ne montre l’extrait qu’une fois le référencement acheté', async ({ page }) => {

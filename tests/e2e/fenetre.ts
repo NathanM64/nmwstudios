@@ -68,22 +68,22 @@ export async function ecartAAncre(page: Page, ancre: string): Promise<number> {
   }, ancre)
 }
 
-/** Amène une partie dans la fenêtre par le seul chemin qui reste depuis la disparition des
- *  repères : défiler le formulaire jusqu'au groupe dont l'ancre est la tête de cette partie.
+/** Amène une partie en tête de la fenêtre par le seul chemin qui reste depuis la disparition
+ *  des repères : défiler le formulaire jusqu'au groupe dont l'ancre est la tête de cette partie.
  *
  *  Le groupe est dérivé, jamais écrit à la main : une ancre de groupe déplacée déplace l'aide
  *  avec elle. `block: 'start'` plutôt que `scrollIntoViewIfNeeded`, qui laisserait le groupe
  *  sous la ligne de lecture, donc l'aperçu où il était.
  *
- *  L'attente fait partie de l'aide : la translation passe par une transition, et juger le
- *  contenu d'une scène pendant qu'elle arrive reviendrait à lire une image de mouvement. */
+ *  L'arrivée fait partie de l'aide : la sonde se libère sur la partie en tête de fenêtre, et non
+ *  sur la simple intersection, qui est vraie dès la première image de la transition. */
 export async function amenerLaPartie(page: Page, partie: SceneId): Promise<void> {
   const groupe = GROUPES.find((g) => ANCRE_PAR_GROUPE[g.id] === ANCRE_DE_TETE[partie])
   if (!groupe) throw new Error(`aucun groupe ne vise la tête de la partie ${partie}`)
   await page.locator(`[data-groupe="${groupe.id}"]`).evaluate((el) => el.scrollIntoView({ block: 'start' }))
   await expect
-    .poll(() => dansLaFenetre(page, `partie-${partie}`), {
-      message: `défiler jusqu’au groupe « ${groupe.titre} » n’amène pas ${partie} dans la fenêtre`,
+    .poll(() => partieAuHautDeLaFenetre(page), {
+      message: `défiler jusqu’au groupe « ${groupe.titre} » n’amène pas ${partie} en tête de fenêtre`,
     })
-    .toBe(true)
+    .toBe(partie)
 }

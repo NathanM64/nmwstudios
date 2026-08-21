@@ -3,7 +3,7 @@ import { GROUPES } from '../../lib/config/catalogue'
 import { ANCRE_PAR_GROUPE, partieDeAncre } from '../../lib/config/scenes'
 import { calculer, formaterEuros } from '../../lib/config/devis'
 import { CONFIG_DEPART } from '../../components/config/Configurateur'
-import { LIGNE_DE_LECTURE } from '../../components/config/PanneauOptions'
+import { LIGNE_DE_LECTURE, SUSPENSION_MS } from '../../components/config/PanneauOptions'
 import { dansLaFenetre, partieAuHautDeLaFenetre } from './fenetre'
 
 /** La partie que la fenêtre montre à son bord haut, attendue : la translation passe par une
@@ -98,9 +98,8 @@ test('faire défiler le formulaire fait suivre l’aperçu, sans rien cocher', a
 
 test('sous 1280, le premier geste depuis le repos fait déjà suivre l’aperçu', async ({ page }) => {
   // Sous 1280 la racine défile et l’aperçu occupe le haut : au repos aucun groupe n’a franchi la
-  // ligne de lecture. Le relevé du montage doit se consommer quand même, sinon rien n’amorce le
-  // pilote et ce seul geste est avalé. Même état de repos qu’au-dessus de 1280 depuis que le bloc
-  // des réglages pousse le premier groupe sous la ligne.
+  // ligne de lecture, le bloc des réglages poussant le premier sous elle à cette hauteur de
+  // fenêtre. Le relevé du montage doit se consommer quand même, sinon ce seul geste est avalé.
   await page.setViewportSize({ width: 1024, height: 720 })
   await page.goto('/configurateur')
   await attendLaPartie(page, 'site', 'l’aperçu ne s’ouvre pas sur le site')
@@ -128,9 +127,9 @@ test('le défilement reprend la main sur un choix d’option', async ({ page }) 
   await page.getByRole('checkbox', { name: 'Livraison accélérée', exact: true }).check()
   await attendLaPartie(page, 'deroule', 'cocher la livraison accélérée n’amène pas le déroulé')
 
-  // Attente franche au delà des 500 ms de suspension du relevé : la lecture pilote la position
-  // en continu, un choix est un saut et non un verrou, et le geste suivant redevient la source.
-  await page.waitForTimeout(900)
+  // Attente franche au delà de la suspension du relevé : la lecture pilote la position en
+  // continu, un choix est un saut et non un verrou, et le geste suivant redevient la source.
+  await page.waitForTimeout(SUSPENSION_MS + 400)
   await amener(page, 'contenu')
   await attendLaPartie(page, 'site', 'le défilement ne reprend pas la main sur le choix')
 })
@@ -185,9 +184,9 @@ test('cocher une option garde sa scène au delà de la suspension du relevé', a
   await attendLaPartie(page, 'deroule', 'cocher la livraison accélérée n’amène pas le déroulé')
   expect(await dansLaFenetre(page, 'partie-deroule')).toBe(true)
 
-  // Attente franche au delà des 500 ms de suspension : le clic a fait défiler le panneau, et
-  // cette lecture subie ne doit pas reprendre la main une fois la suspension levée.
-  await page.waitForTimeout(900)
+  // Attente franche au delà de la suspension : le clic a fait défiler le panneau, et cette
+  // lecture subie ne doit pas reprendre la main une fois la suspension levée.
+  await page.waitForTimeout(SUSPENSION_MS + 400)
   expect(await partieAuHautDeLaFenetre(page)).toBe('deroule')
   expect(await dansLaFenetre(page, 'partie-deroule')).toBe(true)
 })
