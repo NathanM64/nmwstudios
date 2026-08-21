@@ -75,8 +75,17 @@ export async function ecartAAncre(page: Page, ancre: string): Promise<number> {
  *  avec elle. `block: 'start'` plutôt que `scrollIntoViewIfNeeded`, qui laisserait le groupe
  *  sous la ligne de lecture, donc l'aperçu où il était.
  *
- *  L'arrivée fait partie de l'aide : la sonde se libère sur la partie en tête de fenêtre, et non
- *  sur la simple intersection, qui est vraie dès la première image de la transition. */
+ *  L'arrivée fait partie de l'aide, et elle se constate au repos, jamais sur un sondage seul.
+ *  À l'aller, `partieAuHautDeLaFenetre` attend bien que la partie visée gagne le haut de la
+ *  fenêtre. En remontant, cette partie le couvre déjà : sa condition se réduit mot pour mot à
+ *  celle de `dansLaFenetre`, vraie dès la première image, et la sonde se libérerait à une fenêtre
+ *  de sa destination.
+ *
+ *  Ce que l'aide ne promet pas : se poser sur l'ancre de tête. La lecture interpole vers l'ancre
+ *  du groupe suivant au prorata de l'avancement, et `scrollIntoView` laisse le groupe entamé.
+ *  Mesuré à 1280 x 720 : 10,8 px de dérive pour le site, 422 pour le déroulé si le plancher de
+ *  document ne les écrasait pas. Pour une position exacte, cocher une option, qui pose
+ *  `progression: 0`. */
 export async function amenerLaPartie(page: Page, partie: SceneId): Promise<void> {
   const groupe = GROUPES.find((g) => ANCRE_PAR_GROUPE[g.id] === ANCRE_DE_TETE[partie])
   if (!groupe) throw new Error(`aucun groupe ne vise la tête de la partie ${partie}`)
@@ -86,4 +95,19 @@ export async function amenerLaPartie(page: Page, partie: SceneId): Promise<void>
       message: `défiler jusqu’au groupe « ${groupe.titre} » n’amène pas ${partie} en tête de fenêtre`,
     })
     .toBe(partie)
+  // Le sondage ne prouve que le départ. Attente franche au delà de la transition, jamais un second
+  // sondage : c'est la seule façon de constater qu'une position tient plutôt qu'elle passe.
+  await page.waitForTimeout((await dureeDuVoyage(page)) + 120)
+  expect(await partieAuHautDeLaFenetre(page), `${partie} quitte la tête de fenêtre avant le repos`).toBe(partie)
+}
+
+/** Durée de la transition du rouleau, lue sur la page plutôt qu'écrite ici : mise en dur, elle
+ *  rendrait la main en pleine transition le jour où `--dur-page` s'allonge. */
+async function dureeDuVoyage(page: Page): Promise<number> {
+  return page.evaluate(() => {
+    const brut = getComputedStyle(document.documentElement).getPropertyValue('--dur-page').trim()
+    const valeur = parseFloat(brut)
+    if (!Number.isFinite(valeur)) throw new Error(`--dur-page illisible : « ${brut} »`)
+    return brut.endsWith('ms') ? valeur : valeur * 1000
+  })
 }

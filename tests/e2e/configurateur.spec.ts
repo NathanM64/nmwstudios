@@ -290,13 +290,14 @@ test('cocher une option visible garde la scène du site', async ({ page }) => {
 test('la scène du site garde tout ce qui a été coché', async ({ page }) => {
   await page.goto('/configurateur')
   await page.getByRole('checkbox', { name: 'Un blog' }).check()
-  // Le référencement emmène l'aperçu sur « La preuve » : le sujet est le retour, et lui seul
-  // peut tomber, `site-blog` ne dépendant que du blog et `toBeVisible` ignorant l'écrêtage.
+  // Le référencement emmène l'aperçu sur « La preuve » : le sujet est l'aller-retour, et les deux
+  // moitiés mordent. Le constat final est la seule garantie de cumul entre groupes du dépôt : une
+  // mutation qui retire le blog dès que le SEO est acheté fait tomber ce test par `site-blog`.
   await page.getByRole('checkbox', { name: 'Fondations SEO' }).check()
   // Le retour passe par un défilement, que la suspension du relevé avalerait sans être rejoué.
   await page.waitForTimeout(SUSPENSION_MS + 400)
   await amenerLaPartie(page, 'site')
-  expect(await dansLaFenetre(page, 'site-blog')).toBe(true)
+  expect(await dansLaFenetre(page, 'site-blog'), 'le blog coché avant le SEO a disparu de la scène').toBe(true)
 })
 
 test('« La preuve » ne montre l’extrait qu’une fois le référencement acheté', async ({ page }) => {

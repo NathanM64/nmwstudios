@@ -40,7 +40,7 @@ test('cocher tout le catalogue dans l’ordre garde aperçu, scène et total coh
   await page.waitForTimeout(SUSPENSION_MS + 400)
 
   // Toutes les parties restent atteignables une fois tout coché, par le défilement du
-  // formulaire : l'aide échoue si la partie visée n'entre pas dans la fenêtre.
+  // formulaire : l'aide échoue si la partie visée n'arrive pas en tête de fenêtre.
   for (const scene of SCENES) await amenerLaPartie(page, scene.id)
 })
 
