@@ -5,8 +5,10 @@ import type { Configuration } from '@/lib/config/devis'
 import { HABILLAGE, LANGUES, type Langue } from '@/lib/config/maquette'
 import { DOMAINE_REPLI, editorialDe, type DomaineId } from '@/lib/config/domaines'
 import type { Geste } from '@/lib/config/styles'
-
-const PAGES_SOCLE = 3
+import { Navigation } from '@/components/config/blocs/site/Navigation'
+import { Hero } from '@/components/config/blocs/site/Hero'
+import { Photo } from '@/components/config/blocs/site/Photo'
+import { Services } from '@/components/config/blocs/site/Services'
 
 export const SceneSite = memo(function SceneSite({
   config,
@@ -17,12 +19,9 @@ export const SceneSite = memo(function SceneSite({
   domaine?: DomaineId
   geste: Geste
 }) {
-  const tranches = config.pages ?? 0
   const langues = config.langue ?? 0
   const redaction = config.redaction ?? 0
   const reprise = config.reprise ?? 0
-  const photos = config.photos ?? 0
-  const visuels = config.visuels ?? 0
   const blog = config.blog ?? 0
   const articles = config.article ?? 0
   const formulaire = config.formulaire ?? 0
@@ -37,7 +36,6 @@ export const SceneSite = memo(function SceneSite({
   const active = offertes.includes(langue) ? langue : 'fr'
   const t = HABILLAGE[active]
   const e = editorialDe(domaine, active)
-  const libelles = e.pages.slice(0, PAGES_SOCLE + tranches * 3)
 
   return (
     <div className="animate-apparait m-contenu flex min-w-0 flex-1">
@@ -47,106 +45,24 @@ export const SceneSite = memo(function SceneSite({
         </div>
       )}
       <div className="m-air m-marge flex min-w-0 flex-1 flex-col">
-      {geste === 'bandeau' && <div data-testid="geste-bandeau" className="m-bandeau" />}
-      {geste === 'aplat' && <div data-testid="geste-aplat" className="m-aplat-tete" />}
-      <header data-endroit="site-navigation" className="flex min-w-0 items-baseline gap-3">
-        <span data-testid="site-enseigne" className="m-enseigne shrink-0">
-          {e.enseigne}
-        </span>
-        <div className="flex min-w-0 flex-1 flex-wrap items-center justify-end gap-x-3 gap-y-0.5">
-          <nav data-testid="site-nav">
-            <ul className="flex flex-wrap justify-end gap-x-2 gap-y-0.5">
-              {libelles.map((page) => (
-                <li key={page} className="animate-glisse m-menu">
-                  {page}
-                </li>
-              ))}
-            </ul>
-          </nav>
-          {langues > 0 && (
-            <select
-              data-testid="site-langue"
-              value={active}
-              onChange={(evenement) => setLangue(evenement.target.value as Langue)}
-              aria-label="Langue de l’aperçu"
-              className="animate-glisse m-select px-1"
-            >
-              {offertes.map((code) => (
-                <option key={code} value={code}>
-                  {code.toUpperCase()}
-                </option>
-              ))}
-            </select>
-          )}
-          {(config.membre ?? 0) > 0 && (
-            <span data-testid="site-connexion" className="animate-glisse m-puce px-1.5">
-              {t.connexion}
-            </span>
-          )}
-        </div>
-      </header>
+      <Navigation
+        config={config}
+        domaine={domaine}
+        langue={active}
+        offertes={offertes}
+        onLangue={setLangue}
+        geste={geste}
+      />
 
-      <span data-testid="site-filet" className="m-filet h-px w-full shrink-0" />
-
-      {/* Héros : hauteur au contenu, jamais centrée. C'est la place libre en dessous qui
-          s'étire, donc cocher une option ne déplace pas le titre. */}
-      <div
-        {...(geste === 'centre' ? { 'data-testid': 'geste-centre' } : {})}
-        className={`flex shrink-0 flex-col gap-1${geste === 'centre' ? ' m-centre' : ''}`}
-      >
-        <p className="m-surtitre">{e.surtitre}</p>
-        <p data-testid="site-titre" className="m-titre">
-          {e.titre}
-        </p>
-        <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1">
-          <p data-testid="site-corps" className="m-chapeau max-w-[62ch] flex-1">
-            {e.corps}
-          </p>
-          <span className="m-plein ml-auto shrink-0 px-3 py-0.5">{e.pages[2]}</span>
-        </div>
-      </div>
+      <Hero domaine={domaine} langue={active} geste={geste} />
 
       <div className="m-air flex min-h-0 flex-1 flex-col">
         {/* Bande haute : l'aplat prend la hauteur libre, les services prennent la leur.
             Aucun centrage, donc aucune bande vide, et rien ne se comprime sous son contenu. */}
-        {/* Photo réelle du métier, en licence libre, à la place du dégradé. Conditionner sa
-            présence à l'achat de `photos` ou `visuels` a été essayé et défait : les deux options
-            rendaient alors la même image. Les distinguer demande l'état inachevé complet, textes
-            compris, et c'est le lot 3 qui le porte. */}
-        <div
-          data-testid="site-cadre"
-          data-endroit="site-contenu"
-          className="m-photo relative shrink grow basis-0 overflow-hidden"
-          style={{ '--m-photo-fond': `url(/maquette/${domaine}.avif)` } as React.CSSProperties}
-        >
-          {photos > 0 && (
-            <>
-              <span data-testid="site-reperes" className="animate-glisse m-reperes absolute inset-3" />
-              {/* Aucun chiffre : un poids annoncé serait une mesure inventée. */}
-              <span data-testid="site-poids" className="animate-glisse m-etiquette absolute right-1.5 bottom-1.5 px-1.5">
-                {t.photo}
-              </span>
-            </>
-          )}
-          {visuels > 0 && (
-            <span data-testid="site-visuels" className="animate-glisse m-etiquette absolute bottom-1.5 left-1.5 px-1.5">
-              {t.visuel}
-            </span>
-          )}
-        </div>
+        <Photo config={config} domaine={domaine} langue={active} />
 
         <div className="m-air flex shrink-0 flex-col">
-        <div data-testid="site-services" className="m-air grid shrink-0 grid-cols-1 @min-[500px]/maquette:grid-cols-3">
-          {e.services.map((service, i) => (
-            <div key={service.nom} data-testid="site-service" className="m-filet-haut flex min-w-0 gap-2 pt-1">
-              <span className="m-mono shrink-0">{String(i + 1).padStart(2, '0')}</span>
-              <div className="min-w-0">
-                <p className="m-sous-titre truncate">{service.nom}</p>
-                <p className="m-legende">{service.texte}</p>
-              </div>
-            </div>
-          ))}
-        </div>
+        <Services domaine={domaine} langue={active} />
 
         {/* Bande de services achetés : chaque carte prend sa part de la largeur, ou toute la
             ligne si ses voisines sont absentes. Conditions indépendantes, aucune cascade. */}
