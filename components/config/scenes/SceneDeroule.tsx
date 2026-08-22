@@ -123,6 +123,10 @@ export const SceneDeroule = memo(function SceneDeroule({ config }: { config: Con
               ) : (
                 <div
                   data-testid={`deroule-${rangee.id}`}
+                  // Construction et livraison sont du socle : elles ne se vendent pas.
+                  data-endroit={
+                    rangee.id === 'cadrage' || rangee.id === 'formation' ? `deroule-${rangee.id}` : undefined
+                  }
                   className={`absolute top-[32%] bottom-[32%] ${rangee.seconde ? 'animate-allonge m-barre-2' : 'm-barre'}`}
                   style={{ left: part(rangee.depart), width: part(rangee.duree) }}
                 />
@@ -135,6 +139,7 @@ export const SceneDeroule = memo(function SceneDeroule({ config }: { config: Con
           {deroule.livraison < deroule.livraisonSansExpress && (
             <span
               data-testid="deroule-fantome"
+              data-endroit="deroule-express"
               style={{
                 left: part(deroule.livraisonSansExpress),
                 translate: decalage(deroule.livraisonSansExpress),
@@ -157,7 +162,7 @@ export const SceneDeroule = memo(function SceneDeroule({ config }: { config: Con
           ` au lieu de ${formaterSemaines(deroule.livraisonSansExpress)} sans la livraison accélérée`}
       </p>
 
-      <div data-ancre="deroule-mensuel" className="m-air-serre flex shrink-0 flex-col">
+      <div data-endroit="deroule-mensuel" className="m-air-serre flex shrink-0 flex-col">
         <div className="flex items-baseline gap-3">
           <p className="m-surtitre">Chaque mois, après la livraison</p>
           <span className="m-filet h-px flex-1" />

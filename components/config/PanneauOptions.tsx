@@ -4,14 +4,14 @@ import { memo, useEffect, useRef } from 'react'
 import { CarteOption } from '@/components/config/CarteOption'
 import { GROUPES, OPTIONS, type GroupeId } from '@/lib/config/catalogue'
 import type { Configuration } from '@/lib/config/devis'
-import { ancreDeOption } from '@/lib/config/scenes'
+import { endroitDeOption } from '@/lib/config/endroits'
 import type { Cible } from '@/lib/config/defilement'
 
 /** Ligne de lecture, en part de la hauteur de fenêtre : le groupe qui la franchit est celui
  *  qu'on est en train de lire, et c'est aussi là que se cale son en-tête collant. */
 export const LIGNE_DE_LECTURE = 0.3
 
-/** Un choix délibéré gagne pendant ce délai. Cocher une option amène son ancre, mais fait aussi
+/** Un choix délibéré gagne pendant ce délai. Cocher une option amène son endroit, mais fait aussi
  *  défiler le panneau jusqu'à la carte, jusqu'à trois fois : mise en vue, focus, puis
  *  réancrage du navigateur après le rendu. Sans cette suspension, ce défilement subi
  *  reprendrait la main sur le choix qui vient de l'émettre.
@@ -39,13 +39,13 @@ export const PanneauOptions = memo(function PanneauOptions({
   // drapeau, pas `dernierGroupe` encore nul, qui reste armé sans groupe au-dessus de la ligne.
   const amorce = useRef(true)
 
-  // L'ancre de l'option, pas la tête de sa partie : un article se voit dans les actualités,
+  // L'endroit de l'option, pas la tête de sa partie : un article se voit dans les actualités,
   // la livraison accélérée sur la ligne de temps. Le relevé se suspend, sans quoi le
   // défilement provoqué par le clic lui-même reprendrait la main aussitôt.
   const poser = (id: string, n: number) => {
     onChange({ ...config, [id]: n })
     suspenduJusqua.current = Date.now() + SUSPENSION_MS
-    onCible({ ancre: ancreDeOption(id), progression: 0 })
+    onCible({ endroit: endroitDeOption(id), progression: 0 })
   }
 
   // L'aperçu suit la lecture : parcourir le formulaire fait défiler les scènes, sans rien cocher.
@@ -108,7 +108,7 @@ export const PanneauOptions = memo(function PanneauOptions({
     suivant[id] = 1
     onChange(suivant)
     suspenduJusqua.current = Date.now() + SUSPENSION_MS
-    onCible({ ancre: ancreDeOption(id), progression: 0 })
+    onCible({ endroit: endroitDeOption(id), progression: 0 })
   }
 
   return (

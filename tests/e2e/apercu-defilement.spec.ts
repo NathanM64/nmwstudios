@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test'
 import { GROUPES } from '../../lib/config/catalogue'
-import { ANCRE_PAR_GROUPE, partieDeAncre } from '../../lib/config/scenes'
+import { endroitDuGroupe, partieDeEndroit } from '../../lib/config/endroits'
 import { calculer, formaterEuros } from '../../lib/config/devis'
 import { CONFIG_DEPART } from '../../components/config/Configurateur'
 import { LIGNE_DE_LECTURE, SUSPENSION_MS } from '../../components/config/PanneauOptions'
@@ -19,7 +19,7 @@ async function amener(page: import('@playwright/test').Page, groupe: string) {
 }
 
 /** Amène la ligne de lecture au bas d'un groupe : sa traversée est alors achevée, et la page
- *  a rejoint l'ancre du groupe suivant. Le groupe d'après reste sous la ligne, séparé par la
+ *  a rejoint l'endroit du groupe suivant. Le groupe d'après reste sous la ligne, séparé par la
  *  gouttière du panneau, donc c'est bien celui-ci qui est lu. */
 async function finDuGroupe(page: import('@playwright/test').Page, groupe: string) {
   await page.locator(`[data-groupe="${groupe}"]`).evaluate((el, ligne) => {
@@ -63,7 +63,7 @@ async function positionPosee(page: import('@playwright/test').Page, depuis?: num
   return precedente
 }
 
-/** Décalages des ancres tels que le document les a relevés, en pixels logiques arrondis. */
+/** Décalages des endroits tels que le document les a relevés, en pixels logiques arrondis. */
 async function offsetsPublies(page: import('@playwright/test').Page): Promise<Record<string, number>> {
   return page.getByTestId('rouleau').evaluate((n: HTMLElement) => JSON.parse(n.dataset.mesures!))
 }
@@ -114,7 +114,7 @@ test('chaque groupe amène sa propre scène', async ({ page }) => {
     await amener(page, groupe.id)
     await attendLaPartie(
       page,
-      partieDeAncre(ANCRE_PAR_GROUPE[groupe.id]),
+      partieDeEndroit(endroitDuGroupe(groupe.id)),
       `le groupe « ${groupe.titre} » n’amène pas sa scène`
     )
   }
@@ -145,16 +145,16 @@ test('la page descend continûment, pas par sauts de partie', async ({ page }) =
   const arrivee = await positionPosee(page, debut)
   expect(arrivee).toBeGreaterThan(debut)
 
-  // Et sans avoir atteint l'ancre d'arrivée : la page interpole, elle ne saute pas. Deux pixels
+  // Et sans avoir atteint l'endroit d'arrivée : la page interpole, elle ne saute pas. Deux pixels
   // de marge, `data-mesures` arrondissant ; l'écart attendu se compte en dizaines de pixels.
   const contenu = (await offsetsPublies(page))['site-contenu']
   expect(arrivee, `la page a sauté jusqu’à site-contenu, à ${contenu}`).toBeLessThan(contenu - 2)
 
-  // Et sans avoir atteint le groupe suivant : la page n'a pas sauté à l'ancre d'après.
+  // Et sans avoir atteint le groupe suivant : la page n'a pas sauté à l'endroit d'après.
   expect(await partieAuHautDeLaFenetre(page)).toBe('site')
 })
 
-test('deux groupes visant la même ancre ne déplacent pas la page', async ({ page }) => {
+test('deux groupes visant le même endroit ne déplacent pas la page', async ({ page }) => {
   await page.goto('/configurateur')
   const avant = await position(page)
   await amener(page, 'visibilite')
@@ -191,13 +191,13 @@ test('cocher une option garde sa scène au delà de la suspension du relevé', a
   expect(await dansLaFenetre(page, 'partie-deroule')).toBe(true)
 })
 
-// Les seules traversées qui changent de partie : l'ancre du groupe et celle du groupe suivant
-// n'y sont pas dans la même. Dérivé du catalogue, une ancre de plus le rejoindra sans retouche.
+// Les seules traversées qui changent de partie : l'endroit du groupe et celui du groupe suivant
+// n'y sont pas dans la même. Dérivé du catalogue, un endroit de plus le rejoindra sans retouche.
 const TRAVERSEES = GROUPES.flatMap((groupe, rang) => {
   const suivant = GROUPES[rang + 1]
   if (!suivant) return []
-  const depart = partieDeAncre(ANCRE_PAR_GROUPE[groupe.id])
-  const arrivee = partieDeAncre(ANCRE_PAR_GROUPE[suivant.id])
+  const depart = partieDeEndroit(endroitDuGroupe(groupe.id))
+  const arrivee = partieDeEndroit(endroitDuGroupe(suivant.id))
   return depart === arrivee ? [] : [{ groupe: groupe.id, titre: groupe.titre, arrivee }]
 })
 

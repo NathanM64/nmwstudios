@@ -117,6 +117,7 @@ export const ScenePreuve = memo(function ScenePreuve({
             <div
               key={controle.id}
               data-testid="preuve-ligne"
+              data-endroit={`preuve-ligne-${controle.id}`}
               data-retenu={retenu ? 'oui' : 'non'}
               // opacity-70 : la ligne reste en retrait sans passer sous 4,5:1, modélisé sur les
               // trois directions par tests/unit/configurateur-contraste.test.ts.

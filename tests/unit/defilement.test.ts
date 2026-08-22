@@ -10,50 +10,58 @@ const MESURES: Mesures = {
 const BORNES: Bornes = { site: { haut: 0, bas: 900 }, preuve: { haut: 900, bas: 1400 }, deroule: { haut: 1400, bas: 2000 } }
 
 describe('position du rouleau', () => {
-  it("pose l'ancre en haut de la fenêtre à progression nulle", () => {
-    expect(positionCible({ ancre: 'preuve-haut', progression: 0 }, MESURES, BORNES)).toBe(900)
+  it("pose l'endroit en haut de la fenêtre à progression nulle", () => {
+    expect(positionCible({ endroit: 'preuve-haut', progression: 0 }, MESURES, BORNES)).toBe(900)
   })
 
   it('atteint la destination à progression pleine', () => {
-    expect(positionCible({ ancre: 'site-haut', vers: 'site-navigation', progression: 1 }, MESURES, BORNES)).toBe(100)
+    expect(positionCible({ endroit: 'site-haut', vers: 'site-navigation', progression: 1 }, MESURES, BORNES)).toBe(100)
   })
 
   it('interpole entre les deux', () => {
-    expect(positionCible({ ancre: 'site-haut', vers: 'site-navigation', progression: 0.5 }, MESURES, BORNES)).toBe(50)
+    expect(positionCible({ endroit: 'site-haut', vers: 'site-navigation', progression: 0.5 }, MESURES, BORNES)).toBe(50)
   })
 
-  it("ne bouge pas quand la destination est la même ancre", () => {
+  it("ne bouge pas quand la destination est le même endroit", () => {
     // Trois groupes visent le rapport : traverser le premier ne doit pas emmener au déroulé.
-    expect(positionCible({ ancre: 'preuve-haut', vers: 'preuve-haut', progression: 1 }, MESURES, BORNES)).toBe(900)
+    expect(positionCible({ endroit: 'preuve-haut', vers: 'preuve-haut', progression: 1 }, MESURES, BORNES)).toBe(900)
   })
 
   it("reste sur place quand la destination n'est pas mesurée", () => {
-    // Une option absente de la configuration ne rend pas son bloc, donc pas son ancre.
-    expect(positionCible({ ancre: 'site-navigation', vers: 'site-contact', progression: 1 }, MESURES, BORNES)).toBe(
+    // Une option absente de la configuration ne rend pas son bloc, donc pas son endroit.
+    expect(positionCible({ endroit: 'site-navigation', vers: 'site-contact', progression: 1 }, MESURES, BORNES)).toBe(
       100
     )
   })
 
   it('borne la progression hors de zéro et un', () => {
-    expect(positionCible({ ancre: 'site-haut', vers: 'site-navigation', progression: -3 }, MESURES, BORNES)).toBe(0)
-    expect(positionCible({ ancre: 'site-haut', vers: 'site-navigation', progression: 9 }, MESURES, BORNES)).toBe(100)
+    expect(positionCible({ endroit: 'site-haut', vers: 'site-navigation', progression: -3 }, MESURES, BORNES)).toBe(0)
+    expect(positionCible({ endroit: 'site-haut', vers: 'site-navigation', progression: 9 }, MESURES, BORNES)).toBe(100)
   })
 
   it('ne descend jamais sous le bas du document', () => {
     // 2000 - 700 : au-delà, la fenêtre montrerait du vide sous la dernière partie.
-    expect(positionCible({ ancre: 'preuve-haut', vers: 'deroule-haut', progression: 1 }, MESURES, BORNES)).toBe(1300)
+    expect(positionCible({ endroit: 'preuve-haut', vers: 'deroule-haut', progression: 1 }, MESURES, BORNES)).toBe(1300)
   })
 
   it('reste en place sans destination', () => {
-    expect(positionCible({ ancre: 'site-navigation', progression: 1 }, MESURES, BORNES)).toBe(100)
+    expect(positionCible({ endroit: 'site-navigation', progression: 1 }, MESURES, BORNES)).toBe(100)
   })
 
-  it('retombe en haut pour une ancre non mesurée', () => {
-    expect(positionCible({ ancre: 'site-contact', progression: 0 }, MESURES, BORNES)).toBe(0)
+  it('retombe en haut quand le repli lui-même n’est pas mesuré', () => {
+    expect(positionCible({ endroit: 'site-contact', progression: 0 }, MESURES, BORNES)).toBe(0)
+  })
+
+  it('se replie sur le permanent au-dessus quand l’endroit n’est pas rendu', () => {
+    // `site-rdv` n'est rendu que si l'option est retenue ; sans repli, viser un bloc non acheté
+    // renverrait la page en tête de document.
+    const mesures: Mesures = { offsets: { 'site-contact': 400 }, hauteurDocument: 4000, hauteurFenetre: 700 }
+    const bornes: Bornes = { site: { haut: 0, bas: 1200 } }
+    expect(positionCible({ endroit: 'site-rdv', progression: 0 }, mesures, bornes)).toBe(400)
   })
 
   it('ne rend jamais une position négative', () => {
-    expect(positionCible({ ancre: 'site-haut', progression: 0 }, { ...MESURES, hauteurDocument: 300 }, BORNES)).toBe(
+    expect(positionCible({ endroit: 'site-haut', progression: 0 }, { ...MESURES, hauteurDocument: 300 }, BORNES)).toBe(
       0
     )
   })
@@ -63,20 +71,20 @@ describe('position du rouleau', () => {
     // dessous, ce que `.maquette-partie` interdit.
     const mesures: Mesures = { offsets: { 'site-contenu': 300 }, hauteurDocument: 4000, hauteurFenetre: 700 }
     const bornes: Bornes = { site: { haut: 0, bas: 700 } }
-    expect(positionCible({ ancre: 'site-contenu', progression: 0 }, mesures, bornes)).toBe(0)
+    expect(positionCible({ endroit: 'site-contenu', progression: 0 }, mesures, bornes)).toBe(0)
   })
 
   it('laisse descendre dans une partie plus longue qu’une fenêtre', () => {
     const mesures: Mesures = { offsets: { 'deroule-mensuel': 2900 }, hauteurDocument: 4000, hauteurFenetre: 700 }
     const bornes: Bornes = { deroule: { haut: 1600, bas: 4000 } }
-    expect(positionCible({ ancre: 'deroule-mensuel', progression: 0 }, mesures, bornes)).toBe(2900)
+    expect(positionCible({ endroit: 'deroule-mensuel', progression: 0 }, mesures, bornes)).toBe(2900)
   })
 
   it('ne défile jamais au delà de la fin de la partie visée', () => {
     const mesures: Mesures = { offsets: { 'site-contenu': 800 }, hauteurDocument: 4000, hauteurFenetre: 700 }
     const bornes: Bornes = { site: { haut: 0, bas: 900 } }
     // 900 - 700 : au delà, la partie d'après entrerait dans la fenêtre.
-    expect(positionCible({ ancre: 'site-contenu', progression: 0 }, mesures, bornes)).toBe(200)
+    expect(positionCible({ endroit: 'site-contenu', progression: 0 }, mesures, bornes)).toBe(200)
   })
 
   it('ignore la borne de partie pendant une lecture', () => {
@@ -84,14 +92,14 @@ describe('position du rouleau', () => {
     // serait jamais atteinte : la lecture traverse les parties, la pose non.
     const mesures: Mesures = { offsets: { 'site-navigation': 100, 'preuve-haut': 900 }, hauteurDocument: 4000, hauteurFenetre: 700 }
     const bornes: Bornes = { site: { haut: 0, bas: 700 } }
-    expect(positionCible({ ancre: 'site-navigation', vers: 'preuve-haut', progression: 1 }, mesures, bornes)).toBe(
+    expect(positionCible({ endroit: 'site-navigation', vers: 'preuve-haut', progression: 1 }, mesures, bornes)).toBe(
       900
     )
   })
 
   it('pose sans borne quand la partie n’est pas encore mesurée', () => {
     // Premier rendu : `bornes` est vide, et la pose doit rester celle d'avant plutôt que zéro.
-    expect(positionCible({ ancre: 'site-navigation', progression: 0 }, MESURES, {})).toBe(100)
+    expect(positionCible({ endroit: 'site-navigation', progression: 0 }, MESURES, {})).toBe(100)
   })
 })
 

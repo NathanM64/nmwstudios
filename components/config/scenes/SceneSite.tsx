@@ -49,7 +49,7 @@ export const SceneSite = memo(function SceneSite({
       <div className="m-air m-marge flex min-w-0 flex-1 flex-col">
       {geste === 'bandeau' && <div data-testid="geste-bandeau" className="m-bandeau" />}
       {geste === 'aplat' && <div data-testid="geste-aplat" className="m-aplat-tete" />}
-      <header data-ancre="site-navigation" className="flex min-w-0 items-baseline gap-3">
+      <header data-endroit="site-navigation" className="flex min-w-0 items-baseline gap-3">
         <span data-testid="site-enseigne" className="m-enseigne shrink-0">
           {e.enseigne}
         </span>
@@ -115,7 +115,7 @@ export const SceneSite = memo(function SceneSite({
             compris, et c'est le lot 3 qui le porte. */}
         <div
           data-testid="site-cadre"
-          data-ancre="site-contenu"
+          data-endroit="site-contenu"
           className="m-photo relative shrink grow basis-0 overflow-hidden"
           style={{ '--m-photo-fond': `url(/maquette/${domaine}.avif)` } as React.CSSProperties}
         >
@@ -151,7 +151,7 @@ export const SceneSite = memo(function SceneSite({
         {/* Bande de services achetés : chaque carte prend sa part de la largeur, ou toute la
             ligne si ses voisines sont absentes. Conditions indépendantes, aucune cascade. */}
         <div data-testid="site-bande" className="m-air flex shrink-0 flex-wrap items-stretch">
-          <section data-testid="site-formulaire" data-ancre="site-contact" className="m-carte m-air-serre flex min-w-0 grow-[1.6] basis-full flex-col px-2 py-1 @min-[500px]/maquette:basis-0">
+          <section data-testid="site-formulaire" data-endroit="site-contact" className="m-carte m-air-serre flex min-w-0 grow-[1.6] basis-full flex-col px-2 py-1 @min-[500px]/maquette:basis-0">
             <div className="flex flex-wrap items-baseline gap-x-2 gap-y-0.5">
               <p className="m-surtitre">{e.blocsRepris[2]}</p>
               {formulaire > 0 && (
@@ -174,14 +174,14 @@ export const SceneSite = memo(function SceneSite({
           </section>
 
           {newsletter > 0 && (
-            <section data-testid="site-newsletter" className="animate-construit m-carte flex min-w-0 grow basis-full items-center gap-1.5 px-2 py-1.5 @min-[500px]/maquette:basis-0">
+            <section data-testid="site-newsletter" data-endroit="site-newsletter" className="animate-construit m-carte flex min-w-0 grow basis-full items-center gap-1.5 px-2 py-1.5 @min-[500px]/maquette:basis-0">
               <span className="m-champ h-3 min-w-0 flex-1" />
               <span className="m-plein shrink-0 px-1.5">{t.inscrire}</span>
             </section>
           )}
 
           {rdv > 0 && (
-            <section data-testid="site-rdv" className="animate-construit m-air-serre flex min-w-0 grow basis-full flex-col @min-[500px]/maquette:basis-0">
+            <section data-testid="site-rdv" data-endroit="site-rdv" className="animate-construit m-air-serre flex min-w-0 grow basis-full flex-col @min-[500px]/maquette:basis-0">
               <p className="m-surtitre">{t.reserver}</p>
               <div className="flex flex-wrap gap-0.5">
                 {t.creneaux.map((h) => (
@@ -194,7 +194,7 @@ export const SceneSite = memo(function SceneSite({
           )}
 
           {paiement > 0 && (
-            <section data-testid="site-paiement" className="animate-construit m-carte flex min-w-0 grow basis-full items-center justify-between gap-2 px-2 py-1.5 @min-[500px]/maquette:basis-0">
+            <section data-testid="site-paiement" data-endroit="site-paiement" className="animate-construit m-carte flex min-w-0 grow basis-full items-center justify-between gap-2 px-2 py-1.5 @min-[500px]/maquette:basis-0">
               <span className="m-corps truncate">{t.regler}</span>
               <span className="flex shrink-0 gap-1">
                 {/* Logos dessinés, aucune marque reproduite. */}
@@ -212,7 +212,7 @@ export const SceneSite = memo(function SceneSite({
               <div data-testid="site-texte" className="animate-construit flex min-w-0 flex-wrap items-baseline gap-x-2 gap-y-0.5">
                 <span className="m-surtitre">{t.redigees}</span>
                 {/* Une page nommée par unité : sans elle, quinze pages rédigées rendent le même écran qu'une. */}
-                <span data-testid="site-redaction" className="flex min-w-0 flex-1 basis-0 flex-wrap items-baseline gap-1">
+                <span data-testid="site-redaction" data-endroit="site-redaction" className="flex min-w-0 flex-1 basis-0 flex-wrap items-baseline gap-1">
                   {e.pages.slice(0, redaction).map((page) => (
                     <span key={page} data-testid="site-page-redigee" className="animate-glisse m-puce px-1.5">
                       {page}
@@ -223,7 +223,7 @@ export const SceneSite = memo(function SceneSite({
             )}
 
             {reprise > 0 && (
-              <ul data-testid="site-reprise" className="animate-construit flex flex-wrap gap-1">
+              <ul data-testid="site-reprise" data-endroit="site-reprise" className="animate-construit flex flex-wrap gap-1">
                 {e.blocsRepris.map((bloc) => (
                   <li key={bloc} className="m-puce px-1.5">
                     {bloc}
@@ -235,7 +235,7 @@ export const SceneSite = memo(function SceneSite({
         )}
 
         {(blog > 0 || articles > 0) && (
-          <section data-testid="site-blog" data-ancre="site-actualites" className="animate-construit m-air-serre flex shrink-0 flex-col">
+          <section data-testid="site-blog" data-endroit="site-actualites" className="animate-construit m-air-serre flex shrink-0 flex-col">
             {/* Pleine largeur et 5 colonnes : 10 articles tiennent sur 2 lignes avec des titres
                 encore lisibles, ce qu'une demi-colonne ne permettait pas. */}
             <div className="flex items-baseline gap-2">

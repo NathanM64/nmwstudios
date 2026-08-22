@@ -1,6 +1,7 @@
 import { expect, type Page } from '@playwright/test'
 import { GROUPES } from '../../lib/config/catalogue'
-import { ANCRE_DE_TETE, ANCRE_PAR_GROUPE, type SceneId } from '../../lib/config/scenes'
+import { ENDROIT_DE_TETE, endroitDuGroupe } from '../../lib/config/endroits'
+import type { SceneId } from '../../lib/config/scenes'
 
 /** Un repère est-il réellement dans la fenêtre de l'aperçu ?
  *
@@ -47,23 +48,23 @@ export async function partieAuHautDeLaFenetre(page: Page): Promise<string | null
   })
 }
 
-/** Écart, en pixels logiques, entre la position posée du rouleau et celle que viser cette ancre
+/** Écart, en pixels logiques, entre la position posée du rouleau et celle que viser cet endroit
  *  commande. Zéro veut dire que la page est posée là où le modèle le demande.
  *
- *  L'attendu est recalculé ici depuis les rectangles réels : la partie qui porte l'ancre, sa
+ *  L'attendu est recalculé ici depuis les rectangles réels : la partie qui porte l'endroit, sa
  *  hauteur, celle de la fenêtre et le plancher du document. Aucun calcul n'est partagé avec la
  *  production, et le relevé publié n'est pas consulté.
  *
- *  Une ancre absente du DOM rend `Infinity` et non `NaN` : les ancres conditionnelles sont
- *  nombreuses, et un `NaN` sondé expire sur un message qui ne dit pas laquelle manque. */
-export async function ecartALaVisee(page: Page, ancre: string): Promise<number> {
+ *  Un endroit absent du DOM rend `Infinity` et non `NaN` : les endroits conditionnels sont
+ *  nombreux, et un `NaN` sondé expire sur un message qui ne dit pas lequel manque. */
+export async function ecartALaVisee(page: Page, endroit: string): Promise<number> {
   return page.getByTestId('rouleau').evaluate((rouleau: HTMLElement, a) => {
-    const cible = rouleau.querySelector<HTMLElement>(`[data-ancre="${a}"]`)
+    const cible = rouleau.querySelector<HTMLElement>(`[data-endroit="${a}"]`)
     if (!cible) return Number.POSITIVE_INFINITY
     const fenetre = rouleau.closest('.cadre-maquette')
     if (!fenetre) throw new Error('cadre-maquette introuvable')
     const partie = cible.closest<HTMLElement>('[data-testid^="partie-"]')
-    if (!partie) throw new Error(`l’ancre ${a} n’est dans aucune partie`)
+    if (!partie) throw new Error(`l’endroit ${a} n’est dans aucune partie`)
 
     const echelle = parseFloat(getComputedStyle(rouleau.parentElement!).scale) || 1
     const haut = rouleau.getBoundingClientRect().top
@@ -79,13 +80,13 @@ export async function ecartALaVisee(page: Page, ancre: string): Promise<number> 
     const attendu = Math.min(Math.max(Math.min(Math.max(offset, pHaut), plafond), 0), max)
     const y = Math.abs(parseFloat(getComputedStyle(rouleau).translate.split(' ')[1] ?? '0'))
     return Math.abs(y - attendu)
-  }, ancre)
+  }, endroit)
 }
 
 /** Amène une partie en tête de la fenêtre par le seul chemin qui reste depuis la disparition
- *  des repères : défiler le formulaire jusqu'au groupe dont l'ancre est la tête de cette partie.
+ *  des repères : défiler le formulaire jusqu'au groupe dont l'endroit est la tête de cette partie.
  *
- *  Le groupe est dérivé, jamais écrit à la main : une ancre de groupe déplacée déplace l'aide
+ *  Le groupe est dérivé, jamais écrit à la main : un endroit de groupe déplacé déplace l'aide
  *  avec elle. `block: 'start'` plutôt que `scrollIntoViewIfNeeded`, qui laisserait le groupe
  *  sous la ligne de lecture, donc l'aperçu où il était.
  *
@@ -95,13 +96,13 @@ export async function ecartALaVisee(page: Page, ancre: string): Promise<number> 
  *  celle de `dansLaFenetre`, vraie dès la première image, et la sonde se libérerait à une fenêtre
  *  de sa destination.
  *
- *  Ce que l'aide ne promet pas : se poser sur l'ancre de tête. La lecture interpole vers l'ancre
+ *  Ce que l'aide ne promet pas : se poser sur l'endroit de tête. La lecture interpole vers celui
  *  du groupe suivant au prorata de l'avancement, et `scrollIntoView` laisse le groupe entamé.
  *  Mesuré à 1280 x 720 : 10,8 px de dérive pour le site, 422 pour le déroulé si le plancher de
  *  document ne les écrasait pas. Pour une position exacte, cocher une option, qui pose
  *  `progression: 0`. */
 export async function amenerLaPartie(page: Page, partie: SceneId): Promise<void> {
-  const groupe = GROUPES.find((g) => ANCRE_PAR_GROUPE[g.id] === ANCRE_DE_TETE[partie])
+  const groupe = GROUPES.find((g) => endroitDuGroupe(g.id) === ENDROIT_DE_TETE[partie])
   if (!groupe) throw new Error(`aucun groupe ne vise la tête de la partie ${partie}`)
   await page.locator(`[data-groupe="${groupe.id}"]`).evaluate((el) => el.scrollIntoView({ block: 'start' }))
   await expect

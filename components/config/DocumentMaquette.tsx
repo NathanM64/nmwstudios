@@ -4,7 +4,8 @@ import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import type { Configuration } from '@/lib/config/devis'
 import type { DomaineId } from '@/lib/config/domaines'
 import type { Geste } from '@/lib/config/styles'
-import { ANCRE_DE_TETE, SCENES, type AncreId, type SceneId } from '@/lib/config/scenes'
+import { SCENES, type SceneId } from '@/lib/config/scenes'
+import { ENDROIT_DE_TETE, type EndroitId } from '@/lib/config/endroits'
 import { partiesActives, positionCible, type Bornes, type Cible, type Mesures } from '@/lib/config/defilement'
 import { SceneSite } from '@/components/config/scenes/SceneSite'
 import { ScenePreuve } from '@/components/config/scenes/ScenePreuve'
@@ -41,11 +42,11 @@ export function DocumentMaquette({
       const page = rouleau.parentElement!
       const echelle = parseFloat(getComputedStyle(page).scale) || 1
       // Différence de rectangles divisée par l'échelle, et non `offsetTop` : le parent de
-      // positionnement d'une ancre n'est pas garanti être le rouleau.
+      // positionnement d'un endroit n'est pas garanti être le rouleau.
       const haut = rouleau.getBoundingClientRect().top
       const offsets: Mesures['offsets'] = {}
-      for (const el of rouleau.querySelectorAll<HTMLElement>('[data-ancre]')) {
-        offsets[el.dataset.ancre as AncreId] = (el.getBoundingClientRect().top - haut) / echelle
+      for (const el of rouleau.querySelectorAll<HTMLElement>('[data-endroit]')) {
+        offsets[el.dataset.endroit as EndroitId] = (el.getBoundingClientRect().top - haut) / echelle
       }
       // Les parties se repèrent par leur `data-testid`, seul marqueur qu'elles portent.
       const prises: Bornes = {}
@@ -67,13 +68,13 @@ export function DocumentMaquette({
     mesurer()
     const observateur = new ResizeObserver(mesurer)
     observateur.observe(rouleau)
-    // Une ancre se déplace sans que le rouleau change de taille : chaque partie est épinglée à
+    // Un endroit se déplace sans que le rouleau change de taille : chaque partie est épinglée à
     // la hauteur de la fenêtre, et c'est un bloc élastique en son sein qui absorbe l'écart.
-    // Changer de direction de style ou de langue passe ainsi par la taille d'un porteur d'ancre,
+    // Changer de direction de style ou de langue passe ainsi par la taille d'un porteur,
     // jamais par une prop de ce composant.
-    for (const el of rouleau.querySelectorAll('[data-ancre]')) observateur.observe(el)
+    for (const el of rouleau.querySelectorAll('[data-endroit]')) observateur.observe(el)
     // Une animation d'entrée translate son bloc : un rectangle lu pendant qu'elle court situe
-    // l'ancre là où elle passe, pas là où elle se pose. `animationend` remonte jusqu'ici, y
+    // l'endroit là où il passe, pas là où il se pose. `animationend` remonte jusqu'ici, y
     // compris pour les blocs qui se remontent sans que ce composant se rende, comme la langue.
     rouleau.addEventListener('animationend', mesurer)
     // La fenêtre change de hauteur avec sa colonne, pas seulement avec le contenu.
@@ -91,7 +92,7 @@ export function DocumentMaquette({
   const actives = new Set(
     mesures.hauteurFenetre > 0 ? partiesActives(bornes, position, mesures.hauteurFenetre) : SCENES.map((s) => s.id)
   )
-  // Décalages publiés : la position posée ne dit pas quelle ancre elle vise, et c'est le seul
+  // Décalages publiés : la position posée ne dit pas quel endroit elle vise, et c'est le seul
   // relevé sur lequel un filet peut juger qu'une mesure a vieilli.
   const releve = Object.fromEntries(Object.entries(mesures.offsets).map(([a, o]) => [a, Math.round(o!)]))
 
@@ -105,7 +106,7 @@ export function DocumentMaquette({
     >
       <div
         data-testid="partie-site"
-        data-ancre={ANCRE_DE_TETE.site}
+        data-endroit={ENDROIT_DE_TETE.site}
         inert={!actives.has('site')}
         className="maquette-partie"
       >
@@ -116,7 +117,7 @@ export function DocumentMaquette({
         <div
           key={partie.id}
           data-testid={`partie-${partie.id}`}
-          data-ancre={ANCRE_DE_TETE[partie.id]}
+          data-endroit={ENDROIT_DE_TETE[partie.id]}
           inert={!actives.has(partie.id)}
           className="maquette-partie"
         >

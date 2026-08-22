@@ -1,5 +1,6 @@
 import { expect, test } from '@playwright/test'
-import { ANCRES, SCENES, ancreDeOption } from '../../lib/config/scenes'
+import { SCENES } from '../../lib/config/scenes'
+import { ENDROITS, endroitDeOption } from '../../lib/config/endroits'
 import { SUSPENSION_MS } from '../../components/config/PanneauOptions'
 import { amenerLaPartie, dansLaFenetre, ecartALaVisee, hydrate } from './fenetre'
 import { STYLES, STYLE_DEFAUT } from '../../lib/config/styles'
@@ -11,17 +12,17 @@ const AUTRE_DIRECTION = STYLES.find((s) => s.id !== STYLE_DEFAUT)!.id
 type Page = import('@playwright/test').Page
 
 /** Écart, en pixels logiques, entre le relevé publié par le document et la mise en page réelle.
- *  Les ancres de frontière ne bougent qu'une fois une partie plus haute qu'une fenêtre : ce sont
- *  les ancres internes qui trahissent une mesure périmée, et elles ne visent encore rien. */
+ *  Les endroits de frontière ne bougent qu'une fois une partie plus haute qu'une fenêtre : ce sont
+ *  les endroits internes qui trahissent une mesure périmée. */
 async function ecartDuReleve(page: Page): Promise<number> {
   return page.getByTestId('rouleau').evaluate((rouleau) => {
     const releve = JSON.parse(rouleau.dataset.mesures!) as Record<string, number>
     const echelle = parseFloat(getComputedStyle(rouleau.parentElement!).scale) || 1
     const haut = rouleau.getBoundingClientRect().top
     let pire = 0
-    for (const el of rouleau.querySelectorAll<HTMLElement>('[data-ancre]')) {
+    for (const el of rouleau.querySelectorAll<HTMLElement>('[data-endroit]')) {
       const reel = (el.getBoundingClientRect().top - haut) / echelle
-      pire = Math.max(pire, Math.abs(reel - releve[el.dataset.ancre!]))
+      pire = Math.max(pire, Math.abs(reel - releve[el.dataset.endroit!]))
     }
     return pire
   })
@@ -33,8 +34,8 @@ async function offsetsReels(page: Page): Promise<string> {
   return page.getByTestId('rouleau').evaluate((rouleau) => {
     const echelle = parseFloat(getComputedStyle(rouleau.parentElement!).scale) || 1
     const haut = rouleau.getBoundingClientRect().top
-    return [...rouleau.querySelectorAll<HTMLElement>('[data-ancre]')]
-      .map((el) => `${el.dataset.ancre}:${Math.round((el.getBoundingClientRect().top - haut) / echelle)}`)
+    return [...rouleau.querySelectorAll<HTMLElement>('[data-endroit]')]
+      .map((el) => `${el.dataset.endroit}:${Math.round((el.getBoundingClientRect().top - haut) / echelle)}`)
       .join(' ')
   })
 }
@@ -144,6 +145,9 @@ test('à 390, le plus petit texte de la maquette tient le plancher du projet', a
   expect(await plusPetitTexte(page), 'plus petit texte à 390').toBeGreaterThanOrEqual(10)
 })
 
+const TOUT_COCHE =
+  '/configurateur?pages=4&langue=3&redaction=15&reprise&photos&visuels&blog&article=10&membre&formulaire&rdv&newsletter&paiement&seo&seo-local&perf&a11y&rgpd&legal&migration&domaine&cadrage&formation&express&partenaire'
+
 /** Repères écrêtés en hauteur à l'intérieur d'une partie. Seul le rognage vertical est un
  *  défaut : la fenêtre écrête le document, c'est son travail, alors qu'à l'intérieur d'une
  *  partie un contenu coupé en hauteur disparaît sans le dire. */
@@ -175,36 +179,46 @@ test('rien n’est rogné à l’intérieur d’une partie', async ({ page }) =>
   expect(await rognes(page), 'tout coché').toEqual([])
 })
 
-const TOUT_COCHE =
-  '/configurateur?pages=4&langue=3&redaction=15&reprise&photos&visuels&blog&article=10&membre&formulaire&rdv&newsletter&paiement&seo&seo-local&perf&a11y&rgpd&legal&migration&domaine&cadrage&formation&express&partenaire'
-
-// Pire cas mesuré : sur ce métier, la seule bascule en anglais remonte six ancres de 25 à 55 px,
-// les deux repères de partie compris, la partie du site dépassant alors une fenêtre.
+// Pire cas mesuré : sur ce métier, la seule bascule en anglais remonte six endroits de 25 à
+// 55 px, les deux repères de partie compris, la partie du site dépassant alors une fenêtre.
 const CHARGE =
   '/configurateur?langue=3&blog&article=10&formulaire&redaction=15&reprise&rdv&newsletter&paiement&photos&visuels&membre&pages=4'
 
-test('les ancres sont déclarées dans l’ordre du document', async ({ page }) => {
-  // `ANCRES` est ce que l'auteur d'une ancre nouvelle lira pour savoir où la sienne se range :
+test('les endroits sont déclarés dans l’ordre du document', async ({ page }) => {
+  // `ENDROITS` est ce que l'auteur d'un endroit nouveau lira pour savoir où le sien se range :
   // l'ordre déclaré doit être celui que la mise en page produit, mesuré et non affirmé.
-  await page.goto(CHARGE)
-    await hydrate(page)
+  await page.goto(TOUT_COCHE)
+  await hydrate(page)
   await animationsFinies(page)
   const releve = await page
     .getByTestId('rouleau')
     .evaluate((n: HTMLElement) => JSON.parse(n.dataset.mesures!) as Record<string, number>)
 
-  const ids = ANCRES.map((a) => a.id)
-  expect([...Object.keys(releve)].sort(), 'toutes les ancres sont rendues sous cette charge').toEqual(
+  const ids = ENDROITS.map((e) => e.id)
+  expect([...Object.keys(releve)].sort(), 'tous les endroits sont rendus sous cette charge').toEqual(
     [...ids].sort()
   )
   const decalages = ids.map((id) => releve[id])
-  expect(decalages, `décalages dans l’ordre de ANCRES : ${ids.join(' ')}`).toEqual(
+  expect(decalages, `décalages dans l’ordre de ENDROITS : ${ids.join(' ')}`).toEqual(
     [...decalages].sort((x, y) => x - y)
   )
 })
 
-test('le relevé des ancres suit la mise en page, animations d’entrée comprises', async ({ page }) => {
-  // Un rectangle lu pendant qu'une animation d'entrée court situe l'ancre là où elle passe :
+test('tout endroit permanent est rendu sur la configuration de départ', async ({ page }) => {
+  // Un endroit permanent sert de repli aux conditionnels qui le suivent : absent, il renvoie la
+  // page en tête de document au lieu de la poser où le modèle le demande.
+  await animationsFinies(page)
+  const releve = await page
+    .getByTestId('rouleau')
+    .evaluate((n: HTMLElement) => JSON.parse(n.dataset.mesures!) as Record<string, number>)
+
+  const attendus = ENDROITS.filter((e) => e.permanent).map((e) => e.id)
+  const manquants = attendus.filter((id) => releve[id] === undefined)
+  expect(manquants, 'endroits déclarés permanents mais absents du document').toEqual([])
+})
+
+test('le relevé des endroits suit la mise en page, animations d’entrée comprises', async ({ page }) => {
+  // Un rectangle lu pendant qu'une animation d'entrée court situe l'endroit là où il passe :
   // mesuré à 9 px de trop sur les actualités avant correction, et jamais repris ensuite.
   await page.goto(CHARGE)
     await hydrate(page)
@@ -212,18 +226,18 @@ test('le relevé des ancres suit la mise en page, animations d’entrée compris
   await expect.poll(() => ecartDuReleve(page), { message: 'au chargement' }).toBeLessThan(2)
 })
 
-test('le relevé des ancres suit un changement de style, de métier et de langue', async ({ page }) => {
+test('le relevé des endroits suit un changement de style, de métier et de langue', async ({ page }) => {
   // Chaque bascule est d'abord constatée sur la mise en page réelle. Sans ce constat, le premier
   // sondage tombe avant que le changement ait pris, et un écart nul ne prouve rien.
   const bascule = async (agir: () => Promise<unknown>, quoi: string) => {
     const avant = await offsetsReels(page)
     await agir()
-    await expect.poll(() => offsetsReels(page), { message: `${quoi} n’a déplacé aucune ancre` }).not.toBe(avant)
+    await expect.poll(() => offsetsReels(page), { message: `${quoi} n’a déplacé aucun endroit` }).not.toBe(avant)
     await expect.poll(() => ecartDuReleve(page), { message: `relevé périmé après ${quoi}` }).toBeLessThan(2)
   }
 
   // Le style ne passe par aucune prop du document, la langue vit dans l'état interne de
-  // SceneSite : sans observateur sur les porteurs d'ancres, rien ne remesure.
+  // SceneSite : sans observateur sur les porteurs d'endroits, rien ne remesure.
   await animationsFinies(page)
   await bascule(() => page.getByTestId('selecteur-style').selectOption(AUTRE_DIRECTION), 'le style')
 
@@ -249,13 +263,13 @@ test('cocher une option pose la page là où le modèle le demande', async ({ pa
   await expect.poll(() => dansLaFenetre(page, 'site-blog')).toBe(true)
   // La partie du site tient dans une fenêtre : un simple constat de présence ne prouverait rien.
   // La pose s'arrête à la fin de la partie visée.
-  const ancreDuBlog = ancreDeOption('blog')
-  await expect.poll(() => ecartALaVisee(page, ancreDuBlog), { message: `écart à ${ancreDuBlog}` }).toBeLessThan(2)
+  const endroitDuBlog = endroitDeOption('blog')
+  await expect.poll(() => ecartALaVisee(page, endroitDuBlog), { message: `écart à ${endroitDuBlog}` }).toBeLessThan(2)
 
   // Attente franche au delà de la suspension. Un sondage se contente de sa fin de transition et
   // ne verrait pas le demi-tour d'après.
   await page.waitForTimeout(SUSPENSION_MS + 400)
-  expect(await ecartALaVisee(page, ancreDuBlog), `écart à ${ancreDuBlog}`).toBeLessThan(2)
+  expect(await ecartALaVisee(page, endroitDuBlog), `écart à ${endroitDuBlog}`).toBeLessThan(2)
 })
 
 test('cocher un contrôle technique amène le rapport', async ({ page }) => {

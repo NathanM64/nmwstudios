@@ -11,7 +11,7 @@ import { JamaisInclus } from '@/components/config/JamaisInclus'
 import type { Configuration } from '@/lib/config/devis'
 import { decoder, encoder } from '@/lib/config/url'
 import { GROUPES, type GroupeId } from '@/lib/config/catalogue'
-import { ANCRE_PAR_GROUPE } from '@/lib/config/scenes'
+import { endroitDuGroupe } from '@/lib/config/endroits'
 import type { Cible } from '@/lib/config/defilement'
 import { DOMAINE_OUVERTURE, type DomaineId } from '@/lib/config/domaines'
 import { STYLE_DEFAUT, type StyleId } from '@/lib/config/styles'
@@ -21,7 +21,7 @@ export const CONFIG_DEPART: Configuration = { essentiel: 1 }
 
 export function Configurateur() {
   const [config, setConfig] = useState<Configuration>(CONFIG_DEPART)
-  const [cible, setCible] = useState<Cible>({ ancre: 'site-haut', progression: 0 })
+  const [cible, setCible] = useState<Cible>({ endroit: 'site-haut', progression: 0 })
   // Métier et direction de style ne vivent pas dans l'URL : ils ne changent ni le prix ni le devis.
   const [domaine, setDomaine] = useState<DomaineId>(DOMAINE_OUVERTURE)
   const [style, setStyle] = useState<StyleId>(STYLE_DEFAUT)
@@ -31,14 +31,14 @@ export function Configurateur() {
   const [copie, setCopie] = useState<'succes' | 'echec' | null>(null)
   const [recapVisible, setRecapVisible] = useState(false)
 
-  // Lire un groupe, c'est parcourir la distance qui sépare son ancre de celle du groupe d'après.
+  // Lire un groupe, c'est parcourir la distance de son endroit à celui du groupe d'après.
   // Le dernier groupe n'a pas de suite : sa cible se pose, elle n'interpole rien.
   const surLecture = useCallback(({ groupe, progression }: { groupe: GroupeId; progression: number }) => {
     const rang = GROUPES.findIndex((g) => g.id === groupe)
     const suivant = GROUPES[rang + 1]
     setCible({
-      ancre: ANCRE_PAR_GROUPE[groupe],
-      vers: suivant ? ANCRE_PAR_GROUPE[suivant.id] : undefined,
+      endroit: endroitDuGroupe(groupe),
+      vers: suivant ? endroitDuGroupe(suivant.id) : undefined,
       progression,
     })
   }, [])

@@ -1,7 +1,8 @@
 import { expect, test } from '@playwright/test'
 import { OPTIONS, SOCLE_ID } from '../../lib/config/catalogue'
 import { calculer, formaterEuros } from '../../lib/config/devis'
-import { SCENES, sceneDeOption } from '../../lib/config/scenes'
+import { SCENES } from '../../lib/config/scenes'
+import { sceneDeOption } from '../../lib/config/endroits'
 import { SUSPENSION_MS } from '../../components/config/PanneauOptions'
 import { amenerLaPartie, partieAuHautDeLaFenetre } from './fenetre'
 
