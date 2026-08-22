@@ -45,9 +45,11 @@ describe('table des endroits', () => {
     }
   })
 
-  it('rattache chaque endroit à une partie déclarée', () => {
+  it('rattache chaque endroit à une partie déclarée, qui porte un libellé', () => {
     const parties = new Set(SCENES.map((s) => s.id))
     for (const endroit of ENDROITS) expect(parties.has(endroit.partie), endroit.id).toBe(true)
+    // Le document titre chaque partie par son libellé : vide, l'en-tête sort sans nom.
+    expect(SCENES.every((s) => s.libelle)).toBe(true)
   })
 
   it('ne déclare pas deux fois le même identifiant', () => {

@@ -123,7 +123,7 @@ export const SceneDeroule = memo(function SceneDeroule({ config }: { config: Con
               ) : (
                 <div
                   data-testid={`deroule-${rangee.id}`}
-                  // Construction et livraison sont du socle : elles ne se vendent pas.
+                  // Cadrage et formation se vendent ; la construction est du socle.
                   data-endroit={
                     rangee.id === 'cadrage' || rangee.id === 'formation' ? `deroule-${rangee.id}` : undefined
                   }
