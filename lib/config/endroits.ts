@@ -62,18 +62,17 @@ const TABLE_BRUTE = [
 export type EndroitId = (typeof TABLE_BRUTE)[number]['id']
 
 // `satisfies` ne change pas le type inféré : un champ optionnel absent sort de l'union et sa
-// lecture échoue ailleurs. `Etendre` le réintroduit sans élargir l'id littéral.
-type Etendre<T> = { [K in keyof T]: T[K] extends Endroit ? T[K] & Endroit : T[K] }
-export const ENDROITS: Etendre<typeof TABLE_BRUTE> = TABLE_BRUTE
+// lecture échoue ailleurs. Cette annotation le réintroduit sans élargir les id en `string`.
+export const ENDROITS: readonly (Endroit & { id: EndroitId })[] = TABLE_BRUTE
 
-const PAR_ID = new Map(ENDROITS.map((e) => [e.id as EndroitId, e]))
-const RANG = new Map(ENDROITS.map((e, i) => [e.id as EndroitId, i]))
-const VISEUR = new Map<string, EndroitId>(ENDROITS.flatMap((e) => e.sert.map((o) => [o, e.id as EndroitId])))
+const PAR_ID = new Map(ENDROITS.map((e) => [e.id, e]))
+const RANG = new Map(ENDROITS.map((e, i) => [e.id, i]))
+const VISEUR = new Map<string, EndroitId>(ENDROITS.flatMap((e) => e.sert.map((o) => [o, e.id])))
 const PAR_GROUPE = new Map<GroupeId, EndroitId>(
-  ENDROITS.flatMap((e) => (e.teteDeGroupe ?? []).map((g) => [g as GroupeId, e.id as EndroitId]))
+  ENDROITS.flatMap((e) => (e.teteDeGroupe ?? []).map((g) => [g, e.id]))
 )
 
-// `EndroitId` étant dérivée de `ENDROITS`, tout endroit est ici : pas de repli à prévoir.
+// `EndroitId` étant dérivée de `TABLE_BRUTE`, tout endroit est ici : pas de repli à prévoir.
 export function partieDeEndroit(id: EndroitId): SceneId {
   return PAR_ID.get(id)!.partie
 }

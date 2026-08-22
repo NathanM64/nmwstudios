@@ -52,6 +52,8 @@ describe('table des endroits', () => {
 
   it('ne déclare pas deux fois le même identifiant', () => {
     expect(new Set(ENDROITS.map((e) => e.id)).size).toBe(ENDROITS.length)
+    // Les deux quantités ci-dessus bougent ensemble : une entrée perdue s'y noierait.
+    expect(ENDROITS).toHaveLength(24)
   })
 
   it('donne à chacun des neuf groupes un endroit permanent', () => {
@@ -94,6 +96,17 @@ describe('table des endroits', () => {
       expect(partieDeEndroit(repli), endroit.id).toBe(endroit.partie)
       expect(ENDROITS.find((e) => e.id === repli)!.permanent, endroit.id).toBe(true)
       if (endroit.permanent) expect(repli, endroit.id).toBe(endroit.id)
+    }
+  })
+
+  it('replie sur le permanent le plus proche, jamais un plus lointain', () => {
+    // Un repli trop lointain passerait le filet ci-dessus : lui seul vérifie la proximité.
+    const rang = new Map(ENDROITS.map((e, i) => [e.id, i]))
+    for (const endroit of ENDROITS) {
+      if (endroit.permanent) continue
+      const repli = repliDe(endroit.id)
+      const entre = ENDROITS.slice(rang.get(repli)! + 1, rang.get(endroit.id)!)
+      expect(entre.some((e) => e.partie === endroit.partie && e.permanent), endroit.id).toBe(false)
     }
   })
 
