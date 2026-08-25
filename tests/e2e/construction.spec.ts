@@ -2,7 +2,7 @@ import { expect, test } from '@playwright/test'
 
 test('cocher une option anime seulement l’élément concerné', async ({ page }) => {
   await page.goto('/configurateur')
-  // Rang dans le document, pas position à l'écran : cocher amène l'ancre de l'option, et toute
+  // Rang dans le document, pas position à l'écran : cocher amène l'endroit de l'option, et toute
   // la page défile sous la fenêtre. Ce qui se juge ici est le reflux, pas ce défilement.
   const rangDuTitre = () =>
     page.getByTestId('site-titre').evaluate((titre) => {

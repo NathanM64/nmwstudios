@@ -282,7 +282,7 @@ test('cocher une option visible garde la scène du site', async ({ page }) => {
   await page.goto('/configurateur')
   await page.getByRole('checkbox', { name: 'Un blog' }).check()
   await expect(page.getByTestId('site-blog')).toBeVisible()
-  // La page vise l'ancre de l'option, pas la tête de sa partie : `toBeVisible` est vrai en
+  // La page vise l'endroit de l'option, pas la tête de sa partie : `toBeVisible` est vrai en
   // permanence, les trois parties étant montées, c'est la partie qui doit rester dans la fenêtre.
   await expect.poll(() => dansLaFenetre(page, 'partie-site')).toBe(true)
 })

@@ -33,7 +33,7 @@ describe('table des endroits', () => {
   })
 
   it('exige un motif dès qu’un endroit sert plusieurs options', () => {
-    // C'est le défaut du lot A : huit options visaient une ancre sans que rien ne le déclare.
+    // Un endroit qui sert plusieurs options doit déclarer le motif de ce partage.
     for (const endroit of ENDROITS) {
       if (endroit.sert.length > 1) expect(endroit.partage, endroit.id).toBeTruthy()
     }
