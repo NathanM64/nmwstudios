@@ -54,7 +54,7 @@ const TABLE_BRUTE = [
   { id: 'deroule-mensuel', partie: 'deroule', permanent: true,
     sert: ['sans-suivi', 'heberg', 'essentiel', 'serenite', 'partenaire'],
     teteDeGroupe: ['recurrent'],
-    partage: 'les cinq niveaux d’une même chose, qu’un client compare' },
+    partage: 'les cinq niveaux d’une même chose, qu’un client compare ; partage définitif, rien ne le défera' },
 ] as const satisfies readonly Endroit[]
 
 /** Dérivée de la table, jamais écrite à la main : un endroit oublié ne peut plus se glisser
@@ -88,6 +88,7 @@ export function endroitDeOption(id: string): EndroitId {
   return VISEUR.get(id) ?? 'site-haut'
 }
 
+// Le filet unitaire exige un endroit permanent pour chacun des neuf groupes : aucun ne manque ici.
 export function endroitDuGroupe(groupe: GroupeId): EndroitId {
   return PAR_GROUPE.get(groupe)!
 }
