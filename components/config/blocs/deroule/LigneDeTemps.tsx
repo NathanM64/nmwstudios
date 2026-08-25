@@ -3,6 +3,14 @@
 import { OPTIONS } from '@/lib/config/catalogue'
 import type { Configuration } from '@/lib/config/devis'
 import { calculerDeroule } from '@/lib/config/duree'
+import type { EndroitId } from '@/lib/config/endroits'
+
+/** Endroit des rangées qui se vendent ; la construction est du socle et n'en porte aucun.
+ *  Écrits et non concaténés : un identifiant fabriqué au gabarit échappe au contrôle de type. */
+const ENDROIT_DE_RANGEE: Record<string, EndroitId | undefined> = {
+  cadrage: 'deroule-cadrage',
+  formation: 'deroule-formation',
+}
 
 /** Pire cas réel du catalogue, express décoché : échelle fixe de l'axe, sans quoi une option
  *  lourde ne changerait que sa part du total, jamais sa largeur en pixels. */
@@ -106,10 +114,7 @@ export function LigneDeTemps({ config }: { config: Configuration }) {
               ) : (
                 <div
                   data-testid={`deroule-${rangee.id}`}
-                  // Cadrage et formation se vendent ; la construction est du socle.
-                  data-endroit={
-                    rangee.id === 'cadrage' || rangee.id === 'formation' ? `deroule-${rangee.id}` : undefined
-                  }
+                  data-endroit={ENDROIT_DE_RANGEE[rangee.id]}
                   className={`absolute top-[32%] bottom-[32%] ${rangee.seconde ? 'animate-allonge m-barre-2' : 'm-barre'}`}
                   style={{ left: part(rangee.depart), width: part(rangee.duree) }}
                 />

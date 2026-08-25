@@ -3,6 +3,7 @@
 import { memo, useEffect, useRef, useState, type ComponentType } from 'react'
 import type { Configuration } from '@/lib/config/devis'
 import { DOMAINE_REPLI, type DomaineId } from '@/lib/config/domaines'
+import type { EndroitId } from '@/lib/config/endroits'
 import { Serp } from '@/components/config/blocs/preuve/Serp'
 import { FicheLocale } from '@/components/config/blocs/preuve/FicheLocale'
 import { Cascade } from '@/components/config/blocs/preuve/Cascade'
@@ -44,7 +45,7 @@ function useCompteur(cible: number): { valeur: number; anime: boolean } {
   return { valeur, anime: valeur !== cible }
 }
 
-const CONTROLES = [
+export const CONTROLES = [
   { id: 'seo', nom: 'Vous apparaissez dans les résultats' },
   { id: 'seo-local', nom: 'Fiche locale et horaires' },
   { id: 'perf', nom: 'Vitesse de chargement' },
@@ -55,9 +56,11 @@ const CONTROLES = [
   { id: 'domaine', nom: 'Adresse et certificat' },
 ] as const
 
-/** Détail dessiné par chaque contrôle retenu. Le lot 4 remplace ces huit blocs un par un, sans
- *  toucher à la boucle qui les monte. */
-const DETAILS: Record<string, ComponentType<{ config: Configuration; domaine: DomaineId }>> = {
+type ControleId = (typeof CONTROLES)[number]['id']
+
+// Clavée sur les identifiants de `CONTROLES` : une entrée en trop ou en moins est une erreur
+// de compilation, là où `Record<string, …>` laissait passer les deux.
+const DETAILS: Record<ControleId, ComponentType<{ config: Configuration; domaine: DomaineId }>> = {
   seo: Serp,
   'seo-local': FicheLocale,
   perf: Cascade,
@@ -102,11 +105,14 @@ export const ScenePreuve = memo(function ScenePreuve({
         {CONTROLES.map((controle) => {
           const retenu = (config[controle.id] ?? 0) > 0
           const Detail = DETAILS[controle.id]
+          // `satisfies` remet sous contrôle de type un identifiant que le gabarit fabrique :
+          // renommer un contrôle détache sinon l'endroit de la table, en silence.
+          const endroit = `preuve-ligne-${controle.id}` satisfies EndroitId
           return (
             <div
               key={controle.id}
               data-testid="preuve-ligne"
-              data-endroit={`preuve-ligne-${controle.id}`}
+              data-endroit={endroit}
               data-retenu={retenu ? 'oui' : 'non'}
               // opacity-70 : la ligne reste en retrait sans passer sous 4,5:1, modélisé sur les
               // trois directions par tests/unit/configurateur-contraste.test.ts.
