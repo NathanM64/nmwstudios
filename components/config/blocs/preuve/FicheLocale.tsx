@@ -1,5 +1,9 @@
 'use client'
 
 export function FicheLocale() {
-  return <p className="m-legende">Bègles · horaires d’ouverture renseignés</p>
+  return (
+    <p data-testid="preuve-seo-local" className="m-legende">
+      Bègles · horaires d’ouverture renseignés
+    </p>
+  )
 }
