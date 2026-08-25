@@ -29,14 +29,25 @@ async function ecartDuReleve(page: Page): Promise<number> {
 }
 
 /** Décalages réels, tels que la mise en page les donne, indépendamment de ce que le document
- *  en a relevé. Sert à constater qu'une bascule a bien déplacé quelque chose. */
-async function offsetsReels(page: Page): Promise<string> {
+ *  en a relevé. Sert à constater qu'une bascule a bien déplacé quelque chose, et à lire
+ *  l'ordre du document.
+ *
+ *  Trié sur `top` puis `left` : quatre endroits sont frères sur une même rangée et partagent
+ *  leur `top`, et un tri sur le seul `top` laisserait toute permutation des quatre passer. */
+async function offsetsReels(page: Page): Promise<{ id: string; top: number; left: number }[]> {
   return page.getByTestId('rouleau').evaluate((rouleau) => {
     const echelle = parseFloat(getComputedStyle(rouleau.parentElement!).scale) || 1
-    const haut = rouleau.getBoundingClientRect().top
+    const origine = rouleau.getBoundingClientRect()
     return [...rouleau.querySelectorAll<HTMLElement>('[data-endroit]')]
-      .map((el) => `${el.dataset.endroit}:${Math.round((el.getBoundingClientRect().top - haut) / echelle)}`)
-      .join(' ')
+      .map((el) => {
+        const r = el.getBoundingClientRect()
+        return {
+          id: el.dataset.endroit!,
+          top: Math.round((r.top - origine.top) / echelle),
+          left: Math.round((r.left - origine.left) / echelle),
+        }
+      })
+      .sort((a, b) => a.top - b.top || a.left - b.left)
   })
 }
 
@@ -198,10 +209,10 @@ test('les endroits sont déclarés dans l’ordre du document', async ({ page })
   expect([...Object.keys(releve)].sort(), 'tous les endroits sont rendus sous cette charge').toEqual(
     [...ids].sort()
   )
-  const decalages = ids.map((id) => releve[id])
-  expect(decalages, `décalages dans l’ordre de ENDROITS : ${ids.join(' ')}`).toEqual(
-    [...decalages].sort((x, y) => x - y)
-  )
+  // Suite d'identifiants et non suite de décalages : deux endroits à égalité de `top` se
+  // départagent sur `left`, alors qu'un tri de nombres égaux accepte les deux ordres.
+  const ordre = (await offsetsReels(page)).map((e) => e.id)
+  expect(ordre, 'ordre du document, de haut en bas puis de gauche à droite').toEqual(ids)
 })
 
 test('tout endroit permanent est rendu sur la configuration de départ', async ({ page }) => {
@@ -234,7 +245,7 @@ test('le relevé des endroits suit un changement de style, de métier et de lang
   const bascule = async (agir: () => Promise<unknown>, quoi: string) => {
     const avant = await offsetsReels(page)
     await agir()
-    await expect.poll(() => offsetsReels(page), { message: `${quoi} n’a déplacé aucun endroit` }).not.toBe(avant)
+    await expect.poll(() => offsetsReels(page), { message: `${quoi} n’a déplacé aucun endroit` }).not.toEqual(avant)
     await expect.poll(() => ecartDuReleve(page), { message: `relevé périmé après ${quoi}` }).toBeLessThan(2)
   }
 
