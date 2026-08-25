@@ -13,8 +13,7 @@ import { Formulaire } from '@/components/config/blocs/site/Formulaire'
 import { Newsletter } from '@/components/config/blocs/site/Newsletter'
 import { Rdv } from '@/components/config/blocs/site/Rdv'
 import { Paiement } from '@/components/config/blocs/site/Paiement'
-import { Redaction } from '@/components/config/blocs/site/Redaction'
-import { Reprise } from '@/components/config/blocs/site/Reprise'
+import { Textes } from '@/components/config/blocs/site/Textes'
 import { Actualites } from '@/components/config/blocs/site/Actualites'
 
 export const SceneSite = memo(function SceneSite({
@@ -27,8 +26,6 @@ export const SceneSite = memo(function SceneSite({
   geste: Geste
 }) {
   const langues = config.langue ?? 0
-  const redaction = config.redaction ?? 0
-  const reprise = config.reprise ?? 0
   const [langue, setLangue] = useState<Langue>('fr')
 
   // Une langue de plus par unité achetée. La langue affichée est retenue seulement si elle
@@ -73,13 +70,7 @@ export const SceneSite = memo(function SceneSite({
               <Paiement config={config} langue={active} />
             </div>
 
-            {/* Rédaction et reprise se cumulent : aucune ne dépend de l'autre pour s'afficher. */}
-            {(redaction > 0 || reprise > 0) && (
-              <div className="m-air-serre flex shrink-0 flex-col">
-                <Redaction config={config} domaine={domaine} langue={active} />
-                <Reprise config={config} domaine={domaine} langue={active} />
-              </div>
-            )}
+            <Textes config={config} domaine={domaine} langue={active} />
 
             <Actualites config={config} domaine={domaine} langue={active} />
           </div>
