@@ -1,31 +1,16 @@
 'use client'
 
-import { Fragment, memo, useEffect, useRef, useState } from 'react'
+import { memo, useEffect, useRef, useState, type ComponentType } from 'react'
 import type { Configuration } from '@/lib/config/devis'
-import { contrastRatio, parseColor } from '@/lib/color/contrast'
-import { lireChargement } from '@/lib/config/mesure'
-import { DOMAINE_REPLI, editorialDe, type DomaineId } from '@/lib/config/domaines'
-
-/** Contraste réellement rendu : lu sur le DOM, jamais écrit en dur. */
-function useContrasteMesure(): number | null {
-  const [ratio, setRatio] = useState<number | null>(null)
-
-  useEffect(() => {
-    const mesurer = () => {
-      const styles = getComputedStyle(document.documentElement)
-      const texte = parseColor(styles.getPropertyValue('--color-foreground').trim())
-      const fond = parseColor(styles.getPropertyValue('--color-canvas').trim())
-      setRatio(contrastRatio(texte.rgb, fond.rgb))
-    }
-    mesurer()
-    // Le thème se change depuis cet écran : sans observation, le chiffre affiché ment.
-    const observateur = new MutationObserver(mesurer)
-    observateur.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] })
-    return () => observateur.disconnect()
-  }, [])
-
-  return ratio
-}
+import { DOMAINE_REPLI, type DomaineId } from '@/lib/config/domaines'
+import { Serp } from '@/components/config/blocs/preuve/Serp'
+import { FicheLocale } from '@/components/config/blocs/preuve/FicheLocale'
+import { Cascade } from '@/components/config/blocs/preuve/Cascade'
+import { Contraste } from '@/components/config/blocs/preuve/Contraste'
+import { Banniere } from '@/components/config/blocs/preuve/Banniere'
+import { MentionsLegales } from '@/components/config/blocs/preuve/MentionsLegales'
+import { Redirections } from '@/components/config/blocs/preuve/Redirections'
+import { Domaine } from '@/components/config/blocs/preuve/Domaine'
 
 /** Compteur qui s'incrémente au lieu de sauter. La durée suit l'écart : sans cela, passer de
  *  zéro à huit se lirait aussi vite qu'un plus un. */
@@ -70,6 +55,19 @@ const CONTROLES = [
   { id: 'domaine', nom: 'Adresse et certificat' },
 ] as const
 
+/** Détail dessiné par chaque contrôle retenu. Le lot 4 remplace ces huit blocs un par un, sans
+ *  toucher à la boucle qui les monte. */
+const DETAILS: Record<string, ComponentType<{ config: Configuration; domaine: DomaineId }>> = {
+  seo: Serp,
+  'seo-local': FicheLocale,
+  perf: Cascade,
+  a11y: Contraste,
+  rgpd: Banniere,
+  legal: MentionsLegales,
+  migration: Redirections,
+  domaine: Domaine,
+}
+
 export const ScenePreuve = memo(function ScenePreuve({
   config,
   domaine = DOMAINE_REPLI,
@@ -77,16 +75,6 @@ export const ScenePreuve = memo(function ScenePreuve({
   config: Configuration
   domaine?: DomaineId
 }) {
-  // Cette scène n'a pas de sélecteur de langue : elle reste en français, comme le reste de ses libellés.
-  const recherche = editorialDe(domaine, 'fr').recherche
-  const ratio = useContrasteMesure()
-  const [vitesse, setVitesse] = useState<number | null>(null)
-
-  useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect -- mesure ponctuelle au montage, la seule vraie source de la scène.
-    setVitesse(lireChargement(performance.getEntriesByType('navigation')))
-  }, [])
-
   const retenus = CONTROLES.filter((controle) => (config[controle.id] ?? 0) > 0).length
   const compteur = useCompteur(retenus)
 
@@ -113,6 +101,7 @@ export const ScenePreuve = memo(function ScenePreuve({
       <div className="m-air-serre flex flex-1 flex-col">
         {CONTROLES.map((controle) => {
           const retenu = (config[controle.id] ?? 0) > 0
+          const Detail = DETAILS[controle.id]
           return (
             <div
               key={controle.id}
@@ -128,74 +117,7 @@ export const ScenePreuve = memo(function ScenePreuve({
                 <p className="m-corps truncate">{controle.nom}</p>
               </div>
 
-              {retenu && controle.id === 'seo' && (
-                <div data-testid="preuve-serp" className="animate-construit flex flex-col">
-                  <p className="m-mono m-sourd">votre-nom.fr</p>
-                  <p className="m-sous-titre m-accent truncate">{recherche.titre}</p>
-                  <p className="m-legende">{recherche.description}</p>
-                </div>
-              )}
-
-              {retenu && controle.id === 'seo-local' && (
-                <p className="m-legende">Bègles · horaires d’ouverture renseignés</p>
-              )}
-
-              {retenu && controle.id === 'perf' && (
-                <>
-                  {/* Artefact visuel, aucune requête simulée : la mesure vient du texte en dessous. */}
-                  <div data-testid="preuve-cascade" className="animate-construit m-cascade flex flex-col gap-0.5">
-                    {[100, 65, 40, 20].map((largeur, i) => (
-                      <span key={i} className="m-barre h-0.5" style={{ width: `${largeur}%` }} />
-                    ))}
-                  </div>
-                  <p data-testid="preuve-vitesse" className="m-corps m-accent truncate">
-                    {vitesse === null
-                      ? 'mesure indisponible'
-                      : `mesuré sur ce configurateur, pas sur votre futur site : ${vitesse.toFixed(2).replace('.', ',')} s`}
-                  </p>
-                </>
-              )}
-
-              {retenu && controle.id === 'a11y' && ratio !== null && (
-                <p data-testid="apercu-a11y" className="m-legende m-accent truncate">
-                  mesuré sur ce configurateur, pas sur votre futur site : {ratio.toFixed(2).replace('.', ',')}:1 ·{' '}
-                  {ratio >= 4.5 ? 'conforme AA' : 'sous le seuil AA'}
-                </p>
-              )}
-
-              {retenu && controle.id === 'rgpd' && (
-                <p data-testid="preuve-rgpd" className="m-cadre m-legende w-fit px-1">
-                  Bannière de consentement aux cookies
-                </p>
-              )}
-
-              {retenu && controle.id === 'legal' && (
-                <p data-testid="preuve-legal" className="m-legende truncate">
-                  Pied de page · Mentions légales
-                </p>
-              )}
-
-              {retenu && controle.id === 'migration' && (
-                // Une vraie table : deux colonnes et un code de réponse, pas deux lignes de texte.
-                <div data-testid="preuve-redirections" className="m-table font-mono">
-                  {[
-                    ['/ancien-site/accueil', '/'],
-                    ['/ancien-site/contact', '/#contact'],
-                  ].map(([avant, apres]) => (
-                    <Fragment key={avant}>
-                      <span className="m-legende">{avant}</span>
-                      <span className="m-legende m-accent">{apres}</span>
-                      <span className="m-jeton m-legende justify-self-start px-1">301</span>
-                    </Fragment>
-                  ))}
-                </div>
-              )}
-
-              {retenu && controle.id === 'domaine' && (
-                <p data-testid="preuve-domaine" className="m-legende truncate">
-                  votre-nom.fr · certificat valide
-                </p>
-              )}
+              {retenu && <Detail config={config} domaine={domaine} />}
             </div>
           )
         })}

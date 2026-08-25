@@ -1,5 +1,9 @@
 import { expect, test } from '@playwright/test'
 import { pireBandeVide } from './vide'
+import { hydrate } from './fenetre'
+
+const TOUT_COCHE =
+  '/configurateur?pages=4&langue=3&redaction=15&reprise&photos&visuels&blog&article=10&membre&formulaire&rdv&newsletter&paiement&seo&seo-local&perf&a11y&rgpd&legal&migration&domaine&cadrage&formation&express&partenaire'
 
 test('le compteur de contrôles domine la scène', async ({ page }) => {
   await page.goto('/configurateur?seo&perf')
@@ -26,4 +30,13 @@ test('la scène de la preuve remplit son cadre, sans bande vide notable', async 
   await page.goto('/configurateur?seo&perf&rgpd')
   const vide = await page.getByTestId('partie-preuve').evaluate(pireBandeVide)
   expect(vide).toBeLessThan(0.25)
+})
+
+test('les huit contrôles retenus rendent chacun leur détail', async ({ page }) => {
+  await page.goto(TOUT_COCHE)
+  await hydrate(page)
+  for (const repere of ['preuve-serp', 'preuve-cascade', 'preuve-rgpd', 'preuve-legal',
+                        'preuve-redirections', 'preuve-domaine', 'apercu-a11y', 'preuve-vitesse']) {
+    await expect(page.getByTestId(repere), `${repere} manque`).toHaveCount(1)
+  }
 })
