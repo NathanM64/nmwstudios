@@ -45,47 +45,47 @@ export const SceneSite = memo(function SceneSite({
         </div>
       )}
       <div className="m-air m-marge flex min-w-0 flex-1 flex-col">
-      <Navigation
-        config={config}
-        domaine={domaine}
-        langue={active}
-        offertes={offertes}
-        onLangue={setLangue}
-        geste={geste}
-      />
+        <Navigation
+          config={config}
+          domaine={domaine}
+          langue={active}
+          offertes={offertes}
+          onLangue={setLangue}
+          geste={geste}
+        />
 
-      <Hero domaine={domaine} langue={active} geste={geste} />
+        <Hero domaine={domaine} langue={active} geste={geste} />
 
-      <div className="m-air flex min-h-0 flex-1 flex-col">
-        {/* Bande haute : l'aplat prend la hauteur libre, les services prennent la leur.
-            Aucun centrage, donc aucune bande vide, et rien ne se comprime sous son contenu. */}
-        <Photo config={config} domaine={domaine} langue={active} />
+        <div className="m-air flex min-h-0 flex-1 flex-col">
+          {/* Bande haute : l'aplat prend la hauteur libre, les services prennent la leur.
+              Aucun centrage, donc aucune bande vide, et rien ne se comprime sous son contenu. */}
+          <Photo config={config} domaine={domaine} langue={active} />
 
-        <div className="m-air flex shrink-0 flex-col">
-        <Services domaine={domaine} langue={active} />
+          <div className="m-air flex shrink-0 flex-col">
+            <Services domaine={domaine} langue={active} />
 
-        {/* Bande de services achetés : chaque carte prend sa part de la largeur, ou toute la
-            ligne si ses voisines sont absentes. Conditions indépendantes, aucune cascade. */}
-        <div data-testid="site-bande" className="m-air flex shrink-0 flex-wrap items-stretch">
-          <Formulaire config={config} domaine={domaine} langue={active} />
-          <Newsletter config={config} langue={active} />
-          <Rdv config={config} langue={active} />
-          <Paiement config={config} langue={active} />
-        </div>
+            {/* Bande de services achetés : chaque carte prend sa part de la largeur, ou toute la
+                ligne si ses voisines sont absentes. Conditions indépendantes, aucune cascade. */}
+            <div data-testid="site-bande" className="m-air flex shrink-0 flex-wrap items-stretch">
+              <Formulaire config={config} domaine={domaine} langue={active} />
+              <Newsletter config={config} langue={active} />
+              <Rdv config={config} langue={active} />
+              <Paiement config={config} langue={active} />
+            </div>
 
-        {/* Rédaction et reprise se cumulent : aucune ne dépend de l'autre pour s'afficher. */}
-        {(redaction > 0 || reprise > 0) && (
-          <div className="m-air-serre flex shrink-0 flex-col">
-            <Redaction config={config} domaine={domaine} langue={active} />
-            <Reprise config={config} domaine={domaine} langue={active} />
+            {/* Rédaction et reprise se cumulent : aucune ne dépend de l'autre pour s'afficher. */}
+            {(redaction > 0 || reprise > 0) && (
+              <div className="m-air-serre flex shrink-0 flex-col">
+                <Redaction config={config} domaine={domaine} langue={active} />
+                <Reprise config={config} domaine={domaine} langue={active} />
+              </div>
+            )}
+
+            <Actualites config={config} domaine={domaine} langue={active} />
           </div>
-        )}
 
-        <Actualites config={config} domaine={domaine} langue={active} />
+          {geste === 'bande' && <div data-testid="geste-bande" className="m-bande shrink-0" />}
         </div>
-
-        {geste === 'bande' && <div data-testid="geste-bande" className="m-bande shrink-0" />}
-      </div>
       </div>
     </div>
   )
