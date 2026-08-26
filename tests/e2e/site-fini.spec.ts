@@ -16,7 +16,12 @@ test('la configuration de départ ne porte aucun emplacement d’image vide', as
   const cellules = await page.getByTestId('site-bande-images').evaluate((bande) =>
     [...bande.children].map((cellule) => {
       const boite = cellule.getBoundingClientRect()
-      const hauts = [...cellule.children].map((n) => n.getBoundingClientRect().top)
+      // Un enfant masqué (display: none) rend un rectangle nul : sans filtre, son `top` à 0
+      // fausse le minimum et fait passer le filet au vert par construction.
+      const hauts = [...cellule.children]
+        .map((n) => n.getBoundingClientRect())
+        .filter((r) => r.height > 0)
+        .map((r) => r.top)
       return {
         repere: (cellule as HTMLElement).dataset.testid ?? cellule.className,
         servie: getComputedStyle(cellule).backgroundImage.includes('/maquette/'),
