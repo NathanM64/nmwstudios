@@ -14,7 +14,6 @@ import { Newsletter } from '@/components/config/blocs/site/Newsletter'
 import { Rdv } from '@/components/config/blocs/site/Rdv'
 import { Paiement } from '@/components/config/blocs/site/Paiement'
 import { Redaction } from '@/components/config/blocs/site/Redaction'
-import { Reprise } from '@/components/config/blocs/site/Reprise'
 import { Actualites } from '@/components/config/blocs/site/Actualites'
 
 export const SceneSite = memo(function SceneSite({
@@ -60,7 +59,7 @@ export const SceneSite = memo(function SceneSite({
           <Photo config={config} domaine={domaine} langue={active} />
 
           <div className="m-air flex shrink-0 flex-col">
-            <Services domaine={domaine} langue={active} />
+            <Services config={config} domaine={domaine} langue={active} />
 
             {/* Bande de services achetés : chaque carte prend sa part de la largeur, ou toute la
                 ligne si ses voisines sont absentes. Conditions indépendantes, aucune cascade. */}
@@ -72,7 +71,6 @@ export const SceneSite = memo(function SceneSite({
             </div>
 
             <Redaction config={config} domaine={domaine} langue={active} />
-            <Reprise config={config} domaine={domaine} langue={active} />
 
             <Actualites config={config} domaine={domaine} langue={active} />
           </div>

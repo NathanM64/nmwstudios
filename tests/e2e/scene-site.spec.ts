@@ -54,6 +54,29 @@ test('acheter plus de rédaction que le site n’a de pages ne nomme rien de plu
   await expect(page.getByTestId('site-page-fournie')).toHaveCount(0)
 })
 
+test('sans reprise, les trois textes coulent en un pavé sans titre', async ({ page }) => {
+  await expect(page.getByTestId('site-services-pave')).toBeVisible()
+  await expect(page.getByTestId('site-service')).toHaveCount(0)
+})
+
+test('la reprise rend leurs intertitres et leur numérotation aux services', async ({ page }) => {
+  await page.getByRole('checkbox', { name: 'Je restructure vos textes existants', exact: true }).check()
+  await expect(page.getByTestId('site-service')).toHaveCount(3)
+  await expect(page.getByTestId('site-services-pave')).toHaveCount(0)
+})
+
+test('la reprise n’écrit pas un mot de plus que le pavé', async ({ page }) => {
+  // Le catalogue vend « le fond reste le vôtre » : les deux états portent les mêmes textes,
+  // et un delta de volume ferait de cette promesse un mensonge.
+  const mots = (t: string) => t.replace(/\s+/g, ' ').trim()
+  const avant = mots(await page.getByTestId('site-services-pave').innerText())
+  await page.getByRole('checkbox', { name: 'Je restructure vos textes existants', exact: true }).check()
+  const textes = await page.getByTestId('site-service').evaluateAll((n) =>
+    n.map((e) => e.querySelectorAll('p')[1].textContent ?? '')
+  )
+  expect(mots(textes.join(' '))).toBe(avant)
+})
+
 // Tout le texte, pas la seule navigation : titres, blocs repris, créneaux, newsletter,
 // articles et étiquettes du cadre image doivent suivre le sélecteur.
 // Les chaînes viennent du domaine par défaut, pas d'un littéral : une relecture des textes
@@ -61,7 +84,7 @@ test('acheter plus de rédaction que le site n’a de pages ne nomme rien de plu
 const attendu = (langue: Langue) => {
   const e = EDITORIAL[DOMAINE_OUVERTURE][langue]
   const h = HABILLAGE[langue]
-  return [e.pages[0], e.titre, h.fournies, h.redigees, e.blocsRepris[0], h.actualites, e.articles[0].titre,
+  return [e.pages[0], e.titre, h.fournies, h.redigees, e.blocsRepris[2], h.actualites, e.articles[0].titre,
     h.photo, h.visuel, h.pieceJointe, h.reserver, h.creneaux[0], h.inscrire, h.regler, h.connexion]
 }
 
@@ -83,7 +106,7 @@ test('le sélecteur de langue bascule tout le texte de la maquette', async ({ pa
 
   const propresAuFrancais = [
     EDITORIAL[DOMAINE_OUVERTURE].fr.titre,
-    EDITORIAL[DOMAINE_OUVERTURE].fr.blocsRepris[0],
+    EDITORIAL[DOMAINE_OUVERTURE].fr.blocsRepris[2],
     HABILLAGE.fr.reserver,
     HABILLAGE.fr.actualites,
   ]

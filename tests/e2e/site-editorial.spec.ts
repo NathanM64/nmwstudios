@@ -6,7 +6,7 @@ test('le socle seul rend une page complète, sans aucune option', async ({ page 
   for (const repere of ['site-enseigne', 'site-titre', 'site-corps', 'site-services', 'site-formulaire', 'site-filet']) {
     await expect(page.getByTestId(repere)).toBeVisible()
   }
-  await expect(page.getByTestId('site-service')).toHaveCount(3)
+  await expect(page.getByTestId('site-services-pave')).toBeVisible()
 })
 
 test('le titre est nettement plus grand que le corps', async ({ page }) => {

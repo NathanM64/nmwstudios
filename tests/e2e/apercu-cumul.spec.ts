@@ -9,7 +9,7 @@ const REPERE_PAR_OPTION: Record<string, (page: Page) => Promise<void>> = {
   blog: (page) => expect(page.getByTestId('site-blog')).toBeVisible(),
   langue: (page) => expect(page.getByTestId('site-langue')).toBeVisible(),
   redaction: (page) => expect(page.getByTestId('site-page-redigee')).not.toHaveCount(0),
-  reprise: (page) => expect(page.getByTestId('site-reprise')).toBeVisible(),
+  reprise: (page) => expect(page.getByTestId('site-service')).toHaveCount(3),
   photos: (page) => expect(page.getByTestId('site-reperes')).toBeVisible(),
   visuels: (page) => expect(page.getByTestId('site-visuels')).toBeVisible(),
   formulaire: (page) => expect(page.getByTestId('site-etapes')).toBeVisible(),

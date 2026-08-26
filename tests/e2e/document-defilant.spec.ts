@@ -225,7 +225,7 @@ test('tout endroit permanent est rendu sur la configuration de départ', async (
 
   const attendus = ENDROITS.filter((e) => e.permanent).map((e) => e.id)
   // Sans ce plancher, une table sans aucun `permanent` ferait passer le filet à vide.
-  expect(attendus, 'cinq pour le site, neuf pour la preuve, deux pour le déroulé').toHaveLength(16)
+  expect(attendus, 'six pour le site, neuf pour la preuve, deux pour le déroulé').toHaveLength(17)
   const manquants = attendus.filter((id) => releve[id] === undefined)
   expect(manquants, 'endroits déclarés permanents mais absents du document').toEqual([])
 })
