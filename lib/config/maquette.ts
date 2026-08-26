@@ -20,6 +20,10 @@ export type Habillage = {
   connexion: string
   fournies: string
   redigees: string
+  etapes: string[]
+  question: string
+  reponse: string
+  fichier: string
 }
 
 export const HABILLAGE: Record<Langue, Habillage> = {
@@ -34,6 +38,10 @@ export const HABILLAGE: Record<Langue, Habillage> = {
     connexion: 'Connexion',
     fournies: 'Pages fournies',
     redigees: 'Pages rédigées',
+    etapes: ['Votre demande', 'Vos coordonnées', 'Validation'],
+    question: 'Souhaitez-vous être rappelé ?',
+    reponse: 'Oui, le matin',
+    fichier: 'plan-du-projet.pdf',
   },
   en: {
     actualites: 'News',
@@ -46,6 +54,10 @@ export const HABILLAGE: Record<Langue, Habillage> = {
     connexion: 'Log in',
     fournies: 'Pages supplied',
     redigees: 'Pages written',
+    etapes: ['Your request', 'Your details', 'Confirmation'],
+    question: 'Would you like a call back?',
+    reponse: 'Yes, in the morning',
+    fichier: 'project-plan.pdf',
   },
   es: {
     actualites: 'Novedades',
@@ -58,6 +70,10 @@ export const HABILLAGE: Record<Langue, Habillage> = {
     connexion: 'Acceder',
     fournies: 'Páginas facilitadas',
     redigees: 'Páginas redactadas',
+    etapes: ['Su solicitud', 'Sus datos', 'Validación'],
+    question: '¿Desea que le llamemos?',
+    reponse: 'Sí, por la mañana',
+    fichier: 'plano-del-proyecto.pdf',
   },
   de: {
     actualites: 'Aktuelles',
@@ -70,5 +86,9 @@ export const HABILLAGE: Record<Langue, Habillage> = {
     connexion: 'Anmelden',
     fournies: 'Gelieferte Seiten',
     redigees: 'Verfasste Seiten',
+    etapes: ['Ihre Anfrage', 'Ihre Daten', 'Bestätigung'],
+    question: 'Möchten Sie zurückgerufen werden?',
+    reponse: 'Ja, vormittags',
+    fichier: 'projektplan.pdf',
   },
 }

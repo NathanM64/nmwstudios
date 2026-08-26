@@ -1,7 +1,9 @@
 import { expect, test } from '@playwright/test'
+import { hydrate } from './fenetre'
 
 test.beforeEach(async ({ page }) => {
   await page.goto('/configurateur')
+  await hydrate(page)
 })
 
 test('le socle montre un formulaire de contact à trois champs', async ({ page }) => {
@@ -9,11 +11,12 @@ test('le socle montre un formulaire de contact à trois champs', async ({ page }
   await expect(page.getByTestId('site-formulaire').getByTestId('site-champ')).toHaveCount(3)
 })
 
-test('le formulaire avancé montre ses étapes et sa pièce jointe', async ({ page }) => {
-  await expect(page.getByTestId('site-etapes')).toHaveCount(0)
+test('le formulaire avancé montre son fil, son champ conditionnel et sa pièce', async ({ page }) => {
+  await expect(page.getByTestId('site-etape')).toHaveCount(0)
   await page.getByRole('checkbox', { name: 'Formulaire avancé', exact: true }).check()
-  await expect(page.getByTestId('site-etapes')).toBeVisible()
-  await expect(page.getByTestId('site-formulaire')).toContainText('Pièce jointe')
+  await expect(page.getByTestId('site-etape')).toHaveCount(3)
+  await expect(page.getByTestId('site-conditionnel')).toBeVisible()
+  await expect(page.getByTestId('site-piece')).toBeVisible()
 })
 
 test('la prise de rendez-vous montre des créneaux et non un simple bouton', async ({ page }) => {

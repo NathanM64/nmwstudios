@@ -86,7 +86,7 @@ const attendu = (langue: Langue) => {
   const e = EDITORIAL[DOMAINE_OUVERTURE][langue]
   const h = HABILLAGE[langue]
   return [e.pages[0], e.titre, h.fournies, h.redigees, e.blocsRepris[0], e.blocsRepris[1],
-    e.blocsRepris[2], e.recherche.description, h.actualites, e.articles[0].titre, h.pieceJointe,
+    e.blocsRepris[2], e.recherche.description, h.actualites, e.articles[0].titre, h.fichier,
     h.reserver, h.creneaux[0], h.inscrire, h.regler, h.connexion]
 }
 

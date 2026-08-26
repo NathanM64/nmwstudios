@@ -26,7 +26,7 @@ const REPERE_PAR_OPTION: Record<string, (page: Page) => Promise<void>> = {
       .toBe(1)
   },
   visuels: (page) => expect(page.getByTestId('site-visuel')).toBeVisible(),
-  formulaire: (page) => expect(page.getByTestId('site-etapes')).toBeVisible(),
+  formulaire: (page) => expect(page.getByTestId('site-etape')).toHaveCount(3),
   rdv: (page) => expect(page.getByTestId('site-rdv')).toBeVisible(),
   newsletter: (page) => expect(page.getByTestId('site-newsletter')).toBeVisible(),
   paiement: (page) => expect(page.getByTestId('site-paiement')).toBeVisible(),

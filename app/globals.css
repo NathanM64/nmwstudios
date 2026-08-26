@@ -413,6 +413,10 @@ body {
   border-radius: var(--m-rayon);
 }
 .m-jeton { background-color: color-mix(in srgb, var(--m-texte) 18%, transparent); border-radius: var(--m-rayon); }
+/* `m-mono` porte l'accent, marginal sur ce fond translucide selon la direction (mesuré jusqu'à
+   3,3:1). Le pas-à-pas du formulaire y loge un texte réel, pas un chiffre isolé : le texte
+   reprend celui de la carte, dont le contraste sur ce fond est large sur les cinq directions. */
+.m-jeton.m-mono { color: var(--m-texte); }
 /* Plancher de largeur : une phase très courte doit rester une barre visible. */
 .m-barre { background-color: var(--m-accent); border-radius: var(--m-rayon); min-width: 4px; }
 .m-barre-2 { background-color: var(--m-accent-2); border-radius: var(--m-rayon); min-width: 4px; }
@@ -505,10 +509,22 @@ body {
   to   { scale: 1 1; }
 }
 
+@keyframes geste {
+  from { opacity: 0; translate: 0 0.35rem; }
+  to   { opacity: 1; translate: 0 0; }
+}
+
 @media (prefers-reduced-motion: no-preference) {
   .animate-construit { animation: construit var(--dur-std) var(--ease-out) both; }
   .animate-glisse { animation: glisse var(--dur-micro) var(--ease-out) both; }
   .animate-allonge { animation: allonge var(--dur-std) var(--ease-out) both; transform-origin: left center; }
+
+  /* Geste séquencé : chaque élément entre à son rang, une seule fois. Hors de ce bloc la règle
+     ne s'applique pas, donc l'état de repos est l'état CSS normal et rien n'est à replier. */
+  .animate-geste {
+    animation: geste var(--dur-std) var(--ease-out) both;
+    animation-delay: calc(var(--geste-rang, 0) * var(--dur-micro));
+  }
 }
 
 /* Une barre déjà posée ne réapparaît pas, elle s'allonge : c'est une transition, pas une

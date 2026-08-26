@@ -4,11 +4,13 @@ import { STYLES, STYLE_DEFAUT } from '../../lib/config/styles'
 import { SCENES } from '../../lib/config/scenes'
 import { amenerLaPartie } from './fenetre'
 
-// `animate-apparait` fait entrer les scènes en fondu : axe lu pendant le fondu mesure une
-// opacité transitoire et rapporte un contraste qui n'existe à aucun moment stable.
+// `animate-apparait` et `animate-geste` font entrer scènes et gestes en fondu : axe lu pendant
+// le fondu mesure une opacité transitoire et rapporte un contraste qui n'existe à aucun moment stable.
 async function fonduTermine(page: Page) {
   await page.waitForFunction(() =>
-    [...document.querySelectorAll('.animate-apparait')].every((el) => getComputedStyle(el).opacity === '1')
+    [...document.querySelectorAll('.animate-apparait, .animate-geste')].every(
+      (el) => getComputedStyle(el).opacity === '1'
+    )
   )
 }
 
