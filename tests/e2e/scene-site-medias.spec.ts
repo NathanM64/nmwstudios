@@ -89,6 +89,19 @@ test('le visuel sous licence est cadré même sans retouche des photos', async (
   expect(new Set(await dessins(page)).size, 'les photos non retouchées se sont alignées').toBe(3)
 })
 
+test('visuels seule cochée : le quatrième emplacement ne coïncide avec aucun des trois autres', async ({ page }) => {
+  // Épingle le piège du lot, pas une préférence de dessin : `photos` et `visuels` ne peuvent jamais rendre la même image.
+  await page.getByRole('checkbox', { name: 'Visuels sous licence', exact: true }).check()
+  const cadres = await dessins(page)
+  const visuel = await page.getByTestId('site-visuel').evaluate((e) => {
+    const s = getComputedStyle(e)
+    return `${s.backgroundPosition}|${s.backgroundImage}`
+  })
+  for (const cadre of cadres) {
+    expect(visuel, 'le quatrième emplacement coïncide avec un des trois autres').not.toBe(cadre)
+  }
+})
+
 test('photos et visuels cochées ensemble alignent les quatre emplacements', async ({ page }) => {
   await page.getByRole('checkbox', { name: 'Je retouche vos photos', exact: true }).check()
   await page.getByRole('checkbox', { name: 'Visuels sous licence', exact: true }).check()
