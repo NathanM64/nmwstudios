@@ -1,9 +1,11 @@
 import { expect, test } from '@playwright/test'
 import { DOMAINE_OUVERTURE, EDITORIAL } from '../../lib/config/domaines'
 import { HABILLAGE, type Langue } from '../../lib/config/maquette'
+import { hydrate } from './fenetre'
 
 test.beforeEach(async ({ page }) => {
   await page.goto('/configurateur')
+  await hydrate(page)
 })
 
 test('le socle montre trois entrées de navigation', async ({ page }) => {
@@ -17,25 +19,39 @@ test('chaque tranche de pages ajoute trois entrées', async ({ page }) => {
   await expect(page.getByTestId('site-nav').getByRole('listitem')).toHaveCount(9)
 })
 
-test('le faux texte devient du texte écrit quand la rédaction est retenue', async ({ page }) => {
-  await expect(page.getByTestId('site-texte')).toHaveCount(0)
-  await page.getByRole('button', { name: 'Ajouter : J’écris vos textes' }).click()
+test('les pages se nomment par provenance, fournies par défaut', async ({ page }) => {
+  // Le bloc ne se replie plus : sans l'option, les trois pages du socle sont là, du côté fourni.
   await expect(page.getByTestId('site-texte')).toBeVisible()
-  await expect(page.getByTestId('site-texte')).not.toBeEmpty()
+  await expect(page.getByTestId('site-page-fournie')).toHaveCount(3)
+  await expect(page.getByTestId('site-page-redigee')).toHaveCount(0)
 })
 
-test('la reprise réordonne les blocs existants au lieu d’écrire du neuf', async ({ page }) => {
-  await page.getByRole('checkbox', { name: 'Je restructure vos textes existants', exact: true }).check()
-  await expect(page.getByTestId('site-reprise')).toBeVisible()
-  // Rédaction et reprise ne se confondent pas à l'écran.
-  await expect(page.getByTestId('site-texte')).toHaveCount(0)
+test('chaque page achetée passe du côté rédigé sans changer le total', async ({ page }) => {
+  await page.getByRole('button', { name: 'Ajouter : J’écris vos textes' }).click()
+  await expect(page.getByTestId('site-page-redigee')).toHaveCount(1)
+  await expect(page.getByTestId('site-page-fournie')).toHaveCount(2)
+  await page.getByRole('button', { name: 'Ajouter : J’écris vos textes' }).click()
+  await expect(page.getByTestId('site-page-redigee')).toHaveCount(2)
+  await expect(page.getByTestId('site-page-fournie')).toHaveCount(1)
 })
 
-test('rédaction et reprise cochées ensemble restent visibles toutes les deux', async ({ page }) => {
+test('les deux provenances portent chacune leur surtitre', async ({ page }) => {
   await page.getByRole('button', { name: 'Ajouter : J’écris vos textes' }).click()
-  await page.getByRole('checkbox', { name: 'Je restructure vos textes existants', exact: true }).check()
-  await expect(page.getByTestId('site-texte')).toBeVisible()
-  await expect(page.getByTestId('site-reprise')).toBeVisible()
+  const bloc = page.getByTestId('site-texte')
+  await expect(bloc).toContainText(HABILLAGE.fr.fournies)
+  await expect(bloc).toContainText(HABILLAGE.fr.redigees)
+})
+
+test('le volume du site commande le nombre de pages nommées', async ({ page }) => {
+  // Sans ce constat, le bloc nommerait quinze pages sur un site qui n'en a que trois.
+  await page.getByRole('button', { name: 'Ajouter : 3 pages de plus' }).click()
+  await expect(page.getByTestId('site-page-fournie')).toHaveCount(6)
+})
+
+test('acheter plus de rédaction que le site n’a de pages ne nomme rien de plus', async ({ page }) => {
+  await page.goto('/configurateur?redaction=15')
+  await expect(page.getByTestId('site-page-redigee')).toHaveCount(3)
+  await expect(page.getByTestId('site-page-fournie')).toHaveCount(0)
 })
 
 // Tout le texte, pas la seule navigation : titres, blocs repris, créneaux, newsletter,
@@ -45,13 +61,13 @@ test('rédaction et reprise cochées ensemble restent visibles toutes les deux',
 const attendu = (langue: Langue) => {
   const e = EDITORIAL[DOMAINE_OUVERTURE][langue]
   const h = HABILLAGE[langue]
-  return [e.pages[0], e.titre, h.redigees, e.blocsRepris[0], h.actualites, e.articles[0].titre,
+  return [e.pages[0], e.titre, h.fournies, h.redigees, e.blocsRepris[0], h.actualites, e.articles[0].titre,
     h.photo, h.visuel, h.pieceJointe, h.reserver, h.creneaux[0], h.inscrire, h.regler, h.connexion]
 }
 
 test('le sélecteur de langue bascule tout le texte de la maquette', async ({ page }) => {
   await page.goto(
-    '/configurateur?langue=1&redaction=3&reprise&photos&visuels&blog&article=2&membre&formulaire&rdv&newsletter&paiement'
+    '/configurateur?langue=1&redaction=2&reprise&photos&visuels&blog&article=2&membre&formulaire&rdv&newsletter&paiement'
   )
   const maquette = page.getByTestId('objet-scene')
 
@@ -90,13 +106,6 @@ test('retirer la langue ramène la maquette en français, sans la laisser bloqu�
   await page.getByRole('button', { name: 'Retirer : Une langue de plus' }).click()
   await expect(page.getByTestId('site-langue')).toHaveCount(0)
   await expect(page.getByTestId('objet-scene')).toContainText(EDITORIAL[DOMAINE_OUVERTURE].fr.titre)
-})
-
-test('chaque page rédigée se nomme dans la maquette', async ({ page }) => {
-  await page.goto('/configurateur?redaction=1')
-  await expect(page.getByTestId('site-page-redigee')).toHaveCount(1)
-  await page.goto('/configurateur?redaction=15')
-  await expect(page.getByTestId('site-page-redigee')).toHaveCount(15)
 })
 
 test('l’espace membre pose un bouton de connexion', async ({ page }) => {

@@ -1,11 +1,9 @@
 'use client'
 
-import { HABILLAGE, type Langue } from '@/lib/config/maquette'
+import { HABILLAGE, PAGES_SOCLE, type Langue } from '@/lib/config/maquette'
 import { editorialDe, type DomaineId } from '@/lib/config/domaines'
 import type { Configuration } from '@/lib/config/devis'
 import type { Geste } from '@/lib/config/styles'
-
-const PAGES_SOCLE = 3
 
 export function Navigation({
   config,

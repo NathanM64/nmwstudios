@@ -29,7 +29,7 @@ const TABLE_BRUTE = [
   { id: 'site-newsletter', partie: 'site', sert: ['newsletter'] },
   { id: 'site-rdv', partie: 'site', sert: ['rdv'] },
   { id: 'site-paiement', partie: 'site', sert: ['paiement'] },
-  { id: 'site-redaction', partie: 'site', sert: ['redaction'] },
+  { id: 'site-redaction', partie: 'site', permanent: true, sert: ['redaction'] },
   { id: 'site-reprise', partie: 'site', sert: ['reprise'] },
   { id: 'site-actualites', partie: 'site', sert: ['blog', 'article'],
     partage: 'un article se pose dans la section d’actualités qui le porte ; le lot 3 les sépare' },

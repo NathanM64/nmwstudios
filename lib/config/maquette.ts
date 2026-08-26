@@ -3,6 +3,10 @@ export type Langue = 'fr' | 'en' | 'es' | 'de'
 /** Langues de la maquette dans l'ordre d'achat : le français, puis une de plus par unité de `langue`. */
 export const LANGUES: readonly Langue[] = ['fr', 'en', 'es', 'de']
 
+/** Pages du socle. Le volume du site s'en déduit avec les tranches de `pages` : la navigation et
+ *  le bloc des provenances doivent nommer le même nombre de pages. */
+export const PAGES_SOCLE = 3
+
 /** Habillage commun aux sept métiers : les libellés d'interface, qui ne dépendent pas de
  *  l'activité. Tout ce qui en dépend vit dans `lib/config/domaines.ts`. */
 export type Habillage = {
@@ -16,6 +20,7 @@ export type Habillage = {
   connexion: string
   photo: string
   visuel: string
+  fournies: string
   redigees: string
 }
 
@@ -31,7 +36,8 @@ export const HABILLAGE: Record<Langue, Habillage> = {
     connexion: 'Connexion',
     photo: 'recadrée et allégée',
     visuel: 'visuel sous licence',
-    redigees: 'Textes rédigés',
+    fournies: 'Pages fournies',
+    redigees: 'Pages rédigées',
   },
   en: {
     actualites: 'News',
@@ -44,6 +50,7 @@ export const HABILLAGE: Record<Langue, Habillage> = {
     connexion: 'Log in',
     photo: 'cropped and compressed',
     visuel: 'licensed image',
+    fournies: 'Pages supplied',
     redigees: 'Pages written',
   },
   es: {
@@ -57,7 +64,8 @@ export const HABILLAGE: Record<Langue, Habillage> = {
     connexion: 'Acceder',
     photo: 'recortada y aligerada',
     visuel: 'imagen con licencia',
-    redigees: 'Textos redactados',
+    fournies: 'Páginas facilitadas',
+    redigees: 'Páginas redactadas',
   },
   de: {
     actualites: 'Aktuelles',
@@ -70,6 +78,7 @@ export const HABILLAGE: Record<Langue, Habillage> = {
     connexion: 'Anmelden',
     photo: 'zugeschnitten und verkleinert',
     visuel: 'Lizenzbild',
+    fournies: 'Gelieferte Seiten',
     redigees: 'Verfasste Seiten',
   },
 }

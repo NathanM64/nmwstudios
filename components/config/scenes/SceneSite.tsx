@@ -13,7 +13,8 @@ import { Formulaire } from '@/components/config/blocs/site/Formulaire'
 import { Newsletter } from '@/components/config/blocs/site/Newsletter'
 import { Rdv } from '@/components/config/blocs/site/Rdv'
 import { Paiement } from '@/components/config/blocs/site/Paiement'
-import { Textes } from '@/components/config/blocs/site/Textes'
+import { Redaction } from '@/components/config/blocs/site/Redaction'
+import { Reprise } from '@/components/config/blocs/site/Reprise'
 import { Actualites } from '@/components/config/blocs/site/Actualites'
 
 export const SceneSite = memo(function SceneSite({
@@ -70,7 +71,8 @@ export const SceneSite = memo(function SceneSite({
               <Paiement config={config} langue={active} />
             </div>
 
-            <Textes config={config} domaine={domaine} langue={active} />
+            <Redaction config={config} domaine={domaine} langue={active} />
+            <Reprise config={config} domaine={domaine} langue={active} />
 
             <Actualites config={config} domaine={domaine} langue={active} />
           </div>
