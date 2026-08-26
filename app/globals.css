@@ -400,6 +400,9 @@ body {
   color: var(--m-texte-sourd);
 }
 
+/* Créneau déjà pris : barré et sourd, jamais masqué. Un créneau absent ne dit pas qu'il est pris. */
+.m-barre-texte { text-decoration: line-through; color: var(--m-texte-sourd); }
+
 .m-teinte { background-color: color-mix(in srgb, var(--m-accent) 16%, transparent); }
 /* Couloir du chronogramme : assez marqué pour que le temps non employé se voie, assez
    discret pour ne pas concurrencer les barres. */

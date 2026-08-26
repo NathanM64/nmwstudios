@@ -27,7 +27,7 @@ const REPERE_PAR_OPTION: Record<string, (page: Page) => Promise<void>> = {
   },
   visuels: (page) => expect(page.getByTestId('site-visuel')).toBeVisible(),
   formulaire: (page) => expect(page.getByTestId('site-etape')).toHaveCount(3),
-  rdv: (page) => expect(page.getByTestId('site-rdv')).toBeVisible(),
+  rdv: (page) => expect(page.getByTestId('site-jour')).toHaveCount(7),
   newsletter: (page) => expect(page.getByTestId('site-newsletter')).toBeVisible(),
   paiement: (page) => expect(page.getByTestId('site-paiement')).toBeVisible(),
   membre: (page) => expect(page.getByTestId('site-connexion')).toBeVisible(),

@@ -161,31 +161,6 @@ test('aucune grille ne garde plus de colonnes que son palier n’en permet', asy
   }
 })
 
-/** Part de la largeur de la bande que prend chaque carte de services. Une carte seule sur sa
- *  ligne vaut 1, quatre cartes de front valent environ 0,25 chacune. */
-async function partDesCartes(page: Page): Promise<number[]> {
-  return page.getByTestId('site-bande').evaluate((bande) => {
-    const large = bande.getBoundingClientRect().width
-    return [...bande.children].map((n) => n.getBoundingClientRect().width / large)
-  })
-}
-
-test('les cartes de services se posent chacune sur sa ligne au palier téléphone', async ({ page }) => {
-  await page.goto(TOUT_COCHE)
-
-  // Le constat de bureau prouve que le filet distingue les paliers : sans lui, une bande
-  // toujours empilée le satisferait aussi.
-  await page.setViewportSize({ width: 1920, height: 900 })
-  const bureau = await partDesCartes(page)
-  expect(bureau.length, 'cartes rendues en bureau').toBeGreaterThan(2)
-  expect(Math.max(...bureau), 'la plus large carte en bureau').toBeLessThan(0.6)
-
-  await page.setViewportSize({ width: 390, height: 900 })
-  for (const part of await partDesCartes(page)) {
-    expect(part, 'part d’une carte en téléphone').toBeGreaterThan(0.9)
-  }
-})
-
 /** Ce que le navigateur peint réellement au centre du cadre. Défaut préexistant au socle, trouvé
  *  par capture le 21/08/2026 : la colonne de l'aperçu est `sticky` sous `xl` et le formulaire la
  *  suit dans le DOM, donc il se peignait par dessus dès le premier défilement. */

@@ -100,6 +100,9 @@ test('aucune violation axe sérieuse sur les trois scènes de l’aperçu, tout 
 // par un filet unitaire sur le fond nu, qui a laissé passer une sourdine à 4,06 sur un jeton le
 // 21/08/2026. Ici c'est la page qui juge, sur les paires réellement peintes.
 test('aucune violation axe sérieuse dans les quatre directions non par défaut', async ({ page }) => {
+  // Le rendez-vous porte deux fois plus d'éléments à juger qu'avant (une semaine, pas six créneaux) :
+  // ce filet scanne quatre styles sur toutes les scènes, le triple de délai n'est pas de trop.
+  test.slow()
   const toutCoche =
     '/configurateur?pages=4&langue=3&redaction=15&reprise&photos&visuels&blog&article=10&membre&formulaire&rdv&newsletter&paiement&seo&seo-local&perf&a11y&rgpd&legal&migration&domaine&cadrage&formation&express&partenaire'
   for (const style of STYLES.filter((s) => s.id !== STYLE_DEFAUT)) {

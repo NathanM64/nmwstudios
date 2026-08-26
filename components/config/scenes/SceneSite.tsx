@@ -63,11 +63,12 @@ export const SceneSite = memo(function SceneSite({
 
             <Formulaire config={config} domaine={domaine} langue={active} />
 
+            <Rdv config={config} domaine={domaine} langue={active} />
+
             {/* Bande de services achetés : chaque carte prend sa part de la largeur, ou toute la
                 ligne si ses voisines sont absentes. Conditions indépendantes, aucune cascade. */}
             <div data-testid="site-bande" className="m-air flex shrink-0 flex-wrap items-stretch">
               <Newsletter config={config} langue={active} />
-              <Rdv config={config} langue={active} />
               <Paiement config={config} langue={active} />
             </div>
 

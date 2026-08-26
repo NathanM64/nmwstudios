@@ -19,9 +19,11 @@ test('le formulaire avancé montre son fil, son champ conditionnel et sa pièce'
   await expect(page.getByTestId('site-piece')).toBeVisible()
 })
 
-test('la prise de rendez-vous montre des créneaux et non un simple bouton', async ({ page }) => {
+test('la prise de rendez-vous montre une semaine, des créneaux libres et des créneaux pris', async ({ page }) => {
   await page.getByRole('checkbox', { name: 'Prise de rendez-vous', exact: true }).check()
-  await expect(page.getByTestId('site-rdv').getByTestId('site-creneau')).toHaveCount(6)
+  await expect(page.getByTestId('site-rdv').getByTestId('site-jour')).toHaveCount(7)
+  await expect(page.getByTestId('site-rdv').getByTestId('site-creneau')).toHaveCount(4)
+  await expect(page.getByTestId('site-rdv').getByTestId('site-creneau-pris')).toHaveCount(2)
 })
 
 test('la newsletter pose un bandeau d’inscription en pied de page', async ({ page }) => {

@@ -11,8 +11,10 @@ export const PAGES_SOCLE = 3
  *  l'activité. Tout ce qui en dépend vit dans `lib/config/domaines.ts`. */
 export type Habillage = {
   actualites: string
+  jours: string[]
   creneaux: string[]
   reserver: string
+  confirmation: string
   inscrire: string
   envoyer: string
   pieceJointe: string
@@ -29,8 +31,10 @@ export type Habillage = {
 export const HABILLAGE: Record<Langue, Habillage> = {
   fr: {
     actualites: 'Actualités',
+    jours: ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'],
     creneaux: ['9 h', '10 h', '11 h', '14 h', '15 h', '16 h'],
     reserver: 'Réserver un créneau',
+    confirmation: 'Confirmation par e-mail',
     inscrire: 'S’inscrire',
     envoyer: 'Envoyer',
     pieceJointe: 'Pièce jointe',
@@ -45,8 +49,10 @@ export const HABILLAGE: Record<Langue, Habillage> = {
   },
   en: {
     actualites: 'News',
+    jours: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
     creneaux: ['9 am', '10 am', '11 am', '2 pm', '3 pm', '4 pm'],
     reserver: 'Book a slot',
+    confirmation: 'Confirmation by e-mail',
     inscrire: 'Sign up',
     envoyer: 'Send',
     pieceJointe: 'Attachment',
@@ -61,8 +67,10 @@ export const HABILLAGE: Record<Langue, Habillage> = {
   },
   es: {
     actualites: 'Novedades',
+    jours: ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'],
     creneaux: ['9:00', '10:00', '11:00', '14:00', '15:00', '16:00'],
     reserver: 'Reservar una cita',
+    confirmation: 'Confirmación por correo',
     inscrire: 'Suscribirse',
     envoyer: 'Enviar',
     pieceJointe: 'Adjunto',
@@ -77,8 +85,10 @@ export const HABILLAGE: Record<Langue, Habillage> = {
   },
   de: {
     actualites: 'Aktuelles',
+    jours: ['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So'],
     creneaux: ['9 Uhr', '10 Uhr', '11 Uhr', '14 Uhr', '15 Uhr', '16 Uhr'],
     reserver: 'Termin buchen',
+    confirmation: 'Bestätigung per E-Mail',
     inscrire: 'Abonnieren',
     envoyer: 'Senden',
     pieceJointe: 'Anhang',
