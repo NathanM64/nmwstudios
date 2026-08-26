@@ -22,13 +22,19 @@ for (const option of OPTIONS.filter((o) => o.id !== SOCLE_ID)) {
     }
 
     const apercu = page.getByTestId('apercu')
-    // Empreinte structurelle : les nœuds réellement présents et leurs identifiants de test.
-    // Un `data-retenu` ou une classe d'état qui bascule seul ne fait plus passer ce test.
+    // Empreinte structurelle et picturale : les nœuds présents, leurs identifiants de test, et
+    // le dessin réellement peint de ceux qui portent une image. Une option qui ne change qu'un
+    // cadrage ou une dominante ne pose aucun repère neuf, et les nœuds seuls la diraient muette.
     const empreinte = () =>
       apercu.evaluate((el) => {
         const noeuds = [...el.querySelectorAll('*')]
         const ids = noeuds.map((n) => n.getAttribute('data-testid') ?? '').filter(Boolean).sort()
-        return `${noeuds.length} nœuds · ${ids.join(',')}`
+        const peints = noeuds
+          .map((n) => getComputedStyle(n))
+          .filter((s) => s.backgroundImage !== 'none')
+          .map((s) => `${s.backgroundImage}@${s.backgroundPosition}`)
+          .sort()
+        return `${noeuds.length} nœuds · ${ids.join(',')} · ${peints.join(',')}`
       })
     const avant = await empreinte()
 
