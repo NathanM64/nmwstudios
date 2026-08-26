@@ -50,6 +50,7 @@ test('le volume du site commande le nombre de pages nommées', async ({ page }) 
 
 test('acheter plus de rédaction que le site n’a de pages ne nomme rien de plus', async ({ page }) => {
   await page.goto('/configurateur?redaction=15')
+  await hydrate(page)
   await expect(page.getByTestId('site-page-redigee')).toHaveCount(3)
   await expect(page.getByTestId('site-page-fournie')).toHaveCount(0)
 })
@@ -84,14 +85,16 @@ test('la reprise n’écrit pas un mot de plus que le pavé', async ({ page }) =
 const attendu = (langue: Langue) => {
   const e = EDITORIAL[DOMAINE_OUVERTURE][langue]
   const h = HABILLAGE[langue]
-  return [e.pages[0], e.titre, h.fournies, h.redigees, e.blocsRepris[0], e.blocsRepris[2], h.actualites,
-    e.articles[0].titre, h.pieceJointe, h.reserver, h.creneaux[0], h.inscrire, h.regler, h.connexion]
+  return [e.pages[0], e.titre, h.fournies, h.redigees, e.blocsRepris[0], e.blocsRepris[1],
+    e.blocsRepris[2], e.recherche.description, h.actualites, e.articles[0].titre, h.pieceJointe,
+    h.reserver, h.creneaux[0], h.inscrire, h.regler, h.connexion]
 }
 
 test('le sélecteur de langue bascule tout le texte de la maquette', async ({ page }) => {
   await page.goto(
     '/configurateur?langue=1&redaction=2&reprise&photos&blog&article=2&membre&formulaire&rdv&newsletter&paiement'
   )
+  await hydrate(page)
   const maquette = page.getByTestId('objet-scene')
 
   for (const texte of attendu('fr')) {
@@ -118,13 +121,16 @@ test('le sélecteur de langue bascule tout le texte de la maquette', async ({ pa
 
 test('chaque langue achetée ajoute une entrée au sélecteur', async ({ page }) => {
   await page.goto('/configurateur?langue=1')
+  await hydrate(page)
   await expect(page.getByTestId('site-langue').locator('option')).toHaveCount(2)
   await page.goto('/configurateur?langue=3')
+  await hydrate(page)
   await expect(page.getByTestId('site-langue').locator('option')).toHaveCount(4)
 })
 
 test('retirer la langue ramène la maquette en français, sans la laisser bloquée', async ({ page }) => {
   await page.goto('/configurateur?langue=1&redaction=1')
+  await hydrate(page)
   await page.getByTestId('site-langue').selectOption('en')
   await expect(page.getByTestId('objet-scene')).toContainText(EDITORIAL[DOMAINE_OUVERTURE].en.titre)
   await page.getByRole('button', { name: 'Retirer : Une langue de plus' }).click()

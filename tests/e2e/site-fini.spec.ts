@@ -7,12 +7,29 @@ import { DOMAINES, EDITORIAL } from '../../lib/config/domaines'
 const ATTENTE = /(à|a) fournir|à venir|en attente|to be supplied|placeholder|lorem/i
 
 test('la configuration de départ ne porte aucun emplacement d’image vide', async ({ page }) => {
+  // Fenêtre haute posée ici : la bande absorbe la hauteur libre, et à 720 px elle est trop
+  // courte pour qu'une cellule étirée sur rien se distingue d'une cellule pleine.
+  await page.setViewportSize({ width: 1440, height: 900 })
   await page.goto('/configurateur')
-  const servis = await page.getByTestId('partie-site').evaluate((n) =>
-    [...n.querySelectorAll('.m-photo')].map((e) => getComputedStyle(e).backgroundImage)
+  // Toutes les cellules de la bande, quelle que soit leur classe : la carte de texte du quatrième
+  // emplacement est une `.m-carte`, et un filet limité aux `.m-photo` ne la voyait pas.
+  const cellules = await page.getByTestId('site-bande-images').evaluate((bande) =>
+    [...bande.children].map((cellule) => {
+      const boite = cellule.getBoundingClientRect()
+      const hauts = [...cellule.children].map((n) => n.getBoundingClientRect().top)
+      return {
+        repere: (cellule as HTMLElement).dataset.testid ?? cellule.className,
+        servie: getComputedStyle(cellule).backgroundImage.includes('/maquette/'),
+        // Part de la cellule laissée sans matière au dessus de sa première ligne peinte.
+        vide: hauts.length === 0 ? 1 : (Math.min(...hauts) - boite.top) / boite.height,
+      }
+    })
   )
-  expect(servis.length, 'aucun emplacement d’image dans la scène du site').toBeGreaterThan(0)
-  for (const image of servis) expect(image, 'emplacement sans photo servie').toContain('/maquette/')
+  expect(cellules.length, 'aucune cellule dans la bande d’images').toBeGreaterThan(0)
+  for (const cellule of cellules) {
+    if (cellule.servie) continue
+    expect(cellule.vide, `${cellule.repere} : sa matière commence dans sa moitié basse`).toBeLessThan(0.5)
+  }
 })
 
 test('la configuration de départ ne porte aucun cadre en pointillés', async ({ page }) => {
