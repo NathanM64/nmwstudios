@@ -417,6 +417,9 @@ body {
    3,3:1). Le pas-à-pas du formulaire y loge un texte réel, pas un chiffre isolé : le texte
    reprend celui de la carte, dont le contraste sur ce fond est large sur les cinq directions. */
 .m-jeton.m-mono { color: var(--m-texte); }
+/* Même spécificité que m-mono : sans ce combiné, l'ordre du fichier déciderait la couleur du
+   texte sur l'étape active. */
+.m-mono.m-plein { color: var(--m-accent-contraste); }
 /* Plancher de largeur : une phase très courte doit rester une barre visible. */
 .m-barre { background-color: var(--m-accent); border-radius: var(--m-rayon); min-width: 4px; }
 .m-barre-2 { background-color: var(--m-accent-2); border-radius: var(--m-rayon); min-width: 4px; }
