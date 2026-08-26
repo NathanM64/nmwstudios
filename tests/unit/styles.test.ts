@@ -6,7 +6,7 @@ const REQUISES = [
   '--m-fond', '--m-fond-2', '--m-texte', '--m-texte-sourd', '--m-accent',
   '--m-accent-contraste', '--m-bord', '--m-titre-famille', '--m-corps-famille',
   '--m-titre-graisse', '--m-titre-taille-base', '--m-rayon', '--m-densite-base',
-  '--m-photo-teinte', '--m-photo-voile',
+  '--m-photo-teinte', '--m-photo-voile', '--m-accent-2',
 ] as const
 
 /** Les huit valeurs que le palier multiplie. `styles.ts` ne pose que le `-base` : poser la

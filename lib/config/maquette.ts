@@ -18,8 +18,6 @@ export type Habillage = {
   pieceJointe: string
   regler: string
   connexion: string
-  photo: string
-  visuel: string
   fournies: string
   redigees: string
 }
@@ -34,8 +32,6 @@ export const HABILLAGE: Record<Langue, Habillage> = {
     pieceJointe: 'Pièce jointe',
     regler: 'Régler en ligne',
     connexion: 'Connexion',
-    photo: 'recadrée et allégée',
-    visuel: 'visuel sous licence',
     fournies: 'Pages fournies',
     redigees: 'Pages rédigées',
   },
@@ -48,8 +44,6 @@ export const HABILLAGE: Record<Langue, Habillage> = {
     pieceJointe: 'Attachment',
     regler: 'Pay online',
     connexion: 'Log in',
-    photo: 'cropped and compressed',
-    visuel: 'licensed image',
     fournies: 'Pages supplied',
     redigees: 'Pages written',
   },
@@ -62,8 +56,6 @@ export const HABILLAGE: Record<Langue, Habillage> = {
     pieceJointe: 'Adjunto',
     regler: 'Pagar en línea',
     connexion: 'Acceder',
-    photo: 'recortada y aligerada',
-    visuel: 'imagen con licencia',
     fournies: 'Páginas facilitadas',
     redigees: 'Páginas redactadas',
   },
@@ -76,8 +68,6 @@ export const HABILLAGE: Record<Langue, Habillage> = {
     pieceJointe: 'Anhang',
     regler: 'Online bezahlen',
     connexion: 'Anmelden',
-    photo: 'zugeschnitten und verkleinert',
-    visuel: 'Lizenzbild',
     fournies: 'Gelieferte Seiten',
     redigees: 'Verfasste Seiten',
   },

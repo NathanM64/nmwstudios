@@ -10,8 +10,14 @@ const REPERE_PAR_OPTION: Record<string, (page: Page) => Promise<void>> = {
   langue: (page) => expect(page.getByTestId('site-langue')).toBeVisible(),
   redaction: (page) => expect(page.getByTestId('site-page-redigee')).not.toHaveCount(0),
   reprise: (page) => expect(page.getByTestId('site-service')).toHaveCount(3),
-  photos: (page) => expect(page.getByTestId('site-reperes')).toBeVisible(),
-  visuels: (page) => expect(page.getByTestId('site-visuels')).toBeVisible(),
+  photos: async (page) => {
+    // Aligner trois cadrages n'ajoute aucun repère : le constat porte sur ce qui est peint.
+    const cadrages = await page
+      .getByTestId('site-cadre')
+      .evaluateAll((n) => n.map((e) => getComputedStyle(e).backgroundPosition))
+    expect(new Set(cadrages).size, 'les trois emplacements ne coïncident pas').toBe(1)
+  },
+  visuels: (page) => expect(page.getByTestId('site-visuel')).toBeVisible(),
   formulaire: (page) => expect(page.getByTestId('site-etapes')).toBeVisible(),
   rdv: (page) => expect(page.getByTestId('site-rdv')).toBeVisible(),
   newsletter: (page) => expect(page.getByTestId('site-newsletter')).toBeVisible(),

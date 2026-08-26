@@ -42,7 +42,7 @@ for (const style of STYLES) {
 test('le cadre image porte une image servie, pas un rectangle vide', async ({ page }) => {
   await page.goto(AVEC_OPTIONS)
     await hydrate(page)
-  const cadre = await page.getByTestId('site-cadre').evaluate((n) => {
+  const cadre = await page.getByTestId('site-cadre').first().evaluate((n) => {
     const s = getComputedStyle(n)
     return { image: s.backgroundImage, taille: s.backgroundSize, fond: s.backgroundColor }
   })
@@ -64,7 +64,7 @@ test("l'image servie est celle du métier choisi", async ({ page }) => {
   await page.goto(AVEC_OPTIONS)
     await hydrate(page)
   const lu = async () =>
-    page.getByTestId('site-cadre').evaluate((n) => getComputedStyle(n).backgroundImage)
+    page.getByTestId('site-cadre').first().evaluate((n) => getComputedStyle(n).backgroundImage)
   const avant = await lu()
   const autre = DOMAINES.find((d) => !avant.includes(`/${d.id}.avif`))!
   await page.getByTestId('selecteur-domaine').selectOption(autre.id)

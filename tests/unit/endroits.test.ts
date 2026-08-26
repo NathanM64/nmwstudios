@@ -55,7 +55,7 @@ describe('table des endroits', () => {
   it('ne déclare pas deux fois le même identifiant', () => {
     expect(new Set(ENDROITS.map((e) => e.id)).size).toBe(ENDROITS.length)
     // Les deux quantités ci-dessus bougent ensemble : une entrée perdue s'y noierait.
-    expect(ENDROITS).toHaveLength(24)
+    expect(ENDROITS).toHaveLength(25)
   })
 
   it('donne à chacun des neuf groupes un endroit permanent', () => {

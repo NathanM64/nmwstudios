@@ -84,13 +84,13 @@ test('la reprise n’écrit pas un mot de plus que le pavé', async ({ page }) =
 const attendu = (langue: Langue) => {
   const e = EDITORIAL[DOMAINE_OUVERTURE][langue]
   const h = HABILLAGE[langue]
-  return [e.pages[0], e.titre, h.fournies, h.redigees, e.blocsRepris[2], h.actualites, e.articles[0].titre,
-    h.photo, h.visuel, h.pieceJointe, h.reserver, h.creneaux[0], h.inscrire, h.regler, h.connexion]
+  return [e.pages[0], e.titre, h.fournies, h.redigees, e.blocsRepris[0], e.blocsRepris[2], h.actualites,
+    e.articles[0].titre, h.pieceJointe, h.reserver, h.creneaux[0], h.inscrire, h.regler, h.connexion]
 }
 
 test('le sélecteur de langue bascule tout le texte de la maquette', async ({ page }) => {
   await page.goto(
-    '/configurateur?langue=1&redaction=2&reprise&photos&visuels&blog&article=2&membre&formulaire&rdv&newsletter&paiement'
+    '/configurateur?langue=1&redaction=2&reprise&photos&blog&article=2&membre&formulaire&rdv&newsletter&paiement'
   )
   const maquette = page.getByTestId('objet-scene')
 
@@ -106,6 +106,7 @@ test('le sélecteur de langue bascule tout le texte de la maquette', async ({ pa
 
   const propresAuFrancais = [
     EDITORIAL[DOMAINE_OUVERTURE].fr.titre,
+    EDITORIAL[DOMAINE_OUVERTURE].fr.blocsRepris[0],
     EDITORIAL[DOMAINE_OUVERTURE].fr.blocsRepris[2],
     HABILLAGE.fr.reserver,
     HABILLAGE.fr.actualites,

@@ -1,8 +1,22 @@
 import { expect, test } from '@playwright/test'
+import { hydrate } from './fenetre'
 
 test.beforeEach(async ({ page }) => {
   await page.goto('/configurateur')
+  await hydrate(page)
 })
+
+/** Cadrage et dominante réellement peints sur les trois emplacements servis par la photo.
+ *  Lus sur le style calculé, jamais sur une classe : une classe qui bascule sans rien déplacer
+ *  passerait au vert, et c'est exactement le piège que ce lot doit éviter. */
+async function dessins(page: import('@playwright/test').Page): Promise<string[]> {
+  return page
+    .getByTestId('site-cadre')
+    .evaluateAll((n) => n.map((e) => {
+      const s = getComputedStyle(e)
+      return `${s.backgroundPosition}|${s.backgroundImage}`
+    }))
+}
 
 test('aucune balise image n’est produite dans l’aperçu', async ({ page }) => {
   // Contrainte de production : Nathan ne livre ni photo ni dessin.
@@ -10,35 +24,58 @@ test('aucune balise image n’est produite dans l’aperçu', async ({ page }) =
   await expect(page.getByTestId('apercu').locator('img')).toHaveCount(0)
 })
 
-test('la retouche montre le recadrage sans annoncer de poids chiffré', async ({ page }) => {
-  await expect(page.getByTestId('site-poids')).toHaveCount(0)
-  await page.getByRole('checkbox', { name: 'Je retouche vos photos', exact: true }).check()
-  await expect(page.getByTestId('site-reperes')).toBeVisible()
-  await expect(page.getByTestId('site-poids')).toBeVisible()
-  // Un poids affiché serait un chiffre non mesuré, interdit par le CLAUDE.md.
-  await expect(page.getByTestId('site-poids')).not.toContainText(/\d/)
+test('la bande porte trois emplacements servis par la photo du métier', async ({ page }) => {
+  await expect(page.getByTestId('site-cadre')).toHaveCount(3)
+  for (const dessin of await dessins(page)) expect(dessin).toContain('/maquette/')
 })
 
-test('les visuels sous licence remplissent le cadre et s’annoncent comme substituts', async ({ page }) => {
-  await page.getByRole('checkbox', { name: 'Visuels sous licence', exact: true }).check()
-  await expect(page.getByTestId('site-visuels')).toBeVisible()
+test('sans retouche, les trois emplacements divergent ; avec, ils coïncident', async ({ page }) => {
+  const avant = await dessins(page)
+  expect(new Set(avant).size, 'les trois emplacements se ressemblent déjà').toBe(3)
+
+  await page.getByRole('checkbox', { name: 'Je retouche vos photos', exact: true }).check()
+  await expect
+    .poll(async () => new Set(await dessins(page)).size, { message: 'la retouche n’aligne pas les trois' })
+    .toBe(1)
 })
 
-test('photos et visuels cochés ensemble affichent deux étiquettes qui ne se recouvrent pas', async ({ page }) => {
-  // photos et visuels ne s'excluent pas : la visibilité seule ne verrait pas un chevauchement.
+test('les étiquettes de devis ont disparu du cadre image', async ({ page }) => {
+  // Deux annotations de devis posées sur une vraie photo depuis le lot 1, et le cadre en
+  // pointillés qui les accompagnait. Le delta se voit sur l'image, plus sur une légende.
+  await page.goto('/configurateur?photos&visuels')
+  await hydrate(page)
+  for (const disparu of ['site-poids', 'site-reperes', 'site-visuels']) {
+    await expect(page.getByTestId(disparu)).toHaveCount(0)
+  }
+})
+
+test('le quatrième emplacement porte une carte de texte, que les visuels illustrent', async ({ page }) => {
+  await expect(page.getByTestId('site-carte')).toBeVisible()
+  await expect(page.getByTestId('site-visuel')).toHaveCount(0)
+
+  await page.getByRole('checkbox', { name: 'Visuels sous licence', exact: true }).check()
+  await expect(page.getByTestId('site-visuel')).toBeVisible()
+  await expect(page.getByTestId('site-carte')).toHaveCount(0)
+})
+
+test('le visuel sous licence est cadré même sans retouche des photos', async ({ page }) => {
+  // Une image de banque arrive propre : la retouche ne la concerne pas, et c'est ce qui garde
+  // aux deux options une manifestation propre quand une seule est cochée.
+  await page.getByRole('checkbox', { name: 'Visuels sous licence', exact: true }).check()
+  const visuel = await page.getByTestId('site-visuel').evaluate((n) => getComputedStyle(n).backgroundPosition)
+  // Deux couches d'image : le navigateur répète la position par couche dans la valeur calculée.
+  expect(visuel.split(', '), visuel).toEqual(['50% 50%', '50% 50%'])
+  expect(new Set(await dessins(page)).size, 'les photos non retouchées se sont alignées').toBe(3)
+})
+
+test('photos et visuels cochées ensemble alignent les quatre emplacements', async ({ page }) => {
   await page.getByRole('checkbox', { name: 'Je retouche vos photos', exact: true }).check()
   await page.getByRole('checkbox', { name: 'Visuels sous licence', exact: true }).check()
-  await expect(page.getByTestId('site-poids')).toBeVisible()
-  await expect(page.getByTestId('site-visuels')).toBeVisible()
-
-  const poids = (await page.getByTestId('site-poids').boundingBox())!
-  const visuels = (await page.getByTestId('site-visuels').boundingBox())!
-  const chevauchement =
-    poids.x < visuels.x + visuels.width &&
-    poids.x + poids.width > visuels.x &&
-    poids.y < visuels.y + visuels.height &&
-    poids.y + poids.height > visuels.y
-  expect(chevauchement).toBe(false)
+  const cadrages = await page
+    .getByTestId('objet-scene')
+    .evaluate((n) => [...n.querySelectorAll('.m-photo')].map((e) => getComputedStyle(e).backgroundPosition))
+  expect(cadrages, 'quatre emplacements attendus').toHaveLength(4)
+  expect(new Set(cadrages).size).toBe(1)
 })
 
 test('le blog ouvre une grille d’actualités vide', async ({ page }) => {

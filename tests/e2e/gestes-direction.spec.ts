@@ -39,9 +39,9 @@ test('la photo est traitée différemment par chaque direction', async ({ page }
   for (const style of STYLES) {
     await page.getByTestId('selecteur-style').selectOption(style.id)
     await expect
-      .poll(() => page.getByTestId('site-cadre').evaluate((n) => getComputedStyle(n).backgroundImage))
+      .poll(() => page.getByTestId('site-cadre').first().evaluate((n) => getComputedStyle(n).backgroundImage))
       .toContain('gradient')
-    vus.add(await page.getByTestId('site-cadre').evaluate((n) => getComputedStyle(n).backgroundImage))
+    vus.add(await page.getByTestId('site-cadre').first().evaluate((n) => getComputedStyle(n).backgroundImage))
   }
   expect(vus.size, `traitements distincts : ${vus.size}`).toBe(STYLES.length)
 })
