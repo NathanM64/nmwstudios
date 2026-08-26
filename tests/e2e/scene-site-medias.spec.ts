@@ -39,12 +39,22 @@ test('la bande porte trois emplacements servis par la photo du métier', async (
 test('sans retouche, les trois emplacements divergent ; avec, ils coïncident', async ({ page }) => {
   const avant = await dessins(page)
   expect(new Set(avant).size, 'les trois emplacements se ressemblent déjà').toBe(3)
-  expect(new Set(await teintes(page)).size, 'les trois dominantes se ressemblent déjà').toBe(3)
 
   await page.getByRole('checkbox', { name: 'Je retouche vos photos', exact: true }).check()
   await expect
     .poll(async () => new Set(await dessins(page)).size, { message: 'la retouche n’aligne pas les trois' })
     .toBe(1)
+})
+
+test('sans retouche, les trois dominantes divergent aussi ; avec, elles coïncident', async ({ page }) => {
+  // Sur `enseigne`, la direction par défaut, --m-accent-2 et --m-photo-teinte valent la même
+  // couleur : le virage y est inerte. `clinique` les distingue, ce qui rend --m-photo-vire mesurable.
+  await page.getByTestId('selecteur-style').selectOption('clinique')
+  await expect
+    .poll(async () => new Set(await teintes(page)).size, { message: 'les trois dominantes se ressemblent déjà' })
+    .toBe(3)
+
+  await page.getByRole('checkbox', { name: 'Je retouche vos photos', exact: true }).check()
   await expect
     .poll(async () => new Set(await teintes(page)).size, { message: 'la retouche n’aligne pas les trois dominantes' })
     .toBe(1)
