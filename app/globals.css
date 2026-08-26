@@ -392,14 +392,6 @@ body {
   font-size: var(--m-legende-taille);
 }
 
-.m-etiquette {
-  background-color: var(--m-fond);
-  color: var(--m-texte);
-  border-radius: var(--m-rayon);
-  font-size: var(--m-legende-taille);
-  line-height: 1.3;
-}
-
 .m-puce {
   border: 1px solid var(--m-bord);
   border-radius: var(--m-rayon);
