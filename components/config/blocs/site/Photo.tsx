@@ -10,10 +10,12 @@ import type { Configuration } from '@/lib/config/devis'
 const DIVERGENCE = 0.7
 
 /** Les trois emplacements servis par la même photo, à leur écart maximal : décalage du cadrage en
- *  pour cent, facteur du voile de la direction, part de virage vers l'accent secondaire. */
+ *  pour cent, facteur du voile de la direction, part de virage vers l'accent secondaire.
+ *  Le deuxième est le plus calme des trois, mais jamais nul : à la référence il serait le jumeau
+ *  du visuel sous licence, et l'option vendrait une image déjà à l'écran. */
 const EMPLACEMENTS = [
   { x: 14, y: 24, voile: 0.5, vire: 0.55 },
-  { x: 50, y: 50, voile: 1, vire: 0 },
+  { x: 68, y: 30, voile: 0.85, vire: 0.2 },
   { x: 86, y: 76, voile: 1.8, vire: 0.35 },
 ]
 

@@ -345,13 +345,14 @@ body {
   border: 1px solid var(--m-bord);
   /* Deux réglages par emplacement, posés en ligne par la scène : le facteur multiplie le voile de
      la direction, le virage le fait tirer vers l'accent secondaire. Absents, le rendu est celui
-     de la direction. Le `clamp` borne le produit, qu'une divergence forte pousse au delà de 100 %. */
+     de la direction. Le `clamp` borne le produit à la moitié : au delà, le voile pèse plus que la
+     photo et l'emplacement se lit comme une image abîmée, pas comme une teinte qui diverge. */
   --m-photo-couche: color-mix(
     in oklab,
     var(--m-accent-2) calc(var(--m-photo-vire, 0) * 100%),
     var(--m-photo-teinte)
   );
-  --m-photo-part: clamp(0%, calc(var(--m-photo-voile) * var(--m-photo-facteur, 1) * 100%), 100%);
+  --m-photo-part: clamp(0%, calc(var(--m-photo-voile) * var(--m-photo-facteur, 1) * 100%), 50%);
   /* Voile de la direction composé au dessus de la photo : la même image appartient aux cinq
      palettes au lieu d'y être posée. `background-image` porte les deux, le voile en premier. */
   background-image: linear-gradient(
