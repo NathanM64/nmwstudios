@@ -18,6 +18,13 @@ async function dessins(page: import('@playwright/test').Page): Promise<string[]>
     }))
 }
 
+/** Dominante seule, isolée du cadrage : `dessins()` concatène position et image, et le
+ *  cadrage seul suffirait à rendre trois chaînes distinctes. Sans ce filet séparé, un bug sur
+ *  `--m-photo-facteur` ou `--m-photo-vire` resterait invisible derrière la seule position. */
+async function teintes(page: import('@playwright/test').Page): Promise<string[]> {
+  return page.getByTestId('site-cadre').evaluateAll((n) => n.map((e) => getComputedStyle(e).backgroundImage))
+}
+
 test('aucune balise image n’est produite dans l’aperçu', async ({ page }) => {
   // Contrainte de production : Nathan ne livre ni photo ni dessin.
   await page.getByRole('checkbox', { name: 'Je retouche vos photos', exact: true }).check()
@@ -32,10 +39,14 @@ test('la bande porte trois emplacements servis par la photo du métier', async (
 test('sans retouche, les trois emplacements divergent ; avec, ils coïncident', async ({ page }) => {
   const avant = await dessins(page)
   expect(new Set(avant).size, 'les trois emplacements se ressemblent déjà').toBe(3)
+  expect(new Set(await teintes(page)).size, 'les trois dominantes se ressemblent déjà').toBe(3)
 
   await page.getByRole('checkbox', { name: 'Je retouche vos photos', exact: true }).check()
   await expect
     .poll(async () => new Set(await dessins(page)).size, { message: 'la retouche n’aligne pas les trois' })
+    .toBe(1)
+  await expect
+    .poll(async () => new Set(await teintes(page)).size, { message: 'la retouche n’aligne pas les trois dominantes' })
     .toBe(1)
 })
 

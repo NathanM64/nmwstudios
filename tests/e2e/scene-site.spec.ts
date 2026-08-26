@@ -77,8 +77,8 @@ test('la reprise n’écrit pas un mot de plus que le pavé', async ({ page }) =
   expect(mots(textes.join(' '))).toBe(avant)
 })
 
-// Tout le texte, pas la seule navigation : titres, blocs repris, créneaux, newsletter,
-// articles et étiquettes du cadre image doivent suivre le sélecteur.
+// Tout le texte, pas la seule navigation : titres, blocs repris, la carte de texte de la
+// bande d'images, créneaux, newsletter et articles doivent suivre le sélecteur.
 // Les chaînes viennent du domaine par défaut, pas d'un littéral : une relecture des textes
 // ne doit pas rendre ce test faux, seulement le faire porter sur les nouveaux mots.
 const attendu = (langue: Langue) => {

@@ -1,6 +1,7 @@
 import type { Page } from '@playwright/test'
 import { expect, test } from '@playwright/test'
 import { GROUPES, OPTIONS } from '../../lib/config/catalogue'
+import { hydrate } from './fenetre'
 
 // Repère propre à chaque option : preuve qu'elle garde sa manifestation face à
 // ses voisines de groupe, sans comparer des blocs d'innerHTML entre eux.
@@ -12,10 +13,17 @@ const REPERE_PAR_OPTION: Record<string, (page: Page) => Promise<void>> = {
   reprise: (page) => expect(page.getByTestId('site-service')).toHaveCount(3),
   photos: async (page) => {
     // Aligner trois cadrages n'ajoute aucun repère : le constat porte sur ce qui est peint.
-    const cadrages = await page
-      .getByTestId('site-cadre')
-      .evaluateAll((n) => n.map((e) => getComputedStyle(e).backgroundPosition))
-    expect(new Set(cadrages).size, 'les trois emplacements ne coïncident pas').toBe(1)
+    await expect
+      .poll(
+        async () =>
+          new Set(
+            await page
+              .getByTestId('site-cadre')
+              .evaluateAll((n) => n.map((e) => getComputedStyle(e).backgroundPosition))
+          ).size,
+        { message: 'les trois emplacements ne coïncident pas' }
+      )
+      .toBe(1)
   },
   visuels: (page) => expect(page.getByTestId('site-visuel')).toBeVisible(),
   formulaire: (page) => expect(page.getByTestId('site-etapes')).toBeVisible(),
@@ -53,6 +61,7 @@ for (const groupe of GROUPES_CUMULABLES) {
     page,
   }) => {
     await page.goto('/configurateur')
+    await hydrate(page)
 
     for (const option of options) {
       if (option.quantifiable) {

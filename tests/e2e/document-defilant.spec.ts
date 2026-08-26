@@ -165,8 +165,6 @@ const TOUT_COCHE =
 async function rognes(page: Page): Promise<string[]> {
   return page.getByTestId('rouleau').evaluate((rouleau) =>
     [...rouleau.querySelectorAll<HTMLElement>('*')]
-      // L'aplat de l'image écrête ses repères de recadrage, et c'est voulu.
-      .filter((n) => n.dataset.testid !== 'site-cadre' && !n.closest('[data-testid="site-cadre"]'))
       // `scrollHeight` compte aussi le débord des glyphes hors de leur ligne, que le titre
       // et le chiffre assument par un interlignage serré. Seul ce qui écrête cache.
       .filter((n) => getComputedStyle(n).overflowY !== 'visible')
