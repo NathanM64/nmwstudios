@@ -17,6 +17,14 @@ test('aucune requête tierce, aucun cookie', async ({ page, context }) => {
 
   expect(externes).toEqual([])
   expect(await context.cookies()).toEqual([])
+
+  // Le relevé affiche ce compte au lecteur : une ressource ajoutée doit le faire mentir ici
+  // avant de le faire mentir en production. Les URI data: ont déjà été comptées pour un tiers.
+  await page.goto('/', { waitUntil: 'load' })
+  const releve = page.getByRole('definition')
+  await expect(releve).toHaveCount(2)
+  await expect(releve.first()).toHaveText('0')
+  await expect(releve.last()).toHaveText('0')
 })
 
 // Rejoué depuis la refonte précédente : les variables next/font se posent sur <html>, et
