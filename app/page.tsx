@@ -9,6 +9,7 @@ import { Contact } from '@/components/blocs/Contact'
 import { Releve } from '@/components/blocs/Releve'
 import { OFFRES } from '@/content/offres'
 import { ENGAGEMENTS } from '@/content/engagements'
+import { TRAVAUX } from '@/content/travaux'
 import { LEGAL, TJM } from '@/lib/legal'
 
 export default function Page() {
@@ -20,6 +21,7 @@ export default function Page() {
         <Modes />
         <MarqueBlanche />
         <AucunNom />
+        <Verifiable />
         <Tarif />
         <Contact />
       </main>
@@ -166,7 +168,7 @@ function Modes() {
 // lecteur cherche en premier, donc c'est elle qui porte la graisse.
 function MarqueBlanche() {
   return (
-    <Section titre="Je ne suis jamais devant votre client." fond="creux">
+    <Section titre="Je ne suis jamais devant votre client.">
       <ol className="mt-14">
         {ENGAGEMENTS.map((engagement, rang) => (
           <li
@@ -215,19 +217,59 @@ const VERIFIABLES = [
 
 function AucunNom() {
   return (
+    <section className="bg-papier-creux/70 py-24 sm:py-32">
+      <Container>
+        {/* Le titre tient une colonne, la matière tient l'autre : la page dit « aucun nom »
+            et montre ce qu'il y a derrière dans le même écran, pas trois sections plus bas. */}
+        <div className="grid gap-x-16 gap-y-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)]">
+          <div>
+            <h2 className="monte max-w-[16ch] font-display text-[clamp(1.9rem,4.2vw,3rem)] font-extrabold leading-[1.03] tracking-[-0.03em] text-balance">
+              Vous ne verrez aucun nom de client sur ce site.
+            </h2>
+            <div className="monte mt-7 max-w-[40rem] text-lg leading-relaxed text-encre-douce">
+              <p>
+                C’est le principe, pas un manque. Les agences avec qui je travaille ont signé un
+                accord de confidentialité, et la vôtre en signera un. Un prestataire qui étale ses
+                références finira par étaler la vôtre.
+              </p>
+              <p className="mt-5">
+                À la place, voilà ce qui tourne. Le secteur et la technique, jamais le nom.
+              </p>
+            </div>
+          </div>
+
+          {/* La description reste basse, la preuve porte la graisse : c'est elle que le
+              lecteur cherche, bien avant la pile technique. */}
+          <ol className="monte lg:pt-2">
+            {TRAVAUX.map((travail, rang) => (
+              <li
+                key={travail.corps}
+                className={rang > 0 ? 'mt-8 border-t border-encre/12 pt-8' : ''}
+              >
+                <p className="max-w-[46ch] leading-relaxed text-encre-douce">{travail.corps}</p>
+                {travail.preuve ? (
+                  <p className="mt-3 font-display text-[clamp(1.1rem,2.2vw,1.4rem)] font-extrabold leading-snug tracking-[-0.03em]">
+                    {travail.preuve}
+                  </p>
+                ) : null}
+              </li>
+            ))}
+          </ol>
+        </div>
+      </Container>
+    </section>
+  )
+}
+
+function Verifiable() {
+  return (
     <Section
-      titre="Vous ne verrez aucun nom de client sur ce site."
+      titre="Ce que vous pouvez vérifier vous-même."
       chapeau={
-        <>
-          <p>
-            C’est le principe, pas un manque. Les agences avec qui je travaille ont signé un
-            accord de confidentialité, et la vôtre en signera un. Un prestataire qui étale ses
-            références finira par étaler la vôtre.
-          </p>
-          <p className="mt-5">
-            À la place, voici ce que vous pouvez vérifier vous-même, tout de suite.
-          </p>
-        </>
+        <p>
+          Trois pages qui détaillent la méthode, et une mesure prise à l’instant dans votre
+          navigateur.
+        </p>
       }
     >
       <div className="mt-14 grid gap-x-16 gap-y-14 lg:grid-cols-[minmax(0,1fr)_minmax(0,23rem)] lg:items-start">

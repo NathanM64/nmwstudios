@@ -71,7 +71,7 @@ Décisions produit encore ouvertes, à ne pas inventer :
 - Le TJM s'affiche-t-il seul ou avec une mention « à partir de ».
 - Le délai de réponse réellement tenable, retiré du bloc contact faute de pouvoir être
   vérifié.
-- L'ancienneté en production des deux derniers travaux cités.
+- La preuve manquante du quatrième travail, la plateforme d'impression 3D.
 - L'hébergeur des mentions légales, à confirmer quand le serveur `infra` sera en service.
 - La liste des technologies reprises, à compléter si Laravel, Vue, Drupal ou Node doivent y
   figurer.
@@ -98,11 +98,17 @@ type score Lighthouse.
 
 ## Evidence on Hand
 
-- Trois travaux réels, anonymisés au secteur et à la technique (`content/travaux.ts`) :
-  application iPad hors ligne pour un émetteur international de cartes de paiement, en
-  production et maintenue depuis deux ans ; plateforme de gamification pour une agence
-  marketing ; plateforme industrielle de pilotage de l'impression 3D. Ancienneté inconnue
-  pour les deux derniers.
+- Quatre travaux réels, anonymisés au secteur et à la technique (`content/travaux.ts`).
+  Trois portent une preuve, affichée en gras sous la description : reprise d'un jeu concours
+  écrit en PHP par un autre, sans base de données, avec base et backoffice complet ajoutés,
+  plus de 100 000 joueurs en un mois ; application iPad hors ligne pour un émetteur
+  international de cartes de paiement, en production et maintenue depuis deux ans ;
+  backoffice de création de campagnes de jeux pour une agence marketing, toujours en service
+  et enrichi au fil des campagnes. Le quatrième, la plateforme industrielle de pilotage de
+  l'impression 3D, n'a pas de preuve datée et n'en reçoit pas d'inventée.
+
+  L'événement de la campagne de jeu concours n'est pas cité : le volume convainc, l'événement
+  identifierait le client.
 - Preuves vérifiables par le visiteur : absence de requête tierce, absence de cookie,
   hébergement sur serveur propre.
 - Mentions légales complètes dans `lib/legal.ts`.
