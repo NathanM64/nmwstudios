@@ -6,6 +6,7 @@ import { Pied } from '@/components/shell/Pied'
 import { Contact } from '@/components/blocs/Contact'
 import { OFFRES } from '@/content/offres'
 import { ENGAGEMENTS } from '@/content/engagements'
+import { TRAVAUX } from '@/content/travaux'
 import { LEGAL, TJM } from '@/lib/legal'
 
 export default function Page() {
@@ -185,12 +186,29 @@ function AucunNom() {
             références finira par étaler la vôtre.
           </p>
           <p className="mt-5">
-            À la place, voici ce que vous pouvez vérifier avant de me confier quoi que ce soit.
+            Ce que je peux dire, en revanche, c’est ce sur quoi je travaille.
           </p>
         </>
       }
     >
-      <div className="mt-14 grid gap-10 sm:grid-cols-3">
+      <ul className="mt-12 max-w-3xl border-b border-filet-fort">
+        {TRAVAUX.map((travail) => (
+          <li key={travail.corps} className="border-t border-filet-fort py-5">
+            <p className="text-lg leading-snug">{travail.corps}</p>
+            {travail.etat ? (
+              <p className="mt-2 font-mono text-xs uppercase tracking-[0.14em] text-carbone">
+                {travail.etat}
+              </p>
+            ) : null}
+          </li>
+        ))}
+      </ul>
+
+      <p className="mt-12 max-w-2xl text-lg text-encre-sourde">
+        Et voici ce que vous pouvez lire en entier avant de me confier quoi que ce soit.
+      </p>
+
+      <div className="mt-12 grid gap-10 sm:grid-cols-3">
         <VerifiableItem
           titre="Ce que je reprends"
           corps="Trois conditions décident d’une reprise, et aucune ne porte sur le langage. Avec les cas les plus fréquents, et ce que je refuse."
@@ -253,8 +271,8 @@ function Tarif() {
             achetez est un nombre de jours, écrit et validé avant de commencer.
           </p>
           <p className="calque pl-5 text-lg leading-snug">
-            Pas de forfait opaque, pas de surprise en fin de mois, pas de facturation à
-            l’estimation dépassée.
+            Aucune journée supplémentaire n’est engagée sans votre accord écrit. Pas de forfait
+            opaque, pas de surprise en fin de mois.
           </p>
         </div>
         <p className="mt-10 font-mono text-xs text-encre-sourde">{LEGAL.tva}</p>

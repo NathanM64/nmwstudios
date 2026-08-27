@@ -107,7 +107,7 @@ function Technos() {
         </p>
       }
     >
-      <ul className="mt-12 max-w-3xl">
+      <ul className="mt-12 max-w-3xl border-b border-filet-fort">
         {CRITERES.map((critere) => (
           <li key={critere} className="border-t border-filet-fort py-4 text-lg">
             {critere}
@@ -156,7 +156,7 @@ function Depart() {
       }
     >
       <div className="mt-14 grid gap-x-10 gap-y-6 md:grid-cols-2">
-        <ul>
+        <ul className="border-b border-filet-fort">
           {[
             'Le dépôt Git, avec tout l’historique des changements.',
             'Les accès à l’hébergement et au nom de domaine, à votre nom.',

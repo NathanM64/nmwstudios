@@ -5,7 +5,11 @@ import { Entete } from '@/components/shell/Entete'
 import { Pied } from '@/components/shell/Pied'
 import { LEGAL } from '@/lib/legal'
 
-export const metadata: Metadata = { title: 'Mentions légales' }
+export const metadata: Metadata = {
+  title: 'Mentions légales',
+  // L'adresse postale est obligatoire ici, pas dans les moteurs de recherche.
+  robots: { index: false, follow: true },
+}
 
 export default function Page() {
   return (

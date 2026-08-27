@@ -7,6 +7,5 @@ export default function sitemap(): MetadataRoute.Sitemap {
   return [
     { url: `${base}/`, priority: 1 },
     { url: `${base}/reprise-et-maintenance/`, priority: 0.9 },
-    { url: `${base}/mentions-legales/`, priority: 0.2 },
   ]
 }

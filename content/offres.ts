@@ -33,7 +33,7 @@ export const OFFRES: Offre[] = [
     declencheur: "Vous avez hérité d’un site que personne ne veut toucher.",
     corps:
       "Un projet développé ailleurs, par quelqu’un qui n’est plus là. Je le reprends, je le garde en vie et je le fais avancer, sans repartir de zéro.",
-    engagement: 'Au mois, résiliable.',
+    engagement: 'Au mois, une enveloppe de jours convenue à l’avance, résiliable.',
     dominante: true,
     lien: { href: '/reprise-et-maintenance/', texte: 'Comment ça se passe' },
   },
