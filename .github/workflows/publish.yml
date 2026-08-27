@@ -1,0 +1,53 @@
+# Construit l'image et la publie sur GHCR. Le serveur ne compile jamais rien :
+# il se contente de tirer cette image et de redémarrer le conteneur.
+name: Publier l'image
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  publier:
+    runs-on: ubuntu-latest
+
+    # GITHUB_TOKEN suffit à pousser sur GHCR quand le paquet appartient au même
+    # compte : aucun secret à créer. Le paquet étant public, le serveur n'a pas
+    # non plus besoin de s'authentifier pour le tirer.
+    #
+    # GHCR crée tout nouveau paquet en PRIVÉ : la visibilité se bascule à la
+    # main une fois, après le premier build.
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - uses: actions/checkout@v7
+
+      # buildx active le cache distant de l'étape suivante.
+      - uses: docker/setup-buildx-action@v4
+
+      - uses: docker/login-action@v4
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: docker/build-push-action@v7
+        with:
+          context: .
+          push: true
+          # Nom en minuscules écrit en dur : ${{ github.repository }} vaudrait
+          # NathanM64/nmwstudios, et Docker refuse les majuscules dans un nom
+          # d'image. L'erreur arrive à la poussée, pas au build.
+          #
+          # Deux tags à chaque fois : `latest` pour le déploiement courant, le
+          # SHA pour pouvoir revenir en arrière sur une version précise sans
+          # reconstruire quoi que ce soit.
+          tags: |
+            ghcr.io/nathanm64/nmwstudios:latest
+            ghcr.io/nathanm64/nmwstudios:${{ github.sha }}
+          # Le cache vit chez GitHub : yarn install et next build ne repartent
+          # pas de zéro à chaque commit.
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
