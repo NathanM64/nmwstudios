@@ -3,25 +3,45 @@ import { Container } from '@/components/ui/Container'
 import { Logo } from '@/components/ui/Logo'
 import { LEGAL } from '@/lib/legal'
 
-// Le logo signe en bas, comme un cachet sur un document. En haut de page, la place revient
-// au nom de l'agence.
+// Le logo signe en bas, comme un cachet sur un document. L'arête s'éteint sur ses deux bords :
+// c'est le seul trait horizontal du site, et il ne touche jamais la marge.
 export function Pied() {
   return (
-    <footer className="regle mt-24 py-12">
-      <Container className="flex flex-wrap items-end justify-between gap-x-10 gap-y-8">
-        <div>
-          <Logo className="h-14 w-14 text-encre" />
-          <p className="mt-5 font-mono text-xs text-encre-sourde">
-            {LEGAL.adresse.split(',').slice(1).join(',').trim()} · à distance partout en France
-          </p>
-        </div>
-        <div className="flex flex-wrap gap-x-6 gap-y-2 font-mono text-xs text-encre-sourde">
-          <a href={`mailto:${LEGAL.email}`} className="hover:text-carbone">
-            {LEGAL.email}
-          </a>
-          <Link href="/mentions-legales/" className="hover:text-carbone">
-            Mentions légales
-          </Link>
+    <footer className="pb-14 pt-16">
+      <Container>
+        <div
+          aria-hidden="true"
+          className="h-px w-full bg-gradient-to-r from-transparent via-encre/18 to-transparent"
+        />
+        <div className="mt-12 flex flex-wrap items-end justify-between gap-x-12 gap-y-10">
+          <div>
+            <Logo className="h-12 w-12 text-encre" />
+            <p className="mt-5 text-sm text-encre-douce">
+              {LEGAL.adresse.split(',').slice(1).join(',').trim()}
+              <br />
+              À distance partout en France
+            </p>
+          </div>
+          <div className="flex flex-col items-start gap-2 text-sm">
+            <a
+              href={`mailto:${LEGAL.email}`}
+              className="lien-souligne font-display font-bold tracking-[-0.01em]"
+            >
+              {LEGAL.email}
+            </a>
+            <a
+              href={`tel:${LEGAL.telephoneLien}`}
+              className="chiffres text-encre-douce transition-colors duration-300 hover:text-encre"
+            >
+              {LEGAL.telephone}
+            </a>
+            <Link
+              href="/mentions-legales/"
+              className="mt-3 text-encre-douce transition-colors duration-300 hover:text-encre"
+            >
+              Mentions légales
+            </Link>
+          </div>
         </div>
       </Container>
     </footer>

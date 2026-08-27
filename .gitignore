@@ -48,6 +48,8 @@ next-env.d.ts
 *.md
 !README.md
 !CLAUDE.md
+!DESIGN.md
+!PRODUCT.md
 
 # Documentation de travail : specs, plans, journaux et rapports de relecture.
 # Le dépôt est public et ces fichiers portent des données commerciales

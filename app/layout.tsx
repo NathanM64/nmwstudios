@@ -1,24 +1,24 @@
-import type { Metadata } from 'next'
-import { Archivo, IBM_Plex_Mono, Source_Serif_4 } from 'next/font/google'
+import type { Metadata, Viewport } from 'next'
+import { Hanken_Grotesk, Schibsted_Grotesk } from 'next/font/google'
+import { Refraction } from '@/components/ui/Refraction'
 import './globals.css'
 
 // Les variables se posent sur <html>. Tailwind déclare --font-* sur :root : plus bas,
 // la var() serait irrésolue au moment de la déclaration et la police jamais appliquée.
-const archivo = Archivo({ variable: '--font-archivo', subsets: ['latin'], display: 'swap' })
-const sourceSerif = Source_Serif_4({ variable: '--font-source-serif', subsets: ['latin'], display: 'swap' })
-const plexMono = IBM_Plex_Mono({
-  variable: '--font-plex-mono',
-  subsets: ['latin'],
-  weight: ['400', '500'],
-  display: 'swap',
-})
+const schibsted = Schibsted_Grotesk({ variable: '--font-schibsted', subsets: ['latin'], display: 'swap' })
+const hanken = Hanken_Grotesk({ variable: '--font-hanken', subsets: ['latin'], display: 'swap' })
 
-const POLICES = [archivo, sourceSerif, plexMono]
+const POLICES = [schibsted, hanken]
+
+export const viewport: Viewport = {
+  // La barre d'adresse reprend la couleur du mur : le document ne s'arrête pas au viewport.
+  themeColor: '#e4e7ec',
+}
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://nmwstudios.com'),
   title: {
-    default: "NMW Studios · Développeur en marque blanche pour agences",
+    default: 'NMW Studios · Développeur en marque blanche pour agences',
     template: '%s · NMW Studios',
   },
   description:
@@ -33,7 +33,10 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="fr" className={POLICES.map((p) => p.variable).join(' ')}>
-      <body>{children}</body>
+      <body>
+        {children}
+        <Refraction />
+      </body>
     </html>
   )
 }

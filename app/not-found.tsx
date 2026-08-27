@@ -7,23 +7,29 @@ export default function NotFound() {
   return (
     <>
       <Entete />
-      <main className="regle py-28">
+      <main className="py-24 sm:py-32">
         <Container>
-          <p className="font-mono text-[0.6875rem] uppercase tracking-[0.2em] text-carbone">
-            Erreur 404
-          </p>
-          <h1 className="mt-8 max-w-[16ch] font-display text-[clamp(2rem,5vw,3.5rem)] font-extrabold leading-[1] tracking-[-0.035em]">
+          <h1 className="entre max-w-[14ch] font-display text-[clamp(2.2rem,5.4vw,4rem)] font-extrabold leading-[0.98] tracking-[-0.04em]">
             Cette page n’existe pas.
           </h1>
-          <p className="mt-8 max-w-xl text-lg text-encre-sourde">
+          <p
+            className="entre mt-8 max-w-[40rem] text-lg leading-relaxed text-encre-douce"
+            style={{ '--rang': 1 } as React.CSSProperties}
+          >
             Le lien est peut-être ancien. Les deux pages du site sont l’accueil et la reprise de
             site existant.
           </p>
-          <div className="mt-10 flex flex-wrap gap-x-8 gap-y-3 font-mono text-xs uppercase tracking-[0.14em]">
-            <Link href="/" className="text-carbone hover:underline">
+          <div
+            className="entre mt-10 flex flex-wrap gap-x-10 gap-y-3"
+            style={{ '--rang': 2 } as React.CSSProperties}
+          >
+            <Link href="/" className="lien-souligne font-display text-lg font-bold">
               Accueil
             </Link>
-            <Link href="/reprise-et-maintenance/" className="text-carbone hover:underline">
+            <Link
+              href="/reprise-et-maintenance/"
+              className="lien-souligne font-display text-lg font-bold"
+            >
               Reprise et maintenance
             </Link>
           </div>

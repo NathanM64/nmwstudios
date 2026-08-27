@@ -1,26 +1,38 @@
 import Link from 'next/link'
 import { Container } from '@/components/ui/Container'
+import { Logo } from '@/components/ui/Logo'
+import { Verre } from '@/components/ui/Verre'
+import { LEGAL } from '@/lib/legal'
 
-// Le nom du studio reste petit et en haut. Sur ce site, la place centrale revient au
-// nom de l'agence, pas au mien.
+// Une barre de verre flottante, détachée des bords par le conteneur. Sous 640px le lien
+// secondaire disparaît : seule l'action reste, elle ne quitte jamais le pouce.
 export function Entete() {
   return (
-    <header className="regle border-t-0">
-      <Container className="flex flex-wrap items-baseline justify-between gap-x-8 gap-y-2 py-5">
-        <Link
-          href="/"
-          className="font-mono text-xs uppercase tracking-[0.22em] text-encre hover:text-carbone"
-        >
-          NMW Studios
-        </Link>
-        <nav className="flex flex-wrap items-baseline gap-x-6 gap-y-1 font-mono text-xs uppercase tracking-[0.14em] text-encre-sourde">
-          <Link href="/reprise-et-maintenance/" className="hover:text-carbone">
-            Reprise et maintenance
+    <header className="sticky top-0 z-20 pt-4 sm:pt-5">
+      <Container>
+        <Verre dense flou={18} className="flex items-center justify-between gap-4 py-2.5 pl-4 pr-2.5 sm:pl-6 sm:pr-3">
+          <Link href="/" className="flex items-center gap-3 rounded-[4px]">
+            <Logo className="h-7 w-7 shrink-0 text-encre" />
+            <span className="hidden font-display text-[0.95rem] font-bold tracking-[-0.02em] sm:inline">
+              NMW Studios
+            </span>
           </Link>
-          <Link href="/#contact" className="hover:text-carbone">
-            Contact
-          </Link>
-        </nav>
+
+          <nav className="flex items-center gap-1 sm:gap-5">
+            <Link
+              href="/reprise-et-maintenance/"
+              className="hidden rounded-[4px] px-1 text-[0.95rem] text-encre-douce transition-colors duration-300 hover:text-encre sm:block"
+            >
+              Reprise et maintenance
+            </Link>
+            <a
+              href={`mailto:${LEGAL.email}`}
+              className="capsule whitespace-nowrap px-5 py-2.5 font-display text-[0.9rem] font-bold tracking-[-0.01em] sm:px-6 sm:text-[0.95rem]"
+            >
+              Écrire un message
+            </a>
+          </nav>
+        </Verre>
       </Container>
     </header>
   )

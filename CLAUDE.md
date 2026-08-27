@@ -35,10 +35,20 @@ Avant d'ajouter un filet, poser la question : est-ce qu'un changement plausible 
 
 ## Direction visuelle
 
-« Carbone » : le papier d'un duplicata de contrat, l'encre bleu-violet qui imprime dessous
-sans être vue. Un seul mode, pas de thème sombre. Archivo pour les titres, Source Serif 4
-pour le corps, IBM Plex Mono pour les étiquettes et les chiffres.
+« Le pli » : un mur de lumière grise et grenue, fixe sous toute la page, et des dalles de
+verre presque incolores qui le compriment sur leur tranche. Un seul mode, pas de thème
+sombre, aucune couleur. Schibsted Grotesk pour les titres, Hanken Grotesk pour le corps,
+aucune monospace. Le détail est dans `DESIGN.md`, qui fait autorité.
 
-Le geste de signature est le décalque (`.calque`) : chaque promesse porte sa contrepartie,
-imprimée en carbone et calée deux pixels plus bas. C'est le seul effet du site. Ne pas en
-ajouter d'autre.
+Le geste de signature est la réfraction : `components/ui/Refraction.tsx` mesure chaque
+élément `data-verre`, calcule sa carte de déplacement à sa taille et la pose en
+`backdrop-filter`. Le mur ne défile pas, le verre passe dessus, et le pli vit sans script
+d'animation. Ne pas ajouter de deuxième matériau.
+
+Les classes du système vont dans `@layer base` ou `@layer components`. Hors couche, elles
+battent les utilitaires Tailwind : `.verre { position: relative }` a déjà annulé en silence
+un `absolute` posé sur une dalle.
+
+Aucune animation ne passe par un écouteur de défilement : `animation-timeline: view()` et
+`IntersectionObserver` couvrent tout. Tout mouvement est gardé derrière
+`prefers-reduced-motion`.

@@ -1,101 +1,339 @@
 @import 'tailwindcss';
 
-/* Direction « carbone ». Le papier d'un duplicata de contrat, l'encre bleu-violet qui
-   imprime dessous sans jamais être vue. Un seul mode : ce site est un document. */
+/* Direction « le pli ». Un mur de lumière grise, des dalles de verre presque incolores qui
+   compriment ce mur sur leur tranche, et deux surfaces noires par page. Aucune teinte. */
 @theme {
-  --color-papier: #ede9e0;
-  --color-papier-creux: #e2ddd1;
-  --color-encre: #14161c;
-  --color-encre-sourde: #56564f;
-  --color-carbone: #2f3a8c;
-  --color-filet: rgba(20, 22, 28, 0.16);
-  --color-filet-fort: rgba(20, 22, 28, 0.32);
+  --color-papier: #e4e7ec;
+  --color-papier-creux: #d9dde4;
+  --color-encre: #12151a;
+  --color-encre-douce: #545c67;
+  --color-blanc-vif: #f2f5f8;
 
-  --font-display: var(--font-archivo), system-ui, sans-serif;
-  --font-sans: var(--font-source-serif), Georgia, serif;
-  --font-mono: var(--font-plex-mono), ui-monospace, monospace;
+  --font-display: var(--font-schibsted), system-ui, sans-serif;
+  --font-sans: var(--font-hanken), system-ui, sans-serif;
 
-  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --radius-verre: 26px;
+  --radius-verre-epais: 30px;
+
+  --ease-verre: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-html {
-  background-color: var(--color-papier);
-  color-scheme: light;
-  /* Le grain du papier : deux trames très faibles, pas d'image à télécharger. */
-  background-image:
-    repeating-linear-gradient(0deg, rgba(20, 22, 28, 0.018) 0 1px, transparent 1px 3px),
-    repeating-linear-gradient(90deg, rgba(20, 22, 28, 0.014) 0 1px, transparent 1px 4px);
+/* Les classes du système vivent dans des couches : hors couche, elles battraient les
+   utilitaires Tailwind, et un `absolute` posé sur une dalle serait silencieusement annulé. */
+@layer base {
+  html {
+    background-color: var(--color-papier);
+    color-scheme: light;
+    scroll-behavior: smooth;
+  }
+
+  /* Le mur : un champ de lumière, jamais un aplat. La clarté descend de l'angle haut gauche
+     et se creuse vers le bas. C'est ce dégradé que la tranche des dalles vient comprimer. */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: -2;
+    pointer-events: none;
+    background-color: var(--color-papier);
+    background-image:
+      radial-gradient(118% 88% at 10% -8%, #f8fafc 0%, rgb(248 250 252 / 0) 56%),
+      radial-gradient(86% 66% at 92% 6%, #eef1f5 0%, rgb(238 241 245 / 0) 62%),
+      radial-gradient(150% 118% at 46% 112%, #d3d9e1 0%, rgb(211 217 225 / 0) 66%);
+  }
+
+  /* Le grain. Sans matière fine derrière, une déformation de verre glisse sur un dégradé
+     lisse et ne se voit pas : c'est lui que la tranche brouille sur ses deux millimètres. */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    opacity: 0.75;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23g)' opacity='0.62'/%3E%3C/svg%3E");
+  }
+
+  body {
+    min-height: 100dvh;
+    color: var(--color-encre);
+    font-family: var(--font-sans);
+    font-size: 1.0625rem;
+    line-height: 1.62;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  ::selection {
+    background-color: var(--color-encre);
+    color: var(--color-blanc-vif);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-encre);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: rgb(18 21 26 / 0.32);
+    border-radius: 999px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background-color: transparent;
+  }
 }
 
-body {
-  min-height: 100dvh;
-  color: var(--color-encre);
-  font-family: var(--font-sans);
-  font-size: 1.0625rem;
-  line-height: 1.6;
-  -webkit-font-smoothing: antialiased;
+@layer components {
+  .chiffres {
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* ── Le verre ──
+     Dégradé blanc très bas, liseré interne, ombre portée lointaine, aucune bordure. Le flou
+     n'est qu'un repli : dès que Refraction a mesuré la dalle, il pose un filtre de
+     déplacement à sa place et le centre redevient net. */
+  .verre,
+  .verre-epais {
+    position: relative;
+    backdrop-filter: blur(6px) saturate(1.4);
+    -webkit-backdrop-filter: blur(6px) saturate(1.4);
+  }
+
+  .verre {
+    border-radius: var(--radius-verre);
+    background-image: linear-gradient(158deg, rgb(255 255 255 / 0.17), rgb(255 255 255 / 0.05));
+    box-shadow:
+      inset 0 1.5px 0 rgb(255 255 255 / 0.95),
+      inset 0 -1.5px 0 rgb(255 255 255 / 0.6),
+      inset 0 0 0 1px rgb(18 21 26 / 0.08),
+      0 24px 50px -28px rgb(18 21 26 / 0.5);
+  }
+
+  /* La barre de navigation passe sur le contenu : elle porte plus de blanc que les dalles
+     de contenu, sinon deux lectures se superposent. */
+  .verre-dense {
+    background-image: linear-gradient(158deg, rgb(255 255 255 / 0.74), rgb(255 255 255 / 0.58));
+  }
+
+  .verre-epais {
+    border-radius: var(--radius-verre-epais);
+    background-image: linear-gradient(158deg, rgb(255 255 255 / 0.28), rgb(255 255 255 / 0.09));
+    box-shadow:
+      inset 0 2px 0 rgb(255 255 255 / 1),
+      inset 0 -2px 0 rgb(255 255 255 / 0.7),
+      inset 0 0 0 1px rgb(18 21 26 / 0.1),
+      0 40px 80px -34px rgb(18 21 26 / 0.6);
+  }
+
+  /* L'arête spéculaire : un filet en dégradé qui s'allume en haut à gauche et se rallume en
+     bas à droite, masqué pour ne peindre que le contour. */
+  .verre::after,
+  .verre-epais::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    pointer-events: none;
+    background-image: linear-gradient(
+      158deg,
+      rgb(255 255 255 / 0.95),
+      rgb(255 255 255 / 0.08) 36%,
+      rgb(255 255 255 / 0.06) 64%,
+      rgb(255 255 255 / 0.8)
+    );
+    -webkit-mask:
+      linear-gradient(black 0 0) content-box,
+      linear-gradient(black 0 0);
+    -webkit-mask-composite: xor;
+    mask:
+      linear-gradient(black 0 0) content-box exclude,
+      linear-gradient(black 0 0);
+  }
+
+  /* Une dalle prend la lumière de ce qu'elle touche : sur la bande noire, le verre monte. */
+  .sur-encre.verre,
+  .sur-encre.verre-epais {
+    background-image: linear-gradient(158deg, rgb(255 255 255 / 0.2), rgb(255 255 255 / 0.07));
+    box-shadow:
+      inset 0 1.5px 0 rgb(255 255 255 / 0.4),
+      inset 0 -1.5px 0 rgb(255 255 255 / 0.16),
+      inset 0 0 0 1px rgb(255 255 255 / 0.1),
+      0 30px 60px -30px rgb(8 10 14 / 0.92);
+  }
+
+  .sur-encre.verre::after,
+  .sur-encre.verre-epais::after {
+    background-image: linear-gradient(
+      158deg,
+      rgb(255 255 255 / 0.55),
+      rgb(255 255 255 / 0.04) 38%,
+      rgb(255 255 255 / 0.03) 62%,
+      rgb(255 255 255 / 0.34)
+    );
+  }
+
+  /* Sans transparence, la dalle devient une surface pleine plutôt qu'un rectangle fantôme. */
+  @media (prefers-reduced-transparency: reduce) {
+    .verre,
+    .verre-epais {
+      background-image: none;
+      background-color: rgb(255 255 255 / 0.94);
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+    }
+  }
+
+  /* ── L'action ──
+     Une seule capsule par écran. Le lien souligné porte tout le reste. */
+  .capsule {
+    display: inline-flex;
+    align-items: center;
+    border-radius: 999px;
+    background-image: linear-gradient(180deg, #2b323d, #05070a);
+    color: var(--color-blanc-vif);
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 0.22),
+      0 16px 34px -16px rgb(18 21 26 / 0.6);
+    transition:
+      translate 420ms var(--ease-verre),
+      box-shadow 420ms var(--ease-verre);
+  }
+
+  .capsule:hover {
+    translate: 0 -2px;
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 0.3),
+      0 24px 46px -18px rgb(18 21 26 / 0.72);
+  }
+
+  .capsule:active {
+    translate: 0 0;
+    scale: 0.985;
+  }
+
+  .lien-souligne {
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 6px;
+    text-decoration-color: rgb(18 21 26 / 0.35);
+    transition: text-decoration-color 300ms var(--ease-verre);
+  }
+
+  .lien-souligne:hover {
+    text-decoration-color: var(--color-encre);
+  }
+
+  /* ── La bande ──
+     La seule surface pleine et pleine largeur. Elle porte le chiffre, une fois par page. */
+  .bande {
+    color: var(--color-blanc-vif);
+    background-color: #080a0e;
+    /* Elle garde sa lumière rasante : la dalle posée dessus a besoin d'un dégradé à plier. */
+    background-image:
+      radial-gradient(88% 130% at 16% -10%, rgb(255 255 255 / 0.12) 0%, rgb(255 255 255 / 0) 58%),
+      linear-gradient(168deg, #1a1f27, #080a0e);
+  }
+
+  /* Le décalage des contreparties : chaque ligne s'enfonce un peu plus dans la marge. Sur
+     téléphone tout revient au bord gauche, sinon la colonne se réduit à rien. */
+  @media (min-width: 768px) {
+    .decale {
+      margin-left: calc(var(--rang, 0) * 1.75rem);
+    }
+  }
+
+  .reflet {
+    overflow: hidden;
+  }
 }
 
-::selection {
-  background-color: var(--color-carbone);
-  color: var(--color-papier);
-}
-
-:focus-visible {
-  outline: 2px solid var(--color-carbone);
-  outline-offset: 3px;
-}
-
-/* ── Le geste de signature ──
-   Le décalque : une contrepartie imprimée en carbone, calée deux pixels plus bas que le
-   texte auquel elle répond, comme la feuille du dessous qui a bougé sous la pression. */
-.calque {
-  border-left: 2px solid var(--color-carbone);
-  color: var(--color-carbone);
-  translate: 0 2px;
-  /* Le filet épouse son texte : étiré par la grille, il descendrait seul jusqu'en bas
-     de la rangée et se lirait comme une colonne, pas comme une réponse. */
-  align-self: start;
-}
-
-/* Cartouche de signature : le champ vide d'un contrat, laissé au nom de l'agence. */
-.cartouche {
-  border: 1px dashed var(--color-carbone);
-  color: var(--color-carbone);
-}
-
-/* Filet de section : un trait de règle, pas une bordure de carte. */
-.regle {
-  border-top: 1px solid var(--color-filet);
-}
-
+/* ── Le mouvement ──
+   Trois gestes seulement : l'entrée au chargement, la montée au défilement, le remplissage
+   d'un rail de séquence. Tout passe par transform, opacity et clip-path. */
 @media (prefers-reduced-motion: no-preference) {
   .entre {
-    animation: entre 520ms var(--ease-out) both;
-    animation-delay: calc(var(--rang, 0) * 90ms);
+    animation: monte 620ms var(--ease-verre) both;
+    animation-delay: calc(var(--rang, 0) * 110ms);
+  }
+
+  @supports (animation-timeline: view()) {
+    .monte {
+      animation: monte linear both;
+      animation-timeline: view();
+      animation-range: entry 12% entry 92%;
+    }
+
+    /* Le rail d'une séquence se remplit sur toute la traversée de la liste, pas sur son
+       entrée, sinon il est plein avant qu'on ait lu la première étape. */
+    .remplit {
+      animation: remplit linear both;
+      animation-timeline: view();
+      animation-range: entry 85% exit 15%;
+      transform-origin: top center;
+    }
+
+    .devoile {
+      animation: devoile linear both;
+      animation-timeline: view();
+      animation-range: entry 20% entry 100%;
+    }
+  }
+
+  /* La lumière qui passe sur une dalle : une bande claire très lente, en transform pur. */
+  .reflet > .reflet-bande {
+    position: absolute;
+    inset: -40% -60%;
+    pointer-events: none;
+    background-image: linear-gradient(
+      74deg,
+      transparent 40%,
+      rgb(255 255 255 / 0.2) 50%,
+      transparent 60%
+    );
+    animation: reflet 16s linear infinite;
   }
 }
 
-@keyframes entre {
-  from { opacity: 0; translate: 0 0.6rem; }
-  to { opacity: 1; translate: 0 0; }
-}
-
-/* Le décalque garde son décalage : sans cette reprise, l'animation le remettrait à zéro. */
-@media (prefers-reduced-motion: no-preference) {
-  .calque.entre {
-    animation-name: entre-calque;
+@keyframes monte {
+  from {
+    opacity: 0;
+    translate: 0 1.25rem;
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
   }
 }
 
-@keyframes entre-calque {
-  from { opacity: 0; translate: 0 0.6rem; }
-  to { opacity: 1; translate: 0 2px; }
+@keyframes remplit {
+  from {
+    scale: 1 0;
+  }
+  to {
+    scale: 1 1;
+  }
 }
 
-/* Sur la bande encre, le carbone ne se lit plus : le décalque imprime alors dans l'encre de
-   la feuille qu'il touche, ici le papier. */
-.calque.sur-encre {
-  border-left-color: var(--color-papier);
-  color: color-mix(in oklab, var(--color-papier) 80%, transparent);
+@keyframes devoile {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+@keyframes reflet {
+  from {
+    translate: -60% 0;
+  }
+  to {
+    translate: 60% 0;
+  }
 }

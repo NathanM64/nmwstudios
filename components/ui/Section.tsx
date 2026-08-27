@@ -1,20 +1,14 @@
 import { Container } from '@/components/ui/Container'
 
-export function Surtitre({ children }: { children: React.ReactNode }) {
-  return (
-    <p className="font-mono text-[0.6875rem] uppercase tracking-[0.2em] text-carbone">{children}</p>
-  )
-}
-
 // La respiration suit le poids : une section de transition ne pèse pas autant qu'un argument.
 const DENSITES = {
-  basse: 'py-12 sm:py-16',
-  normale: 'py-16 sm:py-24',
+  basse: 'py-16 sm:py-20',
+  normale: 'py-24 sm:py-32',
 } as const
 
+// Aucune étiquette au-dessus d'un titre : le titre porte son propre poids.
 export function Section({
   id,
-  surtitre,
   titre,
   chapeau,
   largeur = 'normale',
@@ -23,7 +17,6 @@ export function Section({
   children,
 }: {
   id?: string
-  surtitre?: string
   titre?: React.ReactNode
   chapeau?: React.ReactNode
   largeur?: 'normale' | 'serree' | 'pleine'
@@ -31,26 +24,26 @@ export function Section({
   densite?: keyof typeof DENSITES
   children?: React.ReactNode
 }) {
-  const entete = surtitre ?? titre ?? chapeau
   return (
     <section
       id={id}
-      className={`regle ${DENSITES[densite]} ${fond === 'creux' ? 'bg-papier-creux' : ''}`}
+      className={`${DENSITES[densite]} ${fond === 'creux' ? 'bg-papier-creux/70' : ''}`}
     >
-      {entete ? (
+      {titre || chapeau ? (
         <Container largeur={largeur === 'pleine' ? 'normale' : largeur}>
-          {surtitre ? <Surtitre>{surtitre}</Surtitre> : null}
           {titre ? (
-            <h2 className="mt-5 max-w-3xl font-display text-[clamp(1.7rem,3.6vw,2.6rem)] font-bold leading-[1.06] tracking-[-0.025em]">
+            <h2 className="monte max-w-[22ch] font-display text-[clamp(1.9rem,4.2vw,3rem)] font-extrabold leading-[1.03] tracking-[-0.03em] text-balance">
               {titre}
             </h2>
           ) : null}
           {chapeau ? (
-            <div className="mt-6 max-w-2xl text-lg text-encre-sourde">{chapeau}</div>
+            <div className="monte mt-7 max-w-[40rem] text-lg leading-relaxed text-encre-douce">
+              {chapeau}
+            </div>
           ) : null}
         </Container>
       ) : null}
-      {/* Pleine largeur : le bloc traverse la page, au lieu d'être posé dans le conteneur. */}
+      {/* Pleine largeur : le bloc traverse la page au lieu d'être posé dans le conteneur. */}
       {largeur === 'pleine' ? children : <Container largeur={largeur}>{children}</Container>}
     </section>
   )

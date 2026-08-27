@@ -1,49 +1,52 @@
 import { Container } from '@/components/ui/Container'
-import { Surtitre } from '@/components/ui/Section'
+import { Verre } from '@/components/ui/Verre'
 import { LEGAL, RENDEZ_VOUS } from '@/lib/legal'
 
+// L'email est le chemin principal et assumé comme tel : il est écrit en toutes lettres,
+// à la taille d'un titre, plutôt que caché derrière un libellé.
 export function Contact() {
   return (
-    <section id="contact" className="regle py-16 sm:py-24">
+    <section id="contact" className="py-20 sm:py-28">
       <Container>
-        <Surtitre>Contact</Surtitre>
-        <h2 className="mt-5 max-w-3xl font-display text-[clamp(1.7rem,3.6vw,2.6rem)] font-bold leading-[1.06] tracking-[-0.025em]">
-          Écrivez-moi ce que vous avez sur les bras.
-        </h2>
-        <p className="mt-6 max-w-2xl text-lg text-encre-sourde">
-          Une adresse de dépôt Git, une URL, ou trois lignes sur la situation. Je vous dis
-          franchement si c’est pour moi ou non.
-        </p>
+        <Verre epais reflet className="monte px-7 py-10 sm:px-12 sm:py-14">
+          <div className="grid gap-x-14 gap-y-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,20rem)] lg:items-end">
+            <div>
+              <h2 className="max-w-[18ch] font-display text-[clamp(1.9rem,4.2vw,3rem)] font-extrabold leading-[1.03] tracking-[-0.03em] text-balance">
+                Écrivez-moi ce que vous avez sur les bras.
+              </h2>
+              <p className="mt-6 max-w-[40rem] text-lg leading-relaxed text-encre-douce">
+                Une adresse de dépôt Git, une URL, ou trois lignes sur la situation. Je vous dis
+                franchement si c&rsquo;est pour moi ou non.
+              </p>
+              <a
+                href={`mailto:${LEGAL.email}`}
+                className="lien-souligne mt-9 inline-block font-display text-[clamp(1.35rem,3.4vw,2.1rem)] font-extrabold tracking-[-0.03em]"
+              >
+                {LEGAL.email}
+              </a>
+            </div>
 
-        <div className="mt-10 flex flex-wrap items-center gap-x-10 gap-y-5">
-          {RENDEZ_VOUS ? (
-            <a
-              href={RENDEZ_VOUS}
-              target="_blank"
-              rel="noreferrer"
-              className="bg-encre px-7 py-4 font-display text-lg font-bold tracking-[-0.01em] text-papier hover:bg-carbone"
-            >
-              Réserver un créneau
-            </a>
-          ) : null}
-          <a
-            href={`mailto:${LEGAL.email}`}
-            className="font-display text-[clamp(1.25rem,3vw,1.75rem)] font-bold tracking-[-0.02em] text-carbone underline decoration-2 underline-offset-[6px] hover:decoration-encre"
-          >
-            {LEGAL.email}
-          </a>
-          <a
-            href={`tel:${LEGAL.telephoneLien}`}
-            className="font-mono text-sm text-encre-sourde hover:text-carbone"
-          >
-            {LEGAL.telephone}
-          </a>
-        </div>
-
-        <p className="mt-10 max-w-2xl font-mono text-xs leading-relaxed text-encre-sourde">
-          Ce site ne charge aucun script tiers et ne mesure aucune visite.
-          {RENDEZ_VOUS ? ' La prise de rendez-vous ouvre un service externe, dans un autre onglet.' : ''}
-        </p>
+            <div className="text-sm leading-relaxed text-encre-douce">
+              <a
+                href={`tel:${LEGAL.telephoneLien}`}
+                className="chiffres font-display text-lg font-bold tracking-[-0.02em] text-encre transition-opacity duration-300 hover:opacity-70"
+              >
+                {LEGAL.telephone}
+              </a>
+              {RENDEZ_VOUS ? (
+                <p className="mt-4">
+                  <a href={RENDEZ_VOUS} target="_blank" rel="noreferrer" className="lien-souligne">
+                    Réserver un créneau
+                  </a>
+                  , dans un autre onglet.
+                </p>
+              ) : null}
+              <p className="mt-5">
+                Pas de formulaire : il faudrait un service tiers, donc un script et un cookie.
+              </p>
+            </div>
+          </div>
+        </Verre>
       </Container>
     </section>
   )

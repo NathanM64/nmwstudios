@@ -1,9 +1,12 @@
 import Link from 'next/link'
 import { Container } from '@/components/ui/Container'
 import { Section } from '@/components/ui/Section'
+import { Verre } from '@/components/ui/Verre'
+import { Logo } from '@/components/ui/Logo'
 import { Entete } from '@/components/shell/Entete'
 import { Pied } from '@/components/shell/Pied'
 import { Contact } from '@/components/blocs/Contact'
+import { Releve } from '@/components/blocs/Releve'
 import { OFFRES } from '@/content/offres'
 import { ENGAGEMENTS } from '@/content/engagements'
 import { LEGAL, TJM } from '@/lib/legal'
@@ -27,62 +30,74 @@ export default function Page() {
 
 function Hero() {
   return (
-    <section className="regle py-20 sm:py-28">
+    <section className="pb-14 pt-14 sm:pb-20 sm:pt-20">
       <Container>
-        <p className="entre font-mono text-[0.6875rem] uppercase tracking-[0.2em] text-carbone">
-          Sous-traitance technique · Marque blanche · Bordeaux
-        </p>
-        <h1
-          className="entre mt-8 max-w-[19ch] font-display text-[clamp(2.4rem,6.4vw,4.6rem)] font-extrabold leading-[0.98] tracking-[-0.035em]"
-          style={{ '--rang': 1 } as React.CSSProperties}
-        >
-          Le développeur des agences qui n’ont pas d’équipe technique.
-        </h1>
-        <p
-          className="entre mt-8 max-w-2xl text-xl leading-relaxed text-encre-sourde"
-          style={{ '--rang': 2 } as React.CSSProperties}
-        >
-          Je prends en charge vos projets web en marque blanche, de la reprise d’un existant à
-          la mise en production. Bordeaux, à distance partout en France.
-        </p>
-
-        <div
-          className="entre mt-14 flex flex-wrap items-end justify-between gap-x-10 gap-y-10"
-          style={{ '--rang': 3 } as React.CSSProperties}
-        >
-          <div className="flex flex-wrap items-baseline gap-x-8 gap-y-3">
+        <div className="grid items-center gap-x-16 gap-y-14 lg:grid-cols-[minmax(0,1fr)_22rem]">
+          <div>
+            <h1 className="entre max-w-[16ch] font-display text-[clamp(2rem,4.6vw,3.4rem)] font-extrabold leading-[1.02] tracking-[-0.035em] text-balance">
+              Le développeur des agences qui n’ont pas d’équipe technique.
+            </h1>
+            <p
+              className="entre mt-8 max-w-[40rem] text-lg leading-relaxed text-encre-douce sm:text-xl"
+              style={{ '--rang': 1 } as React.CSSProperties}
+            >
+              Je prends en charge vos projets web en marque blanche, de la reprise d’un existant
+              à la mise en production.
+            </p>
             <a
               href={`mailto:${LEGAL.email}`}
-              className="font-display text-lg font-bold tracking-[-0.01em] text-carbone underline decoration-2 underline-offset-[6px] hover:decoration-encre"
+              className="lien-souligne entre mt-10 inline-block font-display text-xl font-bold tracking-[-0.02em]"
+              style={{ '--rang': 2 } as React.CSSProperties}
             >
-              Parler d’un projet
+              Écrire un message
             </a>
-            <Link
-              href="/reprise-et-maintenance/"
-              className="font-mono text-xs uppercase tracking-[0.14em] text-encre-sourde hover:text-carbone"
-            >
-              Reprendre un site existant
-            </Link>
           </div>
 
-          {/* La signature d'un contrat, laissée au nom de l'agence : ce site ne met pas mon
-              nom au centre, il met le leur. */}
-          <div className="cartouche px-6 py-4">
-            <p className="font-mono text-[0.625rem] uppercase tracking-[0.2em] opacity-70">
-              Le travail est livré sous le nom de
-            </p>
-            <p className="mt-2 font-display text-2xl font-bold tracking-[-0.02em]">votre agence</p>
-          </div>
+          <Cartouche />
         </div>
       </Container>
     </section>
   )
 }
 
+// La signature d'un contrat, laissée au nom de l'agence. Ce site ne met pas mon nom au
+// centre : il le pose en filigrane, sous la dalle qui porte celui de l'agence.
+function Cartouche() {
+  return (
+    <div
+      className="entre relative mx-auto aspect-[6/5] w-full max-w-[21rem] lg:mx-0"
+      style={{ '--rang': 1 } as React.CSSProperties}
+    >
+      {/* Le seul endroit du site où ma marque est grande, et elle est sous la dalle qui porte
+          le nom de l'agence. C'est aussi ce que la tranche du verre a à plier. */}
+      <span aria-hidden="true">
+        <Logo className="absolute left-1/2 top-1/2 h-[122%] w-auto -translate-x-1/2 -translate-y-1/2 text-encre opacity-[0.09] blur-[1.5px] [mask-image:radial-gradient(closest-side,black_48%,transparent_96%)]" />
+      </span>
+      <div data-verre className="verre absolute bottom-0 left-10 right-0 top-14" />
+      <Verre
+        epais
+        reflet
+        className="absolute bottom-14 left-0 right-10 top-0 flex flex-col justify-between px-6 py-6"
+      >
+        <p className="max-w-[15ch] text-sm leading-snug text-encre-douce">
+          Le travail est livré sous le nom de
+        </p>
+        <p className="font-display text-[clamp(1.6rem,4.4vw,2.1rem)] font-extrabold leading-[0.95] tracking-[-0.04em]">
+          votre
+          <br />
+          agence
+        </p>
+      </Verre>
+    </div>
+  )
+}
+
 function Modes() {
+  const petites = OFFRES.filter((offre) => !offre.dominante)
+  const dominante = OFFRES.find((offre) => offre.dominante)
+
   return (
     <Section
-      surtitre="Trois manières de travailler ensemble"
       titre="Vous choisissez le niveau d’engagement, pas le tarif."
       chapeau={
         <p>
@@ -90,86 +105,87 @@ function Modes() {
           pour combien de temps.
         </p>
       }
-      largeur="pleine"
     >
-      {/* Bord à bord : la grille traverse la page comme un tableau, au lieu d'être une carte
-          posée dedans. */}
-      <div className="mx-auto mt-14 grid max-w-[110rem] gap-px border-y border-filet bg-filet sm:grid-cols-2 lg:grid-cols-3">
-        {OFFRES.map((offre) => (
-          <article
-            key={offre.id}
-            className={
-              offre.dominante
-                ? 'flex flex-col bg-encre p-6 text-papier sm:col-span-2 sm:p-10 lg:col-span-1'
-                : 'flex flex-col bg-papier p-6 sm:p-10'
-            }
-          >
-            <p
-              className={`font-mono text-[0.6875rem] uppercase tracking-[0.18em] ${
-                offre.dominante ? 'text-papier/70' : 'text-carbone'
-              }`}
-            >
+      {/* Deux dalles côte à côte, puis une troisième qui traverse : la reprise prend la
+          largeur entière parce que c'est elle qui dure. */}
+      <div className="mt-14 grid gap-5 sm:grid-cols-2">
+        {petites.map((offre) => (
+          <Verre key={offre.id} as="article" className="monte flex flex-col px-7 py-8 sm:px-9">
+            <h3 className="font-display text-2xl font-extrabold leading-[1.1] tracking-[-0.03em]">
               {offre.titre}
-            </p>
-            <h3
-              className={`mt-5 font-display text-2xl font-bold leading-[1.12] tracking-[-0.02em] ${
-                offre.dominante ? 'text-papier' : ''
-              }`}
-            >
-              {offre.declencheur}
             </h3>
-            <p
-              className={`mt-4 flex-1 ${offre.dominante ? 'text-papier/80' : 'text-encre-sourde'}`}
-            >
-              {offre.corps}
+            <p className="mt-4 font-display text-lg font-bold leading-snug tracking-[-0.02em]">
+              {offre.declencheur}
             </p>
-            <p
-              className={`mt-8 font-mono text-xs ${
-                offre.dominante ? 'text-papier' : 'text-encre'
-              }`}
-            >
-              {offre.engagement}
+            <p className="mt-4 leading-relaxed text-encre-douce">{offre.corps}</p>
+            <p className="mt-auto pt-8 text-sm text-encre-douce">
+              <span className="block border-t border-encre/10 pt-5">{offre.engagement}</span>
             </p>
-            {offre.lien ? (
-              <Link
-                href={offre.lien.href}
-                className="mt-3 font-mono text-xs uppercase tracking-[0.14em] text-papier underline decoration-1 underline-offset-4 hover:decoration-2"
-              >
-                {offre.lien.texte}
-              </Link>
-            ) : null}
-          </article>
+          </Verre>
         ))}
       </div>
+
+      {dominante ? (
+        <Verre
+          as="article"
+          epais
+          reflet
+          className="monte mt-5 grid gap-x-14 gap-y-8 px-7 py-10 sm:px-11 sm:py-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:items-end"
+        >
+          <div>
+            <h3 className="font-display text-[clamp(1.9rem,4vw,2.8rem)] font-extrabold leading-[1] tracking-[-0.04em]">
+              {dominante.titre}
+            </h3>
+            <p className="mt-5 max-w-[20ch] font-display text-xl font-bold leading-snug tracking-[-0.025em] sm:text-2xl">
+              {dominante.declencheur}
+            </p>
+          </div>
+          <div>
+            <p className="max-w-[38rem] text-lg leading-relaxed text-encre-douce">
+              {dominante.corps}
+            </p>
+            <p className="mt-7 border-t border-encre/10 pt-5 text-sm text-encre-douce">
+              {dominante.engagement}
+            </p>
+            {dominante.lien ? (
+              <Link
+                href={dominante.lien.href}
+                className="lien-souligne mt-4 inline-block font-display font-bold tracking-[-0.01em]"
+              >
+                {dominante.lien.texte}
+              </Link>
+            ) : null}
+          </div>
+        </Verre>
+      ) : null}
     </Section>
   )
 }
 
+// La contrepartie passe devant : ce qu'un prestataire ne fera pas est l'information que le
+// lecteur cherche en premier, donc c'est elle qui porte la graisse.
 function MarqueBlanche() {
   return (
-    <Section surtitre="Marque blanche" titre="Je ne suis jamais devant votre client." fond="creux">
-      {/* Des articles numérotés, parce que c'est de cela qu'il s'agit : les trois lignes sont
-          dans les conditions de vente. */}
-      <ol className="mt-12 border-b border-filet-fort">
-        {ENGAGEMENTS.map((engagement, index) => (
+    <Section titre="Je ne suis jamais devant votre client." fond="creux">
+      <ol className="mt-14">
+        {ENGAGEMENTS.map((engagement, rang) => (
           <li
             key={engagement.fait}
-            className="grid gap-x-10 gap-y-4 border-t border-filet-fort py-8 md:grid-cols-[5rem_1fr_1fr]"
+            className="monte grid gap-x-14 gap-y-4 border-t border-encre/12 py-9 md:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] md:py-11"
           >
-            <span
-              className="font-mono text-xs uppercase tracking-[0.16em] text-carbone md:pt-1.5"
-              aria-hidden="true"
+            <p className="font-display text-[clamp(1.25rem,2.6vw,1.7rem)] font-extrabold leading-[1.15] tracking-[-0.025em] text-balance">
+              {engagement.pasFait}
+            </p>
+            <p
+              className="decale self-start leading-relaxed text-encre-douce"
+              style={{ '--rang': rang } as React.CSSProperties}
             >
-              Art. {index + 1}
-            </span>
-            <p className="font-display text-xl font-semibold leading-snug tracking-[-0.015em]">
               {engagement.fait}
             </p>
-            <p className="calque pl-5 text-lg leading-snug">{engagement.pasFait}</p>
           </li>
         ))}
       </ol>
-      <p className="mt-10 max-w-2xl text-encre-sourde">
+      <p className="mt-12 max-w-[40rem] leading-relaxed text-encre-douce">
         Ces trois lignes sont reprises dans mes conditions de vente. Si votre agence a son propre
         accord de confidentialité, je signe le vôtre.
       </p>
@@ -183,27 +199,23 @@ const VERIFIABLES = [
     corps:
       'Trois conditions décident d’une reprise, et aucune ne porte sur le langage. Avec les cas les plus fréquents, et ce que je refuse.',
     href: '/reprise-et-maintenance/#technos',
-    lien: 'Voir la liste',
   },
   {
     titre: 'Les deux premières semaines',
     corps:
       'Ce que je fais quand je prends la main sur un projet que je n’ai pas écrit, étape par étape.',
     href: '/reprise-et-maintenance/#semaines',
-    lien: 'Voir le déroulé',
   },
   {
     titre: 'Comment je rends la main',
     corps: 'Ce que vous récupérez le jour où vous arrêtez, et ce que je ne garde pas.',
     href: '/reprise-et-maintenance/#depart',
-    lien: 'Voir la sortie',
   },
 ]
 
 function AucunNom() {
   return (
     <Section
-      surtitre="Références"
       titre="Vous ne verrez aucun nom de client sur ce site."
       chapeau={
         <>
@@ -213,65 +225,71 @@ function AucunNom() {
             références finira par étaler la vôtre.
           </p>
           <p className="mt-5">
-            À la place, voici ce que vous pouvez vérifier avant de me confier quoi que ce soit.
+            À la place, voici ce que vous pouvez vérifier vous-même, tout de suite.
           </p>
         </>
       }
-      largeur="serree"
-      densite="basse"
     >
-      <ul className="mt-10 border-b border-filet-fort">
-        {VERIFIABLES.map((item) => (
-          <li key={item.titre} className="border-t border-filet-fort">
-            <Link
-              href={item.href}
-              className="group grid gap-x-6 gap-y-2 py-5 sm:grid-cols-[1fr_auto] sm:items-baseline"
+      <div className="mt-14 grid gap-x-16 gap-y-14 lg:grid-cols-[minmax(0,1fr)_minmax(0,23rem)] lg:items-start">
+        <ul className="monte">
+          {VERIFIABLES.map((item, rang) => (
+            <li
+              key={item.titre}
+              className="decale py-5 first:pt-0"
+              style={{ '--rang': rang } as React.CSSProperties}
             >
-              <span>
-                <span className="font-display text-lg font-bold tracking-[-0.015em] group-hover:text-carbone">
+              <Link href={item.href} className="group block max-w-[34rem] rounded-[4px]">
+                <span className="lien-souligne font-display text-[clamp(1.25rem,2.4vw,1.6rem)] font-extrabold tracking-[-0.03em] group-hover:decoration-encre">
                   {item.titre}
                 </span>
-                <span className="mt-1 block text-encre-sourde">{item.corps}</span>
-              </span>
-              <span className="font-mono text-xs uppercase tracking-[0.14em] text-carbone group-hover:underline">
-                {item.lien}
-              </span>
-            </Link>
-          </li>
-        ))}
-      </ul>
+                <span className="mt-2.5 block leading-relaxed text-encre-douce">{item.corps}</span>
+              </Link>
+            </li>
+          ))}
+        </ul>
+
+        <div className="monte">
+          <Releve />
+        </div>
+      </div>
     </Section>
   )
 }
 
-// Le point d'orgue de la page : le seul chiffre du site prend toute la largeur et passe au
-// verso, là où le carbone a fini par imprimer.
+// La rupture de rythme de la page : la seule surface pleine et pleine largeur, et le seul
+// chiffre du site. Le nombre s'ouvre au défilement, une fois.
 function Tarif() {
   return (
-    <section className="bg-encre py-20 text-papier sm:py-28">
+    <section className="bande py-24 sm:py-32">
       <Container>
-        <p className="font-mono text-[0.6875rem] uppercase tracking-[0.2em] text-papier/60">
-          Tarif
-        </p>
-        <div className="mt-8 flex flex-wrap items-end gap-x-8 gap-y-4">
-          <p className="font-display text-[clamp(4rem,15vw,11rem)] font-extrabold leading-[0.78] tracking-[-0.05em]">
-            {TJM} €
-          </p>
-          <p className="font-display text-2xl font-bold tracking-[-0.02em] text-papier/70">
-            la journée
-          </p>
+        <h2 className="max-w-[16ch] font-display text-[clamp(1.9rem,4.2vw,3rem)] font-extrabold leading-[1.03] tracking-[-0.03em]">
+          Un seul chiffre, et il ne bouge pas.
+        </h2>
+
+        <div className="mt-12 grid items-center gap-x-16 gap-y-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,22rem)]">
+          <div>
+            <p className="devoile flex flex-wrap items-baseline gap-x-5">
+              <span className="chiffres font-display text-[clamp(3.5rem,11vw,6rem)] font-extrabold leading-[0.85] tracking-[-0.05em]">
+                {TJM} €
+              </span>
+              <span className="font-display text-2xl font-bold tracking-[-0.02em] text-blanc-vif/65">
+                la journée
+              </span>
+            </p>
+            <p className="mt-10 max-w-[40rem] text-lg leading-relaxed text-blanc-vif/80">
+              Renfort, projet complet, reprise et maintenance : c’est le même chiffre. Ce que vous
+              achetez est un nombre de jours, écrit et validé avant de commencer.
+            </p>
+            <p className="mt-8 text-sm text-blanc-vif/50">{LEGAL.tva}</p>
+          </div>
+
+          <Verre surEncre className="px-7 py-7 text-blanc-vif">
+            <p className="font-display text-lg font-bold leading-snug tracking-[-0.015em] sm:text-xl">
+              Pas de forfait opaque, pas de surprise en fin de mois, pas de facturation à
+              l’estimation dépassée.
+            </p>
+          </Verre>
         </div>
-        <div className="mt-14 grid gap-x-10 gap-y-6 md:grid-cols-2">
-          <p className="text-lg text-papier/80">
-            Renfort, projet complet, reprise et maintenance : c’est le même chiffre. Ce que vous
-            achetez est un nombre de jours, écrit et validé avant de commencer.
-          </p>
-          <p className="calque sur-encre pl-5 text-lg leading-snug">
-            Pas de forfait opaque, pas de surprise en fin de mois, pas de facturation à
-            l’estimation dépassée.
-          </p>
-        </div>
-        <p className="mt-12 font-mono text-xs text-papier/50">{LEGAL.tva}</p>
       </Container>
     </section>
   )

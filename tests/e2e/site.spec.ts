@@ -38,8 +38,8 @@ test('les polices du site sont réellement appliquées', async ({ page }) => {
     }
   })
 
-  expect(polices.titre).toContain('Archivo')
-  expect(polices.corps).toContain('Source Serif')
+  expect(polices.titre).toContain('Schibsted')
+  expect(polices.corps).toContain('Hanken')
   expect(polices.titreCharge).toBe(true)
   expect(polices.corpsCharge).toBe(true)
 })
@@ -48,7 +48,7 @@ test('les deux pages se répondent', async ({ page }) => {
   await page.goto('/')
   await expect(page.getByRole('heading', { level: 1 })).toContainText("n’ont pas d’équipe")
 
-  await page.getByRole('link', { name: 'Reprendre un site existant' }).click()
+  await page.getByRole('link', { name: 'Reprise et maintenance', exact: true }).first().click()
   await expect(page.getByRole('heading', { level: 1 })).toContainText('tout est à refaire')
 })
 

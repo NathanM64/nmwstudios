@@ -8,9 +8,9 @@ export function Container({
   largeur?: 'normale' | 'serree'
 }) {
   return (
-    <div className={`mx-auto w-full max-w-5xl px-6 sm:px-10 ${className}`}>
+    <div className={`mx-auto w-full max-w-6xl px-6 sm:px-10 ${className}`}>
       {/* Le serré se resserre par la droite : le bord gauche du document ne bouge jamais. */}
-      {largeur === 'serree' ? <div className="max-w-2xl">{children}</div> : children}
+      {largeur === 'serree' ? <div className="max-w-[40rem]">{children}</div> : children}
     </div>
   )
 }
