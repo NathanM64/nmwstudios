@@ -66,6 +66,7 @@ function Semaines() {
   return (
     <Section
       id="semaines"
+      fond="creux"
       surtitre="Les deux premières semaines"
       titre="Ce que je fais avant d’écrire la moindre ligne."
       chapeau={
@@ -75,10 +76,18 @@ function Semaines() {
         </p>
       }
     >
-      <ol className="mt-14 space-y-12">
+      {/* Le filet porte la séquence : sans lui, quatre paragraphes numérotés se lisent comme
+          quatre paragraphes. */}
+      <ol className="mt-14 border-l-2 border-carbone/25 pl-8 sm:pl-12">
         {PREMIERES_SEMAINES.map((etape, index) => (
-          <li key={etape.titre} className="grid gap-x-8 gap-y-3 sm:grid-cols-[3rem_1fr]">
-            <span className="font-mono text-sm text-carbone" aria-hidden="true">
+          <li
+            key={etape.titre}
+            className="grid gap-x-8 gap-y-3 pb-12 last:pb-0 sm:grid-cols-[4rem_1fr]"
+          >
+            <span
+              className="font-display text-3xl font-extrabold leading-none tracking-[-0.04em] text-carbone"
+              aria-hidden="true"
+            >
               {String(index + 1).padStart(2, '0')}
             </span>
             <div>
@@ -106,38 +115,51 @@ function Technos() {
           écrit. Trois conditions, et elles sont les mêmes partout.
         </p>
       }
+      largeur="pleine"
     >
-      <ul className="mt-12 max-w-3xl border-b border-filet-fort">
-        {CRITERES.map((critere) => (
-          <li key={critere} className="border-t border-filet-fort py-4 text-lg">
-            {critere}
-          </li>
-        ))}
-      </ul>
-
-      <p className="mt-16 max-w-2xl text-encre-sourde">
-        Le reste est une question de temps, et le temps se chiffre. Voici ce qui passe entre mes
-        mains le plus souvent, et que vous cherchez peut-être en ce moment.
-      </p>
-
-      <dl className="mt-10 space-y-10">
-        {TECHNOS.map((techno) => (
-          <div key={techno.nom} className="grid gap-x-10 gap-y-3 md:grid-cols-[14rem_1fr]">
-            <dt className="font-display text-xl font-bold tracking-[-0.015em]">{techno.nom}</dt>
-            <dd className="max-w-2xl text-encre-sourde">{techno.corps}</dd>
+      {/* Les trois conditions traversent la page : c'est ce qui décide, tout le reste en
+          dépend. */}
+      <div className="mx-auto mt-12 grid max-w-[110rem] gap-px border-y border-filet bg-filet sm:grid-cols-3">
+        {CRITERES.map((critere, index) => (
+          <div key={critere} className="flex flex-col bg-papier p-6 sm:p-10">
+            <span className="font-mono text-xs text-carbone" aria-hidden="true">
+              {String(index + 1).padStart(2, '0')}
+            </span>
+            <p className="mt-5 font-display text-lg font-semibold leading-snug tracking-[-0.015em]">
+              {critere}
+            </p>
           </div>
         ))}
-      </dl>
-      <div className="mt-16 grid gap-x-10 gap-y-4 md:grid-cols-2">
-        <p className="font-display text-xl font-semibold leading-snug tracking-[-0.015em]">
-          Si votre projet n’est pas dans cette liste, demandez quand même : les trois conditions
-          du haut comptent plus que le nom du framework.
-        </p>
-        <p className="calque pl-5 text-lg leading-snug">
-          Je ne reprends pas les sites montés sur un constructeur de pages : votre intégrateur
-          ira plus vite que moi, et il vous coûtera moins cher.
-        </p>
       </div>
+
+      <Container>
+        <p className="mt-16 max-w-2xl text-encre-sourde">
+          Le reste est une question de temps, et le temps se chiffre. Voici ce qui passe entre mes
+          mains le plus souvent, et que vous cherchez peut-être en ce moment.
+        </p>
+
+        <dl className="mt-10 border-b border-filet">
+          {TECHNOS.map((techno) => (
+            <div
+              key={techno.nom}
+              className="grid gap-x-10 gap-y-3 border-t border-filet py-7 md:grid-cols-[14rem_1fr]"
+            >
+              <dt className="font-display text-xl font-bold tracking-[-0.015em]">{techno.nom}</dt>
+              <dd className="max-w-2xl text-encre-sourde">{techno.corps}</dd>
+            </div>
+          ))}
+        </dl>
+        <div className="mt-16 grid gap-x-10 gap-y-4 md:grid-cols-2">
+          <p className="font-display text-xl font-semibold leading-snug tracking-[-0.015em]">
+            Si votre projet n’est pas dans cette liste, demandez quand même : les trois conditions
+            du haut comptent plus que le nom du framework.
+          </p>
+          <p className="calque pl-5 text-lg leading-snug">
+            Je ne reprends pas les sites montés sur un constructeur de pages : votre intégrateur
+            ira plus vite que moi, et il vous coûtera moins cher.
+          </p>
+        </div>
+      </Container>
     </Section>
   )
 }
@@ -154,24 +176,24 @@ function Depart() {
           repris le projet. Voilà à quoi ressemble une sortie propre.
         </p>
       }
+      largeur="serree"
+      densite="basse"
     >
-      <div className="mt-14 grid gap-x-10 gap-y-6 md:grid-cols-2">
-        <ul className="border-b border-filet-fort">
-          {[
-            'Le dépôt Git, avec tout l’historique des changements.',
-            'Les accès à l’hébergement et au nom de domaine, à votre nom.',
-            'Un document qui explique comment le projet se déploie, en une page.',
-          ].map((ligne) => (
-            <li key={ligne} className="border-t border-filet-fort py-4 text-lg">
-              {ligne}
-            </li>
-          ))}
-        </ul>
-        <p className="calque pl-5 text-lg leading-snug">
-          Je ne garde ni accès, ni sauvegarde, ni compte de service. Un autre développeur peut
-          reprendre sans avoir à me parler.
-        </p>
-      </div>
+      <ul className="mt-10 border-b border-filet-fort">
+        {[
+          'Le dépôt Git, avec tout l’historique des changements.',
+          'Les accès à l’hébergement et au nom de domaine, à votre nom.',
+          'Un document qui explique comment le projet se déploie, en une page.',
+        ].map((ligne) => (
+          <li key={ligne} className="border-t border-filet-fort py-4 text-lg">
+            {ligne}
+          </li>
+        ))}
+      </ul>
+      <p className="calque mt-8 pl-5 text-lg leading-snug">
+        Je ne garde ni accès, ni sauvegarde, ni compte de service. Un autre développeur peut
+        reprendre sans avoir à me parler.
+      </p>
     </Section>
   )
 }

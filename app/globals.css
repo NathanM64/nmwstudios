@@ -92,3 +92,10 @@ body {
   from { opacity: 0; translate: 0 0.6rem; }
   to { opacity: 1; translate: 0 2px; }
 }
+
+/* Sur la bande encre, le carbone ne se lit plus : le décalque imprime alors dans l'encre de
+   la feuille qu'il touche, ici le papier. */
+.calque.sur-encre {
+  border-left-color: var(--color-papier);
+  color: color-mix(in oklab, var(--color-papier) 80%, transparent);
+}

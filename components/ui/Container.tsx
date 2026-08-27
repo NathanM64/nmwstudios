@@ -1,3 +1,16 @@
-export function Container({ children, className = '' }: { children: React.ReactNode; className?: string }) {
-  return <div className={`mx-auto w-full max-w-5xl px-6 sm:px-10 ${className}`}>{children}</div>
+export function Container({
+  children,
+  className = '',
+  largeur = 'normale',
+}: {
+  children: React.ReactNode
+  className?: string
+  largeur?: 'normale' | 'serree'
+}) {
+  return (
+    <div className={`mx-auto w-full max-w-5xl px-6 sm:px-10 ${className}`}>
+      {/* Le serré se resserre par la droite : le bord gauche du document ne bouge jamais. */}
+      {largeur === 'serree' ? <div className="max-w-2xl">{children}</div> : children}
+    </div>
+  )
 }
