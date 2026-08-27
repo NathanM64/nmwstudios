@@ -1,0 +1,9 @@
+node_modules
+.next
+out
+.git
+docs
+tests
+playwright-report
+test-results
+shot.mjs

@@ -1,0 +1,94 @@
+@import 'tailwindcss';
+
+/* Direction « carbone ». Le papier d'un duplicata de contrat, l'encre bleu-violet qui
+   imprime dessous sans jamais être vue. Un seul mode : ce site est un document. */
+@theme {
+  --color-papier: #ede9e0;
+  --color-papier-creux: #e2ddd1;
+  --color-encre: #14161c;
+  --color-encre-sourde: #56564f;
+  --color-carbone: #2f3a8c;
+  --color-filet: rgba(20, 22, 28, 0.16);
+  --color-filet-fort: rgba(20, 22, 28, 0.32);
+
+  --font-display: var(--font-archivo), system-ui, sans-serif;
+  --font-sans: var(--font-source-serif), Georgia, serif;
+  --font-mono: var(--font-plex-mono), ui-monospace, monospace;
+
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+html {
+  background-color: var(--color-papier);
+  color-scheme: light;
+  /* Le grain du papier : deux trames très faibles, pas d'image à télécharger. */
+  background-image:
+    repeating-linear-gradient(0deg, rgba(20, 22, 28, 0.018) 0 1px, transparent 1px 3px),
+    repeating-linear-gradient(90deg, rgba(20, 22, 28, 0.014) 0 1px, transparent 1px 4px);
+}
+
+body {
+  min-height: 100dvh;
+  color: var(--color-encre);
+  font-family: var(--font-sans);
+  font-size: 1.0625rem;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background-color: var(--color-carbone);
+  color: var(--color-papier);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-carbone);
+  outline-offset: 3px;
+}
+
+/* ── Le geste de signature ──
+   Le décalque : une contrepartie imprimée en carbone, calée deux pixels plus bas que le
+   texte auquel elle répond, comme la feuille du dessous qui a bougé sous la pression. */
+.calque {
+  border-left: 2px solid var(--color-carbone);
+  color: var(--color-carbone);
+  translate: 0 2px;
+  /* Le filet épouse son texte : étiré par la grille, il descendrait seul jusqu'en bas
+     de la rangée et se lirait comme une colonne, pas comme une réponse. */
+  align-self: start;
+}
+
+/* Cartouche de signature : le champ vide d'un contrat, laissé au nom de l'agence. */
+.cartouche {
+  border: 1px dashed var(--color-carbone);
+  color: var(--color-carbone);
+}
+
+/* Filet de section : un trait de règle, pas une bordure de carte. */
+.regle {
+  border-top: 1px solid var(--color-filet);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .entre {
+    animation: entre 520ms var(--ease-out) both;
+    animation-delay: calc(var(--rang, 0) * 90ms);
+  }
+}
+
+@keyframes entre {
+  from { opacity: 0; translate: 0 0.6rem; }
+  to { opacity: 1; translate: 0 0; }
+}
+
+/* Le décalque garde son décalage : sans cette reprise, l'animation le remettrait à zéro. */
+@media (prefers-reduced-motion: no-preference) {
+  .calque.entre {
+    animation-name: entre-calque;
+  }
+}
+
+@keyframes entre-calque {
+  from { opacity: 0; translate: 0 0.6rem; }
+  to { opacity: 1; translate: 0 2px; }
+}
