@@ -17,7 +17,10 @@ export function Footer() {
         <div className="mt-12 flex flex-wrap items-end justify-between gap-x-12 gap-y-10">
           <div>
             <Logo className="h-12 w-12 text-ink" />
-            <p className="mt-5 text-sm text-ink-soft">
+            <p className="mt-5 font-display text-sm font-bold tracking-[-0.01em]">
+              {LEGAL.publisher}, développeur web
+            </p>
+            <p className="mt-2 text-sm text-ink-soft">
               33130 Bègles, dans la métropole de Bordeaux
               <br />
               À distance partout en France
