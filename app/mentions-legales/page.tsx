@@ -65,11 +65,20 @@ export default function Page() {
                 Données personnelles
               </h2>
               <div className="mt-5 grid max-w-[76rem] gap-x-14 gap-y-4 leading-relaxed text-encre-douce md:grid-cols-2">
-                <p>
-                  Ce site est statique. Il ne dépose aucun cookie, ne charge aucune ressource
-                  depuis un service tiers et ne mesure pas la fréquentation. Aucune donnée n’est
-                  collectée lors de la consultation.
-                </p>
+                <div className="space-y-4">
+                  <p>
+                    Ce site est statique. Il ne dépose aucun cookie et ne charge aucune ressource
+                    depuis un service tiers.
+                  </p>
+                  {/* « À ce jour » est la seule phrase à réécrire le jour où une mesure arrive.
+                      Un test la garde : voir tests/e2e/site.spec.ts. */}
+                  <p>
+                    Aucune mesure d’audience n’est en place à ce jour, et aucune donnée n’est
+                    collectée lors de la consultation. Si une mesure est mise en place, elle sera
+                    hébergée sur le même serveur, sans cookie, et sans donnée permettant de vous
+                    identifier ni de vous suivre d’un site à l’autre.
+                  </p>
+                </div>
                 <p>
                   Les messages envoyés à l’adresse de contact sont conservés le temps de la
                   relation commerciale. Vous pouvez en demander la suppression à cette même

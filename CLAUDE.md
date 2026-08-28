@@ -29,9 +29,17 @@ Avant d'ajouter un filet, poser la question : est-ce qu'un changement plausible 
   Un test le vérifie.
 - `output: 'export'` : pas de route dynamique, pas de middleware, pas de composant serveur
   qui lit une requête. Toute page ajoutée doit être rendue à la construction.
-- La CSP posée par le `Caddyfile` interdit tout domaine tiers. Ajouter une police
-  distante, un script d'analyse ou une carte casserait à la fois la règle et l'argument
-  central du site.
+- La CSP posée par le `Caddyfile` interdit tout domaine tiers : une police distante ou une
+  carte la casserait, et le test `aucune requête tierce, aucun cookie` le dirait.
+- Une mesure d'audience est prévue, dans le dépôt `infra`, hébergée sur le même serveur.
+  Servie depuis ce domaine, elle ne serait ni une requête tierce ni un cookie : elle passe
+  sous le test ci-dessus. C'est `aucun script hors du paquet Next` qui la voit. Quand il
+  casse, le paragraphe « Données personnelles » des mentions légales doit être réécrit, la
+  phrase « à ce jour » devient fausse.
+- Le journal d'accès de Traefik est désactivé (`infra/compose/traefik.yml`), et le
+  `Caddyfile` ne pose aucune directive `log`. C'est ce qui rend vraie la phrase « aucune
+  donnée n'est collectée lors de la consultation ». L'activer la rend fausse sans toucher
+  au site, et aucun test d'ici ne le verra.
 
 ## Direction visuelle
 

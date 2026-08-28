@@ -71,6 +71,9 @@ l'agence.
 Décisions produit encore ouvertes, à ne pas inventer :
 
 - Le TJM s'affiche-t-il seul ou avec une mention « à partir de ».
+- La mesure d'audience, prévue dans le dépôt `infra` et portée par Nathan. Le jour où elle
+  arrive, le paragraphe « Données personnelles » des mentions légales doit dire ce qui est
+  réellement mesuré et conservé.
 - Le délai de réponse réellement tenable, retiré du bloc contact faute de pouvoir être
   vérifié.
 - La preuve manquante du quatrième travail, la plateforme d'impression 3D.

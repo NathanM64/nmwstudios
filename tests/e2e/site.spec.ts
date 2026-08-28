@@ -19,6 +19,23 @@ test('aucune requête tierce, aucun cookie', async ({ page, context }) => {
   expect(await context.cookies()).toEqual([])
 })
 
+// Une mesure d'audience hébergée sur le même domaine ne serait ni une requête tierce ni un
+// cookie : le filet du dessus ne la verrait pas, et les mentions légales deviendraient fausses
+// en silence. Celui-ci la voit. S'il casse, c'est le paragraphe « Données personnelles » qu'il
+// faut réécrire, pas le test.
+test('aucun script hors du paquet Next', async ({ page }) => {
+  await page.goto('/', { waitUntil: 'load' })
+
+  const chemins = await page.evaluate(() =>
+    [...document.querySelectorAll('script[src]')].map(
+      (balise) => new URL((balise as HTMLScriptElement).src).pathname,
+    ),
+  )
+
+  expect(chemins.length).toBeGreaterThan(0)
+  for (const chemin of chemins) expect(chemin).toMatch(/^\/_next\/static\//)
+})
+
 // Rejoué depuis la refonte précédente : les variables next/font se posent sur <html>, et
 // sur <body> la police n’était jamais appliquée sans que rien ne le signale. Le test lit la
 // famille calculée puis la donne à document.fonts.check : next/font renomme les familles.
