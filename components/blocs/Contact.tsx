@@ -41,9 +41,6 @@ export function Contact() {
                   , dans un autre onglet.
                 </p>
               ) : null}
-              <p className="mt-5">
-                Pas de formulaire : il faudrait un service tiers, donc un script et un cookie.
-              </p>
             </div>
           </div>
         </Verre>

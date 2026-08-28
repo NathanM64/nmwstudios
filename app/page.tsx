@@ -6,7 +6,6 @@ import { Logo } from '@/components/ui/Logo'
 import { Entete } from '@/components/shell/Entete'
 import { Pied } from '@/components/shell/Pied'
 import { Contact } from '@/components/blocs/Contact'
-import { Releve } from '@/components/blocs/Releve'
 import { OFFRES } from '@/content/offres'
 import { ENGAGEMENTS } from '@/content/engagements'
 import { TRAVAUX } from '@/content/travaux'
@@ -21,7 +20,6 @@ export default function Page() {
         <Modes />
         <MarqueBlanche />
         <AucunNom />
-        <Verifiable />
         <Tarif />
         <Contact />
       </main>
@@ -219,8 +217,8 @@ function AucunNom() {
   return (
     <section className="bg-papier-creux/70 py-24 sm:py-32">
       <Container>
-        {/* Le titre tient une colonne, la matière tient l'autre : la page dit « aucun nom »
-            et montre ce qu'il y a derrière dans le même écran, pas trois sections plus bas. */}
+        {/* Le titre et la sortie tiennent une colonne, la matière tient l'autre : la page dit
+            « aucun nom » et montre ce qu'il y a derrière dans le même écran. */}
         <div className="grid gap-x-16 gap-y-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)]">
           <div>
             <h2 className="monte max-w-[16ch] font-display text-[clamp(1.9rem,4.2vw,3rem)] font-extrabold leading-[1.03] tracking-[-0.03em] text-balance">
@@ -236,6 +234,21 @@ function AucunNom() {
                 À la place, voilà ce qui tourne. Le secteur et la technique, jamais le nom.
               </p>
             </div>
+
+            <ul className="monte mt-10">
+              {VERIFIABLES.map((item) => (
+                <li key={item.titre} className="mt-6 first:mt-0">
+                  <Link href={item.href} className="group block max-w-[34rem] rounded-[4px]">
+                    <span className="lien-souligne font-display text-xl font-extrabold tracking-[-0.03em] group-hover:decoration-encre">
+                      {item.titre}
+                    </span>
+                    <span className="mt-2 block leading-relaxed text-encre-douce">
+                      {item.corps}
+                    </span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
           </div>
 
           {/* La description reste basse, la preuve porte la graisse : c'est elle que le
@@ -258,43 +271,6 @@ function AucunNom() {
         </div>
       </Container>
     </section>
-  )
-}
-
-function Verifiable() {
-  return (
-    <Section
-      titre="Ce que vous pouvez vérifier vous-même."
-      chapeau={
-        <p>
-          Trois pages qui détaillent la méthode, et une mesure prise à l’instant dans votre
-          navigateur.
-        </p>
-      }
-    >
-      <div className="mt-14 grid gap-x-16 gap-y-14 lg:grid-cols-[minmax(0,1fr)_minmax(0,23rem)] lg:items-start">
-        <ul className="monte">
-          {VERIFIABLES.map((item, rang) => (
-            <li
-              key={item.titre}
-              className="decale py-5 first:pt-0"
-              style={{ '--rang': rang } as React.CSSProperties}
-            >
-              <Link href={item.href} className="group block max-w-[34rem] rounded-[4px]">
-                <span className="lien-souligne font-display text-[clamp(1.25rem,2.4vw,1.6rem)] font-extrabold tracking-[-0.03em] group-hover:decoration-encre">
-                  {item.titre}
-                </span>
-                <span className="mt-2.5 block leading-relaxed text-encre-douce">{item.corps}</span>
-              </Link>
-            </li>
-          ))}
-        </ul>
-
-        <div className="monte">
-          <Releve />
-        </div>
-      </div>
-    </Section>
   )
 }
 

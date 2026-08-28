@@ -34,9 +34,11 @@ d'autres disent au téléphone. Un seul chiffre est affiché, 500 € la journé
 pour les trois modes : ce que l'agence achète est un nombre de jours, jamais un forfait
 déguisé.
 
-La promesse technique se vérifie dans le navigateur : site statique, aucun domaine tiers,
-aucun cookie, hébergement sur serveur propre. Un concurrent peut copier la phrase, pas la
-CSP qui la verrouille.
+Le site est statique, sans domaine tiers ni cookie, hébergé sur serveur propre. C'est une
+contrainte de construction, pas un argument affiché : le lecteur visé n'a pas d'équipe
+technique, il n'ouvrira pas l'onglet réseau, et lui vendre l'absence de cookie répond à une
+question qu'il ne pose pas. Seules les mentions légales l'écrivent, pour le lecteur qui a
+une raison de le lire.
 
 ## Operating Context
 
@@ -109,8 +111,8 @@ type score Lighthouse.
 
   L'événement de la campagne de jeu concours n'est pas cité : le volume convainc, l'événement
   identifierait le client.
-- Preuves vérifiables par le visiteur : absence de requête tierce, absence de cookie,
-  hébergement sur serveur propre.
+- Absence de requête tierce, absence de cookie, hébergement sur serveur propre. Vérifiable,
+  mais gardé hors du discours de vente et tenu par la CSP et un test.
 - Mentions légales complètes dans `lib/legal.ts`.
 
 Il n'existe aucun témoignage, aucune étude de cas, aucune référence nommée, aucun chiffre

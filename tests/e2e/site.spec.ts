@@ -2,8 +2,8 @@ import { expect, test } from '@playwright/test'
 
 const PAGES = ['/', '/reprise-et-maintenance/', '/mentions-legales/']
 
-// Le site affiche qu'il ne charge rien d'ailleurs et ne suit personne. Un filet le vérifie,
-// parce que c'est le genre de promesse qu'une dépendance ajoutée casse sans bruit.
+// Le site ne vend plus l'absence de tiers au lecteur, mais les mentions légales l'affirment
+// et la CSP du Caddyfile l'impose. Une dépendance ajoutée casserait les deux sans bruit.
 test('aucune requête tierce, aucun cookie', async ({ page, context }) => {
   const externes: string[] = []
   page.on('request', (requete) => {
@@ -17,14 +17,6 @@ test('aucune requête tierce, aucun cookie', async ({ page, context }) => {
 
   expect(externes).toEqual([])
   expect(await context.cookies()).toEqual([])
-
-  // Le relevé affiche ce compte au lecteur : une ressource ajoutée doit le faire mentir ici
-  // avant de le faire mentir en production. Les URI data: ont déjà été comptées pour un tiers.
-  await page.goto('/', { waitUntil: 'load' })
-  const releve = page.getByRole('definition')
-  await expect(releve).toHaveCount(2)
-  await expect(releve.first()).toHaveText('0')
-  await expect(releve.last()).toHaveText('0')
 })
 
 // Rejoué depuis la refonte précédente : les variables next/font se posent sur <html>, et

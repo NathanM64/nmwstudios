@@ -322,13 +322,6 @@ lumière rasante en haut à gauche. Le verre posé dessus change de peau : il de
 22% puis 7%, parce qu'une dalle prend la lumière de ce qu'elle touche. C'est la rupture de
 rythme obligatoire de chaque page.
 
-### Le relevé (composant signature)
-
-Le site affirme qu'il ne charge rien d'ailleurs. Plutôt que de l'écrire deux fois, il le
-mesure dans le navigateur du lecteur : domaines tiers contactés, cookies déposés, poids de
-la page, lus dans l'API de performance après le chargement. Les chiffres montent une fois
-quand le relevé entre dans le champ. Aucune valeur n'est écrite en dur.
-
 ### Le filigrane du cartouche
 
 Le sigle NMW, en `encre/6`, posé sous les deux dalles du premier écran de l'accueil. C'est
