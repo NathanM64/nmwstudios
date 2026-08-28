@@ -17,7 +17,8 @@ export function Contact() {
             </h2>
             <p className="mt-6 text-lg leading-relaxed text-ink-soft">
               Une adresse de dépôt Git, une URL, ou trois lignes sur la situation. Je vous dis
-              franchement si c&rsquo;est pour moi ou non.
+              franchement si c&rsquo;est pour moi ou non. Si c&rsquo;est urgent, je peux démarrer
+              dans la journée.
             </p>
           </div>
 

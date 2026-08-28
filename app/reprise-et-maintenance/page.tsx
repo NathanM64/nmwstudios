@@ -72,9 +72,15 @@ function Hero() {
             six ans.
           </p>
           <p>
-            Mon travail est de le garder en vie et de le faire avancer. Quand une refonte est
-            vraiment la bonne réponse, je vous le dis avec les chiffres qui le montrent, et c’est
-            vous qui décidez.
+            Mon travail est de le garder en vie et de le faire avancer, en marque blanche. Quand
+            une refonte est vraiment la bonne réponse, je vous le dis avec les chiffres qui le
+            montrent, et c’est vous qui décidez.
+          </p>
+          <p>
+            Une fois le projet repris, ce qui empêche le site de fonctionner a une réponse dans la
+            journée, en jours ouvrés. Une échéance que vous avez annoncée à votre client se
+            planifie : dites-la-moi tôt et je vous dis dans la journée si elle tient. Le reste
+            avance sur l’enveloppe de jours convenue à l’avance.
           </p>
         </div>
       </Container>
@@ -208,7 +214,7 @@ function Handover() {
       title="Ce qui se passe le jour où vous arrêtez la maintenance."
       intro={
         <p>
-          L’autre peur, celle dont on parle moins : se retrouver dépendant du prestataire qui a
+          L’autre peur d’une agence, celle dont on parle moins : se retrouver dépendant du prestataire qui a
           repris le projet. Voilà à quoi ressemble une sortie propre.
         </p>
       }

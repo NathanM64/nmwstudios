@@ -65,9 +65,9 @@ function Hero() {
             budget, un client qui attend, et personne chez vous pour tenir tout ça.
           </p>
           <p>
-            Je prends le développement, du premier fichier à la mise en ligne. Vous gardez le
-            client, la relation et les décisions. Et l’estimation que je vous donne est un
-            plafond, pas un point de départ.
+            Je prends le développement en marque blanche, du premier fichier à la mise en ligne.
+            Vous gardez le client, la relation et les décisions, et votre agence reste le seul nom
+            sur le projet. L’estimation que je vous donne est un plafond, pas un point de départ.
           </p>
         </div>
       </Container>

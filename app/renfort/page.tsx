@@ -62,13 +62,13 @@ function Hero() {
         >
           <p>
             C’est précisément pour ça que vous cherchez quelqu’un. Un renfort qu’il faut encadrer
-            vous coûte deux fois : ses jours, et ceux de la personne qui l’encadre. Cette personne
-            n’existe pas chez vous.
+            coûte deux fois à une agence : ses jours, et ceux de la personne qui l’encadre. Cette
+            personne n’existe pas chez vous.
           </p>
           <p>
             Alors je pars du code. Je le lis, je le fais tourner, et ce que je vous demande ensuite
-            tient en quelques questions, pas en une réunion de cadrage. À la journée, sans durée
-            minimum.
+            tient en quelques questions, pas en une réunion de cadrage. En marque blanche, à la
+            journée, sans durée minimum.
           </p>
         </div>
       </Container>

@@ -208,6 +208,9 @@ function WhiteLabel() {
         Ces trois lignes sont reprises dans mes conditions de vente. Si votre agence a son propre
         accord de confidentialité, je signe le vôtre.
       </p>
+      <p className="mt-5 max-w-[40rem] leading-relaxed text-ink-soft">
+        Si vous êtes un studio, une ESN ou un indépendant qui sous-traite, le cadre est le même.
+      </p>
     </Section>
   )
 }
