@@ -34,9 +34,9 @@
 		Strict-Transport-Security "max-age=31536000; includeSubDomains"
 		# Le site ne charge rien d'ailleurs : la règle le rend vérifiable par le navigateur.
 		# 'unsafe-inline' est nécessaire aux deux scripts d'amorçage que Next pose dans le HTML.
-		# Sans champ ni contenu venant d'un visiteur, il n'y a pas de XSS à empêcher ici ; ce que
-		# la règle verrouille vraiment, c'est le 'self' qui interdit tout domaine tiers.
-		Content-Security-Policy "default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'"
+		# form-action passe de 'none' à 'self' depuis que le bloc contact porte un vrai
+		# formulaire : il poste sur /api/contact, servi par Traefik sur le même hôte.
+		Content-Security-Policy "default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; base-uri 'none'; form-action 'self'; frame-ancestors 'none'"
 		-Server
 	}
 }

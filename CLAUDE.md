@@ -3,6 +3,11 @@
 Site vitrine statique. Cible : les directeurs d'agence sans équipe technique. Le site vend
 de la sous-traitance en marque blanche.
 
+Le dépôt produit deux images : le site lui-même, servi par Caddy, et `service/`, l'endpoint
+qui reçoit le formulaire de contact et le poste à Resend. Le site étant un export statique,
+il ne peut rien recevoir en POST : d'où un second conteneur, routé par Traefik sur
+`/api/contact`. Son compose vit dans le dépôt `infra`.
+
 ## Ce qui compte ici
 
 Ce dépôt a déjà été rasé une fois pour sur-ingénierie. Le harnais est volontairement mince
@@ -20,6 +25,8 @@ Avant d'ajouter un filet, poser la question : est-ce qu'un changement plausible 
   `yarn test:e2e`.
 - Jamais de tiret cadratin dans le texte du site ni dans les commits.
 - Commentaires courts, une ou deux lignes, sur le pourquoi. Pas de blocs narratifs.
+- `node_modules` n'est PAS ancré dans `.gitignore` : `service/` a le sien, et un `/node_modules`
+  ancré ne couvrait que la racine. 26 Mo sont passés à un commit près.
 
 ## Pièges connus
 
@@ -29,8 +36,12 @@ Avant d'ajouter un filet, poser la question : est-ce qu'un changement plausible 
   Un test le vérifie.
 - `output: 'export'` : pas de route dynamique, pas de middleware, pas de composant serveur
   qui lit une requête. Toute page ajoutée doit être rendue à la construction.
-- La CSP posée par le `Caddyfile` interdit tout domaine tiers : une police distante ou une
-  carte la casserait, et le test `aucune requête tierce, aucun cookie` le dirait.
+- La CSP posée par le `Caddyfile` interdit tout domaine tiers. Ce n'est pas une règle de
+  Nathan, c'est un choix d'ingénierie : rien à charger, rien à attendre, et la promesse des
+  mentions légales reste vérifiable par le navigateur. Elle se discute donc, comme le reste.
+  Ce qui ne se discute pas : si le site se met à déposer un cookie ou à charger un tiers,
+  c'est le paragraphe « Données personnelles » qui doit changer le même jour.
+  `form-action` vaut `'self'` depuis que le bloc contact porte un vrai formulaire.
 - Une mesure d'audience est prévue, dans le dépôt `infra`, hébergée sur le même serveur.
   Servie depuis ce domaine, elle ne serait ni une requête tierce ni un cookie : elle passe
   sous le test ci-dessus. C'est `aucun script hors du paquet Next` qui la voit. Quand il

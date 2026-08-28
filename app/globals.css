@@ -230,6 +230,33 @@
     scale: 0.985;
   }
 
+  /* ── Les champs ──
+     Pas de deuxième matériau : un champ est un filet sous du texte, jamais une boîte
+     blanche posée sur le verre. Le fond reste celui de la dalle. */
+  .champ {
+    width: 100%;
+    border-bottom: 1px solid rgb(18 21 26 / 0.22);
+    background-color: transparent;
+    padding: 0.55rem 0.15rem;
+    color: var(--color-encre);
+    transition: border-color 300ms var(--ease-verre);
+  }
+
+  .champ::placeholder {
+    color: rgb(84 92 103 / 0.6);
+  }
+
+  .champ:hover {
+    border-bottom-color: rgb(18 21 26 / 0.4);
+  }
+
+  .champ:focus {
+    border-bottom-color: var(--color-encre);
+    /* Le contour global ferait une boîte autour d'un champ qui n'en est pas une :
+       le filet qui s'assombrit suffit à dire où est le curseur. */
+    outline: none;
+  }
+
   .lien-souligne {
     text-decoration: underline;
     text-decoration-thickness: 2px;

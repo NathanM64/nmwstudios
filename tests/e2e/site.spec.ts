@@ -103,3 +103,42 @@ test('chaque page se déclare à sa propre adresse', async ({ page }) => {
     for (const schema of tetes.schemas) expect(() => JSON.parse(schema)).not.toThrow()
   }
 })
+
+// Le formulaire est le seul chemin de conversion du site depuis qu'il remplace le mailto
+// seul. Une charge utile mal formée ou une erreur avalée ne se verrait nulle part ailleurs.
+test('le formulaire poste ce qu’il faut et dit ce qui se passe', async ({ page }) => {
+  await page.goto('/')
+
+  let charge: Record<string, string> | null = null
+  await page.route('**/api/contact', async (route) => {
+    charge = route.request().postDataJSON()
+    await route.fulfill({ status: 204 })
+  })
+
+  await page.getByLabel('Votre nom').fill('Agence Truc')
+  await page.getByLabel('Votre adresse').fill('directeur@agence.fr')
+  await page.getByLabel('Ce que vous avez sur les bras').fill('Un Symfony 4 que personne ne veut.')
+  await page.getByRole('button', { name: 'Envoyer' }).click()
+
+  await expect(page.getByRole('status')).toContainText('C’est parti')
+  expect(charge).toEqual({
+    nom: 'Agence Truc',
+    email: 'directeur@agence.fr',
+    message: 'Un Symfony 4 que personne ne veut.',
+    piege: '',
+  })
+})
+
+// Un envoi qui échoue doit laisser une porte de sortie, pas un formulaire muet.
+test('un échec d’envoi renvoie vers l’adresse mail', async ({ page }) => {
+  await page.goto('/')
+  await page.route('**/api/contact', (route) => route.fulfill({ status: 502, json: {} }))
+
+  await page.getByLabel('Votre nom').fill('A')
+  await page.getByLabel('Votre adresse').fill('a@b.fr')
+  await page.getByLabel('Ce que vous avez sur les bras').fill('Bonjour')
+  await page.getByRole('button', { name: 'Envoyer' }).click()
+
+  // Restreint au bloc contact : Next pose son propre role="alert" pour annoncer les routes.
+  await expect(page.locator('#contact').getByRole('alert')).toContainText('contact@nmwstudios.com')
+})

@@ -51,3 +51,16 @@ jobs:
           # pas de zéro à chaque commit.
           cache-from: type=gha
           cache-to: type=gha,mode=max
+
+      # Seconde image, même commit et mêmes tags : l'endpoint du formulaire. Le site
+      # est statique et ne peut rien recevoir en POST, d'où un service à part. Les
+      # deux images reviennent ensemble sur un retour arrière.
+      - uses: docker/build-push-action@v7
+        with:
+          context: ./service
+          push: true
+          tags: |
+            ghcr.io/nathanm64/nmwstudios-contact:latest
+            ghcr.io/nathanm64/nmwstudios-contact:${{ github.sha }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max

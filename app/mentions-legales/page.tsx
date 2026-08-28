@@ -82,11 +82,19 @@ export default function Page() {
                     identifier ni de vous suivre d’un site à l’autre.
                   </p>
                 </div>
-                <p>
-                  Les messages envoyés à l’adresse de contact sont conservés le temps de la
-                  relation commerciale. Vous pouvez en demander la suppression à cette même
-                  adresse.
-                </p>
+                <div className="space-y-4">
+                  <p>
+                    Le formulaire de contact transmet le nom, l’adresse électronique et le
+                    message que vous y écrivez. Ces informations servent uniquement à vous
+                    répondre. Elles transitent par Resend, prestataire d’envoi de courriels, et
+                    arrivent dans la boîte de l’adresse de contact.
+                  </p>
+                  <p>
+                    Les messages reçus, par le formulaire comme à l’adresse de contact, sont
+                    conservés le temps de la relation commerciale. Vous pouvez en demander la
+                    suppression à cette même adresse.
+                  </p>
+                </div>
               </div>
             </Verre>
           </div>
