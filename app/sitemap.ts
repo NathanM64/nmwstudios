@@ -1,11 +1,13 @@
 import type { MetadataRoute } from 'next'
+import { MODIFIE_LE, SITE } from '@/lib/schema'
 
 export const dynamic = 'force-static'
 
+// Pas de priority : Google l'ignore depuis 2023. lastModified est le seul champ qu'il lit
+// encore, et les mentions légales restent hors du fichier puisqu'elles sont en noindex.
 export default function sitemap(): MetadataRoute.Sitemap {
-  const base = 'https://nmwstudios.com'
   return [
-    { url: `${base}/`, priority: 1 },
-    { url: `${base}/reprise-et-maintenance/`, priority: 0.9 },
+    { url: `${SITE}/`, lastModified: MODIFIE_LE },
+    { url: `${SITE}/reprise-et-maintenance/`, lastModified: MODIFIE_LE },
   ]
 }

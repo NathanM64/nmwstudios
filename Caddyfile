@@ -3,7 +3,15 @@
 :80 {
 	root * /srv
 	encode zstd gzip
-	file_server
+
+	# L'export de Next pose la page d'erreur à trois URL réelles, servies en 200 : le contenu
+	# dirait « page introuvable » et le code « tout va bien », ce que Google compte en soft 404.
+	# `route` fige l'ordre, que le tri des directives ne garantirait pas.
+	route {
+		@fantomes path /404 /404.html /404/* /_not-found /_not-found/*
+		error @fantomes 404
+		file_server
+	}
 
 	# Les pages sont exportées en dossiers avec index.html : Caddy les sert sans réécriture.
 	handle_errors {
@@ -21,6 +29,9 @@
 	header {
 		X-Content-Type-Options nosniff
 		Referrer-Policy strict-origin-when-cross-origin
+		# Le proxy redirige déjà le HTTP en 301, mais la toute première visite passe en clair.
+		# Pas de `preload` tant que tous les sous-domaines ne sont pas en HTTPS.
+		Strict-Transport-Security "max-age=31536000; includeSubDomains"
 		# Le site ne charge rien d'ailleurs : la règle le rend vérifiable par le navigateur.
 		# 'unsafe-inline' est nécessaire aux deux scripts d'amorçage que Next pose dans le HTML.
 		# Sans champ ni contenu venant d'un visiteur, il n'y a pas de XSS à empêcher ici ; ce que

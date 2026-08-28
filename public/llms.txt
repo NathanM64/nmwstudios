@@ -1,0 +1,50 @@
+# NMW Studios
+
+> Développeur web en sous-traitance pour les agences sans équipe technique. Renfort,
+> projet complet, reprise et maintenance d'un existant, en marque blanche. Bègles, dans la
+> métropole de Bordeaux, et à distance partout en France.
+
+Prestataire unique, pas d'équipe. Le travail est livré sous le nom de l'agence cliente, qui
+reste seule interlocutrice de son propre client. Aucun nom de client n'est publié : les
+agences signent un accord de confidentialité et le prestataire signe le leur.
+
+Tarif : 500 EUR la journée, identique pour les trois modes d'engagement. TVA non applicable,
+article 293 B du CGI. Ce qui est acheté est un nombre de jours, écrit et validé avant de
+commencer.
+
+## Modes d'engagement
+
+- Renfort ponctuel : une partie de la production pendant un pic. À la journée, sans durée minimum.
+- Projet complet : développement de bout en bout à partir d'une maquette fournie. Un périmètre, une estimation en jours, un devis.
+- Reprise et maintenance : reprise d'un projet développé ailleurs, puis maintenance au mois, enveloppe de jours convenue à l'avance, résiliable.
+
+## Pages
+
+- [Accueil](https://nmwstudios.com/) : les trois modes d'engagement, les engagements de marque blanche, le tarif.
+- [Reprise et maintenance](https://nmwstudios.com/reprise-et-maintenance/) : l'état des lieux en quatre étapes, les trois conditions de reprise, les technologies reprises, ce qui est rendu en fin de contrat.
+
+## Technologies reprises le plus souvent
+
+Symfony (versions 3 et 4 encore en production comprises), PHP sans framework, React et
+JavaScript ancien (composants de classe, Webpack figé), WordPress à thème et extensions
+développés sur mesure. La liste ne borne pas ce qui est possible : les trois conditions de
+reprise comptent plus que le nom du framework.
+
+## Conditions de reprise
+
+- Le code source est accessible, en entier.
+- Le projet peut redémarrer sur une machine neuve, même au prix de quelques jours.
+- L'hébergement et le nom de domaine peuvent passer au nom de l'agence.
+
+Les sites montés sur un constructeur de pages ne sont pas repris.
+
+## Fin de contrat
+
+Aucun accès, aucune sauvegarde et aucun compte de service ne sont conservés. L'agence
+récupère le dépôt Git avec tout l'historique, les accès à l'hébergement et au nom de domaine
+à son nom, et un document d'une page qui explique le déploiement.
+
+## Contact
+
+- contact@nmwstudios.com
+- +33 6 89 80 15 89
