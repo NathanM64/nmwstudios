@@ -5,6 +5,7 @@ import { Glass } from '@/components/ui/Glass'
 import { Header } from '@/components/shell/Header'
 import { Footer } from '@/components/shell/Footer'
 import { Contact } from '@/components/blocks/Contact'
+import { DayRate } from '@/components/blocks/DayRate'
 import { AFTER_LAUNCH, PRICING_RULES, PREREQUISITES, BENCHMARKS } from '@/content/project'
 import { og } from '@/lib/meta'
 import { schemaService } from '@/lib/schema'
@@ -40,6 +41,7 @@ export default function Page() {
         <Pricing />
         <Benchmarks />
         <AfterLaunch />
+        <DayRate />
         <Contact />
       </main>
       <Footer />

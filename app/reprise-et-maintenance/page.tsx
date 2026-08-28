@@ -5,6 +5,7 @@ import { Glass } from '@/components/ui/Glass'
 import { Header } from '@/components/shell/Header'
 import { Footer } from '@/components/shell/Footer'
 import { Contact } from '@/components/blocks/Contact'
+import { DayRate } from '@/components/blocks/DayRate'
 import { CRITERIA, STACKS } from '@/content/stacks'
 import { ASSESSMENT } from '@/content/assessment'
 import { og } from '@/lib/meta'
@@ -45,6 +46,7 @@ export default function Page() {
         <Assessment />
         <Stacks />
         <Handover />
+        <DayRate />
         <Contact />
       </main>
       <Footer />
