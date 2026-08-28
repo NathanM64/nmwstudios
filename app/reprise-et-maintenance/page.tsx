@@ -7,12 +7,15 @@ import { Pied } from '@/components/shell/Pied'
 import { Contact } from '@/components/blocs/Contact'
 import { CRITERES, TECHNOS } from '@/content/technos'
 import { ETAT_DES_LIEUX } from '@/content/etat-des-lieux'
+import { og } from '@/lib/meta'
+import { SCHEMA_REPRISE } from '@/lib/schema'
 
 export const metadata: Metadata = {
   title: 'Reprise et maintenance de site existant',
   description:
     "Reprise d'un site développé par un autre : Symfony, PHP, React ancien, WordPress. Maintenance au mois pour les agences, en marque blanche.",
   alternates: { canonical: '/reprise-et-maintenance/' },
+  openGraph: og('/reprise-et-maintenance/'),
 }
 
 // Les quatre plaques ne font pas la même largeur : la grille alterne large et étroit plutôt
@@ -22,6 +25,10 @@ const LARGEURS = ['lg:col-span-3', 'lg:col-span-3', 'lg:col-span-4', 'lg:col-spa
 export default function Page() {
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(SCHEMA_REPRISE) }}
+      />
       <Entete courante="reprise" />
       <main id="contenu">
         <Hero />

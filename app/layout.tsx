@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next'
 import { Hanken_Grotesk, Schibsted_Grotesk } from 'next/font/google'
 import { Refraction } from '@/components/ui/Refraction'
+import { og } from '@/lib/meta'
 import { SCHEMA, SITE } from '@/lib/schema'
 import './globals.css'
 
@@ -26,11 +27,7 @@ export const metadata: Metadata = {
   // Google coupe vers 155 signes : au-delà, la fin est écrite pour personne.
   description:
     "Développeur web en marque blanche pour les agences sans équipe technique. Renfort, projet complet, reprise d'un existant. Bordeaux et à distance.",
-  openGraph: {
-    type: 'website',
-    locale: 'fr_FR',
-    siteName: 'NMW Studios',
-  },
+  openGraph: og('/'),
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

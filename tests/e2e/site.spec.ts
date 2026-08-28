@@ -83,3 +83,23 @@ test('les ancres visées depuis l’accueil existent', async ({ page }) => {
     await expect(page.locator(`#${ancre}`)).toHaveCount(1)
   }
 })
+
+// La canonique du layout vaut '/' pour tout le monde : une page ajoutée qui oublie de la
+// reposer se déclare copie de l'accueil, et og:url part avec elle. Rien ne le signalerait.
+test('chaque page se déclare à sa propre adresse', async ({ page }) => {
+  for (const chemin of PAGES) {
+    await page.goto(chemin)
+    const tetes = await page.evaluate(() => ({
+      canonique: document.querySelector('link[rel=canonical]')?.getAttribute('href'),
+      ogUrl: document.querySelector('meta[property="og:url"]')?.getAttribute('content'),
+      schemas: [...document.querySelectorAll('script[type="application/ld+json"]')].map(
+        (balise) => balise.textContent ?? '',
+      ),
+    }))
+
+    expect(tetes.canonique, chemin).toBe(`https://nmwstudios.com${chemin}`)
+    expect(tetes.ogUrl, chemin).toBe(tetes.canonique)
+    expect(tetes.schemas.length, chemin).toBeGreaterThan(0)
+    for (const schema of tetes.schemas) expect(() => JSON.parse(schema)).not.toThrow()
+  }
+})

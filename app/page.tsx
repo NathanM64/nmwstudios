@@ -10,6 +10,9 @@ import { OFFRES } from '@/content/offres'
 import { ENGAGEMENTS } from '@/content/engagements'
 import { TRAVAUX } from '@/content/travaux'
 import { LEGAL, TJM } from '@/lib/legal'
+import { og } from '@/lib/meta'
+
+export const metadata = { openGraph: og('/') }
 
 export default function Page() {
   return (

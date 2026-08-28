@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { og } from '@/lib/meta'
 import { Container } from '@/components/ui/Container'
 import { Verre } from '@/components/ui/Verre'
 import { Entete } from '@/components/shell/Entete'
@@ -10,6 +11,7 @@ export const metadata: Metadata = {
   // L'adresse postale est obligatoire ici, pas dans les moteurs de recherche.
   robots: { index: false, follow: true },
   alternates: { canonical: '/mentions-legales/' },
+  openGraph: og('/mentions-legales/'),
 }
 
 function Bloc({ titre, children }: { titre: string; children: React.ReactNode }) {
