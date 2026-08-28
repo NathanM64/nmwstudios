@@ -3,43 +3,43 @@
 import { useState } from 'react'
 import { LEGAL } from '@/lib/legal'
 
-// Le seul composant client du site. Il coûte un peu de JavaScript, et il évite qu'un
-// prospect sur un poste sans client mail configuré reparte sans avoir écrit.
-// L'endpoint vit dans service/ : le site est un export statique, il ne reçoit rien.
+// The only client component on the site. It costs a little JavaScript, and it stops a
+// prospect on a machine with no mail client from leaving without writing.
+// The endpoint lives in service/: the site is a static export and receives nothing.
 
-type Etat = { forme: 'repos' | 'envoi' | 'parti' } | { forme: 'erreur'; message: string }
+type State = { kind: 'idle' | 'sending' | 'sent' } | { kind: 'error'; message: string }
 
-const REPLI = `Le message n’est pas parti. Écrivez-moi directement à ${LEGAL.email}.`
+const FALLBACK = `Le message n’est pas parti. Écrivez-moi directement à ${LEGAL.email}.`
 
 export function Formulaire() {
-  const [etat, setEtat] = useState<Etat>({ forme: 'repos' })
+  const [state, setState] = useState<State>({ kind: 'idle' })
 
-  async function envoyer(evenement: React.FormEvent<HTMLFormElement>) {
-    evenement.preventDefault()
-    if (etat.forme === 'envoi') return
+  async function submit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault()
+    if (state.kind === 'sending') return
 
-    const champs = new FormData(evenement.currentTarget)
-    setEtat({ forme: 'envoi' })
+    const fields = new FormData(event.currentTarget)
+    setState({ kind: 'sending' })
 
     try {
-      const reponse = await fetch('/api/contact', {
+      const response = await fetch('/api/contact', {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
-        body: JSON.stringify(Object.fromEntries(champs)),
+        body: JSON.stringify(Object.fromEntries(fields)),
       })
 
-      if (reponse.ok) return setEtat({ forme: 'parti' })
+      if (response.ok) return setState({ kind: 'sent' })
 
-      // Le service renvoie une phrase utilisable telle quelle. S'il n'en renvoie pas,
-      // on ne montre pas un code HTTP à un directeur d'agence.
-      const corps = await reponse.json().catch(() => null)
-      setEtat({ forme: 'erreur', message: corps?.erreur ?? REPLI })
+      // The service returns a sentence that can be shown as is. When it does not, an agency
+      // director should not be reading an HTTP status code.
+      const body = await response.json().catch(() => null)
+      setState({ kind: 'error', message: body?.error ?? FALLBACK })
     } catch {
-      setEtat({ forme: 'erreur', message: REPLI })
+      setState({ kind: 'error', message: FALLBACK })
     }
   }
 
-  if (etat.forme === 'parti') {
+  if (state.kind === 'sent') {
     return (
       <p
         role="status"
@@ -52,17 +52,23 @@ export function Formulaire() {
   }
 
   return (
-    <form onSubmit={envoyer} className="space-y-6">
-      {/* Un humain ne le voit ni ne l'atteint au clavier. Un robot le remplit, et le
-          service répond 204 sans rien envoyer. */}
+    <form onSubmit={submit} className="space-y-6">
+      {/* A human neither sees it nor reaches it with the keyboard. A bot fills it, and the
+          service answers 204 without sending anything. */}
       <div aria-hidden="true" className="absolute left-[-9999px]">
-        <label htmlFor="piege">Ne remplissez pas ce champ</label>
-        <input id="piege" name="piege" type="text" tabIndex={-1} autoComplete="off" />
+        <label htmlFor="honeypot">Ne remplissez pas ce champ</label>
+        <input id="honeypot" name="honeypot" type="text" tabIndex={-1} autoComplete="off" />
       </div>
 
       <div className="grid gap-6 sm:grid-cols-2">
-        <Champ nom="nom" libelle="Votre nom" autoComplete="name" />
-        <Champ nom="email" libelle="Votre adresse" type="email" autoComplete="email" />
+        <Field name="name" label="Votre nom" autoComplete="name" maxLength={120} />
+        <Field
+          name="email"
+          label="Votre adresse"
+          type="email"
+          autoComplete="email"
+          maxLength={200}
+        />
       </div>
 
       <div>
@@ -82,15 +88,15 @@ export function Formulaire() {
       <div className="flex flex-wrap items-center gap-x-6 gap-y-3 pt-1">
         <button
           type="submit"
-          disabled={etat.forme === 'envoi'}
+          disabled={state.kind === 'sending'}
           className="capsule px-7 py-3 font-display text-[0.95rem] font-bold tracking-[-0.01em] disabled:opacity-60"
         >
-          {etat.forme === 'envoi' ? 'Envoi…' : 'Envoyer'}
+          {state.kind === 'sending' ? 'Envoi…' : 'Envoyer'}
         </button>
 
-        {etat.forme === 'erreur' ? (
+        {state.kind === 'error' ? (
           <p role="alert" className="text-sm leading-relaxed text-encre">
-            {etat.message}
+            {state.message}
           </p>
         ) : null}
       </div>
@@ -98,28 +104,30 @@ export function Formulaire() {
   )
 }
 
-function Champ({
-  nom,
-  libelle,
+function Field({
+  name,
+  label,
   type = 'text',
   autoComplete,
+  maxLength,
 }: {
-  nom: string
-  libelle: string
+  name: string
+  label: string
   type?: string
   autoComplete?: string
+  maxLength: number
 }) {
   return (
     <div>
-      <label htmlFor={nom} className="block text-sm text-encre-douce">
-        {libelle}
+      <label htmlFor={name} className="block text-sm text-encre-douce">
+        {label}
       </label>
       <input
-        id={nom}
-        name={nom}
+        id={name}
+        name={name}
         type={type}
         required
-        maxLength={nom === 'email' ? 200 : 120}
+        maxLength={maxLength}
         autoComplete={autoComplete}
         className="champ mt-2"
       />

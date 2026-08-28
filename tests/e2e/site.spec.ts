@@ -109,9 +109,9 @@ test('chaque page se déclare à sa propre adresse', async ({ page }) => {
 test('le formulaire poste ce qu’il faut et dit ce qui se passe', async ({ page }) => {
   await page.goto('/')
 
-  let charge: Record<string, string> | null = null
+  let payload: Record<string, string> | null = null
   await page.route('**/api/contact', async (route) => {
-    charge = route.request().postDataJSON()
+    payload = route.request().postDataJSON()
     await route.fulfill({ status: 204 })
   })
 
@@ -121,11 +121,11 @@ test('le formulaire poste ce qu’il faut et dit ce qui se passe', async ({ page
   await page.getByRole('button', { name: 'Envoyer' }).click()
 
   await expect(page.getByRole('status')).toContainText('C’est parti')
-  expect(charge).toEqual({
-    nom: 'Agence Truc',
+  expect(payload).toEqual({
+    name: 'Agence Truc',
     email: 'directeur@agence.fr',
     message: 'Un Symfony 4 que personne ne veut.',
-    piege: '',
+    honeypot: '',
   })
 })
 
