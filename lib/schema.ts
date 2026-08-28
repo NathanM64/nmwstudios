@@ -5,7 +5,7 @@ export const SITE = 'https://nmwstudios.com'
 
 // Bumped by hand. A build date would claim "modified" on every deploy, including when not a
 // single line of content has changed.
-export const LAST_MODIFIED = '2026-08-28'
+export const LAST_MODIFIED = '2026-08-29'
 
 // What ties the domain to a real identity elsewhere on the web. While the list is empty,
 // sameAs is left out: a dead profile is worth less than no profile at all.
