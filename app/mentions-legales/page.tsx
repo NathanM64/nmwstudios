@@ -9,6 +9,7 @@ export const metadata: Metadata = {
   title: 'Mentions légales',
   // L'adresse postale est obligatoire ici, pas dans les moteurs de recherche.
   robots: { index: false, follow: true },
+  alternates: { canonical: '/mentions-legales/' },
 }
 
 function Bloc({ titre, children }: { titre: string; children: React.ReactNode }) {

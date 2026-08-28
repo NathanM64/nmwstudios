@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next'
 import { Hanken_Grotesk, Schibsted_Grotesk } from 'next/font/google'
 import { Refraction } from '@/components/ui/Refraction'
+import { SCHEMA, SITE } from '@/lib/schema'
 import './globals.css'
 
 // Les variables se posent sur <html>. Tailwind déclare --font-* sur :root : plus bas,
@@ -16,13 +17,15 @@ export const viewport: Viewport = {
 }
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://nmwstudios.com'),
+  metadataBase: new URL(SITE),
+  alternates: { canonical: '/' },
   title: {
     default: 'NMW Studios · Développeur en marque blanche pour agences',
     template: '%s · NMW Studios',
   },
+  // Google coupe vers 155 signes : au-delà, la fin est écrite pour personne.
   description:
-    "Développeur web en sous-traitance pour les agences sans équipe technique. Renfort, projet complet, reprise et maintenance d'un existant. Marque blanche systématique. Bordeaux, à distance partout en France.",
+    "Développeur web en marque blanche pour les agences sans équipe technique. Renfort, projet complet, reprise d'un existant. Bordeaux et à distance.",
   openGraph: {
     type: 'website',
     locale: 'fr_FR',
@@ -34,6 +37,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="fr" className={POLICES.map((p) => p.variable).join(' ')}>
       <body>
+        {/* Inline, donc couvert par le 'unsafe-inline' de la CSP et par aucune requête. */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(SCHEMA) }}
+        />
         {children}
         <Refraction />
       </body>

@@ -11,7 +11,8 @@ import { ETAT_DES_LIEUX } from '@/content/etat-des-lieux'
 export const metadata: Metadata = {
   title: 'Reprise et maintenance de site existant',
   description:
-    "Reprise d'un site développé par un autre prestataire : Symfony, PHP sans framework, React ancien, WordPress sur mesure. Maintenance au mois pour les agences, en marque blanche.",
+    "Reprise d'un site développé par un autre : Symfony, PHP, React ancien, WordPress. Maintenance au mois pour les agences, en marque blanche.",
+  alternates: { canonical: '/reprise-et-maintenance/' },
 }
 
 // Les quatre plaques ne font pas la même largeur : la grille alterne large et étroit plutôt
