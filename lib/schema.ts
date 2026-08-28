@@ -1,3 +1,4 @@
+import { OFFERS } from '@/content/offers'
 import { LEGAL, DAY_RATE } from '@/lib/legal'
 
 export const SITE = 'https://nmwstudios.com'
@@ -42,7 +43,9 @@ export const SCHEMA = {
       logo: `${SITE}/logo.png`,
       image: `${SITE}/opengraph-image.jpg`,
       email: LEGAL.email,
-      phone: LEGAL.phone,
+      // `telephone`, et non `phone` : la seconde n'existe pas dans le vocabulaire, le numero
+      // etait publie sans que personne ne le lise.
+      telephone: LEGAL.phone,
       description:
         "Développeur web en sous-traitance pour les agences sans équipe technique. Renfort, projet complet, reprise et maintenance d'un existant, en marque blanche.",
       address: ADDRESS,
@@ -50,6 +53,7 @@ export const SCHEMA = {
       founder: { '@id': PERSON },
       employee: { '@id': PERSON },
       knowsLanguage: 'fr',
+      priceRange: `${DAY_RATE} €`,
       ...(PROFILES.length ? { sameAs: PROFILES } : {}),
       // One rate, per day, the same for all three modes. That is what the page says.
       makesOffer: {
@@ -84,6 +88,25 @@ export const SCHEMA = {
       provider: { '@id': STUDIO },
       areaServed: FRANCE,
       audience: { '@type': 'BusinessAudience', name: 'Agences web et de communication' },
+      // Les trois modes d'engagement ont chacun leur page depuis la relance : le graphe les
+      // rattache au meme service et au meme tarif, ce que trois pages isolees ne disent pas.
+      hasOfferCatalog: {
+        '@type': 'OfferCatalog',
+        name: 'Modes d’engagement',
+        itemListElement: OFFERS.map((offer) => ({
+          '@type': 'Offer',
+          name: offer.title,
+          url: offer.link ? `${SITE}${offer.link.href}` : SITE,
+          itemOffered: { '@id': SERVICE_OFFERING },
+          priceSpecification: {
+            '@type': 'UnitPriceSpecification',
+            price: DAY_RATE,
+            priceCurrency: 'EUR',
+            unitText: 'jour',
+            valueAddedTaxIncluded: false,
+          },
+        })),
+      },
     },
     {
       '@type': 'WebSite',
