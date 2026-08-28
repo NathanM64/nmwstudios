@@ -6,7 +6,7 @@ import { Logo } from '@/components/ui/Logo'
 import { Header } from '@/components/shell/Header'
 import { Footer } from '@/components/shell/Footer'
 import { Contact } from '@/components/blocks/Contact'
-import { OFFERS } from '@/content/offers'
+import { OFFERS, type Offer } from '@/content/offers'
 import { COMMITMENTS } from '@/content/commitments'
 import { WORK } from '@/content/work'
 import { LEGAL, DAY_RATE } from '@/lib/legal'
@@ -97,6 +97,10 @@ function Plate() {
   )
 }
 
+function Purpose({ offer }: { offer: Offer }) {
+  return <span className="sr-only"> : {offer.title.toLowerCase()}</span>
+}
+
 function Modes() {
   const secondary = OFFERS.filter((offer) => !offer.primary)
   const primary = OFFERS.find((offer) => offer.primary)
@@ -126,6 +130,15 @@ function Modes() {
             <p className="mt-auto pt-8 text-sm text-ink-soft">
               <span className="block border-t border-ink/10 pt-5">{offer.commitment}</span>
             </p>
+            {offer.link ? (
+              <Link
+                href={offer.link.href}
+                className="link-underline mt-5 inline-block self-start font-display font-bold tracking-[-0.01em]"
+              >
+                {offer.link.label}
+                <Purpose offer={offer} />
+              </Link>
+            ) : null}
           </Glass>
         ))}
       </div>
@@ -158,6 +171,7 @@ function Modes() {
                 className="link-underline mt-4 inline-block font-display font-bold tracking-[-0.01em]"
               >
                 {primary.link.label}
+                <Purpose offer={primary} />
               </Link>
             ) : null}
           </div>
@@ -235,9 +249,7 @@ function NoNames() {
                 accord de confidentialité, et la vôtre en signera un. Un prestataire qui étale ses
                 références finira par étaler la vôtre.
               </p>
-              <p className="mt-5">
-                À la place, voilà ce qui tourne. Le secteur et la technique, jamais le nom.
-              </p>
+              <p className="mt-5">À la place, voilà ce qui tourne.</p>
             </div>
 
             <ul className="rise mt-10">
@@ -258,21 +270,26 @@ function NoNames() {
 
           {/* La description reste basse, la preuve porte la graisse : c'est elle que le
               lecteur cherche, bien avant la pile technique. */}
-          <ol className="rise lg:pt-2">
-            {WORK.map((item, rank) => (
-              <li
-                key={item.body}
-                className={rank > 0 ? 'mt-8 border-t border-encre/12 pt-8' : ''}
-              >
-                <p className="max-w-[46ch] leading-relaxed text-ink-soft">{item.body}</p>
-                {item.proof ? (
-                  <p className="mt-3 font-display text-[clamp(1.1rem,2.2vw,1.4rem)] font-extrabold leading-snug tracking-[-0.03em]">
-                    {item.proof}
-                  </p>
-                ) : null}
-              </li>
-            ))}
-          </ol>
+          <div className="rise lg:pt-2">
+            <h3 className="font-display text-xl font-extrabold leading-snug tracking-[-0.03em]">
+              Le secteur et la technique, jamais le nom.
+            </h3>
+            <ol className="mt-8">
+              {WORK.map((item, rank) => (
+                <li
+                  key={item.body}
+                  className={rank > 0 ? 'mt-8 border-t border-ink/12 pt-8' : ''}
+                >
+                  <p className="max-w-[46ch] leading-relaxed text-ink-soft">{item.body}</p>
+                  {item.proof ? (
+                    <p className="mt-3 font-display text-[clamp(1.1rem,2.2vw,1.4rem)] font-extrabold leading-snug tracking-[-0.03em]">
+                      {item.proof}
+                    </p>
+                  ) : null}
+                </li>
+              ))}
+            </ol>
+          </div>
         </div>
       </Container>
     </section>

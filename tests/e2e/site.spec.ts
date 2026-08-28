@@ -85,6 +85,20 @@ test('the anchors linked from the home page exist', async ({ page }) => {
   }
 })
 
+// Each offer declares a page in content/offers.ts, and the home page rendered the link for one
+// of the three only: the other two were reachable from the navigation and nowhere else. Nothing
+// failed, the link was simply never printed.
+test('every offer links to its own page from the home page', async ({ page }) => {
+  await page.goto('/')
+  const cards = page.locator('main section:nth-of-type(2) article')
+  await expect(cards).toHaveCount(3)
+
+  for (const card of await cards.all()) {
+    const title = (await card.getByRole('heading', { level: 3 }).innerText()).toLowerCase()
+    await expect(card.getByRole('link', { name: `Comment ça se passe : ${title}` })).toHaveCount(1)
+  }
+})
+
 // The layout canonical is '/' for everyone: a new page that forgets to restate it declares
 // itself a copy of the home page, and og:url goes with it. Nothing else would say so.
 test('each page declares its own address', async ({ page }) => {
