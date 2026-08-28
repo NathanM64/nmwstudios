@@ -61,10 +61,10 @@ export function Form() {
       </div>
 
       <div className="grid gap-6 sm:grid-cols-2">
-        <Field name="name" label="Votre nom" autoComplete="name" maxLength={120} />
+        <Field name="name" label="Prénom Nom" autoComplete="name" maxLength={120} />
         <Field
           name="email"
-          label="Votre adresse"
+          label="Email"
           type="email"
           autoComplete="email"
           maxLength={200}

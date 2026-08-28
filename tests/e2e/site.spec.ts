@@ -116,8 +116,8 @@ test('the form posts what it should and says what happens', async ({ page }) => 
     await route.fulfill({ status: 204 })
   })
 
-  await page.getByLabel('Votre nom').fill('Agence Truc')
-  await page.getByLabel('Votre adresse').fill('directeur@agence.fr')
+  await page.getByLabel('Prénom Nom').fill('Agence Truc')
+  await page.getByLabel('Email').fill('directeur@agence.fr')
   await page.getByLabel('Ce que vous avez sur les bras').fill('Un Symfony 4 que personne ne veut.')
   await page.getByRole('button', { name: 'Envoyer' }).click()
 
@@ -135,8 +135,8 @@ test('a failed send points back to the mail address', async ({ page }) => {
   await page.goto('/')
   await page.route('**/api/contact', (route) => route.fulfill({ status: 502, json: {} }))
 
-  await page.getByLabel('Votre nom').fill('A')
-  await page.getByLabel('Votre adresse').fill('a@b.fr')
+  await page.getByLabel('Prénom Nom').fill('A')
+  await page.getByLabel('Email').fill('a@b.fr')
   await page.getByLabel('Ce que vous avez sur les bras').fill('Bonjour')
   await page.getByRole('button', { name: 'Envoyer' }).click()
 
