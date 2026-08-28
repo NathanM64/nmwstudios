@@ -71,7 +71,7 @@ function Cartouche() {
       {/* Le seul endroit du site où ma marque est grande, et elle est sous la dalle qui porte
           le nom de l'agence. C'est aussi ce que la tranche du verre a à plier. */}
       <span aria-hidden="true">
-        <Logo className="absolute left-1/2 top-1/2 h-[122%] w-auto -translate-x-1/2 -translate-y-1/2 text-encre opacity-[0.09] blur-[1.5px] [mask-image:radial-gradient(closest-side,black_48%,transparent_96%)]" />
+        <Logo className="absolute left-1/2 top-1/2 h-[104%] w-auto -translate-x-1/2 -translate-y-1/2 text-encre opacity-[0.08] blur-[1px]" />
       </span>
       <div data-verre className="verre absolute bottom-0 left-10 right-0 top-14" />
       <Verre
