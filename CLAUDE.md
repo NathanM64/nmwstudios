@@ -60,14 +60,18 @@ sombre, aucune couleur. Schibsted Grotesk pour les titres, Hanken Grotesk pour l
 aucune monospace. Le détail est dans `DESIGN.md`, qui fait autorité.
 
 Le geste de signature est la réfraction : `components/ui/Refraction.tsx` mesure chaque
-élément `data-verre`, calcule sa carte de déplacement à sa taille et la pose en
+élément `data-glass`, calcule sa carte de déplacement à sa taille et la pose en
 `backdrop-filter`. Le mur ne défile pas, le verre passe dessus, et le pli vit sans script
 d'animation. Ne pas ajouter de deuxième matériau.
 
 Les classes du système vont dans `@layer base` ou `@layer components`. Hors couche, elles
-battent les utilitaires Tailwind : `.verre { position: relative }` a déjà annulé en silence
+battent les utilitaires Tailwind : `.glass { position: relative }` a déjà annulé en silence
 un `absolute` posé sur une dalle.
 
-Aucune animation ne passe par un écouteur de défilement : `animation-timeline: view()` et
-`IntersectionObserver` couvrent tout. Tout mouvement est gardé derrière
-`prefers-reduced-motion`.
+Aucune animation ne passe par un écouteur de défilement, ni par `IntersectionObserver` :
+`animation-timeline: view()` couvre tout le mouvement, et `Refraction` est le seul JavaScript
+du site. Tout mouvement est gardé derrière `prefers-reduced-motion`, `scroll-behavior` compris.
+
+`DESIGN.md` nomme les identifiants exactement comme le code, donc en anglais, et sa prose reste
+en français. Trois classes mortes sont nées de l'écart inverse : le filet `aucune classe
+utilitaire ne vise un jeton inexistant` les attrape maintenant.
