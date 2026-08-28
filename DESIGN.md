@@ -234,7 +234,7 @@ de déplacement, calculée à sa taille depuis la distance signée au bord du re
 le décalage horizontal, le vert le vertical, 128 veut dire « ne bouge pas », et l'échelle du
 filtre reprend le pas réel du canal, 255 sur 127.
 
-Le biseau vaut 16% du petit côté, borné à 34px, et le déplacement maximal 72% du biseau : la
+Le biseau vaut 16% du petit côté, borné à 34px, et le déplacement maximal 18% du biseau : la
 tranche comprime le mur au lieu de le recopier. La région du filtre déborde la dalle du
 double du déplacement : sans cette marge, la tranche ramène du vide, c'est-à-dire une bande
 grise sur le bord. Le signe du déplacement suit la normale sortante : dans ce sens la tranche
@@ -275,12 +275,12 @@ et étroit sur l'autre.
 **La règle du centre net.** Aucun flou dans la déclaration finale d'une dalle de contenu.
 Un verre flou en son centre est un calque dépoli ; toute la matière est dans la tranche.
 
-**La règle du trait fin.** Rien de dessiné à traits fins ne passe sous une tranche de verre.
-Le biseau atteint 34px et déplace de 17px, un trait de dix pixels s'y coupe au lieu d'y plier,
-et la zone où deux dalles se recouvrent déplace un fond déjà déplacé. Un sigle en filigrane a
-été essayé sous le cartouche du premier écran : il se déchirait à toutes les densités d'écran,
-et aucun réglage d'opacité, de flou ou de masque ne le rattrapait. La tranche ne comprime bien
-que des étendues continues, le dégradé du mur et son grain.
+**La règle de l'amplitude.** Le déplacement reste sous la largeur du plus fin trait qui passe
+derrière une dalle. Au-delà, le trait ne plie pas, il se coupe net sur le contour de la dalle,
+et la zone où deux dalles se recouvrent le coupe deux fois puisque chacune déplace un fond déjà
+déplacé. Mesuré sur le sigle du cartouche : à 17px de déplacement il se déchire à toutes les
+densités d'écran, à 6px il plie. Aucun réglage d'opacité, de flou ou de masque ne rattrape une
+amplitude trop forte, ce sont trois adoucissements posés sur un défaut géométrique.
 
 **La règle du sans-trait.** Aucune bordure pour délimiter une surface. Les seuls traits du
 site sont des filets à 1px en `encre/10` qui séparent des lignes de liste, et une arête en
@@ -328,6 +328,16 @@ La seule surface pleine et pleine largeur du site, un dégradé noir à 168° do
 lumière rasante en haut à gauche. Le verre posé dessus change de peau : il descend à blanc
 22% puis 7%, parce qu'une dalle prend la lumière de ce qu'elle touche. C'est la rupture de
 rythme obligatoire de chaque page.
+
+### Le filigrane du cartouche
+
+Le sigle NMW, en `encre/8`, flouté d'un pixel, posé sous les deux dalles du premier écran de
+l'accueil. C'est le seul endroit du site où la marque est grande, et elle est sous la plaque qui
+porte le nom de l'agence. C'est aussi ce que la tranche du verre a à plier, en plus du grain.
+
+Il est la contrainte qui fixe l'amplitude du déplacement pour tout le site : ses traits sont ce
+qu'il y a de plus fin derrière une dalle, donc c'est lui qui décide. Voir la règle de
+l'amplitude.
 
 ## Motion
 
@@ -377,8 +387,8 @@ React. Les lignes de temps CSS et `IntersectionObserver` couvrent tout ce que fa
 - **Don't** opacifier une dalle jusqu'à effacer le grain. Une dalle opaque est une carte.
 - **Don't** empiler trois dalles transparentes : les voiles blancs s'additionnent et le tas
   redevient un bloc blanc.
-- **Don't** poser un dessin à traits fins sous une dalle, filigrane compris. Voir la règle du
-  trait fin.
+- **Don't** monter le déplacement au-delà de la largeur des traits qui passent derrière une
+  dalle. Voir la règle de l'amplitude.
 - **Don't** poser une étiquette en petites capitales au-dessus d'un titre.
 - **Don't** entourer une plaque d'une bordure, ni séparer deux sections par un trait plein.
 - **Don't** introduire une couleur, même en accent. Le système n'en a aucune.

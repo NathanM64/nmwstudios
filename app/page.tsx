@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { Container } from '@/components/ui/Container'
 import { Section } from '@/components/ui/Section'
 import { Verre } from '@/components/ui/Verre'
+import { Logo } from '@/components/ui/Logo'
 import { Entete } from '@/components/shell/Entete'
 import { Pied } from '@/components/shell/Pied'
 import { Contact } from '@/components/blocs/Contact'
@@ -70,6 +71,9 @@ function Cartouche() {
       className="entre relative mx-auto aspect-[6/5] w-full max-w-[21rem] lg:mx-0"
       style={{ '--rang': 1 } as React.CSSProperties}
     >
+      <span aria-hidden="true">
+        <Logo className="absolute left-1/2 top-1/2 h-[104%] w-auto -translate-x-1/2 -translate-y-1/2 text-encre opacity-[0.08] blur-[1px]" />
+      </span>
       <div data-verre className="verre absolute bottom-0 left-10 right-0 top-14" />
       <Verre
         epais

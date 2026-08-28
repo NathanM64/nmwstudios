@@ -147,9 +147,12 @@ export function Refraction() {
         derniereTaille = taille
 
         const rayon = parseFloat(getComputedStyle(dalle).borderTopLeftRadius) || 0
-        // Le biseau vaut 16% du petit côté, borné à 34px, et le déplacement 50% du biseau.
+        // Le biseau vaut 16% du petit côté, borné à 34px. Le déplacement ne prend que 18%
+        // de ce biseau : au-delà il dépasse la largeur d'un trait fin passant derrière la
+        // dalle, et le trait se coupe net au lieu de plier. Mesuré à 34px de déplacement,
+        // le sigle du cartouche se déchirait ; à 6px il plie.
         const biseau = Math.min(34, Math.min(largeur, hauteur) * 0.16)
-        const maximum = biseau * 0.5
+        const maximum = biseau * 0.18
         const donnees = carteDeplacement(largeur, hauteur, rayon, biseau)
         if (!donnees) return
 
