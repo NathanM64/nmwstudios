@@ -103,7 +103,7 @@ function Modes() {
       titre="Vous choisissez le niveau d’engagement, pas le tarif."
       chapeau={
         <p>
-          Le tarif est le même dans les trois cas. Ce qui change, c’est ce que vous signez et
+          Le tarif de la sous-traitance est le même dans les trois cas. Ce qui change, c’est ce que vous signez et
           pour combien de temps.
         </p>
       }

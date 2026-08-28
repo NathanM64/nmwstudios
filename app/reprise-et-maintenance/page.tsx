@@ -67,7 +67,7 @@ function EtatDesLieux() {
   return (
     <Section
       id="etat-des-lieux"
-      titre="Ce que je fais avant d’écrire la moindre ligne."
+      titre="La reprise commence avant d’écrire la moindre ligne."
       chapeau={
         <p>
           Quatre étapes, dans cet ordre, parce que chacune a besoin de la précédente. Vous savez
@@ -114,7 +114,7 @@ function Technos() {
           <div className="grid gap-x-16 gap-y-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)]">
             <div>
               <h2 className="max-w-[14ch] font-display text-[clamp(1.9rem,4.2vw,3rem)] font-extrabold leading-[1.03] tracking-[-0.03em] text-balance">
-                Ce n’est pas la technologie qui décide.
+                Symfony, PHP, React, WordPress : ce n’est pas la technologie qui décide.
               </h2>
               <p className="mt-7 max-w-[38rem] text-lg leading-relaxed text-blanc-vif/75">
                 Une reprise se décide sur l’état du projet, pas sur le langage dans lequel il est
@@ -186,7 +186,7 @@ function Depart() {
   return (
     <Section
       id="depart"
-      titre="Ce qui se passe le jour où vous arrêtez."
+      titre="Ce qui se passe le jour où vous arrêtez la maintenance."
       chapeau={
         <p>
           L’autre peur, celle dont on parle moins : se retrouver dépendant du prestataire qui a

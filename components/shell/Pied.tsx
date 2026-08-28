@@ -17,7 +17,7 @@ export function Pied() {
           <div>
             <Logo className="h-12 w-12 text-encre" />
             <p className="mt-5 text-sm text-encre-douce">
-              {LEGAL.adresse.split(',').slice(1).join(',').trim()}
+              33130 Bègles, dans la métropole de Bordeaux
               <br />
               À distance partout en France
             </p>
