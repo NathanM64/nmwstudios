@@ -89,6 +89,21 @@
 }
 
 @layer components {
+  /* Hors écran jusqu'au focus : il ne coûte rien à l'œil et fait gagner deux tabulations
+     à qui navigue au clavier. */
+  .evitement {
+    position: fixed;
+    top: 1rem;
+    left: 1rem;
+    z-index: 40;
+    translate: 0 -160%;
+    transition: translate 240ms var(--ease-verre);
+  }
+
+  .evitement:focus {
+    translate: 0 0;
+  }
+
   .chiffres {
     font-variant-numeric: tabular-nums;
   }

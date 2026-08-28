@@ -22,8 +22,8 @@ const LARGEURS = ['lg:col-span-3', 'lg:col-span-3', 'lg:col-span-4', 'lg:col-spa
 export default function Page() {
   return (
     <>
-      <Entete />
-      <main>
+      <Entete courante="reprise" />
+      <main id="contenu">
         <Hero />
         <EtatDesLieux />
         <Technos />

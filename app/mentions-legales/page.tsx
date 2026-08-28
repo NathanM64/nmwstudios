@@ -25,7 +25,7 @@ export default function Page() {
   return (
     <>
       <Entete />
-      <main className="py-20 sm:py-24">
+      <main id="contenu" className="py-20 sm:py-24">
         <Container>
           <h1 className="entre max-w-[14ch] font-display text-[clamp(2rem,4.6vw,3rem)] font-extrabold leading-[1] tracking-[-0.035em]">
             Mentions légales

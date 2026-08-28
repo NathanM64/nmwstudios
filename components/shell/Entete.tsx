@@ -6,9 +6,15 @@ import { LEGAL } from '@/lib/legal'
 
 // Une barre de verre flottante, détachée des bords par le conteneur. Sous 640px le lien
 // secondaire disparaît : seule l'action reste, elle ne quitte jamais le pouce.
-export function Entete() {
+// La page courante est passée en propriété plutôt que lue par usePathname : lire l'URL
+// exigerait un composant client, et embarquerait tout l'en-tête, logo compris, dans le
+// paquet JavaScript pour un seul attribut.
+export function Entete({ courante }: { courante?: 'reprise' }) {
   return (
     <header className="sticky top-0 z-20 pt-4 sm:pt-5">
+      <a href="#contenu" className="evitement capsule px-5 py-2.5 font-display text-[0.9rem] font-bold">
+        Aller au contenu
+      </a>
       <Container>
         <Verre dense flou={18} className="flex items-center justify-between gap-4 py-2.5 pl-4 pr-2.5 sm:pl-6 sm:pr-3">
           <Link href="/" className="flex items-center gap-3 rounded-[4px]">
@@ -21,6 +27,7 @@ export function Entete() {
           <nav className="flex items-center gap-1 sm:gap-5">
             <Link
               href="/reprise-et-maintenance/"
+              aria-current={courante === 'reprise' ? 'page' : undefined}
               className="hidden rounded-[4px] px-1 text-[0.95rem] text-encre-douce transition-colors duration-300 hover:text-encre sm:block"
             >
               Reprise et maintenance

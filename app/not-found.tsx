@@ -1,13 +1,19 @@
+import type { Metadata } from 'next'
 import Link from 'next/link'
 import { Container } from '@/components/ui/Container'
 import { Entete } from '@/components/shell/Entete'
 import { Pied } from '@/components/shell/Pied'
 
+export const metadata: Metadata = {
+  title: 'Page introuvable',
+  robots: { index: false, follow: true },
+}
+
 export default function NotFound() {
   return (
     <>
       <Entete />
-      <main className="py-24 sm:py-32">
+      <main id="contenu" className="py-24 sm:py-32">
         <Container>
           <h1 className="entre max-w-[14ch] font-display text-[clamp(2.2rem,5.4vw,4rem)] font-extrabold leading-[0.98] tracking-[-0.04em]">
             Cette page n’existe pas.

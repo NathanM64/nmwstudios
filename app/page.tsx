@@ -15,7 +15,7 @@ export default function Page() {
   return (
     <>
       <Entete />
-      <main>
+      <main id="contenu">
         <Hero />
         <Modes />
         <MarqueBlanche />
