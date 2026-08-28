@@ -1,7 +1,9 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # dependencies
-/node_modules
+# Non ancré : service/ embarque son propre node_modules, et `/node_modules` ne
+# couvrait que la racine. 26 Mo partaient au premier commit du service.
+node_modules/
 /.pnp
 .pnp.*
 .yarn/*
@@ -55,3 +57,6 @@ next-env.d.ts
 # Le dépôt est public et ces fichiers portent des données commerciales
 # (montants facturés, TJM, marges). Ils restent sur disque, jamais poussés.
 /docs/
+
+# Sortie de compilation du service de contact
+service/dist/
