@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { Container } from '@/components/ui/Container'
 import { Logo } from '@/components/ui/Logo'
 import { LEGAL } from '@/lib/legal'
+import { NAV } from '@/lib/nav'
 
 // Le logo signe en bas, comme un cachet sur un document. L'arête s'éteint sur ses deux bords :
 // c'est le seul trait horizontal du site, et il ne touche jamais la marge.
@@ -22,6 +23,18 @@ export function Pied() {
               À distance partout en France
             </p>
           </div>
+          <nav className="flex flex-col items-start gap-2 text-sm">
+            {NAV.map((entree) => (
+              <Link
+                key={entree.href}
+                href={entree.href}
+                className="text-encre-douce transition-colors duration-300 hover:text-encre"
+              >
+                {entree.texte}
+              </Link>
+            ))}
+          </nav>
+
           <div className="flex flex-col items-start gap-2 text-sm">
             <a
               href={`mailto:${LEGAL.email}`}

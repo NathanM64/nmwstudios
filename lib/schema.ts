@@ -96,37 +96,57 @@ export const SCHEMA = {
   ],
 } as const
 
-// Injecté par la page de reprise seule : le graphe du layout décrit le studio, pas ce que
+// Injecté par chaque page de service : le graphe du layout décrit le studio, pas ce que
 // cette page-là vend.
-export const SCHEMA_REPRISE = {
-  '@context': 'https://schema.org',
-  '@graph': [
-    {
-      '@type': 'Service',
-      '@id': `${SITE}/reprise-et-maintenance/#service`,
-      name: 'Reprise et maintenance de site existant',
-      serviceType: 'Reprise et maintenance de site web',
-      url: `${SITE}/reprise-et-maintenance/`,
-      provider: { '@id': STUDIO },
-      areaServed: FRANCE,
-      audience: { '@type': 'BusinessAudience', name: 'Agences web et de communication' },
-      description:
-        "Reprise d'un site développé par un autre prestataire, puis maintenance au mois : Symfony, PHP sans framework, React et JavaScript ancien, WordPress sur mesure.",
-      hasOfferCatalog: {
-        '@type': 'OfferCatalog',
-        name: 'Technologies reprises',
-        itemListElement: ['Symfony', 'PHP sans framework', 'React et JavaScript ancien', 'WordPress sur mesure'].map(
-          (nom) => ({ '@type': 'Offer', itemOffered: { '@type': 'Service', name: `Reprise ${nom}` } }),
-        ),
+export function schemaService({
+  chemin,
+  fil,
+  nom,
+  serviceType,
+  description,
+  catalogue,
+}: {
+  chemin: string
+  fil: string
+  nom: string
+  serviceType: string
+  description: string
+  catalogue?: string[]
+}) {
+  return {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'Service',
+        '@id': `${SITE}${chemin}#service`,
+        name: nom,
+        serviceType,
+        url: `${SITE}${chemin}`,
+        provider: { '@id': STUDIO },
+        areaServed: FRANCE,
+        audience: { '@type': 'BusinessAudience', name: 'Agences web et de communication' },
+        description,
+        ...(catalogue
+          ? {
+              hasOfferCatalog: {
+                '@type': 'OfferCatalog',
+                name: 'Technologies reprises',
+                itemListElement: catalogue.map((item) => ({
+                  '@type': 'Offer',
+                  itemOffered: { '@type': 'Service', name: `Reprise ${item}` },
+                })),
+              },
+            }
+          : {}),
       },
-    },
-    {
-      '@type': 'BreadcrumbList',
-      '@id': `${SITE}/reprise-et-maintenance/#fil`,
-      itemListElement: [
-        { '@type': 'ListItem', position: 1, name: 'Accueil', item: `${SITE}/` },
-        { '@type': 'ListItem', position: 2, name: 'Reprise et maintenance' },
-      ],
-    },
-  ],
-} as const
+      {
+        '@type': 'BreadcrumbList',
+        '@id': `${SITE}${chemin}#fil`,
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: 'Accueil', item: `${SITE}/` },
+          { '@type': 'ListItem', position: 2, name: fil },
+        ],
+      },
+    ],
+  }
+}

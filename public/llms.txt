@@ -8,9 +8,14 @@ Prestataire unique, pas d'équipe. Le travail est livré sous le nom de l'agence
 reste seule interlocutrice de son propre client. Aucun nom de client n'est publié : les
 agences signent un accord de confidentialité et le prestataire signe le leur.
 
-Tarif : 500 EUR la journée, identique pour les trois modes d'engagement. TVA non applicable,
-article 293 B du CGI. Ce qui est acheté est un nombre de jours, écrit et validé avant de
-commencer.
+Tarif : 500 EUR la journée, identique pour les trois modes d'engagement. Une journée de
+travail vaut 7 h 30. TVA non applicable, article 293 B du CGI. Ce qui est acheté est un nombre
+de jours, écrit et validé avant de commencer. La facturation porte sur le temps réellement
+passé : une mission terminée en avance coûte moins que son estimation, et un périmètre qui
+change donne lieu à une nouvelle estimation à valider avant de reprendre le travail.
+
+Ordres de grandeur, jamais des forfaits : un site vitrine de plusieurs pages avec la mise en
+place de l'hébergement représente environ 3 jours, un backoffice simple environ 5 jours.
 
 ## Modes d'engagement
 
@@ -21,6 +26,8 @@ commencer.
 ## Pages
 
 - [Accueil](https://nmwstudios.com/) : les trois modes d'engagement, les engagements de marque blanche, le tarif.
+- [Renfort ponctuel](https://nmwstudios.com/renfort/) : ce qui est lu avant d'écrire, la ligne entre ce qui se tranche seul et ce qui remonte à l'agence, ce qui reste à la fin de la mission.
+- [Projet complet](https://nmwstudios.com/projet-complet/) : les quatre préalables au démarrage, les règles de chiffrage, des ordres de grandeur en jours, ce qui est couvert après la mise en ligne.
 - [Reprise et maintenance](https://nmwstudios.com/reprise-et-maintenance/) : l'état des lieux en quatre étapes, les trois conditions de reprise, les technologies reprises, ce qui est rendu en fin de contrat.
 
 ## Technologies reprises le plus souvent

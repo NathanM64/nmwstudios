@@ -8,7 +8,17 @@ import { Contact } from '@/components/blocs/Contact'
 import { CRITERES, TECHNOS } from '@/content/technos'
 import { ETAT_DES_LIEUX } from '@/content/etat-des-lieux'
 import { og } from '@/lib/meta'
-import { SCHEMA_REPRISE } from '@/lib/schema'
+import { schemaService } from '@/lib/schema'
+
+const SCHEMA = schemaService({
+  chemin: '/reprise-et-maintenance/',
+  fil: 'Reprise et maintenance',
+  nom: 'Reprise et maintenance de site existant',
+  serviceType: 'Reprise et maintenance de site web',
+  description:
+    "Reprise d'un site développé par un autre prestataire, puis maintenance au mois : Symfony, PHP sans framework, React et JavaScript ancien, WordPress sur mesure.",
+  catalogue: ['Symfony', 'PHP sans framework', 'React et JavaScript ancien', 'WordPress sur mesure'],
+})
 
 export const metadata: Metadata = {
   title: 'Reprise et maintenance de site existant',
@@ -27,9 +37,9 @@ export default function Page() {
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(SCHEMA_REPRISE) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(SCHEMA) }}
       />
-      <Entete courante="reprise" />
+      <Entete courante="/reprise-et-maintenance/" />
       <main id="contenu">
         <Hero />
         <EtatDesLieux />

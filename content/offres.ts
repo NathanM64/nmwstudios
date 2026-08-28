@@ -18,6 +18,7 @@ export const OFFRES: Offre[] = [
     corps:
       'Je prends une partie de votre production pendant un pic : une intégration, une API à brancher, une mise en production qui traîne. Vous gardez la main sur le projet.',
     engagement: 'À la journée, sans durée minimum.',
+    lien: { href: '/renfort/', texte: 'Comment ça se passe' },
   },
   {
     id: 'projet',
@@ -26,6 +27,7 @@ export const OFFRES: Offre[] = [
     corps:
       'Vous avez la maquette et le client, je fais le développement, de la première ligne à la mise en ligne. Vous restez le seul interlocuteur.',
     engagement: 'Un périmètre, une estimation en jours, un devis.',
+    lien: { href: '/projet-complet/', texte: 'Comment ça se passe' },
   },
   {
     id: 'reprise',

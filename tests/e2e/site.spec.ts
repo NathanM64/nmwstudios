@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test'
 
-const PAGES = ['/', '/reprise-et-maintenance/', '/mentions-legales/']
+const PAGES = ['/', '/renfort/', '/projet-complet/', '/reprise-et-maintenance/', '/mentions-legales/']
 
 // Le site ne vend plus l'absence de tiers au lecteur, mais les mentions légales l'affirment
 // et la CSP du Caddyfile l'impose. Une dépendance ajoutée casserait les deux sans bruit.

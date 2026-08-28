@@ -9,5 +9,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   return [
     { url: `${SITE}/`, lastModified: MODIFIE_LE },
     { url: `${SITE}/reprise-et-maintenance/`, lastModified: MODIFIE_LE },
+    { url: `${SITE}/renfort/`, lastModified: MODIFIE_LE },
+    { url: `${SITE}/projet-complet/`, lastModified: MODIFIE_LE },
   ]
 }
