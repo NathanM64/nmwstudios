@@ -2,7 +2,6 @@ import Link from 'next/link'
 import { Container } from '@/components/ui/Container'
 import { Section } from '@/components/ui/Section'
 import { Verre } from '@/components/ui/Verre'
-import { Logo } from '@/components/ui/Logo'
 import { Entete } from '@/components/shell/Entete'
 import { Pied } from '@/components/shell/Pied'
 import { Contact } from '@/components/blocs/Contact'
@@ -60,19 +59,17 @@ function Hero() {
   )
 }
 
-// La signature d'un contrat, laissée au nom de l'agence. Ce site ne met pas mon nom au
-// centre : il le pose en filigrane, sous la dalle qui porte celui de l'agence.
+// La signature d'un contrat, laissée au nom de l'agence.
+//
+// Aucun filigrane derrière : un sigle à traits fins passé sous une tranche de verre se déchire
+// au lieu de plier, le biseau déplaçant plus large que le trait. La tranche n'a que le grain
+// et le dégradé du mur à comprimer, et c'est pour ça que le grain existe.
 function Cartouche() {
   return (
     <div
       className="entre relative mx-auto aspect-[6/5] w-full max-w-[21rem] lg:mx-0"
       style={{ '--rang': 1 } as React.CSSProperties}
     >
-      {/* Le seul endroit du site où ma marque est grande, et elle est sous la dalle qui porte
-          le nom de l'agence. C'est aussi ce que la tranche du verre a à plier. */}
-      <span aria-hidden="true">
-        <Logo className="absolute left-1/2 top-1/2 h-[104%] w-auto -translate-x-1/2 -translate-y-1/2 text-encre opacity-[0.08] blur-[1px]" />
-      </span>
       <div data-verre className="verre absolute bottom-0 left-10 right-0 top-14" />
       <Verre
         epais
