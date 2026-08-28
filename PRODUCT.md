@@ -74,7 +74,6 @@ Décisions produit encore ouvertes, à ne pas inventer :
 - Le délai de réponse réellement tenable, retiré du bloc contact faute de pouvoir être
   vérifié.
 - La preuve manquante du quatrième travail, la plateforme d'impression 3D.
-- L'hébergeur des mentions légales, à confirmer quand le serveur `infra` sera en service.
 - La liste des technologies reprises, à compléter si Laravel, Vue, Drupal ou Node doivent y
   figurer.
 - `RENDEZ_VOUS` reste vide : la prise de rendez-vous en ligne n'est pas retenue comme

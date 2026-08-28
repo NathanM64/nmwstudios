@@ -8,7 +8,8 @@ export const LEGAL = {
   email: 'contact@nmwstudios.com',
   telephone: '+33 6 89 80 15 89',
   telephoneLien: '+33689801589',
-  // À confirmer avec l’état réel du serveur décrit dans le dépôt infra.
+  // Vérifié contre le dépôt infra : hcloud_server en cx23, datacenter nbg1 à Nuremberg.
+  // L'entité qui exploite Hetzner Cloud est Hetzner Online GmbH.
   hebergeur: {
     nom: 'Hetzner Online GmbH',
     adresse: 'Industriestr. 25, 91710 Gunzenhausen, Allemagne',
