@@ -1,8 +1,8 @@
-// La même liste sert l'en-tête et le pied : sous 768 px la barre ne peut plus tenir trois
-// liens, c'est le pied qui porte la navigation. Deux listes divergeraient à la première page
-// ajoutée.
+// One list serves the header and the footer: below 768px the bar can no longer hold three
+// links, so the footer carries the navigation. Two lists would drift apart the first time a
+// page is added.
 export const NAV = [
-  { href: '/renfort/', texte: 'Renfort ponctuel' },
-  { href: '/projet-complet/', texte: 'Projet complet' },
-  { href: '/reprise-et-maintenance/', texte: 'Reprise et maintenance' },
+  { href: '/renfort/', label: 'Renfort ponctuel' },
+  { href: '/projet-complet/', label: 'Projet complet' },
+  { href: '/reprise-et-maintenance/', label: 'Reprise et maintenance' },
 ] as const

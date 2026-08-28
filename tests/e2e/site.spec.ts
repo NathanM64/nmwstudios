@@ -2,66 +2,67 @@ import { expect, test } from '@playwright/test'
 
 const PAGES = ['/', '/renfort/', '/projet-complet/', '/reprise-et-maintenance/', '/mentions-legales/']
 
-// Le site ne vend plus l'absence de tiers au lecteur, mais les mentions légales l'affirment
-// et la CSP du Caddyfile l'impose. Une dépendance ajoutée casserait les deux sans bruit.
-test('aucune requête tierce, aucun cookie', async ({ page, context }) => {
-  const externes: string[] = []
-  page.on('request', (requete) => {
-    const url = new URL(requete.url())
-    if (url.hostname !== '127.0.0.1' && url.hostname !== 'localhost' && url.protocol !== 'data:') externes.push(requete.url())
-  })
-
-  for (const chemin of PAGES) {
-    await page.goto(chemin, { waitUntil: 'networkidle' })
-  }
-
-  expect(externes).toEqual([])
-  expect(await context.cookies()).toEqual([])
-})
-
-// Une mesure d'audience hébergée sur le même domaine ne serait ni une requête tierce ni un
-// cookie : le filet du dessus ne la verrait pas, et les mentions légales deviendraient fausses
-// en silence. Celui-ci la voit. S'il casse, c'est le paragraphe « Données personnelles » qu'il
-// faut réécrire, pas le test.
-test('aucun script hors du paquet Next', async ({ page }) => {
-  await page.goto('/', { waitUntil: 'load' })
-
-  const chemins = await page.evaluate(() =>
-    [...document.querySelectorAll('script[src]')].map(
-      (balise) => new URL((balise as HTMLScriptElement).src).pathname,
-    ),
-  )
-
-  expect(chemins.length).toBeGreaterThan(0)
-  for (const chemin of chemins) expect(chemin).toMatch(/^\/_next\/static\//)
-})
-
-// Rejoué depuis la refonte précédente : les variables next/font se posent sur <html>, et
-// sur <body> la police n’était jamais appliquée sans que rien ne le signale. Le test lit la
-// famille calculée puis la donne à document.fonts.check : next/font renomme les familles.
-test('les polices du site sont réellement appliquées', async ({ page }) => {
-  await page.goto('/')
-
-  const polices = await page.evaluate(async () => {
-    await document.fonts.ready
-    const premiere = (liste: string) => liste.split(',')[0].trim().replace(/^["']|["']$/g, '')
-    const titre = premiere(getComputedStyle(document.querySelector('h1')!).fontFamily)
-    const corps = premiere(getComputedStyle(document.body).fontFamily)
-    return {
-      titre,
-      corps,
-      titreCharge: document.fonts.check(`700 32px "${titre}"`),
-      corpsCharge: document.fonts.check(`16px "${corps}"`),
+// The site no longer sells the absence of third parties to the reader, but the legal notice
+// states it and the Caddyfile CSP enforces it. An added dependency would break both silently.
+test('no third party request, no cookie', async ({ page, context }) => {
+  const external: string[] = []
+  page.on('request', (request) => {
+    const url = new URL(request.url())
+    if (url.hostname !== '127.0.0.1' && url.hostname !== 'localhost' && url.protocol !== 'data:') {
+      external.push(request.url())
     }
   })
 
-  expect(polices.titre).toContain('Schibsted')
-  expect(polices.corps).toContain('Hanken')
-  expect(polices.titreCharge).toBe(true)
-  expect(polices.corpsCharge).toBe(true)
+  for (const path of PAGES) {
+    await page.goto(path, { waitUntil: 'networkidle' })
+  }
+
+  expect(external).toEqual([])
+  expect(await context.cookies()).toEqual([])
 })
 
-test('les deux pages se répondent', async ({ page }) => {
+// Analytics hosted on the same domain would be neither a third party request nor a cookie: the
+// net above would not see it, and the legal notice would quietly become false. This one sees it.
+// When it breaks, it is the "Données personnelles" paragraph to rewrite, not the test.
+test('no script outside the Next bundle', async ({ page }) => {
+  await page.goto('/', { waitUntil: 'load' })
+
+  const paths = await page.evaluate(() =>
+    [...document.querySelectorAll('script[src]')].map(
+      (tag) => new URL((tag as HTMLScriptElement).src).pathname,
+    ),
+  )
+
+  expect(paths.length).toBeGreaterThan(0)
+  for (const path of paths) expect(path).toMatch(/^\/_next\/static\//)
+})
+
+// Replayed from the previous rebuild: next/font variables go on <html>, and on <body> the font
+// was never applied with nothing to signal it. The test reads the computed family then hands it
+// to document.fonts.check, because next/font renames the families.
+test('the site fonts are actually applied', async ({ page }) => {
+  await page.goto('/')
+
+  const fonts = await page.evaluate(async () => {
+    await document.fonts.ready
+    const first = (list: string) => list.split(',')[0].trim().replace(/^["']|["']$/g, '')
+    const heading = first(getComputedStyle(document.querySelector('h1')!).fontFamily)
+    const body = first(getComputedStyle(document.body).fontFamily)
+    return {
+      heading,
+      body,
+      headingLoaded: document.fonts.check(`700 32px "${heading}"`),
+      bodyLoaded: document.fonts.check(`16px "${body}"`),
+    }
+  })
+
+  expect(fonts.heading).toContain('Schibsted')
+  expect(fonts.body).toContain('Hanken')
+  expect(fonts.headingLoaded).toBe(true)
+  expect(fonts.bodyLoaded).toBe(true)
+})
+
+test('the two pages answer each other', async ({ page }) => {
   await page.goto('/')
   await expect(page.getByRole('heading', { level: 1 })).toContainText("n’ont pas d’équipe")
 
@@ -69,44 +70,44 @@ test('les deux pages se répondent', async ({ page }) => {
   await expect(page.getByRole('heading', { level: 1 })).toContainText('tout est à refaire')
 })
 
-// Les trois renvois de la section « références » pointent vers des ancres de l'autre page :
-// un identifiant renommé les casse en silence.
-test('les ancres visées depuis l’accueil existent', async ({ page }) => {
+// The three links in the proof section point at anchors on the other page: a renamed id breaks
+// them silently.
+test('the anchors linked from the home page exist', async ({ page }) => {
   await page.goto('/')
-  const ancres = await page
+  const anchors = await page
     .locator('a[href*="/reprise-et-maintenance/#"]')
-    .evaluateAll((liens) => liens.map((l) => (l as HTMLAnchorElement).hash.slice(1)))
-  expect(ancres.length).toBeGreaterThan(0)
+    .evaluateAll((links) => links.map((l) => (l as HTMLAnchorElement).hash.slice(1)))
+  expect(anchors.length).toBeGreaterThan(0)
 
   await page.goto('/reprise-et-maintenance/')
-  for (const ancre of ancres) {
-    await expect(page.locator(`#${ancre}`)).toHaveCount(1)
+  for (const anchor of anchors) {
+    await expect(page.locator(`#${anchor}`)).toHaveCount(1)
   }
 })
 
-// La canonique du layout vaut '/' pour tout le monde : une page ajoutée qui oublie de la
-// reposer se déclare copie de l'accueil, et og:url part avec elle. Rien ne le signalerait.
-test('chaque page se déclare à sa propre adresse', async ({ page }) => {
-  for (const chemin of PAGES) {
-    await page.goto(chemin)
-    const tetes = await page.evaluate(() => ({
-      canonique: document.querySelector('link[rel=canonical]')?.getAttribute('href'),
+// The layout canonical is '/' for everyone: a new page that forgets to restate it declares
+// itself a copy of the home page, and og:url goes with it. Nothing else would say so.
+test('each page declares its own address', async ({ page }) => {
+  for (const path of PAGES) {
+    await page.goto(path)
+    const head = await page.evaluate(() => ({
+      canonical: document.querySelector('link[rel=canonical]')?.getAttribute('href'),
       ogUrl: document.querySelector('meta[property="og:url"]')?.getAttribute('content'),
       schemas: [...document.querySelectorAll('script[type="application/ld+json"]')].map(
-        (balise) => balise.textContent ?? '',
+        (tag) => tag.textContent ?? '',
       ),
     }))
 
-    expect(tetes.canonique, chemin).toBe(`https://nmwstudios.com${chemin}`)
-    expect(tetes.ogUrl, chemin).toBe(tetes.canonique)
-    expect(tetes.schemas.length, chemin).toBeGreaterThan(0)
-    for (const schema of tetes.schemas) expect(() => JSON.parse(schema)).not.toThrow()
+    expect(head.canonical, path).toBe(`https://nmwstudios.com${path}`)
+    expect(head.ogUrl, path).toBe(head.canonical)
+    expect(head.schemas.length, path).toBeGreaterThan(0)
+    for (const schema of head.schemas) expect(() => JSON.parse(schema)).not.toThrow()
   }
 })
 
-// Le formulaire est le seul chemin de conversion du site depuis qu'il remplace le mailto
-// seul. Une charge utile mal formée ou une erreur avalée ne se verrait nulle part ailleurs.
-test('le formulaire poste ce qu’il faut et dit ce qui se passe', async ({ page }) => {
+// The form is the site's only conversion path now that it replaces the bare mailto. A malformed
+// payload or a swallowed error would show up nowhere else.
+test('the form posts what it should and says what happens', async ({ page }) => {
   await page.goto('/')
 
   let payload: Record<string, string> | null = null
@@ -129,8 +130,8 @@ test('le formulaire poste ce qu’il faut et dit ce qui se passe', async ({ page
   })
 })
 
-// Un envoi qui échoue doit laisser une porte de sortie, pas un formulaire muet.
-test('un échec d’envoi renvoie vers l’adresse mail', async ({ page }) => {
+// A failed send has to leave a way out, not a mute form.
+test('a failed send points back to the mail address', async ({ page }) => {
   await page.goto('/')
   await page.route('**/api/contact', (route) => route.fulfill({ status: 502, json: {} }))
 
@@ -139,6 +140,6 @@ test('un échec d’envoi renvoie vers l’adresse mail', async ({ page }) => {
   await page.getByLabel('Ce que vous avez sur les bras').fill('Bonjour')
   await page.getByRole('button', { name: 'Envoyer' }).click()
 
-  // Restreint au bloc contact : Next pose son propre role="alert" pour annoncer les routes.
+  // Scoped to the contact block: Next sets its own role="alert" to announce routes.
   await expect(page.locator('#contact').getByRole('alert')).toContainText('contact@nmwstudios.com')
 })

@@ -11,7 +11,7 @@ type State = { kind: 'idle' | 'sending' | 'sent' } | { kind: 'error'; message: s
 
 const FALLBACK = `Le message n’est pas parti. Écrivez-moi directement à ${LEGAL.email}.`
 
-export function Formulaire() {
+export function Form() {
   const [state, setState] = useState<State>({ kind: 'idle' })
 
   async function submit(event: React.FormEvent<HTMLFormElement>) {
@@ -72,7 +72,7 @@ export function Formulaire() {
       </div>
 
       <div>
-        <label htmlFor="message" className="block text-sm text-encre-douce">
+        <label htmlFor="message" className="block text-sm text-ink-soft">
           Ce que vous avez sur les bras
         </label>
         <textarea
@@ -81,7 +81,7 @@ export function Formulaire() {
           required
           rows={4}
           maxLength={5000}
-          className="champ mt-2 resize-y"
+          className="field mt-2 resize-y"
         />
       </div>
 
@@ -89,13 +89,13 @@ export function Formulaire() {
         <button
           type="submit"
           disabled={state.kind === 'sending'}
-          className="capsule px-7 py-3 font-display text-[0.95rem] font-bold tracking-[-0.01em] disabled:opacity-60"
+          className="pill px-7 py-3 font-display text-[0.95rem] font-bold tracking-[-0.01em] disabled:opacity-60"
         >
           {state.kind === 'sending' ? 'Envoi…' : 'Envoyer'}
         </button>
 
         {state.kind === 'error' ? (
-          <p role="alert" className="text-sm leading-relaxed text-encre">
+          <p role="alert" className="text-sm leading-relaxed text-ink">
             {state.message}
           </p>
         ) : null}
@@ -119,7 +119,7 @@ function Field({
 }) {
   return (
     <div>
-      <label htmlFor={name} className="block text-sm text-encre-douce">
+      <label htmlFor={name} className="block text-sm text-ink-soft">
         {label}
       </label>
       <input
@@ -129,7 +129,7 @@ function Field({
         required
         maxLength={maxLength}
         autoComplete={autoComplete}
-        className="champ mt-2"
+        className="field mt-2"
       />
     </div>
   )

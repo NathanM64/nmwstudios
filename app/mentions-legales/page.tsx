@@ -1,9 +1,9 @@
 import type { Metadata } from 'next'
 import { og } from '@/lib/meta'
 import { Container } from '@/components/ui/Container'
-import { Verre } from '@/components/ui/Verre'
-import { Entete } from '@/components/shell/Entete'
-import { Pied } from '@/components/shell/Pied'
+import { Glass } from '@/components/ui/Glass'
+import { Header } from '@/components/shell/Header'
+import { Footer } from '@/components/shell/Footer'
 import { LEGAL } from '@/lib/legal'
 
 export const metadata: Metadata = {
@@ -14,67 +14,67 @@ export const metadata: Metadata = {
   openGraph: og('/mentions-legales/'),
 }
 
-function Bloc({ titre, children }: { titre: string; children: React.ReactNode }) {
+function Block({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <Verre className="px-7 py-8 sm:px-9">
-      <h2 className="font-display text-xl font-extrabold tracking-[-0.025em]">{titre}</h2>
-      <div className="mt-5 space-y-1.5 leading-relaxed text-encre-douce">{children}</div>
-    </Verre>
+    <Glass className="px-7 py-8 sm:px-9">
+      <h2 className="font-display text-xl font-extrabold tracking-[-0.025em]">{title}</h2>
+      <div className="mt-5 space-y-1.5 leading-relaxed text-ink-soft">{children}</div>
+    </Glass>
   )
 }
 
 export default function Page() {
   return (
     <>
-      <Entete />
+      <Header />
       <main id="contenu" className="py-20 sm:py-24">
         <Container>
-          <h1 className="entre max-w-[14ch] font-display text-[clamp(2rem,4.6vw,3rem)] font-extrabold leading-[1] tracking-[-0.035em]">
+          <h1 className="enter max-w-[14ch] font-display text-[clamp(2rem,4.6vw,3rem)] font-extrabold leading-[1] tracking-[-0.035em]">
             Mentions légales
           </h1>
 
           <div
-            className="entre mt-14 grid gap-5 lg:grid-cols-2"
-            style={{ '--rang': 1 } as React.CSSProperties}
+            className="enter mt-14 grid gap-5 lg:grid-cols-2"
+            style={{ '--rank': 1 } as React.CSSProperties}
           >
-            <Bloc titre="Éditeur">
-              <p className="text-encre">
-                {LEGAL.denomination}, {LEGAL.formeJuridique}
+            <Block title="Éditeur">
+              <p className="text-ink">
+                {LEGAL.legalName}, {LEGAL.legalForm}
               </p>
-              <p>{LEGAL.adresse}</p>
-              <p className="chiffres">SIRET : {LEGAL.siret}</p>
-              <p>{LEGAL.tva}</p>
-              <p>Directeur de la publication : {LEGAL.directeurPublication}</p>
+              <p>{LEGAL.address}</p>
+              <p className="figures">SIRET : {LEGAL.siret}</p>
+              <p>{LEGAL.vatNotice}</p>
+              <p>Directeur de la publication : {LEGAL.publisher}</p>
               <p className="pt-2">
-                <a href={`mailto:${LEGAL.email}`} className="lien-souligne text-encre">
+                <a href={`mailto:${LEGAL.email}`} className="link-underline text-ink">
                   {LEGAL.email}
                 </a>
               </p>
               <p>
-                <a href={`tel:${LEGAL.telephoneLien}`} className="chiffres lien-souligne text-encre">
-                  {LEGAL.telephone}
+                <a href={`tel:${LEGAL.phoneHref}`} className="figures link-underline text-ink">
+                  {LEGAL.phone}
                 </a>
               </p>
-            </Bloc>
+            </Block>
 
-            <Bloc titre="Hébergeur">
-              <p className="text-encre">{LEGAL.hebergeur.nom}</p>
-              <p>{LEGAL.hebergeur.adresse}</p>
-              <p className="chiffres">Téléphone : {LEGAL.hebergeur.telephone}</p>
-            </Bloc>
+            <Block title="Hébergeur">
+              <p className="text-ink">{LEGAL.host.name}</p>
+              <p>{LEGAL.host.address}</p>
+              <p className="figures">Téléphone : {LEGAL.host.phone}</p>
+            </Block>
 
-            <Verre className="px-7 py-8 sm:px-9 lg:col-span-2">
+            <Glass className="px-7 py-8 sm:px-9 lg:col-span-2">
               <h2 className="font-display text-xl font-extrabold tracking-[-0.025em]">
                 Données personnelles
               </h2>
-              <div className="mt-5 grid max-w-[76rem] gap-x-14 gap-y-4 leading-relaxed text-encre-douce md:grid-cols-2">
+              <div className="mt-5 grid max-w-[76rem] gap-x-14 gap-y-4 leading-relaxed text-ink-soft md:grid-cols-2">
                 <div className="space-y-4">
                   <p>
                     Ce site est statique. Il ne dépose aucun cookie et ne charge aucune ressource
                     depuis un service tiers.
                   </p>
-                  {/* « À ce jour » est la seule phrase à réécrire le jour où une mesure arrive.
-                      Un test la garde : voir tests/e2e/site.spec.ts. */}
+                  {/* "À ce jour" is the one sentence to rewrite the day analytics arrive.
+                      A test guards it: see tests/e2e/site.spec.ts. */}
                   <p>
                     Aucune mesure d’audience n’est en place à ce jour, et aucune donnée n’est
                     collectée lors de la consultation. Si une mesure est mise en place, elle sera
@@ -96,11 +96,11 @@ export default function Page() {
                   </p>
                 </div>
               </div>
-            </Verre>
+            </Glass>
           </div>
         </Container>
       </main>
-      <Pied />
+      <Footer />
     </>
   )
 }

@@ -1,50 +1,50 @@
 import { Container } from '@/components/ui/Container'
 
-// La respiration suit le poids : une section de transition ne pèse pas autant qu'un argument.
-const DENSITES = {
-  basse: 'py-16 sm:py-20',
-  normale: 'py-24 sm:py-32',
+// Breathing follows weight: a transition section does not weigh as much as an argument.
+const DENSITIES = {
+  low: 'py-16 sm:py-20',
+  normal: 'py-24 sm:py-32',
 } as const
 
-// Aucune étiquette au-dessus d'un titre : le titre porte son propre poids.
+// No label above a heading: the heading carries its own weight.
 export function Section({
   id,
-  titre,
-  chapeau,
-  largeur = 'normale',
-  fond,
-  densite = 'normale',
+  title,
+  intro,
+  width = 'normal',
+  background,
+  density = 'normal',
   children,
 }: {
   id?: string
-  titre?: React.ReactNode
-  chapeau?: React.ReactNode
-  largeur?: 'normale' | 'serree' | 'pleine'
-  fond?: 'creux'
-  densite?: keyof typeof DENSITES
+  title?: React.ReactNode
+  intro?: React.ReactNode
+  width?: 'normal' | 'narrow' | 'full'
+  background?: 'sunken'
+  density?: keyof typeof DENSITIES
   children?: React.ReactNode
 }) {
   return (
     <section
       id={id}
-      className={`${DENSITES[densite]} ${fond === 'creux' ? 'bg-papier-creux/70' : ''}`}
+      className={`${DENSITIES[density]} ${background === 'sunken' ? 'bg-paper-sunken/70' : ''}`}
     >
-      {titre || chapeau ? (
-        <Container largeur={largeur === 'pleine' ? 'normale' : largeur}>
-          {titre ? (
-            <h2 className="monte max-w-[22ch] font-display text-[clamp(1.9rem,4.2vw,3rem)] font-extrabold leading-[1.03] tracking-[-0.03em] text-balance">
-              {titre}
+      {title || intro ? (
+        <Container width={width === 'full' ? 'normal' : width}>
+          {title ? (
+            <h2 className="rise max-w-[22ch] font-display text-[clamp(1.9rem,4.2vw,3rem)] font-extrabold leading-[1.03] tracking-[-0.03em] text-balance">
+              {title}
             </h2>
           ) : null}
-          {chapeau ? (
-            <div className="monte mt-7 max-w-[40rem] text-lg leading-relaxed text-encre-douce">
-              {chapeau}
+          {intro ? (
+            <div className="rise mt-7 max-w-[40rem] text-lg leading-relaxed text-ink-soft">
+              {intro}
             </div>
           ) : null}
         </Container>
       ) : null}
-      {/* Pleine largeur : le bloc traverse la page au lieu d'être posé dans le conteneur. */}
-      {largeur === 'pleine' ? children : <Container largeur={largeur}>{children}</Container>}
+      {/* Full width: the block crosses the page instead of sitting inside the container. */}
+      {width === 'full' ? children : <Container width={width}>{children}</Container>}
     </section>
   )
 }

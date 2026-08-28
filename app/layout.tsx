@@ -5,15 +5,15 @@ import { og } from '@/lib/meta'
 import { SCHEMA, SITE } from '@/lib/schema'
 import './globals.css'
 
-// Les variables se posent sur <html>. Tailwind déclare --font-* sur :root : plus bas,
-// la var() serait irrésolue au moment de la déclaration et la police jamais appliquée.
+// The variables go on <html>. Tailwind declares --font-* on :root: any lower, the var() would
+// be unresolved at declaration time and the font never applied.
 const schibsted = Schibsted_Grotesk({ variable: '--font-schibsted', subsets: ['latin'], display: 'swap' })
 const hanken = Hanken_Grotesk({ variable: '--font-hanken', subsets: ['latin'], display: 'swap' })
 
 const POLICES = [schibsted, hanken]
 
 export const viewport: Viewport = {
-  // La barre d'adresse reprend la couleur du mur : le document ne s'arrête pas au viewport.
+  // The address bar takes the colour of the wall: the document does not stop at the viewport.
   themeColor: '#e4e7ec',
 }
 
@@ -24,7 +24,7 @@ export const metadata: Metadata = {
     default: 'NMW Studios · Développeur en marque blanche pour agences',
     template: '%s · NMW Studios',
   },
-  // Google coupe vers 155 signes : au-delà, la fin est écrite pour personne.
+  // Google cuts around 155 characters: past that, the tail is written for nobody.
   description:
     "Développeur web en marque blanche pour les agences sans équipe technique. Renfort, projet complet, reprise d'un existant. Bordeaux et à distance.",
   openGraph: og('/'),
@@ -34,7 +34,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="fr" className={POLICES.map((p) => p.variable).join(' ')}>
       <body>
-        {/* Inline, donc couvert par le 'unsafe-inline' de la CSP et par aucune requête. */}
+        {/* Inline, so covered by the CSP's 'unsafe-inline' and by no request at all. */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(SCHEMA) }}

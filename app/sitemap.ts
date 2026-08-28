@@ -1,15 +1,15 @@
 import type { MetadataRoute } from 'next'
-import { MODIFIE_LE, SITE } from '@/lib/schema'
+import { LAST_MODIFIED, SITE } from '@/lib/schema'
 
 export const dynamic = 'force-static'
 
-// Pas de priority : Google l'ignore depuis 2023. lastModified est le seul champ qu'il lit
-// encore, et les mentions légales restent hors du fichier puisqu'elles sont en noindex.
+// No priority: Google has ignored it since 2023. lastModified is the only field it still
+// reads, and the legal notice stays out of the file since it is noindex.
 export default function sitemap(): MetadataRoute.Sitemap {
   return [
-    { url: `${SITE}/`, lastModified: MODIFIE_LE },
-    { url: `${SITE}/reprise-et-maintenance/`, lastModified: MODIFIE_LE },
-    { url: `${SITE}/renfort/`, lastModified: MODIFIE_LE },
-    { url: `${SITE}/projet-complet/`, lastModified: MODIFIE_LE },
+    { url: `${SITE}/`, lastModified: LAST_MODIFIED },
+    { url: `${SITE}/reprise-et-maintenance/`, lastModified: LAST_MODIFIED },
+    { url: `${SITE}/renfort/`, lastModified: LAST_MODIFIED },
+    { url: `${SITE}/projet-complet/`, lastModified: LAST_MODIFIED },
   ]
 }

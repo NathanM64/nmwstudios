@@ -1,23 +1,23 @@
-import { LEGAL, TJM } from '@/lib/legal'
+import { LEGAL, DAY_RATE } from '@/lib/legal'
 
 export const SITE = 'https://nmwstudios.com'
 
-// Bumpée à la main. Une date de build dirait « modifié » à chaque déploiement, y compris
-// quand pas une ligne du contenu n'a changé.
-export const MODIFIE_LE = '2026-08-28'
+// Bumped by hand. A build date would claim "modified" on every deploy, including when not a
+// single line of content has changed.
+export const LAST_MODIFIED = '2026-08-28'
 
-// Ce qui rattache le domaine à une identité réelle ailleurs sur le web. Tant que la liste
-// est vide, sameAs est omis : un profil mort vaut moins que pas de profil du tout.
-const PROFILS: string[] = []
+// What ties the domain to a real identity elsewhere on the web. While the list is empty,
+// sameAs is left out: a dead profile is worth less than no profile at all.
+const PROFILES: string[] = []
 
 const STUDIO = `${SITE}/#studio`
-const PERSONNE = `${SITE}/#nathan`
-const PRESTATION = `${SITE}/#prestation`
+const PERSON = `${SITE}/#nathan`
+const SERVICE_OFFERING = `${SITE}/#prestation`
 
-// L'adresse postale reste aux mentions légales. Le code postal et la commune suffisent à
-// situer l'activité pour un moteur, et ce sont eux que reprendrait une fiche en zone de
-// service, où le numéro de rue n'est jamais affiché.
-const ADRESSE = {
+// The street address stays in the legal notice. Postcode and town are enough to place the
+// business for a search engine, and they are what a service-area listing would carry anyway,
+// where the street number is never shown.
+const ADDRESS = {
   '@type': 'PostalAddress',
   postalCode: '33130',
   addressLocality: 'Bègles',
@@ -27,9 +27,9 @@ const ADRESSE = {
 
 const FRANCE = { '@type': 'Country', name: 'France' }
 
-// Les données structurées ne disent que ce que le site affiche déjà : l'activité, la zone,
-// le contact et le seul chiffre. Rien qui ne soit vérifiable sur la page ou dans les mentions
-// légales, sinon Google finit par voir une contradiction et cesse de faire confiance au bloc.
+// Structured data only says what the site already shows: the business, the area, the contact
+// and the single figure. Nothing that cannot be checked on the page or in the legal notice,
+// otherwise Google eventually sees a contradiction and stops trusting the block.
 export const SCHEMA = {
   '@context': 'https://schema.org',
   '@graph': [
@@ -37,48 +37,48 @@ export const SCHEMA = {
       '@type': 'ProfessionalService',
       '@id': STUDIO,
       name: 'NMW Studios',
-      legalName: LEGAL.denomination,
+      legalName: LEGAL.legalName,
       url: SITE,
       logo: `${SITE}/logo.png`,
       image: `${SITE}/opengraph-image.jpg`,
       email: LEGAL.email,
-      telephone: LEGAL.telephone,
+      phone: LEGAL.phone,
       description:
         "Développeur web en sous-traitance pour les agences sans équipe technique. Renfort, projet complet, reprise et maintenance d'un existant, en marque blanche.",
-      address: ADRESSE,
+      address: ADDRESS,
       areaServed: FRANCE,
-      founder: { '@id': PERSONNE },
-      employee: { '@id': PERSONNE },
+      founder: { '@id': PERSON },
+      employee: { '@id': PERSON },
       knowsLanguage: 'fr',
-      ...(PROFILS.length ? { sameAs: PROFILS } : {}),
-      // Un seul tarif, à la journée, identique pour les trois modes. C'est ce que dit la page.
+      ...(PROFILES.length ? { sameAs: PROFILES } : {}),
+      // One rate, per day, the same for all three modes. That is what the page says.
       makesOffer: {
         '@type': 'Offer',
         name: 'Développement web en marque blanche',
-        itemOffered: { '@id': PRESTATION },
+        itemOffered: { '@id': SERVICE_OFFERING },
         priceSpecification: {
           '@type': 'UnitPriceSpecification',
-          price: TJM,
+          price: DAY_RATE,
           priceCurrency: 'EUR',
           unitText: 'jour',
           valueAddedTaxIncluded: false,
         },
       },
     },
-    // Le prestataire est une personne seule : c'est elle que le lecteur évalue, et c'est elle
-    // qu'un moteur doit pouvoir relier à autre chose que ce domaine.
+    // The contractor is one person: they are who the reader judges, and who a search engine
+    // needs to be able to tie to something other than this domain.
     {
       '@type': 'Person',
-      '@id': PERSONNE,
-      name: LEGAL.directeurPublication,
+      '@id': PERSON,
+      name: LEGAL.publisher,
       jobTitle: 'Développeur web',
       worksFor: { '@id': STUDIO },
       knowsAbout: ['Symfony', 'PHP', 'React', 'Next.js', 'WordPress', 'Reprise de code existant'],
-      ...(PROFILS.length ? { sameAs: PROFILS } : {}),
+      ...(PROFILES.length ? { sameAs: PROFILES } : {}),
     },
     {
       '@type': 'Service',
-      '@id': PRESTATION,
+      '@id': SERVICE_OFFERING,
       name: 'Développement web en marque blanche',
       serviceType: 'Développement web en sous-traitance',
       provider: { '@id': STUDIO },
@@ -96,42 +96,42 @@ export const SCHEMA = {
   ],
 } as const
 
-// Injecté par chaque page de service : le graphe du layout décrit le studio, pas ce que
-// cette page-là vend.
+// Injected by each service page: the layout graph describes the studio, not what this
+// particular page sells.
 export function schemaService({
-  chemin,
-  fil,
-  nom,
+  path,
+  crumb,
+  name,
   serviceType,
   description,
-  catalogue,
+  catalog,
 }: {
-  chemin: string
-  fil: string
-  nom: string
+  path: string
+  crumb: string
+  name: string
   serviceType: string
   description: string
-  catalogue?: string[]
+  catalog?: string[]
 }) {
   return {
     '@context': 'https://schema.org',
     '@graph': [
       {
         '@type': 'Service',
-        '@id': `${SITE}${chemin}#service`,
-        name: nom,
+        '@id': `${SITE}${path}#service`,
+        name: name,
         serviceType,
-        url: `${SITE}${chemin}`,
+        url: `${SITE}${path}`,
         provider: { '@id': STUDIO },
         areaServed: FRANCE,
         audience: { '@type': 'BusinessAudience', name: 'Agences web et de communication' },
         description,
-        ...(catalogue
+        ...(catalog
           ? {
               hasOfferCatalog: {
                 '@type': 'OfferCatalog',
                 name: 'Technologies reprises',
-                itemListElement: catalogue.map((item) => ({
+                itemListElement: catalog.map((item) => ({
                   '@type': 'Offer',
                   itemOffered: { '@type': 'Service', name: `Reprise ${item}` },
                 })),
@@ -141,10 +141,10 @@ export function schemaService({
       },
       {
         '@type': 'BreadcrumbList',
-        '@id': `${SITE}${chemin}#fil`,
+        '@id': `${SITE}${path}#fil`,
         itemListElement: [
           { '@type': 'ListItem', position: 1, name: 'Accueil', item: `${SITE}/` },
-          { '@type': 'ListItem', position: 2, name: fil },
+          { '@type': 'ListItem', position: 2, name: crumb },
         ],
       },
     ],

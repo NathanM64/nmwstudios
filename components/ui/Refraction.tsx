@@ -3,190 +3,191 @@
 import { usePathname } from 'next/navigation'
 import { useEffect } from 'react'
 
-// La carte se calcule à la taille de chaque dalle. Étirée depuis une carte unique, le biseau
-// serait large d'un côté et étroit de l'autre, et la trame se dédoublerait au lieu de se
-// comprimer. 360px de côté suffisent : la carte est ensuite étirée sans que le pli bouge.
-const RESOLUTION_MAX = 360
+// The map is computed at each slab's own size. Stretched from a single map, the bevel would be
+// wide on one side and narrow on the other, and the grain would double instead of compressing.
+// 360px a side is enough: the map is stretched afterwards without the fold moving.
+const MAX_RESOLUTION = 360
 
-type Marques = { brands?: { brand: string }[] }
+type Brands = { brands?: { brand: string }[] }
 
-// Chromium est le seul à accepter un filtre SVG dans backdrop-filter. Ailleurs, la classe
-// garde son verre dépoli plutôt qu'un rectangle transparent sans matière.
-function accepteLeFiltre() {
-  const marques = (navigator as Navigator & { userAgentData?: Marques }).userAgentData
-  return Boolean(marques?.brands?.some((m) => m.brand === 'Chromium'))
+// Chromium is the only engine that accepts an SVG filter inside backdrop-filter. Elsewhere the
+// class keeps its frosted glass rather than a transparent rectangle with no material.
+function supportsFilter() {
+  const agent = (navigator as Navigator & { userAgentData?: Brands }).userAgentData
+  return Boolean(agent?.brands?.some((entry) => entry.brand === 'Chromium'))
 }
 
-// Distance signée au bord d'un rectangle arrondi : négative dedans, nulle sur l'arête.
-function champDistances(l: number, h: number, r: number) {
-  const champ = new Float32Array(l * h)
-  const demiL = l / 2
-  const demiH = h / 2
-  for (let y = 0; y < h; y++) {
-    const py = Math.abs(y + 0.5 - demiH) - (demiH - r)
-    for (let x = 0; x < l; x++) {
-      const px = Math.abs(x + 0.5 - demiL) - (demiL - r)
-      champ[y * l + x] =
-        Math.min(Math.max(px, py), 0) + Math.hypot(Math.max(px, 0), Math.max(py, 0)) - r
+// Signed distance to the edge of a rounded rectangle: negative inside, zero on the edge.
+function distanceField(width: number, height: number, radius: number) {
+  const field = new Float32Array(width * height)
+  const halfWidth = width / 2
+  const halfHeight = height / 2
+  for (let y = 0; y < height; y++) {
+    const py = Math.abs(y + 0.5 - halfHeight) - (halfHeight - radius)
+    for (let x = 0; x < width; x++) {
+      const px = Math.abs(x + 0.5 - halfWidth) - (halfWidth - radius)
+      field[y * width + x] =
+        Math.min(Math.max(px, py), 0) + Math.hypot(Math.max(px, 0), Math.max(py, 0)) - radius
     }
   }
-  return champ
+  return field
 }
 
-// Le rouge encode le décalage horizontal, le vert le vertical, 128 veut dire « ne bouge pas ».
-function carteDeplacement(largeur: number, hauteur: number, rayonCss: number, biseauCss: number) {
-  const facteur = Math.min(1, RESOLUTION_MAX / Math.max(largeur, hauteur))
-  const l = Math.max(8, Math.round(largeur * facteur))
-  const h = Math.max(8, Math.round(hauteur * facteur))
-  const r = Math.min(rayonCss * facteur, Math.min(l, h) / 2)
-  const biseau = Math.max(1, biseauCss * facteur)
+// Red encodes the horizontal offset, green the vertical one, 128 means "do not move".
+function displacementMap(cssWidth: number, cssHeight: number, cssRadius: number, cssBevel: number) {
+  const scale = Math.min(1, MAX_RESOLUTION / Math.max(cssWidth, cssHeight))
+  const width = Math.max(8, Math.round(cssWidth * scale))
+  const height = Math.max(8, Math.round(cssHeight * scale))
+  const radius = Math.min(cssRadius * scale, Math.min(width, height) / 2)
+  const bevel = Math.max(1, cssBevel * scale)
 
-  const toile = document.createElement('canvas')
-  toile.width = l
-  toile.height = h
-  const contexte = toile.getContext('2d')
-  if (!contexte) return null
+  const canvas = document.createElement('canvas')
+  canvas.width = width
+  canvas.height = height
+  const context = canvas.getContext('2d')
+  if (!context) return null
 
-  const champ = champDistances(l, h, r)
-  const image = contexte.createImageData(l, h)
-  const octets = image.data
+  const field = distanceField(width, height, radius)
+  const image = context.createImageData(width, height)
+  const bytes = image.data
 
-  for (let y = 0; y < h; y++) {
-    for (let x = 0; x < l; x++) {
-      const i = y * l + x
-      const d = champ[i]
-      let rouge = 128
-      let vert = 128
-      const u = (d + biseau) / biseau
-      if (d < 0 && u > 0) {
-        // La normale sortante se lit sur le champ lui-même : dans ce sens la tranche aspire
-        // le dehors et le comprime contre le bord, dans l'autre elle creuse un vide.
-        const gx = champ[y * l + Math.min(l - 1, x + 1)] - champ[y * l + Math.max(0, x - 1)]
-        const gy = champ[Math.min(h - 1, y + 1) * l + x] - champ[Math.max(0, y - 1) * l + x]
-        const norme = Math.hypot(gx, gy)
-        if (norme > 1e-6) {
-          const force = Math.pow(Math.min(1, u), 1.7)
-          rouge = 128 + 127 * (gx / norme) * force
-          vert = 128 + 127 * (gy / norme) * force
+  for (let y = 0; y < height; y++) {
+    for (let x = 0; x < width; x++) {
+      const i = y * width + x
+      const distance = field[i]
+      let red = 128
+      let green = 128
+      const edge = (distance + bevel) / bevel
+      if (distance < 0 && edge > 0) {
+        // The outward normal is read from the field itself: this way round the edge pulls the
+        // outside in and compresses it against the border, the other way it hollows out a void.
+        const gx = field[y * width + Math.min(width - 1, x + 1)] - field[y * width + Math.max(0, x - 1)]
+        const gy =
+          field[Math.min(height - 1, y + 1) * width + x] - field[Math.max(0, y - 1) * width + x]
+        const norm = Math.hypot(gx, gy)
+        if (norm > 1e-6) {
+          const strength = Math.pow(Math.min(1, edge), 1.7)
+          red = 128 + 127 * (gx / norm) * strength
+          green = 128 + 127 * (gy / norm) * strength
         }
       }
       const j = i * 4
-      octets[j] = Math.round(rouge)
-      octets[j + 1] = Math.round(vert)
-      octets[j + 2] = 255
-      octets[j + 3] = 255
+      bytes[j] = Math.round(red)
+      bytes[j + 1] = Math.round(green)
+      bytes[j + 2] = 255
+      bytes[j + 3] = 255
     }
   }
 
-  contexte.putImageData(image, 0, 0)
-  return toile.toDataURL('image/png')
+  context.putImageData(image, 0, 0)
+  return canvas.toDataURL('image/png')
 }
 
-// Un seul composant client pour tout le site : les dalles restent des composants serveur et
-// se signalent par data-verre.
+// One client component for the whole site: the slabs stay server components and mark
+// themselves with data-glass.
 export function Refraction() {
-  // Le layout survit au changement de page, pas les dalles : sans cette dépendance, les
-  // filtres restent accrochés au DOM de la page précédente et le verre perd son pli.
-  const chemin = usePathname()
+  // The layout survives a page change, the slabs do not: without this dependency the filters
+  // stay attached to the previous page's DOM and the glass loses its fold.
+  const path = usePathname()
 
   useEffect(() => {
     if (window.matchMedia('(prefers-reduced-transparency: reduce)').matches) return
-    if (!accepteLeFiltre()) return
+    if (!supportsFilter()) return
 
     const NS = 'http://www.w3.org/2000/svg'
-    const hote = document.createElementNS(NS, 'svg')
-    hote.setAttribute('aria-hidden', 'true')
-    hote.setAttribute('width', '0')
-    hote.setAttribute('height', '0')
-    hote.style.position = 'fixed'
-    hote.style.pointerEvents = 'none'
-    document.body.appendChild(hote)
+    const host = document.createElementNS(NS, 'svg')
+    host.setAttribute('aria-hidden', 'true')
+    host.setAttribute('width', '0')
+    host.setAttribute('height', '0')
+    host.style.position = 'fixed'
+    host.style.pointerEvents = 'none'
+    document.body.appendChild(host)
 
-    const dalles = Array.from(document.querySelectorAll<HTMLElement>('[data-verre]'))
-    const observateurs: ResizeObserver[] = []
+    const slabs = Array.from(document.querySelectorAll<HTMLElement>('[data-glass]'))
+    const observers: ResizeObserver[] = []
 
-    dalles.forEach((dalle, rang) => {
-      const identifiant = `pli-${rang}`
-      const filtre = document.createElementNS(NS, 'filter')
-      filtre.setAttribute('id', identifiant)
-      filtre.setAttribute('filterUnits', 'userSpaceOnUse')
-      filtre.setAttribute('primitiveUnits', 'userSpaceOnUse')
-      filtre.setAttribute('color-interpolation-filters', 'sRGB')
+    slabs.forEach((slab, rank) => {
+      const id = `fold-${rank}`
+      const filter = document.createElementNS(NS, 'filter')
+      filter.setAttribute('id', id)
+      filter.setAttribute('filterUnits', 'userSpaceOnUse')
+      filter.setAttribute('primitiveUnits', 'userSpaceOnUse')
+      filter.setAttribute('color-interpolation-filters', 'sRGB')
 
-      const carte = document.createElementNS(NS, 'feImage')
-      carte.setAttribute('result', 'carte')
-      carte.setAttribute('preserveAspectRatio', 'none')
+      const map = document.createElementNS(NS, 'feImage')
+      map.setAttribute('result', 'map')
+      map.setAttribute('preserveAspectRatio', 'none')
 
-      // Une surface qui passe sur du texte doit le brouiller avant de le plier, sinon les
-      // deux lectures se superposent. Le flou entre dans la chaîne, pas dans la déclaration.
-      const flou = Number(dalle.dataset.verreFlou ?? 0)
-      const brouillage = document.createElementNS(NS, 'feGaussianBlur')
-      brouillage.setAttribute('in', 'SourceGraphic')
-      brouillage.setAttribute('stdDeviation', String(flou))
-      brouillage.setAttribute('result', 'fond')
+      // A surface passing over text has to blur it before folding it, otherwise the two
+      // readings overlap. The blur goes into the chain, not into the declaration.
+      const blur = Number(slab.dataset.glassBlur ?? 0)
+      const blurNode = document.createElementNS(NS, 'feGaussianBlur')
+      blurNode.setAttribute('in', 'SourceGraphic')
+      blurNode.setAttribute('stdDeviation', String(blur))
+      blurNode.setAttribute('result', 'blurred')
 
-      const deplacement = document.createElementNS(NS, 'feDisplacementMap')
-      deplacement.setAttribute('in', flou > 0 ? 'fond' : 'SourceGraphic')
-      deplacement.setAttribute('in2', 'carte')
-      deplacement.setAttribute('xChannelSelector', 'R')
-      deplacement.setAttribute('yChannelSelector', 'G')
+      const displacement = document.createElementNS(NS, 'feDisplacementMap')
+      displacement.setAttribute('in', blur > 0 ? 'blurred' : 'SourceGraphic')
+      displacement.setAttribute('in2', 'map')
+      displacement.setAttribute('xChannelSelector', 'R')
+      displacement.setAttribute('yChannelSelector', 'G')
 
-      filtre.append(carte)
-      if (flou > 0) filtre.appendChild(brouillage)
-      filtre.appendChild(deplacement)
-      hote.appendChild(filtre)
+      filter.append(map)
+      if (blur > 0) filter.appendChild(blurNode)
+      filter.appendChild(displacement)
+      host.appendChild(filter)
 
-      let derniereTaille = ''
-      const mesurer = () => {
-        const rect = dalle.getBoundingClientRect()
-        const largeur = Math.round(rect.width)
-        const hauteur = Math.round(rect.height)
-        if (largeur < 32 || hauteur < 32) return
-        const taille = `${largeur}x${hauteur}`
-        if (taille === derniereTaille) return
-        derniereTaille = taille
+      let lastSize = ''
+      const measure = () => {
+        const rect = slab.getBoundingClientRect()
+        const width = Math.round(rect.width)
+        const height = Math.round(rect.height)
+        if (width < 32 || height < 32) return
+        const size = `${width}x${height}`
+        if (size === lastSize) return
+        lastSize = size
 
-        const rayon = parseFloat(getComputedStyle(dalle).borderTopLeftRadius) || 0
-        // Le biseau vaut 16% du petit côté, borné à 34px. Le déplacement ne prend que 18%
-        // de ce biseau : au-delà il dépasse la largeur d'un trait fin passant derrière la
-        // dalle, et le trait se coupe net au lieu de plier. Mesuré à 34px de déplacement,
-        // le sigle du cartouche se déchirait ; à 6px il plie.
-        const biseau = Math.min(34, Math.min(largeur, hauteur) * 0.16)
-        const maximum = biseau * 0.18
-        const donnees = carteDeplacement(largeur, hauteur, rayon, biseau)
-        if (!donnees) return
+        const radius = parseFloat(getComputedStyle(slab).borderTopLeftRadius) || 0
+        // The bevel is 16% of the short side, capped at 34px. The displacement only takes 18%
+        // of that bevel: beyond it, it exceeds the width of a hairline running behind the slab,
+        // and the line breaks off instead of folding. Measured at 34px of displacement, the
+        // plate's monogram tore; at 6px it folds.
+        const bevel = Math.min(34, Math.min(width, height) * 0.16)
+        const maximum = bevel * 0.18
+        const data = displacementMap(width, height, radius, bevel)
+        if (!data) return
 
-        // La région déborde la dalle : sans cette marge, la tranche ramène du vide et laisse
-        // une bande grise le long du bord.
-        const marge = Math.ceil(maximum * 2 + 8)
-        filtre.setAttribute('x', String(-marge))
-        filtre.setAttribute('y', String(-marge))
-        filtre.setAttribute('width', String(largeur + marge * 2))
-        filtre.setAttribute('height', String(hauteur + marge * 2))
-        carte.setAttribute('x', '0')
-        carte.setAttribute('y', '0')
-        carte.setAttribute('width', String(largeur))
-        carte.setAttribute('height', String(hauteur))
-        carte.setAttribute('href', donnees)
-        // 128 sur 255 ne vaut pas exactement la moitié : l'échelle reprend le pas réel.
-        deplacement.setAttribute('scale', String((maximum * 255) / 127))
-        dalle.style.backdropFilter = `url(#${identifiant})`
+        // The region overflows the slab: without this margin the edge pulls in emptiness and
+        // leaves a grey band along the border.
+        const margin = Math.ceil(maximum * 2 + 8)
+        filter.setAttribute('x', String(-margin))
+        filter.setAttribute('y', String(-margin))
+        filter.setAttribute('width', String(width + margin * 2))
+        filter.setAttribute('height', String(height + margin * 2))
+        map.setAttribute('x', '0')
+        map.setAttribute('y', '0')
+        map.setAttribute('width', String(width))
+        map.setAttribute('height', String(height))
+        map.setAttribute('href', data)
+        // 128 out of 255 is not exactly half: the scale takes the real step back.
+        displacement.setAttribute('scale', String((maximum * 255) / 127))
+        slab.style.backdropFilter = `url(#${id})`
       }
 
-      mesurer()
-      const observateur = new ResizeObserver(mesurer)
-      observateur.observe(dalle)
-      observateurs.push(observateur)
+      measure()
+      const observer = new ResizeObserver(measure)
+      observer.observe(slab)
+      observers.push(observer)
     })
 
     return () => {
-      observateurs.forEach((observateur) => observateur.disconnect())
-      dalles.forEach((dalle) => {
-        dalle.style.backdropFilter = ''
+      observers.forEach((observer) => observer.disconnect())
+      slabs.forEach((slab) => {
+        slab.style.backdropFilter = ''
       })
-      hote.remove()
+      host.remove()
     }
-  }, [chemin])
+  }, [path])
 
   return null
 }

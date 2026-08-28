@@ -4,33 +4,33 @@ import { Logo } from '@/components/ui/Logo'
 import { LEGAL } from '@/lib/legal'
 import { NAV } from '@/lib/nav'
 
-// Le logo signe en bas, comme un cachet sur un document. L'arête s'éteint sur ses deux bords :
-// c'est le seul trait horizontal du site, et il ne touche jamais la marge.
-export function Pied() {
+// The logo signs at the bottom, like a stamp on a document. The rule fades out at both ends:
+// it is the only horizontal line on the site, and it never touches the margin.
+export function Footer() {
   return (
     <footer className="pb-14 pt-16">
       <Container>
         <div
           aria-hidden="true"
-          className="h-px w-full bg-gradient-to-r from-transparent via-encre/18 to-transparent"
+          className="h-px w-full bg-gradient-to-r from-transparent via-ink/18 to-transparent"
         />
         <div className="mt-12 flex flex-wrap items-end justify-between gap-x-12 gap-y-10">
           <div>
-            <Logo className="h-12 w-12 text-encre" />
-            <p className="mt-5 text-sm text-encre-douce">
+            <Logo className="h-12 w-12 text-ink" />
+            <p className="mt-5 text-sm text-ink-soft">
               33130 Bègles, dans la métropole de Bordeaux
               <br />
               À distance partout en France
             </p>
           </div>
           <nav className="flex flex-col items-start gap-2 text-sm">
-            {NAV.map((entree) => (
+            {NAV.map((item) => (
               <Link
-                key={entree.href}
-                href={entree.href}
-                className="text-encre-douce transition-colors duration-300 hover:text-encre"
+                key={item.href}
+                href={item.href}
+                className="text-ink-soft transition-colors duration-300 hover:text-ink"
               >
-                {entree.texte}
+                {item.label}
               </Link>
             ))}
           </nav>
@@ -38,19 +38,19 @@ export function Pied() {
           <div className="flex flex-col items-start gap-2 text-sm">
             <a
               href={`mailto:${LEGAL.email}`}
-              className="lien-souligne font-display font-bold tracking-[-0.01em]"
+              className="link-underline font-display font-bold tracking-[-0.01em]"
             >
               {LEGAL.email}
             </a>
             <a
-              href={`tel:${LEGAL.telephoneLien}`}
-              className="chiffres text-encre-douce transition-colors duration-300 hover:text-encre"
+              href={`tel:${LEGAL.phoneHref}`}
+              className="figures text-ink-soft transition-colors duration-300 hover:text-ink"
             >
-              {LEGAL.telephone}
+              {LEGAL.phone}
             </a>
             <Link
               href="/mentions-legales/"
-              className="mt-3 text-encre-douce transition-colors duration-300 hover:text-encre"
+              className="mt-3 text-ink-soft transition-colors duration-300 hover:text-ink"
             >
               Mentions légales
             </Link>

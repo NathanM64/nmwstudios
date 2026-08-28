@@ -5,9 +5,9 @@ export const dynamic = 'force-static'
 
 export default function robots(): MetadataRoute.Robots {
   return {
-    // Next exporte la charge RSC en .txt à côté de chaque page : même contenu, sans canonique
-    // ni balise robots possibles. robots.txt est le seul endroit d'où les sortir.
-    // /_next/ reste ouvert : le bloquer empêcherait Google de rendre la page.
+    // Next exports the RSC payload as .txt next to every page: same content, with no canonical
+    // and no robots tag possible. robots.txt is the only place to take them out of crawling.
+    // /_next/ stays open: blocking it would stop Google from rendering the page.
     rules: { userAgent: '*', allow: ['/', '/llms.txt'], disallow: '/*.txt$' },
     sitemap: `${SITE}/sitemap.xml`,
   }
