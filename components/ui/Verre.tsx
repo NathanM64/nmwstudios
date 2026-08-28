@@ -8,6 +8,7 @@ export function Verre({
   surEncre = false,
   reflet = false,
   flou = 0,
+  sansPli = false,
   as: Balise = 'div',
 }: {
   children: React.ReactNode
@@ -17,6 +18,7 @@ export function Verre({
   surEncre?: boolean
   reflet?: boolean
   flou?: number
+  sansPli?: boolean
   as?: 'div' | 'article' | 'li' | 'aside' | 'section'
 }) {
   const classes = [
@@ -30,7 +32,11 @@ export function Verre({
     .join(' ')
 
   return (
-    <Balise data-verre data-verre-flou={flou || undefined} className={classes}>
+    <Balise
+      data-verre={sansPli ? undefined : ''}
+      data-verre-flou={flou || undefined}
+      className={classes}
+    >
       {/* La bande de lumière est un enfant positionné : elle glisse en transform pur. */}
       {reflet ? <span aria-hidden="true" className="reflet-bande" /> : null}
       {children}

@@ -276,11 +276,14 @@ et étroit sur l'autre.
 Un verre flou en son centre est un calque dépoli ; toute la matière est dans la tranche.
 
 **La règle de l'amplitude.** Le déplacement reste sous la largeur du plus fin trait qui passe
-derrière une dalle. Au-delà, le trait ne plie pas, il se coupe net sur le contour de la dalle,
-et la zone où deux dalles se recouvrent le coupe deux fois puisque chacune déplace un fond déjà
-déplacé. Mesuré sur le sigle du cartouche : à 17px de déplacement il se déchire à toutes les
-densités d'écran, à 6px il plie. Aucun réglage d'opacité, de flou ou de masque ne rattrape une
-amplitude trop forte, ce sont trois adoucissements posés sur un défaut géométrique.
+derrière une dalle, et il vaut 18% du biseau. Au-delà, le trait ne plie pas : il se décale d'un
+coup sur le contour de la dalle, et la zone où deux dalles se recouvrent le décale deux fois,
+chacune déplaçant un fond déjà déplacé. Ni l'opacité, ni le flou, ni un masque ne rattrapent une
+amplitude trop forte, ce sont des adoucissements posés sur un défaut géométrique.
+
+**La règle de la sortie.** Quand un dessin fin est inévitable derrière une dalle, la dalle
+renonce au pli plutôt que de le déchirer (`sansPli` sur `<Verre>`), et garde le verre dépoli qui
+le floute uniformément. Une seule surface du site en use, le cartouche du premier écran.
 
 **La règle du sans-trait.** Aucune bordure pour délimiter une surface. Les seuls traits du
 site sont des filets à 1px en `encre/10` qui séparent des lignes de liste, et une arête en
@@ -335,9 +338,10 @@ Le sigle NMW, en `encre/8`, flouté d'un pixel, posé sous les deux dalles du pr
 l'accueil. C'est le seul endroit du site où la marque est grande, et elle est sous la plaque qui
 porte le nom de l'agence. C'est aussi ce que la tranche du verre a à plier, en plus du grain.
 
-Il est la contrainte qui fixe l'amplitude du déplacement pour tout le site : ses traits sont ce
-qu'il y a de plus fin derrière une dalle, donc c'est lui qui décide. Voir la règle de
-l'amplitude.
+Ses deux dalles sont les seules du site à renoncer à la réfraction : sous une tranche, les traits
+du sigle se décalaient d'un bloc sur le contour au lieu de plier, et ça se voyait à toutes les
+densités d'écran. Le verre dépoli les floute uniformément, sans marche. Voir la règle de la
+sortie.
 
 ## Motion
 

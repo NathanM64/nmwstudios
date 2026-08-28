@@ -62,9 +62,9 @@ function Hero() {
 
 // La signature d'un contrat, laissée au nom de l'agence.
 //
-// Aucun filigrane derrière : un sigle à traits fins passé sous une tranche de verre se déchire
-// au lieu de plier, le biseau déplaçant plus large que le trait. La tranche n'a que le grain
-// et le dégradé du mur à comprimer, et c'est pour ça que le grain existe.
+// Seul endroit du site sans réfraction, et c'est le filigrane qui l'impose : un trait fin passé
+// sous une tranche se décale d'un coup sur le contour de la dalle, au lieu de plier. Le verre
+// dépoli le floute uniformément, sans marche. Le pli reste partout ailleurs.
 function Cartouche() {
   return (
     <div
@@ -74,10 +74,11 @@ function Cartouche() {
       <span aria-hidden="true">
         <Logo className="absolute left-1/2 top-1/2 h-[104%] w-auto -translate-x-1/2 -translate-y-1/2 text-encre opacity-[0.08] blur-[1px]" />
       </span>
-      <div data-verre className="verre absolute bottom-0 left-10 right-0 top-14" />
+      <div className="verre absolute bottom-0 left-10 right-0 top-14" />
       <Verre
         epais
         reflet
+        sansPli
         className="absolute bottom-14 left-0 right-10 top-0 flex flex-col justify-between px-6 py-6"
       >
         <p className="max-w-[15ch] text-sm leading-snug text-encre-douce">
