@@ -18,8 +18,3 @@ export const LEGAL = {
 } as const
 
 export const TJM = 500
-
-// Prise de rendez-vous, hors du site. Le lien sort vers un service externe mais ne charge
-// rien ici : pas de script, pas de cookie, la CSP reste tenue. Tant que la chaîne est vide,
-// le bouton ne s'affiche pas plutôt que de pointer dans le vide.
-export const RENDEZ_VOUS: string = ''

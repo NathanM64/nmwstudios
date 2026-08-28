@@ -1,7 +1,7 @@
 import { Container } from '@/components/ui/Container'
 import { Verre } from '@/components/ui/Verre'
 import { Formulaire } from '@/components/blocs/Formulaire'
-import { LEGAL, RENDEZ_VOUS } from '@/lib/legal'
+import { LEGAL } from '@/lib/legal'
 
 // Le formulaire est le chemin principal, l'adresse reste écrite en toutes lettres à côté :
 // un mailto seul renvoyait chez eux les visiteurs sans client mail configuré, et c'était le
@@ -40,14 +40,6 @@ export function Contact() {
                   {LEGAL.telephone}
                 </a>
               </p>
-              {RENDEZ_VOUS ? (
-                <p className="mt-4 text-sm leading-relaxed text-encre-douce">
-                  <a href={RENDEZ_VOUS} target="_blank" rel="noreferrer" className="lien-souligne">
-                    Réserver un créneau
-                  </a>
-                  , dans un autre onglet.
-                </p>
-              ) : null}
             </div>
           </div>
         </Verre>
