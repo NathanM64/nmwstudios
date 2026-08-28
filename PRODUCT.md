@@ -47,7 +47,7 @@ sous son nom. L'entrée en relation passe par un accord de confidentialité sign
 ouverture du projet. Les missions de reprise commencent par un état des lieux écrit :
 démarrage du projet sur une machine neuve, reprise des accès et de l'historique au nom de
 l'agence, tri entre ce qui casse, ce qui est risqué et ce qui est seulement laid, puis
-restitution ordonnée avec une estimation en jours par ligne (`content/semaines.ts`).
+restitution ordonnée avec une estimation en jours par ligne (`content/etat-des-lieux.ts`).
 
 Trois critères décident d'un oui : code source accessible en entier, projet capable de
 redémarrer sur une machine neuve, hébergement et nom de domaine transférables au nom de

@@ -6,7 +6,7 @@ import { Entete } from '@/components/shell/Entete'
 import { Pied } from '@/components/shell/Pied'
 import { Contact } from '@/components/blocs/Contact'
 import { CRITERES, TECHNOS } from '@/content/technos'
-import { PREMIERES_SEMAINES } from '@/content/semaines'
+import { ETAT_DES_LIEUX } from '@/content/etat-des-lieux'
 
 export const metadata: Metadata = {
   title: 'Reprise et maintenance de site existant',
@@ -24,7 +24,7 @@ export default function Page() {
       <Entete />
       <main>
         <Hero />
-        <Semaines />
+        <EtatDesLieux />
         <Technos />
         <Depart />
         <Contact />
@@ -62,10 +62,10 @@ function Hero() {
   )
 }
 
-function Semaines() {
+function EtatDesLieux() {
   return (
     <Section
-      id="semaines"
+      id="etat-des-lieux"
       titre="Ce que je fais avant d’écrire la moindre ligne."
       chapeau={
         <p>
@@ -84,7 +84,7 @@ function Semaines() {
           <span className="remplit block h-full w-px bg-encre/70" />
         </span>
 
-        {PREMIERES_SEMAINES.map((etape, rang) => (
+        {ETAT_DES_LIEUX.map((etape, rang) => (
           <li key={etape.titre} className="monte relative pb-14 last:pb-0">
             <span
               aria-hidden="true"
@@ -121,18 +121,26 @@ function Technos() {
               </p>
             </div>
 
-            <ul className="lg:pt-2">
-              {CRITERES.map((critere, rang) => (
-                <li
-                  key={critere}
-                  className={`font-display text-[clamp(1.15rem,2.2vw,1.45rem)] font-bold leading-snug tracking-[-0.02em] ${
-                    rang > 0 ? 'mt-7 border-t border-blanc-vif/15 pt-7' : ''
-                  }`}
-                >
-                  {critere}
-                </li>
-              ))}
-            </ul>
+            <div className="lg:pt-2">
+              <ul>
+                {CRITERES.map((critere, rang) => (
+                  <li
+                    key={critere}
+                    className={`font-display text-[clamp(1.15rem,2.2vw,1.45rem)] font-bold leading-snug tracking-[-0.02em] ${
+                      rang > 0 ? 'mt-7 border-t border-blanc-vif/15 pt-7' : ''
+                    }`}
+                  >
+                    {critere}
+                  </li>
+                ))}
+              </ul>
+              {/* Une exclusion n'est pas une quatrième condition : elle se lit plus bas et
+                  plus doucement, mais au moment où le lecteur cherche si son cas passe. */}
+              <p className="mt-9 border-t border-blanc-vif/25 pt-7 leading-relaxed text-blanc-vif/70">
+                Je ne reprends pas les sites montés sur un constructeur de pages. Votre
+                intégrateur ira plus vite que moi et vous coûtera moins cher.
+              </p>
+            </div>
           </div>
         </Container>
       </div>
@@ -158,16 +166,10 @@ function Technos() {
           ))}
         </div>
 
-        <div className="mt-16 grid gap-x-14 gap-y-5 md:grid-cols-[minmax(0,7fr)_minmax(0,5fr)]">
-          <p className="font-display text-[clamp(1.2rem,2.4vw,1.6rem)] font-extrabold leading-[1.15] tracking-[-0.025em] text-balance">
-            Je ne reprends pas les sites montés sur un constructeur de pages.
-          </p>
-          <p className="self-start leading-relaxed text-encre-douce">
-            Votre intégrateur ira plus vite que moi et vous coûtera moins cher. Pour tout le
-            reste, demandez quand même : les trois conditions du haut comptent plus que le nom du
-            framework.
-          </p>
-        </div>
+        <p className="monte mt-16 max-w-[26ch] font-display text-[clamp(1.2rem,2.4vw,1.6rem)] font-extrabold leading-[1.15] tracking-[-0.025em] text-balance">
+          Si votre projet n’est pas dans cette liste, demandez quand même. Les trois conditions
+          comptent plus que le nom du framework.
+        </p>
       </Container>
     </section>
   )

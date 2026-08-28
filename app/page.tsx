@@ -201,10 +201,10 @@ const VERIFIABLES = [
     href: '/reprise-et-maintenance/#technos',
   },
   {
-    titre: 'Les deux premières semaines',
+    titre: 'L’état des lieux',
     corps:
-      'Ce que je fais quand je prends la main sur un projet que je n’ai pas écrit, étape par étape.',
-    href: '/reprise-et-maintenance/#semaines',
+      'Ce que je fais quand je prends la main sur un projet que je n’ai pas écrit, dans l’ordre.',
+    href: '/reprise-et-maintenance/#etat-des-lieux',
   },
   {
     titre: 'Comment je rends la main',
@@ -303,8 +303,8 @@ function Tarif() {
 
           <Verre surEncre className="px-7 py-7 text-blanc-vif">
             <p className="font-display text-lg font-bold leading-snug tracking-[-0.015em] sm:text-xl">
-              Pas de forfait opaque, pas de surprise en fin de mois, pas de facturation à
-              l’estimation dépassée.
+              Une journée en plus se valide par écrit avant d’être travaillée. Une journée en
+              moins, vous ne la payez pas.
             </p>
           </Verre>
         </div>

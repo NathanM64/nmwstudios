@@ -1,8 +1,10 @@
 // Une vraie séquence : chaque étape a besoin de la précédente. Le numéro porte donc une
-// information, il ne décore pas.
+// information, il ne décore pas. Aucune durée n'est annoncée nulle part : la première étape
+// dit elle-même que le temps de démarrage dépend de l'état du projet, et un lecteur dont la
+// peur est le délai lit « deux semaines » comme deux semaines avant que rien ne commence.
 export type Etape = { titre: string; corps: string }
 
-export const PREMIERES_SEMAINES: Etape[] = [
+export const ETAT_DES_LIEUX: Etape[] = [
   {
     titre: 'Le projet démarre sur ma machine',
     corps:
