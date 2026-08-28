@@ -1,3 +1,5 @@
+import { readFileSync } from 'node:fs'
+import { globSync } from 'node:fs'
 import { expect, test } from '@playwright/test'
 
 const PAGES = ['/', '/renfort/', '/projet-complet/', '/reprise-et-maintenance/', '/mentions-legales/']
@@ -156,4 +158,35 @@ test('a failed send points back to the mail address', async ({ page }) => {
 
   // Scoped to the contact block: Next sets its own role="alert" to announce routes.
   await expect(page.locator('#contact').getByRole('alert')).toContainText('contact@nmwstudios.com')
+})
+
+// Trois classes mortes en une journée : border-encre/12, border-blanc-vif/15. DESIGN.md nomme
+// encore les jetons en français alors que le code est passé en anglais, et Tailwind laisse
+// tomber une classe dont le jeton n'existe pas sans rien dire. Le séparateur disparaît, la
+// construction réussit, aucun filet ne le voit. Celui-ci lit le CSS réellement produit : une
+// classe utilitaire présente dans la source et absente de la feuille n'a pas été comprise.
+test('aucune classe utilitaire ne vise un jeton inexistant', () => {
+  const source = globSync('{app,components}/**/*.tsx')
+    .map((f) => readFileSync(f, 'utf8'))
+    .join('\n')
+  const css = globSync('out/_next/static/**/*.css')
+    .map((f) => readFileSync(f, 'utf8'))
+    .join('\n')
+  expect(css.length, 'aucun CSS construit, lancer yarn build').toBeGreaterThan(0)
+
+  // Les variantes font partie du sélecteur émis : `lg:border-l` sort en `.lg\:border-l`, et
+  // chercher `.border-l` ne le trouverait pas.
+  const found = source.matchAll(
+    /(?<![\w-])((?:[a-z][a-z0-9-]*:)*)(bg|text|border|from|via|to|fill|stroke|ring|decoration|shadow)-([a-z][a-z0-9-]*(?:\/\d+)?)(?![\w-])/g,
+  )
+  const utilities = new Set([...found].map((m) => `${m[1]}${m[2]}-${m[3]}`))
+
+  const selector = (u: string) => '.' + u.replace(/[:/]/g, (c) => '\\' + c)
+  const orphelines = [...utilities].filter((u) => !css.includes(selector(u)))
+
+  // Le filet doit voir passer une vraie classe morte, sinon il ne prouve rien.
+  expect(css.includes(selector('border-ink/12')), 'jeton connu introuvable').toBe(true)
+  expect(css.includes(selector('border-encre/12')), 'jeton mort trouvé').toBe(false)
+
+  expect(orphelines, 'classes absentes du CSS produit').toEqual([])
 })

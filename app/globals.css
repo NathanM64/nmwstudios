@@ -24,7 +24,14 @@
   html {
     background-color: var(--color-paper);
     color-scheme: light;
-    scroll-behavior: smooth;
+  }
+
+  /* Le défilement doux est un mouvement comme un autre : les ancres de l'accueil vers la page
+     reprise le déclenchaient sans regarder la préférence système. */
+  @media (prefers-reduced-motion: no-preference) {
+    html {
+      scroll-behavior: smooth;
+    }
   }
 
   /* The wall: a field of light, never a flat fill. Brightness falls from the top left corner
@@ -213,9 +220,11 @@
     box-shadow:
       inset 0 1px 0 rgb(255 255 255 / 0.22),
       0 16px 34px -16px rgb(18 21 26 / 0.6);
+    /* Retour d'interaction, pas une entrée : au-delà de 240 ms le survol traîne derrière le
+       curseur. Les 620 ms de `.enter` sont un autre registre, personne ne les déclenche. */
     transition:
-      translate 420ms var(--ease-glass),
-      box-shadow 420ms var(--ease-glass);
+      translate 240ms var(--ease-glass),
+      box-shadow 240ms var(--ease-glass);
   }
 
   .pill:hover {
