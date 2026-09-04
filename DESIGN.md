@@ -237,6 +237,10 @@ fixe et plein cadre, inséré entre le mur de repli et le contenu (`components/u
 La texture porte des arêtes franches et du détail à haute fréquence : sans elles, la réfraction
 n'a rien à plier et le matériau disparaît.
 
+Ses niveaux sont ramenés entre 165 et 252 à la fabrication. C'est la plage du mur : une valeur
+plus sombre sous une dalle ferait tomber le contraste du texte sous le seuil AA, et un filet le
+mesure. La plage se règle sur l'image, jamais en montant le voile blanc, qui efface le grain.
+
 Les deux couches CSS d'origine, le champ de lumière en `body::before` et le grain en
 `body::after`, sont conservées. Elles ne sont plus visibles quand le canvas est monté, et
 redeviennent le mur du site dès que WebGL est indisponible ou que
@@ -304,9 +308,12 @@ la zone où deux dalles se recouvrent le décale deux fois. Ni l'opacité, ni le
 masque ne rattrapent une amplitude trop forte, ce sont des adoucissements posés sur un défaut
 géométrique. La valeur tenue est 15px pour un biseau de 19px.
 
-**La règle de la sortie.** Quand un dessin fin est inévitable derrière une dalle, la dalle
-renonce au pli plutôt que de le déchirer (`noFold` sur `<Glass>`), et garde le verre dépoli qui
-le floute uniformément. Une seule surface du site en use, le cartouche du premier écran.
+**La règle de la sortie.** Une dalle qui doit passer au-dessus du contenu ne peut pas être
+dessinée par le canvas, qui vit sous le contenu : elle serait recouverte par le texte qui
+défile. Ces dalles renoncent au rendu et gardent le verre dépoli du CSS (`noFold` sur
+`<Glass>`, ou un `blur` non nul). Deux surfaces en usent : la barre de navigation, qui passe
+sur le texte, et le cartouche du premier écran, dont le filigrane doit rester visible derrière
+le verre.
 
 **La règle du sans-trait.** Aucune bordure pour délimiter une surface. Les seuls traits du
 site sont des filets à 1px en `ink/10` qui séparent des lignes de liste, et une arête en
@@ -346,7 +353,9 @@ conteneur. Le sigle à gauche, les liens en encre douce, la capsule noire à dro
 640px, le nom écrit et le lien secondaire disparaissent : il reste le sigle et l'action, sur
 une seule ligne, et elle ne quitte jamais le pouce.
 
-C'est la seule surface du site à porter un flou (`blur={18}`) : elle passe sur du texte.
+Elle passe sur du texte, donc elle porte un flou de 18px déclaré sur `.glass-dense`. Le
+`blur` posé sur `<Glass>` ne fixe plus sa valeur : il déclare que la dalle passe sur du
+contenu, et l'exclut du canvas.
 
 ### La bande (composant signature)
 
@@ -361,10 +370,11 @@ Le sigle NMW, en `ink/8`, flouté d'un pixel, posé sous les deux dalles du prem
 l'accueil. C'est le seul endroit du site où la marque est grande, et elle est sous la plaque qui
 porte le nom de l'agence. C'est aussi ce que la tranche du verre a à plier, en plus du grain.
 
-Ses deux dalles sont les seules du site à renoncer à la réfraction : sous une tranche, les traits
-du sigle se décalaient d'un bloc sur le contour au lieu de plier, et ça se voyait à toutes les
-densités d'écran. Le verre dépoli les floute uniformément, sans marche. Voir la règle de la
-sortie.
+Ses deux dalles renoncent au rendu du canvas, et la raison a changé avec lui. Ce n'était plus
+le déchirement des traits du sigle sous le déplacement, que le shader ne peut plus provoquer
+puisqu'il ne touche aucun élément du DOM. C'est l'empilement : le filigrane est du contenu,
+donc au-dessus du canvas. Dessinées par lui, ces deux dalles passeraient sous le sigle au lieu
+de le laisser voir à travers. Voir la règle de la sortie.
 
 ## Motion
 
