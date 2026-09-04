@@ -220,3 +220,30 @@ test('sans WebGL, le mur CSS tient encore le site', async ({ page }) => {
   expect(wall.fieldShown).not.toBe('none')
   expect(wall.grainShown).not.toBe('none')
 })
+
+// Le voile est à 5%, donc très bas. Une texture de mur plus sombre rendrait le texte des
+// dalles illisible sans qu'aucun autre filet ne le voie. L'encre vaut #12151a, de luminance
+// relative 0,0075 : il faut assez de clair derrière elle pour tenir le 4,5:1 de WCAG 2.2 AA.
+test('le texte reste lisible sur une dalle rendue', async ({ page }) => {
+  await page.goto('/?probe')
+  await page.waitForFunction(() => document.documentElement.classList.contains('glass-live'), {
+    timeout: 10_000,
+  })
+  // Aucune dalle n'est dans le premier écran : sans ce défilement, la sonde n'a rien à lire.
+  await page.locator('[data-glass]').first().scrollIntoViewIfNeeded()
+  // Le cycle d'arrivée dure 3,5s : avant sa fin, les dalles ne sont pas à leur état final.
+  await page.waitForTimeout(4500)
+
+  const measured = await page.evaluate(() => {
+    const probe = (window as unknown as { __glassProbe?: () => { min: number } | null }).__glassProbe
+    return probe ? probe() : null
+  })
+
+  expect(measured, 'la sonde ne trouve aucune dalle rendue à mesurer').not.toBeNull()
+
+  const channel = measured!.min / 255
+  const linear = channel <= 0.04045 ? channel / 12.92 : ((channel + 0.055) / 1.055) ** 2.4
+  const contrast = (linear + 0.05) / (0.0075 + 0.05)
+
+  expect(contrast, `contraste minimal sous la dalle : ${contrast.toFixed(2)}:1`).toBeGreaterThan(4.5)
+})
