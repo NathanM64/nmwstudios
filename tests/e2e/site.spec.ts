@@ -190,3 +190,33 @@ test('aucune classe utilitaire ne vise un jeton inexistant', () => {
 
   expect(orphelines, 'classes absentes du CSS produit').toEqual([])
 })
+
+// Sans WebGL, le site doit rester exactement celui d'avant. Une refonte du CSS pourrait
+// supprimer body::before en croyant qu'il ne sert plus, et personne ne le verrait tant que
+// WebGL fonctionne chez celui qui regarde.
+test('sans WebGL, le mur CSS tient encore le site', async ({ page }) => {
+  await page.addInitScript(() => {
+    const original = HTMLCanvasElement.prototype.getContext
+    HTMLCanvasElement.prototype.getContext = function (this: HTMLCanvasElement, ...args: unknown[]) {
+      const kind = args[0]
+      if (kind === 'webgl' || kind === 'experimental-webgl') return null
+      return (original as (...a: unknown[]) => unknown).apply(this, args)
+    } as typeof original
+  })
+
+  await page.goto('/')
+
+  await expect(page.locator('html.glass-live')).toHaveCount(0)
+
+  const wall = await page.evaluate(() => ({
+    field: getComputedStyle(document.body, '::before').backgroundImage,
+    grain: getComputedStyle(document.body, '::after').backgroundImage,
+    fieldShown: getComputedStyle(document.body, '::before').display,
+    grainShown: getComputedStyle(document.body, '::after').display,
+  }))
+
+  expect(wall.field).not.toBe('none')
+  expect(wall.grain).not.toBe('none')
+  expect(wall.fieldShown).not.toBe('none')
+  expect(wall.grainShown).not.toBe('none')
+})
