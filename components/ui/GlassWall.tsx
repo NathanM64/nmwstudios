@@ -191,13 +191,29 @@ export function GlassWall() {
       // Luminance réellement rendue sous la première dalle, seule mesure fiable du contraste.
       Object.assign(window, {
         __glassProbe: () => {
-          const slab = document.querySelector<HTMLElement>('[data-glass]')
-          if (!slab) return null
-          const rect = slab.getBoundingClientRect()
-          const w = Math.max(1, Math.round(rect.width * dpr))
-          const h = Math.max(1, Math.round(rect.height * dpr))
-          const x = Math.round(rect.x * dpr)
-          const y = Math.round(canvas.height - (rect.y + rect.height) * dpr)
+          // On lit l'intersection entre la dalle et la fenêtre, pas la dalle entière : hors
+          // des bornes readPixels rend zéro, et le minimum tomberait sans pixel noir affiché.
+          let best: { x: number; y: number; w: number; h: number } | null = null
+          for (const el of document.querySelectorAll<HTMLElement>('[data-glass]')) {
+            const r = el.getBoundingClientRect()
+            const top = Math.max(0, r.top)
+            const bottom = Math.min(window.innerHeight, r.bottom)
+            const left = Math.max(0, r.left)
+            const right = Math.min(window.innerWidth, r.right)
+            if (bottom - top < 40 || right - left < 40) continue
+            const box = {
+              x: Math.round(left * dpr),
+              y: Math.round(canvas.height - bottom * dpr),
+              w: Math.round((right - left) * dpr),
+              h: Math.round((bottom - top) * dpr),
+            }
+            if (!best || box.w * box.h > best.w * best.h) best = box
+          }
+          if (!best) return null
+          const x = Math.max(0, Math.min(best.x, canvas.width - 1))
+          const y = Math.max(0, Math.min(best.y, canvas.height - 1))
+          const w = Math.max(1, Math.min(best.w, canvas.width - x))
+          const h = Math.max(1, Math.min(best.h, canvas.height - y))
           const pixels = new Uint8Array(w * h * 4)
           gl.readPixels(x, y, w, h, gl.RGBA, gl.UNSIGNED_BYTE, pixels)
           let min = 255

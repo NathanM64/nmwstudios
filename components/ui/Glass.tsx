@@ -1,5 +1,5 @@
-// A slab of glass. It stays a server component: Refraction, mounted once in the document, is
-// what puts the displacement filter on the data-glass elements.
+// A slab of glass. It stays a server component: GlassWall, mounted once in the document, is
+// what draws the data-glass elements in its canvas.
 export function Glass({
   children,
   className = '',
@@ -33,8 +33,9 @@ export function Glass({
 
   return (
     <Tag
-      data-glass={noFold ? undefined : ''}
-      data-glass-blur={blur || undefined}
+      // Le canvas vit sous le contenu : une dalle qui passe dessus, donc qui porte un flou,
+      // ne peut pas être dessinée par lui et reste en CSS.
+      data-glass={noFold || blur > 0 ? undefined : ''}
       className={classNames}
     >
       {/* The band of light is a positioned child: it slides in pure transform. */}

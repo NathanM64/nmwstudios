@@ -11,8 +11,9 @@ il ne peut rien recevoir en POST : d'où un second conteneur, routé par Traefik
 ## Ce qui compte ici
 
 Ce dépôt a déjà été rasé une fois pour sur-ingénierie. Le harnais est volontairement mince
-et doit le rester : lint, typecheck, build, et quatre tests de bout en bout qui protègent
-les promesses affichées par le site. Pas de test unitaire sur un composant de présentation.
+et doit le rester : lint, typecheck, build, et les tests de bout en bout de
+`tests/e2e/site.spec.ts`, qui protègent chacun une promesse affichée par le site ou un piège
+déjà tombé une fois. Pas de test unitaire sur un composant de présentation.
 
 Avant d'ajouter un filet, poser la question : est-ce qu'un changement plausible peut casser
 ça en silence ? Si la réponse est non, ne pas l'écrire.
@@ -59,18 +60,25 @@ verre presque incolores qui le compriment sur leur tranche. Un seul mode, pas de
 sombre, aucune couleur. Schibsted Grotesk pour les titres, Hanken Grotesk pour le corps,
 aucune monospace. Le détail est dans `DESIGN.md`, qui fait autorité.
 
-Le geste de signature est la réfraction : `components/ui/Refraction.tsx` mesure chaque
-élément `data-glass`, calcule sa carte de déplacement à sa taille et la pose en
-`backdrop-filter`. Le mur ne défile pas, le verre passe dessus, et le pli vit sans script
-d'animation. Ne pas ajouter de deuxième matériau.
+Le geste de signature est la réfraction. `components/ui/GlassWall.tsx` pose un canvas WebGL
+fixe entre le mur et le contenu : il lit la position de chaque élément `data-glass`, évalue un
+champ de distance sur les dalles visibles et dessine tout le verre, arête spéculaire et
+épaisseur comprises. Le mur est une texture, pas un dégradé, parce qu'un dégradé lisse ne
+donne rien à plier. Ne pas ajouter de deuxième matériau.
+
+Le mur CSS d'origine, `body::before` et `body::after`, reste en place et sert de repli : sans
+WebGL ou sous `prefers-reduced-transparency`, le canvas n'est jamais monté et le site est
+celui d'avant, intact.
 
 Les classes du système vont dans `@layer base` ou `@layer components`. Hors couche, elles
 battent les utilitaires Tailwind : `.glass { position: relative }` a déjà annulé en silence
 un `absolute` posé sur une dalle.
 
-Aucune animation ne passe par un écouteur de défilement, ni par `IntersectionObserver` :
-`animation-timeline: view()` couvre tout le mouvement, et `Refraction` est le seul JavaScript
-du site. Tout mouvement est gardé derrière `prefers-reduced-motion`, `scroll-behavior` compris.
+Le rendu du mur passe par une boucle `requestAnimationFrame`, seule façon de nourrir un
+shader, et elle ne redessine que si l'état a changé : une dalle a bougé, la fenêtre a été
+redimensionnée, ou le pointeur s'est déplacé. Tout le reste du mouvement passe par
+`animation-timeline: view()`, sans écouteur `scroll` ni `IntersectionObserver`. Tout mouvement
+est gardé derrière `prefers-reduced-motion`, `scroll-behavior` compris.
 
 `DESIGN.md` nomme les identifiants exactement comme le code, donc en anglais, et sa prose reste
 en français. Trois classes mortes sont nées de l'écart inverse : le filet `aucune classe

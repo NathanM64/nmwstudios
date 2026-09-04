@@ -17,13 +17,16 @@ technique.
 
 ## Product Purpose
 
-Vendre de la sous-traitance en marque blanche à des agences, sous trois formes : renfort à
-la journée, projet complet, reprise et maintenance d'un existant. La troisième porte le
-poids commercial, c'est celle qui dure.
+Vendre de la sous-traitance en marque blanche à des agences, sous quatre formes : renfort à
+la journée, projet complet, reprise et maintenance d'un existant, et hébergement surveillé.
+La troisième porte le poids commercial, c'est celle qui dure. La quatrième la prolonge : une
+agence qui confie la reprise d'un projet n'a le plus souvent personne pour l'héberger ensuite.
 
-Le site réussit quand un directeur d'agence écrit à `contact@nmwstudios.com`. L'email est
-le chemin principal et assumé comme tel ; le téléphone existe en second. Aucun formulaire,
-qui exigerait un service tiers, donc un script et un cookie.
+Le site réussit quand un directeur d'agence prend contact. Le formulaire du bloc contact est
+le chemin principal : il poste sur `/api/contact`, servi depuis le même domaine par le
+conteneur `service/` et routé par Traefik, donc sans service tiers ni cookie. L'adresse
+`contact@nmwstudios.com` reste affichée et sert de sortie quand l'envoi échoue ; le téléphone
+existe en second.
 
 ## Positioning
 
@@ -49,14 +52,28 @@ démarrage du projet sur une machine neuve, reprise des accès et de l'historiqu
 l'agence, tri entre ce qui casse, ce qui est risqué et ce qui est seulement laid, puis
 restitution ordonnée avec une estimation en jours par ligne (`content/etat-des-lieux.ts`).
 
+L'hébergement surveillé est mensuel et se souscrit après une reprise ou une livraison, jamais
+seul. Il tourne sur serveur propre, et la pile n'est pas une borne : ce qui redémarre sur une
+machine neuve peut être hébergé. La surveillance couvre la disponibilité, les mises à jour de
+sécurité et, si l'agence le demande, la mesure d'audience de son site.
+
+Sa contrepartie est écrite avant sa promesse, comme les autres. **La surveillance signale, elle
+ne corrige pas** : une correction est du travail, donc des jours, validés par écrit avant d'être
+engagés. Et l'hébergement ne rend rien captif : serveur, nom de domaine et accès restent
+transférables au nom de l'agence à tout moment, sans frais de sortie et sans préavis.
+
+Aucune disponibilité chiffrée n'est annoncée, aucun délai d'intervention non plus. Ce serait
+opposable, et rien ne le mesure aujourd'hui.
+
 Trois critères décident d'un oui : code source accessible en entier, projet capable de
 redémarrer sur une machine neuve, hébergement et nom de domaine transférables au nom de
 l'agence.
 
 ## Capabilities and Constraints
 
-- Deux pages portent le message : l'accueil et « Reprise et maintenance ». Les mentions
-  légales et la 404 complètent. Pas de blog, pas de formulaire, aucun service tiers.
+- Cinq pages portent le message : l'accueil, « Renfort », « Projet complet », « Reprise et
+  maintenance » et les mentions légales. La 404 complète. Pas de blog, aucun service tiers.
+  Chacune des trois offres a sa page, et l'accueil doit lier les trois.
 - Next 16 en `output: 'export'` : pas de route dynamique, pas de middleware, pas de lecture
   de requête. Toute page ajoutée est rendue à la construction et servie par Caddy depuis une
   image sans Node.
@@ -70,6 +87,8 @@ l'agence.
 
 Décisions produit encore ouvertes, à ne pas inventer :
 
+- Le montant mensuel de l'hébergement surveillé. Non arrêté à ce jour, donc absent du site :
+  aucune page ne peut l'afficher tant qu'il n'est pas décidé.
 - Le TJM s'affiche-t-il seul ou avec une mention « à partir de ».
 - La mesure d'audience, prévue dans le dépôt `infra` et portée par Nathan. Le jour où elle
   arrive, le paragraphe « Données personnelles » des mentions légales doit dire ce qui est
@@ -115,6 +134,9 @@ type score Lighthouse.
   identifierait le client.
 - Absence de requête tierce, absence de cookie, hébergement sur serveur propre. Vérifiable,
   mais gardé hors du discours de vente et tenu par la CSP et un test.
+- L'hébergement surveillé n'a aucune preuve datée : ni durée, ni volume, ni incident tenu.
+  Le seul fait disponible est que ce site tourne sur ce serveur. Rien d'autre ne doit être
+  écrit tant que rien d'autre n'est vrai.
 - Mentions légales complètes dans `lib/legal.ts`.
 
 Il n'existe aucun témoignage, aucune étude de cas, aucune référence nommée, aucun chiffre
@@ -125,8 +147,11 @@ forme de silhouette ou de placeholder.
 
 1. **La contrepartie avant la promesse.** Ce qu'un prestataire ne fera pas est l'information
    que le lecteur cherche en premier ; elle est écrite, jamais sous-entendue.
-2. **Un seul chiffre.** L'agence achète des jours. Toute construction tarifaire qui brouille
-   ce compte est refusée, même si elle rassure à la lecture.
+2. **Un seul chiffre pour le travail.** L'agence achète des jours, au même tarif pour les
+   trois modes de production. Toute construction tarifaire qui brouille ce compte est refusée,
+   même si elle rassure à la lecture. L'hébergement fait exception et porte son propre montant
+   mensuel, parce qu'il est un service continu et non du travail : il n'est jamais mêlé au
+   compte de jours, et aucune journée n'y est incluse.
 3. **Prouvable dans le navigateur.** Une affirmation technique n'est publiée que si la page
    elle-même la démontre ou qu'un test la protège.
 4. **La discrétion est de la matière, pas du vide.** L'anonymat s'accompagne toujours d'assez

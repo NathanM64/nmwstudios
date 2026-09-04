@@ -151,6 +151,18 @@
     opacity: 1;
   }
 
+  /* Le shader dessine ces dalles : si le DOM les peignait aussi, on verrait le verre rendu
+     à travers le verre CSS. La position reste, la mise en page en dépend. */
+  .glass-live [data-glass] {
+    background-image: none;
+    backdrop-filter: none;
+    box-shadow: none;
+  }
+
+  .glass-live [data-glass]::after {
+    display: none;
+  }
+
   .glass,
   .glass-thick {
     position: relative;
@@ -171,6 +183,9 @@
      de contenu, sinon deux lectures se superposent. */
   .glass-dense {
     background-image: linear-gradient(158deg, rgb(255 255 255 / 0.74), rgb(255 255 255 / 0.58));
+    /* Six pixels ne séparent pas deux lectures. Ce flou venait de la chaîne SVG de
+       Refraction, il revient ici depuis qu'elle a disparu. */
+    backdrop-filter: blur(18px) saturate(1.4);
   }
 
   .glass-thick {

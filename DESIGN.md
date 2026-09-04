@@ -133,7 +133,7 @@ grain, et sans grain il n'y a plus de pli, donc plus de verre : juste une carte 
 - Le verre est un matériau qui déforme, pas une décoration floutée.
 - Aucune couleur : deux surfaces noires par page, tout le reste en gris et blanc.
 - Aucune bordure de carte : la profondeur et l'arête remplacent le trait.
-- Le mur est fixe, le verre défile dessus : le pli vit sans qu'aucun script l'anime.
+- Le mur est rendu en temps réel : une lumière le balaie une fois à l'arrivée, puis dérive.
 
 ## Colors
 
@@ -232,35 +232,44 @@ Le système est entièrement fondé sur la déformation et la profondeur : aucun
 carte, aucun filet gris, aucun séparateur plein. Une surface existe parce qu'elle comprime
 le mur derrière elle et qu'elle porte une ombre lointaine, pas parce qu'un trait l'entoure.
 
-Le mur est fait de deux couches fixes sous toute la page. D'abord un champ de lumière, trois
-dégradés radiaux qui descendent de l'angle haut gauche et se creusent vers le bas. Ensuite un
-grain, une turbulence SVG désaturée en `data:` URI, à 75% d'opacité. Ce n'est pas un décor :
-sans matière fine derrière, une déformation de verre glisse sur un dégradé lisse et ne se
-voit pas. C'est le grain qu'on voit se comprimer au bord de chaque dalle.
+Le mur est une texture en niveaux de gris, échantillonnée par un shader WebGL dans un canvas
+fixe et plein cadre, inséré entre le mur de repli et le contenu (`components/ui/GlassWall.tsx`).
+La texture porte des arêtes franches et du détail à haute fréquence : sans elles, la réfraction
+n'a rien à plier et le matériau disparaît.
 
-Le mur est en `position: fixed` et ne défile pas. C'est le verre qui passe dessus : le pli
-change donc en continu pendant la lecture, sans qu'aucun script ne l'anime.
+Les deux couches CSS d'origine, le champ de lumière en `body::before` et le grain en
+`body::after`, sont conservées. Elles ne sont plus visibles quand le canvas est monté, et
+redeviennent le mur du site dès que WebGL est indisponible ou que
+`prefers-reduced-transparency` est demandé.
 
-Le déplacement est le matériau, pas un effet. Chaque surface de verre porte sa propre carte
-de déplacement, calculée à sa taille depuis la distance signée au bord du rectangle arrondi
-(`components/ui/Refraction.tsx`, méthode kube.io/blog/liquid-glass-css-svg). Le rouge encode
-le décalage horizontal, le vert le vertical, 128 veut dire « ne bouge pas », et l'échelle du
-filtre reprend le pas réel du canal, 255 sur 127.
+Le déplacement est le matériau, pas un effet. Le shader calcule la distance signée au
+rectangle arrondi le plus proche parmi les dalles visibles, lit la normale dans ce champ par
+différences finies, et déplace l'échantillon du fond le long de cette normale. Le déplacement
+se fait sur deux lobes : le premier pour la face d'entrée, le second plus profond et plus doux
+pour la face de sortie. C'est ce second lobe qui fait lire une paroi de matière plutôt qu'une
+bordure peinte.
 
-Le biseau vaut 16% du petit côté, borné à 34px, et le déplacement maximal 18% du biseau : la
-tranche comprime le mur au lieu de le recopier. La région du filtre déborde la dalle du
-double du déplacement : sans cette marge, la tranche ramène du vide, c'est-à-dire une bande
-grise sur le bord. Le signe du déplacement suit la normale sortante : dans ce sens la tranche
-aspire le dehors et le comprime contre le bord, dans l'autre elle creuse un vide le long du
-cadre.
+| Réglage | Valeur | Rôle |
+| --- | --- | --- |
+| `uThick` | 100 | seconde surface, absorption, bande interne, paroi sombre |
+| `uAmp` | 15 | amplitude du déplacement, en px |
+| `uBevel` | 19 | largeur du biseau, en px |
+| `uSpec` | 74 | intensité du liseré spéculaire |
+| `uBlur` | 29 | flou derrière la dalle |
+| `uVeil` | 5 | voile blanc, lisibilité du texte |
+| `uShadow` | 0 | ombre portée, désactivée |
 
-Une surface qui passe sur du contenu, et pas sur le mur, insère un `feGaussianBlur` dans la
-chaîne avant le déplacement (`blur` sur `<Glass>`) : sans lui, deux lectures se superposent.
-C'est le cas de la seule barre de navigation.
+Le bord n'est pas une coupe binaire : la couverture est lissée sur un pixel par
+`smoothstep(1.0, -1.0, d)`, sinon les grands rayons se crénellent visiblement.
 
-Le filtre est posé en JavaScript, après mesure, et seulement sur Chromium, le seul moteur qui
-accepte un filtre SVG dans `backdrop-filter`. Ailleurs, la déclaration CSS laisse un verre
-dépoli honnête.
+Aucune dispersion chromatique. Échantillonner les trois canaux à des positions différentes
+fabrique de la couleur à partir d'un fond gris, ce que la règle du sans-couleur interdit, et
+la mesure la donnait à 1 sur 255 aux réglages retenus. La retirer fait passer le shader de 27
+à 9 lectures de texture par pixel.
+
+Le rendu marche sur tous les moteurs. C'est un changement de fond par rapport au filtre SVG
+dans `backdrop-filter`, que seul Chromium acceptait : le lecteur sur iPhone ne voyait aucun
+pli.
 
 ### Shadow Vocabulary
 
@@ -281,18 +290,19 @@ dalle rend le matériau invisible et la dalle redevient une carte.
 blanc dans son dégradé, elle l'efface et le pli disparaît. L'exception est la barre de
 navigation (`glass-dense`, 74% à 58%), qui doit rester lisible par-dessus du texte.
 
-**La règle de la carte à la taille.** Une carte de déplacement se calcule à la taille de la
-surface, jamais étirée depuis une carte unique : étirée, le biseau devient large sur un côté
-et étroit sur l'autre.
+**La règle du champ partagé.** Il n'existe plus de carte de déplacement par dalle. Le shader
+évalue un champ de distance unique sur les dalles visibles, ce qui rend le biseau identique
+partout sans dépendre de la taille de chaque surface. Le plafond est de huit dalles
+simultanées à l'écran ; au delà, les huit plus grandes sont retenues.
 
 **La règle du centre net.** Aucun flou dans la déclaration finale d'une dalle de contenu.
 Un verre flou en son centre est un calque dépoli ; toute la matière est dans la tranche.
 
 **La règle de l'amplitude.** Le déplacement reste sous la largeur du plus fin trait qui passe
-derrière une dalle, et il vaut 18% du biseau. Au-delà, le trait ne plie pas : il se décale d'un
-coup sur le contour de la dalle, et la zone où deux dalles se recouvrent le décale deux fois,
-chacune déplaçant un fond déjà déplacé. Ni l'opacité, ni le flou, ni un masque ne rattrapent une
-amplitude trop forte, ce sont des adoucissements posés sur un défaut géométrique.
+derrière une dalle. Au-delà, le trait ne plie pas : il se décale d'un coup sur le contour, et
+la zone où deux dalles se recouvrent le décale deux fois. Ni l'opacité, ni le flou, ni un
+masque ne rattrapent une amplitude trop forte, ce sont des adoucissements posés sur un défaut
+géométrique. La valeur tenue est 15px pour un biseau de 19px.
 
 **La règle de la sortie.** Quand un dessin fin est inévitable derrière une dalle, la dalle
 renonce au pli plutôt que de le déchirer (`noFold` sur `<Glass>`), et garde le verre dépoli qui
@@ -383,17 +393,19 @@ en transform pur.
 **La règle du geste motivé.** Une animation dit une hiérarchie, une séquence, un retour ou
 un changement d'état. Si elle ne dit rien de cela, elle ne se pose pas.
 
-**Aucun écouteur de défilement.** Ni `scroll`, ni `requestAnimationFrame`, ni
-`IntersectionObserver` : le site n'appelle aucune des trois. Les lignes de temps CSS couvrent
-tout le mouvement, et le seul JavaScript du site est `Refraction`, qui mesure les dalles une
-fois pour poser leur filtre.
+**La règle de la boucle silencieuse.** Le rendu du mur passe par une boucle
+`requestAnimationFrame`, seule façon de nourrir un shader, mais elle ne redessine que si
+l'état a changé : une dalle a bougé, la fenêtre a été redimensionnée, ou le pointeur s'est
+déplacé. Une image identique à la précédente n'est jamais redessinée. Tout le reste du
+mouvement du site continue de passer par les lignes de temps CSS, sans écouteur `scroll` ni
+`IntersectionObserver`.
 
 ## Do's and Don'ts
 
 ### Do:
 
 - **Do** poser toute nouvelle surface en verre : dégradé à 158°, `data-glass` pour que
-  `Refraction` la mesure, liseré interne, ombre portée basse. Le grain du mur doit rester
+  `GlassWall` la prenne en compte, liseré interne, ombre portée basse. Le grain du mur doit rester
   visible à travers la dalle, et se comprimer sur sa tranche.
 - **Do** tirer tout texte secondaire de l'encre douce, `ink-soft` (#545c67), jamais d'un gris pur.
 - **Do** varier la famille de composition d'une section à la suivante, et rompre une fois

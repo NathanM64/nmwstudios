@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from 'next'
 import { Hanken_Grotesk, Schibsted_Grotesk } from 'next/font/google'
-import { Refraction } from '@/components/ui/Refraction'
+import { GlassWall } from '@/components/ui/GlassWall'
 import { og } from '@/lib/meta'
 import { SCHEMA, SITE } from '@/lib/schema'
 import './globals.css'
@@ -39,8 +39,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(SCHEMA) }}
         />
+        <GlassWall />
         {children}
-        <Refraction />
       </body>
     </html>
   )
