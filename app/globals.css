@@ -24,6 +24,17 @@
   html {
     background-color: var(--color-paper);
     color-scheme: light;
+
+    /* Deux formats : GlassWall tente l'AVIF puis retombe sur le WebP. */
+    --wall-avif: url('/wall-1280.avif');
+    --wall-webp: url('/wall-1280.webp');
+  }
+
+  /* Le canvas remplace le mur CSS, il ne s'ajoute pas à lui. La classe n'est posée qu'une
+     fois le contexte obtenu et la texture chargée : sans elle, le mur CSS tient le site. */
+  .glass-live body::before,
+  .glass-live body::after {
+    display: none;
   }
 
   /* Le défilement doux est un mouvement comme un autre : les ancres de l'accueil vers la page
@@ -119,6 +130,27 @@
      Dégradé blanc très bas, liseré interne, ombre portée lointaine, aucune bordure. Le flou
      n'est qu'un repli : dès que Refraction a mesuré la dalle, il pose un filtre de
      déplacement à sa place et le centre redevient net. */
+  /* Le mur rendu. z-index -1 comme le grain qu'il remplace, donc sous tout le contenu. */
+  .glass-wall {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    display: block;
+    pointer-events: none;
+    opacity: 0;
+  }
+
+  /* La transition est un mouvement comme un autre : sans préférence contraire seulement. */
+  @media (prefers-reduced-motion: no-preference) {
+    .glass-wall {
+      transition: opacity 700ms var(--ease-glass);
+    }
+  }
+
+  .glass-live .glass-wall {
+    opacity: 1;
+  }
+
   .glass,
   .glass-thick {
     position: relative;
