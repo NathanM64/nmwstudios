@@ -1,170 +1,38 @@
 # Product
 
-<!-- impeccable:product-schema 1 -->
+## État
 
-## Platform
+Remis à zéro le 7 septembre 2026, à la demande de Nathan, pour qu'aucune décision de produit
+ni d'interface prise auparavant ne pèse sur la suite.
 
-web
+Rien n'ici n'est décidé. Toute affirmation sur l'audience, les offres, le tarif, les
+engagements ou les preuves doit être écrite à nouveau, et vérifiée avec Nathan avant d'être
+publiée. Ne pas déduire ces réponses de l'ancien site, du HTML conservé, ni de l'historique.
 
-## Users
+## Ce qui subsiste
 
-Le directeur d'une agence de communication ou de web sans équipe technique, en France.
-Il a vendu un projet ou hérité d'un existant, il n'a personne pour le porter, et il arrive
-sur le site avec deux peurs : que le prestataire se montre devant son client, et qu'on lui
-annonce que tout est à refaire. Il lit souvent sur mobile, en fin de journée, entre deux
-dossiers. Aucune autre audience n'est visée : ni client final, ni recruteur, ni pair
-technique.
+- `content/textes-du-site.md` : tout le texte réellement affiché par l'ancien site, extrait du
+  HTML construit, dans l'ordre de lecture. C'est de la matière, pas une décision.
+- `content/*.ts` : les données de l'ancien site, offres, travaux, engagements, état des lieux.
+  Elles portent des choix produit anciens : à relire avant réemploi, pas à reprendre telles
+  quelles.
+- `lib/legal.ts` : les mentions légales, le SIRET, le TJM. Faits juridiques et administratifs,
+  pas des choix de produit.
 
-## Product Purpose
+## Où retrouver l'état précédent
 
-Vendre de la sous-traitance en marque blanche à des agences, sous quatre formes : renfort à
-la journée, projet complet, reprise et maintenance d'un existant, et hébergement surveillé.
-La troisième porte le poids commercial, c'est celle qui dure. La quatrième la prolonge : une
-agence qui confie la reprise d'un projet n'a le plus souvent personne pour l'héberger ensuite.
+L'étiquette git `avant-reset-2026-09-07` porte le dépôt complet avant cette remise à plat :
+l'ancien `PRODUCT.md` avec son audience, son positionnement, ses quatre offres, ses principes
+et ses interdits, l'ancien `DESIGN.md`, et toute l'interface.
 
-Le site réussit quand un directeur d'agence prend contact. Le formulaire du bloc contact est
-le chemin principal : il poste sur `/api/contact`, servi depuis le même domaine par le
-conteneur `service/` et routé par Traefik, donc sans service tiers ni cookie. L'adresse
-`contact@nmwstudios.com` reste affichée et sert de sortie quand l'envoi échoue ; le téléphone
-existe en second.
+```bash
+git show avant-reset-2026-09-07:PRODUCT.md
+git show avant-reset-2026-09-07:DESIGN.md
+```
 
-## Positioning
+## Une règle qui survit à la remise à zéro
 
-La marque blanche est vérifiable, pas seulement promise. Chaque engagement porte sa
-contrepartie négative écrite (`content/engagements.ts`), la discrétion est prouvée par
-l'absence totale de nom de client sur le site, et les conditions de vente portent ce que
-d'autres disent au téléphone. Un seul chiffre est affiché, 500 € la journée, identique
-pour les trois modes : ce que l'agence achète est un nombre de jours, jamais un forfait
-déguisé.
-
-Le site est statique, sans domaine tiers ni cookie, hébergé sur serveur propre. C'est une
-contrainte de construction, pas un argument affiché : le lecteur visé n'a pas d'équipe
-technique, il n'ouvrira pas l'onglet réseau, et lui vendre l'absence de cookie répond à une
-question qu'il ne pose pas. Seules les mentions légales l'écrivent, pour le lecteur qui a
-une raison de le lire.
-
-## Operating Context
-
-L'agence garde la relation client, ses outils et sa méthode ; le travail se fait dedans,
-sous son nom. L'entrée en relation passe par un accord de confidentialité signé avant
-ouverture du projet. Les missions de reprise commencent par un état des lieux écrit :
-démarrage du projet sur une machine neuve, reprise des accès et de l'historique au nom de
-l'agence, tri entre ce qui casse, ce qui est risqué et ce qui est seulement laid, puis
-restitution ordonnée avec une estimation en jours par ligne (`content/etat-des-lieux.ts`).
-
-L'hébergement surveillé est mensuel et se souscrit après une reprise ou une livraison, jamais
-seul. Il tourne sur serveur propre, et la pile n'est pas une borne : ce qui redémarre sur une
-machine neuve peut être hébergé. La surveillance couvre la disponibilité, les mises à jour de
-sécurité et, si l'agence le demande, la mesure d'audience de son site.
-
-Sa contrepartie est écrite avant sa promesse, comme les autres. **La surveillance signale, elle
-ne corrige pas** : une correction est du travail, donc des jours, validés par écrit avant d'être
-engagés. Et l'hébergement ne rend rien captif : serveur, nom de domaine et accès restent
-transférables au nom de l'agence à tout moment, sans frais de sortie et sans préavis.
-
-Aucune disponibilité chiffrée n'est annoncée, aucun délai d'intervention non plus. Ce serait
-opposable, et rien ne le mesure aujourd'hui.
-
-Trois critères décident d'un oui : code source accessible en entier, projet capable de
-redémarrer sur une machine neuve, hébergement et nom de domaine transférables au nom de
-l'agence.
-
-## Capabilities and Constraints
-
-- Cinq pages portent le message : l'accueil, « Renfort », « Projet complet », « Reprise et
-  maintenance » et les mentions légales. La 404 complète. Pas de blog, aucun service tiers.
-  Chacune des trois offres a sa page, et l'accueil doit lier les trois.
-- Next 16 en `output: 'export'` : pas de route dynamique, pas de middleware, pas de lecture
-  de requête. Toute page ajoutée est rendue à la construction et servie par Caddy depuis une
-  image sans Node.
-- La CSP du `Caddyfile` interdit tout domaine tiers. Une police distante, une analytique ou
-  une carte casserait à la fois la règle et l'argument central.
-- Les technologies citées (Symfony, PHP sans framework, React ancien, WordPress sur mesure)
-  sont des exemples de reconnaissance, jamais une borne de compétence.
-- TJM de 500 €, dans `lib/legal.ts`. Le mensuel est décrit comme une enveloppe de jours
-  convenue à l'avance, résiliable ; toute journée supplémentaire est validée par écrit,
-  jamais absorbée.
-
-Décisions produit encore ouvertes, à ne pas inventer :
-
-- Le montant mensuel de l'hébergement surveillé. Non arrêté à ce jour, donc absent du site :
-  aucune page ne peut l'afficher tant qu'il n'est pas décidé.
-- Le TJM s'affiche-t-il seul ou avec une mention « à partir de ».
-- La mesure d'audience, prévue dans le dépôt `infra` et portée par Nathan. Le jour où elle
-  arrive, le paragraphe « Données personnelles » des mentions légales doit dire ce qui est
-  réellement mesuré et conservé.
-- Le délai de réponse réellement tenable, retiré du bloc contact faute de pouvoir être
-  vérifié.
-- La preuve manquante du quatrième travail, la plateforme d'impression 3D.
-- La liste des technologies reprises, à compléter si Laravel, Vue, Drupal ou Node doivent y
-  figurer.
-- `RENDEZ_VOUS` reste vide : la prise de rendez-vous en ligne n'est pas retenue comme
-  chemin principal. Le bouton ne s'affiche pas tant que la chaîne est vide.
-
-Surfaces prévues, dans cet ordre, quand les deux pages actuelles conviennent : une page
-Contact, puis une page de travaux anonymisés développant `content/travaux.ts`. La page
-« Comment je travaille » n'est pas retenue.
-
-## Brand Commitments
-
-NMW Studios, exploité par Marimbordes Nathan Julien, entrepreneur individuel (SIRET
-99316693300016, Bègles). Le logo signe l'en-tête, le pied de page et l'icône d'onglet
-(`components/ui/Logo.tsx`, `app/icon.svg`).
-
-Voix : première personne, phrases courtes, vocabulaire de contrat plutôt que de plaquette.
-Le site dit ce qu'il ne fait pas avant de dire ce qu'il fait. Jamais de tiret cadratin dans
-le texte affiché. Tout le contenu est en français.
-
-Interdits permanents : aucun nom de client, aucun logo client, aucun témoignage nommé, ni
-sur le site ni en rendez-vous. Aucune affirmation de performance à maintenir à la main,
-type score Lighthouse.
-
-## Evidence on Hand
-
-- Quatre travaux réels, anonymisés au secteur et à la technique (`content/travaux.ts`).
-  Trois portent une preuve, affichée en gras sous la description : reprise d'un jeu concours
-  écrit en PHP par un autre, sans base de données, avec base et backoffice complet ajoutés,
-  plus de 100 000 joueurs en un mois ; application iPad hors ligne pour un émetteur
-  international de cartes de paiement, en production et maintenue depuis deux ans ;
-  backoffice de création de campagnes de jeux pour une agence marketing, toujours en service
-  et enrichi au fil des campagnes. Le quatrième, la plateforme industrielle de pilotage de
-  l'impression 3D, n'a pas de preuve datée et n'en reçoit pas d'inventée.
-
-  L'événement de la campagne de jeu concours n'est pas cité : le volume convainc, l'événement
-  identifierait le client.
-- Absence de requête tierce, absence de cookie, hébergement sur serveur propre. Vérifiable,
-  mais gardé hors du discours de vente et tenu par la CSP et un test.
-- L'hébergement surveillé n'a aucune preuve datée : ni durée, ni volume, ni incident tenu.
-  Le seul fait disponible est que ce site tourne sur ce serveur. Rien d'autre ne doit être
-  écrit tant que rien d'autre n'est vrai.
-- Mentions légales complètes dans `lib/legal.ts`.
-
-Il n'existe aucun témoignage, aucune étude de cas, aucune référence nommée, aucun chiffre
-d'audience et aucun logo client. Rien de tout cela ne doit être fabriqué, y compris sous
-forme de silhouette ou de placeholder.
-
-## Product Principles
-
-1. **La contrepartie avant la promesse.** Ce qu'un prestataire ne fera pas est l'information
-   que le lecteur cherche en premier ; elle est écrite, jamais sous-entendue.
-2. **Un seul chiffre pour le travail.** L'agence achète des jours, au même tarif pour les
-   trois modes de production. Toute construction tarifaire qui brouille ce compte est refusée,
-   même si elle rassure à la lecture. L'hébergement fait exception et porte son propre montant
-   mensuel, parce qu'il est un service continu et non du travail : il n'est jamais mêlé au
-   compte de jours, et aucune journée n'y est incluse.
-3. **Prouvable dans le navigateur.** Une affirmation technique n'est publiée que si la page
-   elle-même la démontre ou qu'un test la protège.
-4. **La discrétion est de la matière, pas du vide.** L'anonymat s'accompagne toujours d'assez
-   de substance pour qu'on ne lise pas « il débute ».
-5. **Le harnais ne pèse pas plus que le site.** Ce dépôt a été rasé une fois pour
-   sur-ingénierie ; toute addition doit prévenir une casse silencieuse réelle.
-
-## Accessibility & Inclusion
-
-Objectif WCAG 2.2 AA, tenu par le code : contrastes, focus visible, navigation clavier,
-sémantique et libellés de lien explicites. Aucune obligation contractuelle ni audit formel
-n'est en jeu, aucun client public n'est visé ; la norme sert de niveau de référence, pas de
-livrable à certifier.
-
-Lecture réelle attendue sur mobile, en conditions pressées : longueur de ligne, taille de
-corps et cibles tactiles sont traitées comme des exigences produit.
+Elle n'est pas un choix de style, c'est une contrainte de véracité, et elle valait avant comme
+elle vaut maintenant : **rien ne s'écrit sur ce site qui ne soit vrai et vérifiable.** Aucun
+témoignage, aucune référence, aucun chiffre d'audience, aucune performance annoncée qui ne
+puisse être tenue. Y compris sous forme d'exemple, de silhouette ou de texte de remplissage.

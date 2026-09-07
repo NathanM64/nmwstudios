@@ -52,6 +52,8 @@ next-env.d.ts
 !CLAUDE.md
 !DESIGN.md
 !PRODUCT.md
+# Le texte publie de l'ancien site, garde comme matiere apres la remise a plat.
+!content/textes-du-site.md
 
 # Documentation de travail : specs, plans, journaux et rapports de relecture.
 # Le dépôt est public et ces fichiers portent des données commerciales

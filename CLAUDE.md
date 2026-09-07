@@ -1,22 +1,40 @@
 # nmwstudios
 
-Site vitrine statique. Cible : les directeurs d'agence sans équipe technique. Le site vend
-de la sous-traitance en marque blanche.
+Site vitrine statique de NMW Studios, en Next 16 avec `output: 'export'`, servi par Caddy.
 
-Le dépôt produit deux images : le site lui-même, servi par Caddy, et `service/`, l'endpoint
-qui reçoit le formulaire de contact et le poste à Resend. Le site étant un export statique,
-il ne peut rien recevoir en POST : d'où un second conteneur, routé par Traefik sur
-`/api/contact`. Son compose vit dans le dépôt `infra`.
+Le dépôt produit deux images : le site lui-même, et `service/`, l'endpoint qui reçoit le
+formulaire de contact et le poste à Resend. Le site étant un export statique, il ne peut rien
+recevoir en POST : d'où un second conteneur, routé par Traefik sur `/api/contact`. Son compose
+vit dans le dépôt `infra`.
+
+## État au 7 septembre 2026
+
+**L'interface a été entièrement retirée.** `app/`, `components/` et `DESIGN.md` sont
+supprimés, et `PRODUCT.md` est remis à zéro. Le dépôt ne compile pas : c'est voulu, il attend
+une direction neuve.
+
+Aucune décision visuelle n'est en vigueur. Ne pas en déduire une depuis l'historique, depuis
+le texte conservé, ni depuis les captures de `docs/`. L'étiquette `avant-reset-2026-09-07`
+porte tout l'état précédent si une question se pose.
+
+Ce qui reste est de la matière, pas des choix :
+
+- `content/textes-du-site.md` : tout le texte réellement affiché, extrait du HTML construit.
+- `content/*.ts` : les données de l'ancien site, à relire avant réemploi.
+- `lib/` : mentions légales, navigation, métadonnées, schéma.
+- `app/icon.svg` et `app/favicon.ico` : la marque, conservée sur demande de Nathan.
+
+Restent récupérables depuis l'étiquette si le besoin apparaît : `app/opengraph-image.jpg` et
+son texte de remplacement, et `components/ui/Logo.tsx`.
 
 ## Ce qui compte ici
 
-Ce dépôt a déjà été rasé une fois pour sur-ingénierie. Le harnais est volontairement mince
-et doit le rester : lint, typecheck, build, et les tests de bout en bout de
-`tests/e2e/site.spec.ts`, qui protègent chacun une promesse affichée par le site ou un piège
-déjà tombé une fois. Pas de test unitaire sur un composant de présentation.
+Ce dépôt a déjà été rasé deux fois, la première pour sur-ingénierie. Le harnais est
+volontairement mince et doit le rester.
 
-Avant d'ajouter un filet, poser la question : est-ce qu'un changement plausible peut casser
-ça en silence ? Si la réponse est non, ne pas l'écrire.
+Avant d'ajouter un filet, poser la question : est-ce qu'un changement plausible peut casser ça
+en silence ? Si la réponse est non, ne pas l'écrire. Les tests de bout en bout ont été retirés
+avec l'interface qu'ils décrivaient : les réécrire au fur et à mesure, jamais d'avance.
 
 ## Règles de travail
 
@@ -26,60 +44,25 @@ Avant d'ajouter un filet, poser la question : est-ce qu'un changement plausible 
   `yarn test:e2e`.
 - Jamais de tiret cadratin dans le texte du site ni dans les commits.
 - Commentaires courts, une ou deux lignes, sur le pourquoi. Pas de blocs narratifs.
-- `node_modules` n'est PAS ancré dans `.gitignore` : `service/` a le sien, et un `/node_modules`
-  ancré ne couvrait que la racine. 26 Mo sont passés à un commit près.
 
 ## Pièges connus
 
-- Les variables `next/font` se posent sur `<html>` dans `app/layout.tsx`, jamais sur
-  `<body>` : Tailwind déclare `--font-*` sur `:root`, et plus bas la `var()` serait
-  irrésolue au moment de la déclaration, laissant tout le document sur la police de repli.
-  Un test le vérifie.
-- `output: 'export'` : pas de route dynamique, pas de middleware, pas de composant serveur
-  qui lit une requête. Toute page ajoutée doit être rendue à la construction.
-- La CSP posée par le `Caddyfile` interdit tout domaine tiers. Ce n'est pas une règle de
-  Nathan, c'est un choix d'ingénierie : rien à charger, rien à attendre, et la promesse des
-  mentions légales reste vérifiable par le navigateur. Elle se discute donc, comme le reste.
-  Ce qui ne se discute pas : si le site se met à déposer un cookie ou à charger un tiers,
-  c'est le paragraphe « Données personnelles » qui doit changer le même jour.
-  `form-action` vaut `'self'` depuis que le bloc contact porte un vrai formulaire.
-- Une mesure d'audience est prévue, dans le dépôt `infra`, hébergée sur le même serveur.
-  Servie depuis ce domaine, elle ne serait ni une requête tierce ni un cookie : elle passe
-  sous le test ci-dessus. C'est `aucun script hors du paquet Next` qui la voit. Quand il
-  casse, le paragraphe « Données personnelles » des mentions légales doit être réécrit, la
-  phrase « à ce jour » devient fausse.
-- Le journal d'accès de Traefik est désactivé (`infra/compose/traefik.yml`), et le
-  `Caddyfile` ne pose aucune directive `log`. C'est ce qui rend vraie la phrase « aucune
-  donnée n'est collectée lors de la consultation ». L'activer la rend fausse sans toucher
-  au site, et aucun test d'ici ne le verra.
+Faits d'ingénierie, tombés une fois chacun. Ils ne portent aucune décision d'interface et
+survivent donc à la remise à plat.
 
-## Direction visuelle
-
-« Le pli » : un mur de lumière grise et grenue, fixe sous toute la page, et des dalles de
-verre presque incolores qui le compriment sur leur tranche. Un seul mode, pas de thème
-sombre, aucune couleur. Schibsted Grotesk pour les titres, Hanken Grotesk pour le corps,
-aucune monospace. Le détail est dans `DESIGN.md`, qui fait autorité.
-
-Le geste de signature est la réfraction. `components/ui/GlassWall.tsx` pose un canvas WebGL
-fixe entre le mur et le contenu : il lit la position de chaque élément `data-glass`, évalue un
-champ de distance sur les dalles visibles et dessine tout le verre, arête spéculaire et
-épaisseur comprises. Le mur est une texture, pas un dégradé, parce qu'un dégradé lisse ne
-donne rien à plier. Ne pas ajouter de deuxième matériau.
-
-Le mur CSS d'origine, `body::before` et `body::after`, reste en place et sert de repli : sans
-WebGL ou sous `prefers-reduced-transparency`, le canvas n'est jamais monté et le site est
-celui d'avant, intact.
-
-Les classes du système vont dans `@layer base` ou `@layer components`. Hors couche, elles
-battent les utilitaires Tailwind : `.glass { position: relative }` a déjà annulé en silence
-un `absolute` posé sur une dalle.
-
-Le rendu du mur passe par une boucle `requestAnimationFrame`, seule façon de nourrir un
-shader, et elle ne redessine que si l'état a changé : une dalle a bougé, la fenêtre a été
-redimensionnée, ou le pointeur s'est déplacé. Tout le reste du mouvement passe par
-`animation-timeline: view()`, sans écouteur `scroll` ni `IntersectionObserver`. Tout mouvement
-est gardé derrière `prefers-reduced-motion`, `scroll-behavior` compris.
-
-`DESIGN.md` nomme les identifiants exactement comme le code, donc en anglais, et sa prose reste
-en français. Trois classes mortes sont nées de l'écart inverse : le filet `aucune classe
-utilitaire ne vise un jeton inexistant` les attrape maintenant.
+- `node_modules` n'est PAS ancré dans `.gitignore` : `service/` a le sien, et un
+  `/node_modules` ancré ne couvrait que la racine. 26 Mo sont passés à un commit près.
+- Les variables `next/font` se posent sur `<html>`, jamais sur `<body>` : Tailwind déclare
+  `--font-*` sur `:root`, et plus bas la `var()` serait irrésolue au moment de la déclaration,
+  laissant tout le document sur la police de repli. La casse est silencieuse.
+- `output: 'export'` : pas de route dynamique, pas de middleware, pas de composant serveur qui
+  lit une requête. Toute page ajoutée doit être rendue à la construction.
+- Tailwind laisse tomber sans un mot une classe dont le jeton n'existe pas. La classe
+  disparaît, la construction réussit, et rien ne le voit.
+- La CSP posée par le `Caddyfile` interdit tout domaine tiers. Elle se discute. Ce qui ne se
+  discute pas : si le site se met à déposer un cookie ou à charger un tiers, c'est le
+  paragraphe « Données personnelles » des mentions légales qui doit changer le même jour.
+- Le journal d'accès de Traefik est désactivé (`infra/compose/traefik.yml`), et le `Caddyfile`
+  ne pose aucune directive `log`. C'est ce qui rend vraie la phrase « aucune donnée n'est
+  collectée lors de la consultation ». L'activer la rend fausse sans toucher au site, et aucun
+  test d'ici ne le verra.
