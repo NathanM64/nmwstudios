@@ -131,14 +131,14 @@ a { color: var(--color-accent); text-underline-offset: 0.2em; }
 .ecran-boite, .ecran { position: absolute; inset: 0; }
 .inner {
   height: 100%; display: flex; flex-direction: column; overflow-y: auto;
-  padding: clamp(5.5rem, 14svh, 9rem) var(--gutter) clamp(4.5rem, 10svh, 6rem);
+  padding: clamp(5.5rem, 12svh, 7.5rem) var(--gutter) 3.5rem;
 }
 .colonnes {
-  margin-block: auto; max-width: 72rem; width: 100%;
+  max-width: 72rem; width: 100%;
   display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
   gap: clamp(2rem, 6vw, 6rem); align-items: start;
 }
-.colonnes.accueil { align-items: center; grid-template-columns: minmax(0, 1fr); }
+.colonnes.accueil { grid-template-columns: minmax(0, 1fr); }
 .ecran.accueil .inner { padding-bottom: clamp(10rem, 26svh, 15rem); }
 
 /* Le panneau de verre du dashboard, avec son liseré, sur une base sombre : l'image derrière reste lisible à travers. */
@@ -184,14 +184,15 @@ ul, ol { padding: 0; margin: 0; list-style: none; }
 /* Accueil : les situations occupent le bas du cadre, chacune est une porte vers l'offre qui y répond. */
 .ecran.accueil .pied { position: absolute; left: var(--gutter); right: var(--gutter); bottom: 3.4rem; }
 .pied .eyebrow { margin: 0 0 0.6rem; }
+/* Un seul flou pour toute la bande : les cellules sont transparentes, sans marche entre elles. */
 .situations {
   display: grid; grid-template-columns: repeat(4, 1fr);
+  background: rgba(10, 10, 15, 0.55); backdrop-filter: var(--glass);
   border: 1px solid var(--color-border); border-radius: var(--radius-lg); overflow: hidden;
 }
 .situations li + li { border-left: 1px solid var(--color-border); }
 .situations a {
   display: flex; flex-direction: column; gap: 0.45rem; height: 100%; padding: 1rem 1.2rem;
-  background: rgba(10, 10, 15, 0.55); backdrop-filter: var(--glass);
   color: var(--color-foreground); text-decoration: none; font-size: 0.98rem; line-height: 1.35; font-weight: 500;
   transition: background-color 0.2s;
 }
@@ -199,8 +200,7 @@ ul, ol { padding: 0; margin: 0; list-style: none; }
 .situations .reponse { margin-top: auto; color: var(--color-accent); font-size: 0.92rem; font-weight: 600; }
 
 /* Ce que je fais : cinq cartes visibles, la carte ouverte occupe deux rangées à gauche. */
-.ecran.offres .inner { padding-top: clamp(5.5rem, 12svh, 7.5rem); padding-bottom: 3.5rem; }
-.colonnes.offres { grid-template-columns: 1fr; gap: 1.5rem; margin-block: 0; max-width: none; }
+.colonnes.offres { grid-template-columns: 1fr; gap: 1.5rem; max-width: none; }
 .entete { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 3rem; align-items: end; }
 .entete h2 { margin: 0; max-width: 26ch; }
 .entete .lead { margin: 0; }
@@ -225,8 +225,7 @@ a.carte:hover { transform: translateY(-3px); background-color: rgba(255, 255, 25
 .carte li { margin-bottom: 0.25rem; }
 
 /* Comment je travaille : la preuve en titre, les missions à droite, la frise des étapes en bas. */
-.ecran.methode .inner { padding-top: clamp(5.5rem, 12svh, 7.5rem); padding-bottom: 3.5rem; }
-.colonnes.methode { grid-template-columns: 1fr; gap: 1.5rem; margin-block: 0; max-width: none; }
+.colonnes.methode { grid-template-columns: 1fr; gap: 1.5rem; max-width: none; }
 .preuve { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 3rem; align-items: start; }
 .preuve h2 { max-width: 24ch; margin-bottom: 1rem; }
 .preuve .lead { margin-bottom: 0.8rem; }
@@ -236,25 +235,33 @@ a.carte:hover { transform: translateY(-3px); background-color: rgba(255, 255, 25
 .etapes {
   counter-reset: etape; margin-top: 0.6rem;
   display: grid; grid-template-columns: repeat(5, 1fr);
+  background: rgba(10, 10, 15, 0.5); backdrop-filter: var(--glass);
   border: 1px solid var(--color-border); border-radius: var(--radius-lg); overflow: hidden;
 }
 .etapes li + li { border-left: 1px solid var(--color-border); }
-.etapes li { padding: 1rem 1.2rem; background: rgba(10, 10, 15, 0.5); backdrop-filter: var(--glass); }
+.etapes li { padding: 1rem 1.2rem; }
 .etapes h3 { font-size: 1rem; margin-bottom: 0.35rem; display: flex; gap: 0.6rem; align-items: baseline; }
 .etapes h3::before { counter-increment: etape; content: counter(etape, decimal-leading-zero); font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.08em; color: var(--color-accent); font-weight: 500; }
 .etapes p { margin: 0; font-size: 0.88rem; color: var(--color-muted-foreground); max-width: none; }
 .etapes p strong { color: var(--color-foreground); font-weight: 500; }
 
-/* Qui je suis : la FAQ dépliable, une question à la fois */
+/* Qui je suis : la FAQ dépliable, une question à la fois, un signe qui dit qu'elle s'ouvre. */
+.faits { color: var(--color-muted-foreground); font-size: 0.95rem; }
+.faits a { color: var(--color-foreground); }
 .qa { border-top: 1px solid var(--color-border); }
 .qa:first-child { border-top: 0; }
 .qa summary {
-  list-style: none; cursor: pointer; padding: 0.7rem 0; color: var(--color-muted-foreground);
+  list-style: none; cursor: pointer; padding: 0.7rem 1.6rem 0.7rem 0; position: relative; color: var(--color-muted-foreground);
   font-weight: 600; font-size: 1rem; letter-spacing: -0.01em; line-height: 1.3; transition: color 0.2s;
 }
 .qa summary::-webkit-details-marker { display: none; }
+.qa summary::after {
+  content: '+'; position: absolute; right: 0; top: 0.55rem; font-weight: 500; font-size: 1.2rem; line-height: 1;
+  color: var(--color-faint); transition: transform 0.25s, color 0.2s;
+}
 .qa summary:hover, .qa[open] summary { color: var(--color-foreground); }
-.qa p { padding-bottom: 0.9rem; margin: 0; max-width: 32rem; font-size: 0.93rem; color: var(--color-muted-foreground); }
+.qa[open] summary::after { transform: rotate(45deg); color: var(--color-accent); }
+.qa p { padding-bottom: 0.9rem; margin: 0; max-width: 32rem; font-size: 0.93rem; color: var(--color-muted-foreground); animation: 240ms ease-out both page-entre; }
 
 /* Contact : les champs du dashboard */
 .contact { max-width: 32rem; }
@@ -309,7 +316,7 @@ a.carte:hover { transform: translateY(-3px); background-color: rgba(255, 255, 25
   .menu a { font-size: 0.92rem; }
   .cadre { position: relative; inset: auto; height: auto; flex: 1; min-height: 0; }
   .inner { overflow-y: auto; padding: 1.5rem var(--gutter) 2rem; }
-  .colonnes, .colonnes.accueil { grid-template-columns: 1fr; margin-block: 0; }
+  .colonnes, .colonnes.accueil { grid-template-columns: 1fr; }
   .ecran.accueil .inner { padding-bottom: 2rem; }
   .ecran.accueil .pied { position: static; margin-top: 1.2rem; }
   .situations { grid-template-columns: 1fr; }
