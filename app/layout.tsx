@@ -39,8 +39,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <Menu />
         </header>
         <main className="cadre">
-          {/* Le nom reste le même d'une route à l'autre : React fond l'ancien écran dans le nouveau. */}
-          <ViewTransition name="ecran" update="ecran">
+          {/* Le nom reste le même d'une route à l'autre : React fond l'ancien écran dans le nouveau.
+              Quand seul un détail change (type « detail »), l'écran ne bouge pas. */}
+          <ViewTransition name="ecran" update={{ default: 'ecran', detail: 'none' }}>
             <div className="ecran-boite">{children}</div>
           </ViewTransition>
         </main>

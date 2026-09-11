@@ -4,6 +4,9 @@ import { expect, test } from '@playwright/test'
 // sont là, le menu mène quelque part. Pas de test d'animation : ça se regarde.
 const ROUTES: Array<[string, string]> = [
   ['/', 'Vous décidez jusqu’où.'],
+  ['/ce-que-je-fais/', 'Pas de constructeur de pages'],
+  ['/ce-que-je-fais/reprise/', 'Trois conditions : le code source accessible en entier'],
+  ['/ce-que-je-fais/hebergement/', 'sauvegardes quotidiennes'],
 ]
 
 test('chaque route porte son texte dans le HTML servi', async ({ request }) => {
@@ -59,4 +62,11 @@ test('le menu navigue et le retour arrière marche', async ({ page }) => {
   await page.goBack()
   await expect(page).toHaveURL(/\/$/)
   await expect(page.getByRole('heading', { level: 1 })).toContainText('Je conçois')
+})
+
+test('la liste des offres change le détail sans quitter l’écran', async ({ page }) => {
+  await page.goto('/ce-que-je-fais/')
+  await page.getByRole('navigation', { name: 'Offres' }).getByRole('link', { name: 'Reprise et maintenance' }).click()
+  await expect(page).toHaveURL(/\/ce-que-je-fais\/reprise\/$/)
+  await expect(page.locator('.detail h3')).toHaveText('Reprise et maintenance')
 })
