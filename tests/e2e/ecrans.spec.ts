@@ -30,6 +30,13 @@ test('chaque écran porte son fond dans le HTML et le fichier est servi', async 
   expect(await (await request.get('/mentions-legales/')).text()).not.toContain('class="fond"')
 })
 
+test('le lien partagé montre une image', async ({ request }) => {
+  const html = await (await request.get('/')).text()
+  const image = html.match(/property="og:image" content="([^"]+)"/)?.[1]
+  expect(image, 'og:image absent').toBeTruthy()
+  expect((await request.get(new URL(image!).pathname)).status()).toBe(200)
+})
+
 test('rien ne déborde du cadre à 1440 × 900', async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 })
   for (const [route] of ROUTES) {
