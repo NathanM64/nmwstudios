@@ -263,16 +263,22 @@ a.carte:hover { transform: translateY(-3px); background-color: rgba(255, 255, 25
 .qa[open] summary::after { transform: rotate(45deg); color: var(--color-accent); }
 .qa p { padding-bottom: 0.9rem; margin: 0; max-width: 32rem; font-size: 0.93rem; color: var(--color-muted-foreground); animation: 240ms ease-out both page-entre; }
 
-/* Contact : les champs du dashboard */
-.contact { max-width: 32rem; }
+/* Contact : les faits à gauche, les champs du dashboard à droite. */
+.colonnes.contact-ecran { grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr); }
+.email { font-size: clamp(1.2rem, 1.8vw, 1.6rem); font-weight: 600; margin: 0 0 1.2rem; }
+.ecran .email a { color: var(--color-foreground); text-decoration-color: var(--color-accent); text-underline-offset: 0.25em; }
+.contact { max-width: none; }
+.contact .optionnel { color: var(--color-faint); font-weight: 500; }
+.contact.envoye p { margin-bottom: 0.4rem; color: var(--color-muted-foreground); }
+.contact.envoye .lead { color: var(--color-foreground); }
 .contact label { display: block; margin-bottom: 1rem; }
 .contact input, .contact textarea {
   display: block; width: 100%; margin-top: 0.4rem;
-  background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-md);
+  background: rgba(10, 10, 15, 0.45); border: 1px solid var(--color-border); border-radius: var(--radius-md);
   padding: 0.6rem 0.8rem; color: var(--color-foreground); font: inherit; font-size: 0.95rem; outline: none;
   transition: border-color 0.2s, box-shadow 0.2s;
 }
-.contact input::placeholder, .contact textarea::placeholder { color: var(--color-faint); }
+.contact input::placeholder, .contact textarea::placeholder { color: var(--color-faint); opacity: 1; }
 .contact input:focus, .contact textarea:focus { border-color: var(--color-accent); box-shadow: var(--focus-glow); }
 .contact .actions { margin-top: 0.4rem; }
 .contact .note { font-size: 0.9rem; color: var(--color-muted-foreground); }

@@ -10,22 +10,17 @@ export function FormulaireContact() {
 
   async function envoyer(ev: FormEvent<HTMLFormElement>) {
     ev.preventDefault()
-    const form = ev.currentTarget
-    const champs = Object.fromEntries(new FormData(form)) as Record<string, string>
+    const champs = Object.fromEntries(new FormData(ev.currentTarget)) as Record<string, string>
+    // Le service ne connaît que trois champs : l'adresse du site ouvre le message.
+    const message = champs.url ? `Site : ${champs.url}\n\n${champs.message}` : champs.message
     setEtat('envoi')
     try {
       const reponse = await fetch('/api/contact', {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({
-          name: champs.nom,
-          email: champs.email,
-          message: champs.message,
-          honeypot: champs.site ?? '',
-        }),
+        body: JSON.stringify({ name: champs.nom, email: champs.email, message, honeypot: champs.site ?? '' }),
       })
       if (reponse.status === 204) {
-        form.reset()
         setEtat('envoye')
         return
       }
@@ -36,6 +31,15 @@ export function FormulaireContact() {
     }
   }
 
+  if (etat === 'envoye') {
+    return (
+      <div className="contact panel envoye" role="status">
+        <p className="lead">Message envoyé.</p>
+        <p>Je le lis moi-même et je vous réponds dans la journée, à l’adresse que vous avez donnée.</p>
+      </div>
+    )
+  }
+
   return (
     <form className="contact panel" onSubmit={envoyer}>
       <label>
@@ -44,11 +48,23 @@ export function FormulaireContact() {
       </label>
       <label>
         <span className="eyebrow">Votre email</span>
-        <input type="email" name="email" autoComplete="email" required maxLength={200} />
+        <input type="email" name="email" autoComplete="email" required maxLength={200} placeholder="vous@entreprise.fr" />
+      </label>
+      <label>
+        <span className="eyebrow">
+          L’adresse de votre site, s’il existe <span className="optionnel">(facultatif)</span>
+        </span>
+        <input type="url" name="url" autoComplete="url" maxLength={300} placeholder="https://" />
       </label>
       <label>
         <span className="eyebrow">Votre projet, en quelques lignes</span>
-        <textarea name="message" rows={4} required maxLength={5000} />
+        <textarea
+          name="message"
+          rows={4}
+          required
+          maxLength={5000}
+          placeholder="Ce qui existe déjà, ce qui coince, et pour quand."
+        />
       </label>
       {/* Le piège à robots : un humain ne le voit pas, un robot le remplit. */}
       <label className="piege" aria-hidden="true">
@@ -59,11 +75,6 @@ export function FormulaireContact() {
         <button className="bouton" type="submit" disabled={etat === 'envoi'}>
           {etat === 'envoi' ? 'Envoi en cours' : 'Envoyer'}
         </button>
-        {etat === 'envoye' && (
-          <span className="note" role="status">
-            Message envoyé. Je vous réponds moi-même.
-          </span>
-        )}
         {typeof etat === 'object' && (
           <span className="note" role="alert">
             {etat.erreur}

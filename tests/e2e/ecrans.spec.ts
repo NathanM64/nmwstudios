@@ -69,6 +69,23 @@ test('les polices sont réellement chargées', async ({ page }) => {
   expect(polices.chargees).toEqual([true, true])
 })
 
+test('le formulaire glisse l’adresse du site dans le message et confirme à la place des champs', async ({ page }) => {
+  await page.goto('/contact/')
+  let corps: Record<string, string> = {}
+  await page.route('**/api/contact', async (route) => {
+    corps = route.request().postDataJSON() as Record<string, string>
+    await route.fulfill({ status: 204 })
+  })
+  await page.getByLabel('Votre nom').fill('Test')
+  await page.getByLabel('Votre email').fill('test@example.com')
+  await page.getByLabel(/L’adresse de votre site/).fill('https://exemple.fr')
+  await page.getByLabel('Votre projet, en quelques lignes').fill('Un site à reprendre.')
+  await page.getByRole('button', { name: 'Envoyer' }).click()
+  await expect(page.getByRole('status')).toContainText('Message envoyé')
+  expect(corps.message).toBe('Site : https://exemple.fr\n\nUn site à reprendre.')
+  await expect(page.locator('form.contact')).toHaveCount(0)
+})
+
 test('le menu navigue et le retour arrière marche', async ({ page }) => {
   await page.goto('/')
   await page.getByRole('navigation', { name: 'Sections' }).getByRole('link', { name: 'Contact' }).click()
