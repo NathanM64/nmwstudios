@@ -1,26 +1,42 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { preload } from 'react-dom'
 import { usePathname } from 'next/navigation'
 import { indexEcran } from '@/content/ecrans'
 
 // Une matière par écran, dans l'ordre du menu. Rien derrière les documents.
 const MATIERES = ['eau', 'soie', 'verre', 'ardoise', 'pluie'] as const
+type Matiere = (typeof MATIERES)[number]
 
 const srcSet = (m: string) => `/fonds/${m}-1200.webp 1200w, /fonds/${m}.webp 2048w`
 
+// Les matières déjà chargées dans ce navigateur : elles s'affichent nettes, sans fondu.
+const chargees = new Set<Matiere>()
+let prechargees = false
+function precharger() {
+  if (prechargees) return
+  prechargees = true
+  for (const m of MATIERES) {
+    const im = new Image()
+    im.onload = () => chargees.add(m)
+    im.sizes = '100vw'
+    im.srcset = srcSet(m)
+  }
+}
+
 export function Fond() {
   const i = indexEcran(usePathname())
-  const [pret, setPret] = useState(false)
-  // Les autres fonds sont demandés tout de suite : au changement d'écran, l'image est déjà là.
-  for (const m of MATIERES) {
-    if (m !== MATIERES[i]) preload(`/fonds/${m}.webp`, { as: 'image', imageSrcSet: srcSet(m), imageSizes: '100vw', fetchPriority: 'low' })
+  const m = i >= 0 ? MATIERES[i] : null
+  // « net » : l'image était déjà là ; « fondu » : elle vient d'arriver, elle apparaît en douceur.
+  const [etat, setEtat] = useState<'net' | 'fondu' | null>(() => (m && chargees.has(m) ? 'net' : null))
+  for (const autre of MATIERES) {
+    if (autre !== m) preload(`/fonds/${autre}.webp`, { as: 'image', imageSrcSet: srcSet(autre), imageSizes: '100vw', fetchPriority: 'low' })
   }
-  if (i < 0) return null
-  const m = MATIERES[i]
+  useEffect(precharger, [])
+  if (!m) return null
   return (
-    <div className="fond" data-matiere={m} data-pret={pret || undefined} aria-hidden="true">
+    <div className="fond" data-matiere={m} data-pret={etat ?? undefined} aria-hidden="true">
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         src={`/fonds/${m}.webp`}
@@ -28,9 +44,9 @@ export function Fond() {
         sizes="100vw"
         alt=""
         fetchPriority="high"
-        onLoad={() => setPret(true)}
-        ref={(el) => {
-          if (el?.complete && el.naturalWidth > 0) setPret(true)
+        onLoad={() => {
+          chargees.add(m)
+          setEtat((e) => e ?? 'fondu')
         }}
       />
     </div>
