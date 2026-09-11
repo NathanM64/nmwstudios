@@ -26,29 +26,58 @@ n'y a plus de long document pour diluer un plan raté.
 
 ## Composition des écrans
 
-Deux colonnes sur bureau, texte à gauche, la colonne de droite change de nature selon
-l'écran.
+Revue le 2026-09-12 après le diagnostic : un gabarit par écran, plus un seul répété.
 
-| Écran | Gauche | Droite |
-|---|---|---|
-| Accueil | accroche, sous-titre, bouton | les trois situations |
-| Ce que je fais | liste des cinq offres | détail de l'offre choisie, une URL par offre |
-| Comment je travaille | les cinq étapes | la marque blanche et les trois missions |
-| Qui je suis | nom, paragraphe, la question « vous êtes seul » | FAQ dépliable, une question à la fois |
-| Contact | titre, phrase | formulaire à trois champs |
+| Écran | Composition |
+|---|---|
+| Accueil | titre à l'échelle du cadre, « Vous décidez jusqu'où » en accent, ligne d'identité (nom, métier, ville, l'agence), bouton et email ; en bas du cadre, quatre situations qui sont des portes vers l'offre qui y répond |
+| Ce que je fais | titre en phrase et intro, puis cinq cartes visibles : la carte ouverte occupe deux rangées à gauche, les quatre fermées à droite ; une carte fermée devient la carte ouverte (transition partagée). La reprise ouvre par défaut. L'offre applications montre une capture de mon outil de suivi du temps |
+| Comment je travaille | la preuve en titre (l'agence, datée), la marque blanche au « vous », les engagements de discrétion ; les trois missions en panneaux à droite ; en bas, la frise des cinq étapes, chacune terminée par ce que le client a en main |
+| Qui je suis | nom, parcours daté, phrases de relation, ville et renvoi au SIRET ; FAQ dépliable à droite, un signe « + », une question ouverte à la fois |
+| Contact | titre, email en gros, faits d'identité ; formulaire à quatre champs (dont l'adresse du site, facultative), confirmation à la place des champs |
 
-Le texte de chaque écran tient dans le cadre à 1440 × 900 sans rien couper. Sous 720 px,
-les colonnes s'empilent et l'écran défile à l'intérieur de lui même.
+Tous les écrans s'ancrent sur la même ligne haute : le titre et le panneau ne bougent pas
+d'un écran à l'autre, et un panneau qui change de hauteur ne fait pas sauter le reste.
+Le bouton « Parler de votre projet » est dans la barre sur les cinq écrans, à la même place.
+
+Le texte de chaque écran tient dans le cadre à 1440 × 900 sans rien couper. Sous 720 px de
+haut ou de large, l'écran défile à l'intérieur de lui même et la molette lui revient.
+
+## Une matière et une lumière par écran
+
+Cinq photographies plein cadre, très sombres, générées le 2026-09-12 (`tools/gen.mjs`,
+sources et essais dans `docs/maquettes/2026-09-12-matiere/`, hors git), converties en WebP
+dans `public/fonds/` en 2048 et 1200 px. Pas de métaphore du métier : de la matière.
+
+| Écran | Matière |
+|---|---|
+| Accueil | l'eau noire, un seul reflet de lune à droite (choisie par Nathan) |
+| Ce que je fais | la soie anthracite |
+| Comment je travaille | le verre dépoli rétroéclairé |
+| Qui je suis | l'ardoise mouillée |
+| Contact | la vitre de pluie, lumières en bokeh |
+
+L'image est voilée à gauche pour le titre et en haut pour la barre. Les panneaux de verre
+posent une base sombre (`rgba(10,10,15,.42)`) sous la surface blanche, sinon un panneau sur
+une zone claire devient illisible. Une bande de cellules (situations, étapes) porte un seul
+flou pour tout le conteneur, jamais un flou par cellule : sinon la marche de luminosité entre
+deux cellules se lit comme un espace. Les cinq fonds sont préchargés dès le premier écran.
 
 ## Ce que le principe impose
 
-- **Une route par écran et par offre, générée statiquement** : `/`, `/ce-que-je-fais`,
-  `/ce-que-je-fais/<offre>`, `/comment-je-travaille`, `/qui-je-suis`, `/contact`, et
-  `/mentions-legales` en document classique. Le texte est dans le HTML de sa route, jamais
+- **Une route par écran et par offre, générée statiquement** : `/`, `/ce-que-je-fais`
+  (la reprise), `/ce-que-je-fais/<offre>`, `/comment-je-travaille`, `/qui-je-suis`,
+  `/contact`, et `/mentions-legales` en document classique. Le texte est dans le HTML de sa route, jamais
   injecté après coup. Voir §15 de la spec.
 - **Les transitions passent par l'API View Transitions**, via `<ViewTransition>` de React
   dans Next 16. Sans support navigateur, l'écran change sans animation et tout fonctionne.
   L'historique et le partage d'URL sont natifs, puisque chaque écran est une route.
+  **Toute la page est photographiée d'un bloc** (un seul nom, `page`) : un élément nommé
+  seul est photographié sans ce qu'il y a derrière lui, donc un panneau de verre y perd son
+  flou et un fond nommé passe au-dessus de l'en-tête. La page qui part s'éteint d'abord,
+  celle qui arrive s'allume ensuite : un fondu croisé laisse l'ancienne page transparaître.
+  Seules les cartes d'offre ont leur propre nom, pour se transformer l'une en l'autre, et
+  elles n'ont pas de flou de fond pour cette raison.
 - **Aucun écran ne déborde en silence.** Un contenu qui ne tient pas se raccourcit, ou son
   écran défile à l'intérieur de lui même. Jamais de débordement caché.
 - **Le cadre fixe ne vaut que pour ces cinq écrans.** Les mentions légales et, plus tard,
@@ -73,24 +102,29 @@ n'avaient jamais été choisies sur pièce ; Nathan a tranché en désignant le 
 
 Ce qui vient avec : la lumière d'ambiance (`--ambient`, quatre dégradés radiaux fixés
 derrière tout), le panneau de verre `.panel` avec son liseré-lentille, son ombre et son
-`backdrop-filter`, le bouton à lueur, les champs sur `surface`. Sur le site, la colonne de
-droite de chaque écran est un panneau ; la colonne de gauche reste du texte nu.
+`backdrop-filter`, le bouton à lueur, les champs sur `surface`. Sur le site, le panneau porte
+ce qui est structuré (cartes, missions, FAQ, formulaire) ; le titre reste du texte nu sur l'image.
 
 À côté du logo, la marque s'écrit **NMW Studios**, en Manrope 600.
 
 ## Typographie
 
 - **Manrope partout**, titres en 700 (h1) et 600 (h2, h3), interlettrage serré.
-- **IBM Plex Mono** pour les étiquettes en capitales (`.eyebrow`), comme le dashboard.
+- Les étiquettes (`.eyebrow`) sont en Manrope 600, petites, sans capitales : en mono
+  capitales elles se lisaient comme un libellé de champ, pas comme un titre de bloc. IBM
+  Plex Mono ne reste que pour les numéros (étapes, compteur d'écran).
 - Les classes next/font vont sur `<html>`, jamais sur `<body>`, sinon les variables sont
   vides en silence.
 
 ## Mouvement
 
-- **La transition entre écrans et le changement de détail sont les seuls moments animés.**
-  Rien d'autre ne bouge de soi même.
+- **La transition entre écrans et l'ouverture d'une carte sont les seuls moments animés.**
+  Rien d'autre ne bouge de soi même. Le fond apparaît en fondu au premier chargement
+  seulement ; une image déjà en cache s'affiche nette.
 - **`transform` et `opacity` uniquement.** Jamais `top`, `left` ni `width` animés.
 - Sous `prefers-reduced-motion`, les transitions deviennent des changements immédiats et le
   défilement amorti est désactivé.
 - Sur mobile, la hauteur se mesure en `svh`, jamais en `vh`, à cause de la barre du
-  navigateur.
+  navigateur. L'en-tête tient sur une ligne avec un bouton Menu, le contenu défile entre
+  l'en-tête et le pied du cadre (compteur, écran suivant, mentions légales) avec un fondu
+  qui dit que ça continue.
