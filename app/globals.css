@@ -36,7 +36,7 @@
     inset 0 1px 0 rgba(255, 255, 255, 0.09), inset 4px 4px 14px -10px rgba(255, 255, 255, 0.75),
     inset 0 -4px 12px -10px rgba(255, 255, 255, 0.45);
   /* Jamais doublé d'un -webkit- écrit à la main : Lightning CSS ne garderait que le dernier. */
-  --glass: blur(28px) saturate(180%) brightness(1.06);
+  --glass: blur(28px) saturate(140%);
 
   /* Quatre sources réparties sur toute la hauteur. */
   --ambient: radial-gradient(900px 520px at 12% -10%, rgba(122, 162, 255, 0.22), transparent 60%),
@@ -69,12 +69,30 @@ a { color: var(--color-accent); text-underline-offset: 0.2em; }
 /* La lumière d'ambiance, derrière tout. */
 .ambiance { position: fixed; inset: 0; z-index: 0; pointer-events: none; background: var(--ambient); }
 
+/* L'image plein cadre : une matière et une lumière par écran, voilée à gauche pour le titre. */
+.fond { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+.fond img {
+  display: block; width: 100%; height: 100%; object-fit: cover;
+  object-position: var(--fond-position, 50% 50%); opacity: var(--fond-opacite, 0.6);
+}
+.fond::after {
+  content: ''; position: absolute; inset: 0;
+  background:
+    linear-gradient(90deg, rgba(10, 10, 15, 0.88) 0%, rgba(10, 10, 15, 0.45) 45%, rgba(10, 10, 15, 0.05) 75%),
+    linear-gradient(180deg, rgba(10, 10, 15, 0.75) 0%, rgba(10, 10, 15, 0) 22%, rgba(10, 10, 15, 0) 70%, rgba(10, 10, 15, 0.7) 100%);
+}
+.fond[data-matiere='eau'] { --fond-opacite: 0.9; --fond-position: 80% 50%; }
+.fond[data-matiere='soie'] { --fond-opacite: 0.55; --fond-position: 70% 50%; }
+.fond[data-matiere='verre'] { --fond-opacite: 0.6; --fond-position: 75% 50%; }
+.fond[data-matiere='ardoise'] { --fond-opacite: 0.45; --fond-position: 70% 50%; }
+.fond[data-matiere='pluie'] { --fond-opacite: 0.7; --fond-position: 65% 50%; }
+
 /* Le chrome fixe : une barre de verre en haut, comme celle du dashboard. */
 .haut {
   position: fixed; top: 0; left: 0; right: 0; z-index: 10; min-height: 4.75rem;
   display: flex; justify-content: space-between; align-items: center; gap: 1rem 2rem;
   padding: 0 var(--gutter);
-  background-color: rgba(255, 255, 255, 0.03);
+  background-color: rgba(10, 10, 15, 0.35);
   border-bottom: 1px solid var(--color-border);
   backdrop-filter: var(--glass);
 }
@@ -114,9 +132,10 @@ a { color: var(--color-accent); text-underline-offset: 0.2em; }
 }
 .colonnes.accueil { align-items: center; grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); }
 
-/* Le panneau de verre du dashboard, avec son liseré. */
+/* Le panneau de verre du dashboard, avec son liseré, sur une base sombre : l'image derrière reste lisible à travers. */
 .panel {
-  background-color: var(--color-surface);
+  background-color: rgba(10, 10, 15, 0.42);
+  background-image: linear-gradient(var(--color-surface), var(--color-surface));
   border: 1px solid var(--panel-edge-dim);
   border-top-color: var(--panel-edge-lit);
   border-left-color: var(--panel-edge-side);
@@ -222,7 +241,11 @@ ul, ol { padding: 0; margin: 0; list-style: none; }
 ::view-transition-new(ecran) { animation: 380ms cubic-bezier(0.22, 1, 0.36, 1) 120ms both ecran-entre; }
 ::view-transition-old(detail) { animation: 140ms ease-out both ecran-sort; }
 ::view-transition-new(detail) { animation: 240ms cubic-bezier(0.22, 1, 0.36, 1) 100ms both ecran-entre; }
-::view-transition-group(ecran), ::view-transition-group(detail) { animation-duration: 0s; }
+::view-transition-old(fond) { animation: 500ms ease-out both fond-sort; }
+::view-transition-new(fond) { animation: 700ms ease-out both fond-entre; }
+::view-transition-group(ecran), ::view-transition-group(detail), ::view-transition-group(fond) { animation-duration: 0s; }
+@keyframes fond-sort { to { opacity: 0; } }
+@keyframes fond-entre { from { opacity: 0; } }
 @keyframes ecran-sort { to { opacity: 0; transform: translateY(-12px); } }
 @keyframes ecran-entre { from { opacity: 0; transform: translateY(12px); } }
 @media (prefers-reduced-motion: reduce) {
@@ -246,5 +269,7 @@ ul, ol { padding: 0; margin: 0; list-style: none; }
   h1 br { display: none; }
   .etapes li { grid-template-columns: 1fr; }
   .document { padding: 1.5rem var(--gutter) 2rem; }
+  .fond img { --fond-position: 72% 50%; }
+  .fond::after { background: linear-gradient(180deg, rgba(10, 10, 15, 0.55) 0%, rgba(10, 10, 15, 0.35) 30%, rgba(10, 10, 15, 0.75) 75%, rgba(10, 10, 15, 0.95) 100%); }
   .legal { position: static; display: block; padding: 0.7rem var(--gutter); text-align: right; z-index: 1; }
 }

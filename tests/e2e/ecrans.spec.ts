@@ -20,6 +20,16 @@ test('chaque route porte son texte dans le HTML servi', async ({ request }) => {
   }
 })
 
+test('chaque écran porte son fond dans le HTML et le fichier est servi', async ({ request }) => {
+  const attendus: Array<[string, string]> = [['/', 'eau'], ['/ce-que-je-fais/reprise/', 'soie'], ['/comment-je-travaille/', 'verre'], ['/qui-je-suis/', 'ardoise'], ['/contact/', 'pluie']]
+  for (const [route, matiere] of attendus) {
+    const html = await (await request.get(route)).text()
+    expect(html, route).toContain(`data-matiere="${matiere}"`)
+    expect((await request.get(`/fonds/${matiere}.webp`)).status(), matiere).toBe(200)
+  }
+  expect(await (await request.get('/mentions-legales/')).text()).not.toContain('class="fond"')
+})
+
 test('rien ne déborde du cadre à 1440 × 900', async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 })
   for (const [route] of ROUTES) {

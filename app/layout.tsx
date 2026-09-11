@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { IBM_Plex_Mono, Manrope } from 'next/font/google'
 import { Menu } from '@/components/Menu'
 import { Clavier } from '@/components/Clavier'
+import { Fond } from '@/components/Fond'
 import './globals.css'
 
 // Les classes next/font vont sur <html> : sur <body>, les variables restent vides en silence.
@@ -32,6 +33,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="fr" className={`${manrope.variable} ${plexMono.variable}`}>
       <body>
         <div className="ambiance" aria-hidden="true" />
+        {/* Le fond a sa propre transition : il fond d'une matière à l'autre sans bouger. */}
+        <ViewTransition name="fond" update={{ default: 'fond', detail: 'none' }}>
+          <Fond />
+        </ViewTransition>
         <header className="haut">
           <Link className="marque" href="/">
             {/* eslint-disable-next-line @next/next/no-img-element */}

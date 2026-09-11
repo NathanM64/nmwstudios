@@ -66,9 +66,10 @@ const b64 = (p) => (existsSync(p) ? readFileSync(p).toString("base64") : die(`fi
 // Le quota image est de 2 requêtes par minute et par modèle : on attend au lieu d'abandonner.
 async function call(url, body, tries = 5) {
   for (let i = 1; ; i++) {
+    const auth = url.includes("generativelanguage") ? { "x-goog-api-key": process.env.GEMINI_API_KEY } : { authorization: `Bearer ${token()}` };
     const r = await fetch(url, {
       method: "POST",
-      headers: { authorization: `Bearer ${token()}`, "content-type": "application/json" },
+      headers: { ...auth, "content-type": "application/json" },
       body: JSON.stringify(body),
     });
     const j = await r.json().catch(() => ({}));
@@ -93,12 +94,15 @@ async function genText(a) {
 async function genImage(a) {
   if (!a.prompt) die("prompt manquant (-p)");
   if (!a.out) die("sortie manquante (-o)");
-  const model = a.model || process.env.VERTEX_IMAGE_MODEL || "gemini-3-pro-image-preview";
+  const model = a.model || process.env.VERTEX_IMAGE_MODEL || "gemini-3-pro-image";
 
   const parts = [{ text: a.prompt }];
   for (const p of a.ref) parts.push({ inlineData: { mimeType: mimeOf(p), data: b64(p) } });
 
-  const j = await call(endpoint(model, a.location), {
+  // Les modèles gemini-3 image ne sont pas ouverts sur ce projet Vertex : ils passent par AI Studio.
+  const studio = /^gemini-3/.test(model) && process.env.GEMINI_API_KEY;
+  const url = studio ? `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent` : endpoint(model, a.location);
+  const j = await call(url, {
     contents: [{ role: "user", parts }],
     generationConfig: {
       responseModalities: ["IMAGE"],
