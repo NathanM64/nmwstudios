@@ -1,0 +1,53 @@
+'use client'
+
+import { useEffect } from 'react'
+import { usePathname, useRouter } from 'next/navigation'
+import { ECRANS, indexEcran } from '@/content/ecrans'
+
+// Le menu est le moyen de navigation ; flèches et molette passent à l'écran voisin.
+// Le seuil et le délai évitent qu'une inertie de pavé tactile saute deux écrans.
+const SEUIL = 120
+const DELAI = 700
+let dernierSaut = 0
+
+export function Clavier() {
+  const router = useRouter()
+  const pathname = usePathname()
+
+  useEffect(() => {
+    const i = indexEcran(pathname)
+    if (i < 0) return
+    const aller = (j: number) => {
+      const cible = ECRANS[j]
+      if (!cible || performance.now() - dernierSaut < DELAI) return
+      dernierSaut = performance.now()
+      router.push(cible.href)
+    }
+
+    let cumul = 0
+    let dernierPas = 0
+    const molette = (ev: WheelEvent) => {
+      if ((ev.target as HTMLElement).closest('.document, textarea')) return
+      const maintenant = performance.now()
+      if (maintenant - dernierPas > 200) cumul = 0
+      dernierPas = maintenant
+      cumul += ev.deltaY
+      if (Math.abs(cumul) < SEUIL) return
+      cumul = 0
+      aller(i + Math.sign(ev.deltaY))
+    }
+    const touche = (ev: KeyboardEvent) => {
+      if ((ev.target as HTMLElement).closest('input, textarea, select')) return
+      if (ev.key === 'ArrowRight' || ev.key === 'PageDown') aller(i + 1)
+      if (ev.key === 'ArrowLeft' || ev.key === 'PageUp') aller(i - 1)
+    }
+    addEventListener('wheel', molette, { passive: true })
+    addEventListener('keydown', touche)
+    return () => {
+      removeEventListener('wheel', molette)
+      removeEventListener('keydown', touche)
+    }
+  }, [pathname, router])
+
+  return null
+}
