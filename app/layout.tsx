@@ -32,29 +32,28 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="fr" className={`${manrope.variable} ${plexMono.variable}`}>
       <body>
-        <div className="ambiance" aria-hidden="true" />
-        {/* Le fond a sa propre transition : il fond d'une matière à l'autre sans bouger. */}
-        <ViewTransition name="fond" update={{ default: 'fond', detail: 'none' }}>
-          <Fond />
+        {/* Toute la page est photographiée d'un bloc : le verre garde ce qu'il floute, l'en-tête ne bouge pas.
+            Quand seul un détail change (type « detail »), la page ne fond pas. */}
+        <ViewTransition name="page" update={{ default: 'page', detail: 'none' }}>
+          <div className="page">
+            <div className="ambiance" aria-hidden="true" />
+            <Fond />
+            <header className="haut">
+              <Link className="marque" href="/">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src="/marque.svg" alt="" width={24} height={24} />
+                NMW Studios
+              </Link>
+              <Menu />
+            </header>
+            <main className="cadre">
+              <div className="ecran-boite">{children}</div>
+            </main>
+            <Link className="legal" href="/mentions-legales">
+              Mentions légales
+            </Link>
+          </div>
         </ViewTransition>
-        <header className="haut">
-          <Link className="marque" href="/">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/marque.svg" alt="" width={24} height={24} />
-            NMW Studios
-          </Link>
-          <Menu />
-        </header>
-        <main className="cadre">
-          {/* Le nom reste le même d'une route à l'autre : React fond l'ancien écran dans le nouveau.
-              Quand seul un détail change (type « detail »), l'écran ne bouge pas. */}
-          <ViewTransition name="ecran" update={{ default: 'ecran', detail: 'none' }}>
-            <div className="ecran-boite">{children}</div>
-          </ViewTransition>
-        </main>
-        <Link className="legal" href="/mentions-legales">
-          Mentions légales
-        </Link>
         <Clavier />
       </body>
     </html>

@@ -7,7 +7,7 @@ const ROUTES: Array<[string, string]> = [
   ['/ce-que-je-fais/', 'Le code source accessible en entier'],
   ['/ce-que-je-fais/sites/', 'démarre à 1 500 €'],
   ['/ce-que-je-fais/hebergement/', 'une sauvegarde chaque nuit'],
-  ['/comment-je-travaille/', 'Une agence parisienne m’a confié'],
+  ['/comment-je-travaille/', 'une agence parisienne me confie'],
   ['/qui-je-suis/', 'Vous êtes seul'],
   ['/contact/', 'Parlons de votre projet.'],
   ['/mentions-legales/', 'Hetzner Online GmbH'],

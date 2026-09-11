@@ -52,6 +52,7 @@
 }
 
 html, body { height: 100%; margin: 0; overflow: hidden; }
+.page { position: fixed; inset: 0; }
 html { background-color: var(--color-canvas); color-scheme: dark; }
 body {
   background-color: var(--color-canvas);
@@ -184,9 +185,10 @@ ul, ol { padding: 0; margin: 0; list-style: none; }
 .ecran.accueil .pied { position: absolute; left: var(--gutter); right: var(--gutter); bottom: 3.4rem; }
 .pied .eyebrow { margin: 0 0 0.6rem; }
 .situations {
-  display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px;
-  background: var(--color-border); border: 1px solid var(--color-border); border-radius: var(--radius-lg); overflow: hidden;
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  border: 1px solid var(--color-border); border-radius: var(--radius-lg); overflow: hidden;
 }
+.situations li + li { border-left: 1px solid var(--color-border); }
 .situations a {
   display: flex; flex-direction: column; gap: 0.45rem; height: 100%; padding: 1rem 1.2rem;
   background: rgba(10, 10, 15, 0.55); backdrop-filter: var(--glass);
@@ -205,6 +207,7 @@ ul, ol { padding: 0; margin: 0; list-style: none; }
 .cartes { display: grid; grid-template-columns: 1.15fr 1fr 1fr; grid-template-rows: 1fr 1fr; gap: 0.9rem; }
 .carte {
   display: flex; flex-direction: column; padding: 1.2rem 1.3rem; color: inherit; text-decoration: none;
+  backdrop-filter: none; background-color: rgba(12, 14, 22, 0.7);
   transition: transform 0.25s, background-color 0.25s;
 }
 a.carte:hover { transform: translateY(-3px); background-color: rgba(255, 255, 255, 0.08); }
@@ -214,24 +217,33 @@ a.carte:hover { transform: translateY(-3px); background-color: rgba(255, 255, 25
 .carte .lien { margin-top: auto; padding-top: 0.4rem; color: var(--color-accent); font-weight: 600; font-size: 0.9rem; }
 .ecran .carte .lien a { text-decoration: none; }
 .ecran .carte .lien a:hover { text-decoration: underline; }
-.carte.ouverte { grid-row: 1 / 3; border-top-color: var(--color-accent); background-color: rgba(122, 162, 255, 0.08); }
+.carte.ouverte { grid-row: 1 / 3; border-top-color: var(--color-accent); background-color: rgba(28, 34, 58, 0.78); }
 .carte.ouverte h3 { font-size: clamp(1.25rem, 1.7vw, 1.5rem); }
 .carte.ouverte p { color: var(--color-foreground); font-size: 0.95rem; }
 .carte.ouverte .prix { font-size: 1.15rem; }
 .carte ul { margin: 0.2rem 0 0.9rem; padding-left: 1rem; list-style: disc; color: var(--color-muted-foreground); font-size: 0.92rem; }
 .carte li { margin-bottom: 0.25rem; }
 
-/* Comment je travaille */
-.etapes { counter-reset: etape; }
-.etapes li { display: grid; grid-template-columns: 11rem 1fr; gap: 0.3rem 1.2rem; padding: 0.65rem 0; border-top: 1px solid var(--color-border); }
-.etapes li:last-child { border-bottom: 1px solid var(--color-border); }
-.etapes h3 { font-size: 1.02rem; display: flex; gap: 0.7rem; align-items: baseline; }
-.etapes h3::before { counter-increment: etape; content: counter(etape, decimal-leading-zero); font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.1em; color: var(--color-faint); font-weight: 500; }
-.etapes p { margin: 0; font-size: 0.93rem; color: var(--color-muted-foreground); }
-.confiance .lead { margin-bottom: 1.2rem; }
-.confiance > p:not(.lead) { color: var(--color-muted-foreground); }
-.missions li { padding: 0.35rem 0 0.35rem 1rem; border-left: 2px solid var(--color-border-strong); margin-bottom: 0.5rem; max-width: 36rem; }
-.missions li:last-child { margin-bottom: 0; }
+/* Comment je travaille : la preuve en titre, les missions à droite, la frise des étapes en bas. */
+.ecran.methode .inner { padding-top: clamp(5.5rem, 12svh, 7.5rem); padding-bottom: 3.5rem; }
+.colonnes.methode { grid-template-columns: 1fr; gap: 1.5rem; margin-block: 0; max-width: none; }
+.preuve { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 3rem; align-items: start; }
+.preuve h2 { max-width: 24ch; margin-bottom: 1rem; }
+.preuve .lead { margin-bottom: 0.8rem; }
+.missions { display: grid; gap: 0.7rem; }
+.missions .panel { padding: 0.9rem 1.1rem; font-size: 0.95rem; line-height: 1.4; color: var(--color-foreground); }
+.missions .panel span { display: block; color: var(--color-muted-foreground); font-size: 0.85rem; margin-top: 0.2rem; }
+.etapes {
+  counter-reset: etape; margin-top: 0.6rem;
+  display: grid; grid-template-columns: repeat(5, 1fr);
+  border: 1px solid var(--color-border); border-radius: var(--radius-lg); overflow: hidden;
+}
+.etapes li + li { border-left: 1px solid var(--color-border); }
+.etapes li { padding: 1rem 1.2rem; background: rgba(10, 10, 15, 0.5); backdrop-filter: var(--glass); }
+.etapes h3 { font-size: 1rem; margin-bottom: 0.35rem; display: flex; gap: 0.6rem; align-items: baseline; }
+.etapes h3::before { counter-increment: etape; content: counter(etape, decimal-leading-zero); font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.08em; color: var(--color-accent); font-weight: 500; }
+.etapes p { margin: 0; font-size: 0.88rem; color: var(--color-muted-foreground); max-width: none; }
+.etapes p strong { color: var(--color-foreground); font-weight: 500; }
 
 /* Qui je suis : la FAQ dépliable, une question à la fois */
 .qa { border-top: 1px solid var(--color-border); }
@@ -266,18 +278,14 @@ a.carte:hover { transform: translateY(-3px); background-color: rgba(255, 255, 25
 .document h2 { font-size: 1.3rem; margin: 1.8rem 0 0.6rem; }
 .document p { color: var(--color-muted-foreground); }
 
-/* Transitions : l'écran qui part monte et s'efface, celui qui arrive monte et apparaît. */
-::view-transition-old(ecran) { animation: 220ms cubic-bezier(0.5, 0, 0.75, 0) both ecran-sort; }
-::view-transition-new(ecran) { animation: 380ms cubic-bezier(0.22, 1, 0.36, 1) 120ms both ecran-entre; }
+/* Transitions : la page qui part s'efface, celle qui arrive apparaît ; une carte fermée devient la carte ouverte. */
+::view-transition-old(page) { animation: 320ms ease-out both page-sort; }
+::view-transition-new(page) { animation: 320ms ease-out both page-entre; }
+::view-transition-group(page) { animation-duration: 0s; }
 ::view-transition-group(.offre) { animation-duration: 340ms; animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1); }
 ::view-transition-old(.offre), ::view-transition-new(.offre) { animation-duration: 340ms; height: 100%; object-fit: cover; object-position: top; }
-::view-transition-old(fond) { animation: 500ms ease-out both fond-sort; }
-::view-transition-new(fond) { animation: 700ms ease-out both fond-entre; }
-::view-transition-group(ecran), ::view-transition-group(fond) { animation-duration: 0s; }
-@keyframes fond-sort { to { opacity: 0; } }
-@keyframes fond-entre { from { opacity: 0; } }
-@keyframes ecran-sort { to { opacity: 0; transform: translateY(-12px); } }
-@keyframes ecran-entre { from { opacity: 0; transform: translateY(12px); } }
+@keyframes page-sort { to { opacity: 0; } }
+@keyframes page-entre { from { opacity: 0; } }
 @media (prefers-reduced-motion: reduce) {
   ::view-transition-old(*), ::view-transition-new(*), ::view-transition-group(*) {
     animation-duration: 0s !important; animation-delay: 0s !important;
@@ -295,7 +303,7 @@ a.carte:hover { transform: translateY(-3px); background-color: rgba(255, 255, 25
    superpose au contenu, quelle que soit la hauteur du menu. Les colonnes s'empilent et
    l'écran défile en lui même, entre les deux. */
 @media (max-width: 720px) {
-  body { display: flex; flex-direction: column; height: 100svh; }
+  .page { position: relative; inset: auto; display: flex; flex-direction: column; height: 100svh; }
   .haut { position: static; min-height: 0; flex-direction: column; align-items: flex-start; gap: 0.8rem; padding: 1rem var(--gutter) 0.9rem; }
   .menu { gap: 0.2rem 1rem; }
   .menu a { font-size: 0.92rem; }
@@ -305,13 +313,15 @@ a.carte:hover { transform: translateY(-3px); background-color: rgba(255, 255, 25
   .ecran.accueil .inner { padding-bottom: 2rem; }
   .ecran.accueil .pied { position: static; margin-top: 1.2rem; }
   .situations { grid-template-columns: 1fr; }
+  .situations li + li, .etapes li + li { border-left: 0; border-top: 1px solid var(--color-border); }
   .entete { grid-template-columns: 1fr; gap: 1rem; }
   .cartes { grid-template-columns: 1fr; grid-template-rows: none; }
+  .preuve { grid-template-columns: 1fr; gap: 1.2rem; }
+  .etapes { grid-template-columns: 1fr; }
   .carte.ouverte { grid-row: auto; }
   .menu .appel { display: none; }
   /* Les retours forcés du titre sont composés pour le bureau. */
   h1 br { display: none; }
-  .etapes li { grid-template-columns: 1fr; }
   .document { padding: 1.5rem var(--gutter) 2rem; }
   .fond img { --fond-position: 72% 50%; }
   .fond::after { background: linear-gradient(180deg, rgba(10, 10, 15, 0.55) 0%, rgba(10, 10, 15, 0.35) 30%, rgba(10, 10, 15, 0.75) 75%, rgba(10, 10, 15, 0.95) 100%); }
