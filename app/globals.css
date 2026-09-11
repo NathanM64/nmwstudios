@@ -141,7 +141,7 @@ ul, ol { padding: 0; margin: 0; list-style: none; }
 .liste a[aria-current='page'] { color: var(--color-paper); border-left-color: var(--color-amber); }
 .detail h3 { font-size: clamp(1.35rem, 2vw, 1.8rem); margin-bottom: 1rem; }
 .detail p { max-width: 32rem; }
-.detail a { text-decoration: underline; }
+.ecran p a, .document a { text-decoration: underline; }
 
 /* Comment je travaille */
 .etapes { counter-reset: etape; }

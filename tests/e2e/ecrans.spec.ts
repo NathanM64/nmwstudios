@@ -9,6 +9,7 @@ const ROUTES: Array<[string, string]> = [
   ['/ce-que-je-fais/hebergement/', 'sauvegardes quotidiennes'],
   ['/comment-je-travaille/', 'Une agence parisienne m’a confié'],
   ['/qui-je-suis/', 'Je ne reprends pas les sites montés sur un constructeur de pages'],
+  ['/contact/', 'Parlons de votre projet.'],
 ]
 
 test('chaque route porte son texte dans le HTML servi', async ({ request }) => {
