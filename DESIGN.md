@@ -54,24 +54,34 @@ les colonnes s'empilent et l'écran défile à l'intérieur de lui même.
 - **Le cadre fixe ne vaut que pour ces cinq écrans.** Les mentions légales et, plus tard,
   les pages prestation restent des documents classiques qui défilent.
 
-## Jetons
+## Thème : « Verre », repris du dashboard
 
-| Jeton | Valeur | Origine |
+Décidé le 2026-09-11 : le site porte le thème du dashboard (`nmw-studios-dashboard`,
+`app/globals.css`), tel quel. Les couleurs posées le 09/09 (fond bleuté, blanc os, ambre)
+n'avaient jamais été choisies sur pièce ; Nathan a tranché en désignant le dashboard.
+
+| Jeton | Valeur | Rôle |
 |---|---|---|
-| `--bg` | `#0A0C0F` | fond de page |
-| `--ink` | `#14161C` | noir du logo |
-| `--paper` | `#EDE9E0` | blanc os du logo |
-| `--graphite` | `#2A2E35` | séparateurs, surfaces secondaires |
-| `--amber` | `#F0A93B` | accent d'action, **provisoire** |
+| `--color-canvas` | `#0a0a0f` | la pièce, fond de page |
+| `--color-surface` | `rgba(255,255,255,.045)` | le panneau de verre |
+| `--color-foreground` | `#f4f4f7` | texte |
+| `--color-muted-foreground` | `#a3a3ae` | texte secondaire |
+| `--color-faint` | `#75757f` | étiquettes, lien légal |
+| `--color-accent` | `#7aa2ff` | l'action : bouton, lien, filet du menu |
+| `--color-accent-2` | `#a878ff` | seulement dans la lumière d'ambiance |
+| `--color-border` | `rgba(255,255,255,.09)` | filets |
 
-Les deux premières couleurs viennent du logo et ne bougeront pas. **L'accent est provisoire** :
-il avait été dérivé du personnage supprimé et devra être rechoisi avec le monde visuel de la
-nouvelle direction. Un seul accent, réservé à ce qui appelle une action.
+Ce qui vient avec : la lumière d'ambiance (`--ambient`, quatre dégradés radiaux fixés
+derrière tout), le panneau de verre `.panel` avec son liseré-lentille, son ombre et son
+`backdrop-filter`, le bouton à lueur, les champs sur `surface`. Sur le site, la colonne de
+droite de chaque écran est un panneau ; la colonne de gauche reste du texte nu.
+
+À côté du logo, la marque s'écrit **NMW Studios**, en Manrope 600.
 
 ## Typographie
 
-- **Titres : Space Grotesk.** Technique et caractérisée, tient les grandes tailles.
-- **Corps : Inter.** Neutre, très lisible en français.
+- **Manrope partout**, titres en 700 (h1) et 600 (h2, h3), interlettrage serré.
+- **IBM Plex Mono** pour les étiquettes en capitales (`.eyebrow`), comme le dashboard.
 - Les classes next/font vont sur `<html>`, jamais sur `<body>`, sinon les variables sont
   vides en silence.
 

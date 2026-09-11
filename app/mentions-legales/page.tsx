@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import { LEGAL } from '@/lib/legal'
 
-export const metadata: Metadata = { title: 'Mentions légales, nmwstudios', robots: { index: false } }
+export const metadata: Metadata = { title: 'Mentions légales, NMW Studios', robots: { index: false } }
 
 export default function Page() {
   return (

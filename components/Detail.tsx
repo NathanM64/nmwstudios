@@ -3,7 +3,7 @@ import type { Offre } from '@/content/offres'
 
 export function Detail({ offre }: { offre: Offre }) {
   return (
-    <div className="detail">
+    <div className="detail panel">
       <h3>{offre.titre}</h3>
       {offre.paragraphes.map((p) => (
         <p key={p}>{p}</p>

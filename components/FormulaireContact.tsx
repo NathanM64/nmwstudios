@@ -37,17 +37,17 @@ export function FormulaireContact() {
   }
 
   return (
-    <form className="contact" onSubmit={envoyer}>
+    <form className="contact panel" onSubmit={envoyer}>
       <label>
-        Votre nom
+        <span className="eyebrow">Votre nom</span>
         <input type="text" name="nom" autoComplete="name" required maxLength={120} />
       </label>
       <label>
-        Votre email
+        <span className="eyebrow">Votre email</span>
         <input type="email" name="email" autoComplete="email" required maxLength={200} />
       </label>
       <label>
-        Votre projet, en quelques lignes
+        <span className="eyebrow">Votre projet, en quelques lignes</span>
         <textarea name="message" rows={4} required maxLength={5000} />
       </label>
       {/* Le piège à robots : un humain ne le voit pas, un robot le remplit. */}

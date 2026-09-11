@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import { Ecran } from '@/components/Ecran'
 
 export const metadata: Metadata = {
-  title: 'Qui je suis, nmwstudios',
+  title: 'Qui je suis, NMW Studios',
   description: 'Nathan Marimbordes, développeur web en micro-entreprise. Seul, et je le dis.',
 }
 
@@ -48,7 +48,7 @@ export default function Page() {
         </p>
       </div>
       {/* name="faq" : le navigateur n'en garde qu'une ouverte, sans JavaScript. */}
-      <div className="faq">
+      <div className="faq panel">
         {FAQ.map(([question, reponse], i) => (
           <details key={question} className="qa" name="faq" open={i === 0}>
             <summary>{question}</summary>

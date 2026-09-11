@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import { Ecran } from '@/components/Ecran'
 
 export const metadata: Metadata = {
-  title: 'Comment je travaille, nmwstudios',
+  title: 'Comment je travaille, NMW Studios',
   description:
     'Cadrage, conception, développement, mise en production, suivi. En marque blanche pour une agence parisienne.',
 }
@@ -35,7 +35,7 @@ export default function Page() {
           </li>
         </ol>
       </div>
-      <div>
+      <div className="confiance panel">
         <p className="lead">
           Une agence parisienne m’a confié l’ensemble de son parc applicatif et ses nouveaux projets. Je
           travaille pour elle en marque blanche : ses maquettes, ses délais, son nom devant le client.

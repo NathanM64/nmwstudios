@@ -1,40 +1,42 @@
 import type { Metadata } from 'next'
 import { ViewTransition } from 'react'
 import Link from 'next/link'
-import { Inter, Space_Grotesk } from 'next/font/google'
+import { IBM_Plex_Mono, Manrope } from 'next/font/google'
 import { Menu } from '@/components/Menu'
 import { Clavier } from '@/components/Clavier'
 import './globals.css'
 
 // Les classes next/font vont sur <html> : sur <body>, les variables restent vides en silence.
-const inter = Inter({
+const manrope = Manrope({
   subsets: ['latin'],
-  variable: '--font-inter',
+  variable: '--font-manrope',
   display: 'swap',
 })
 
-const spaceGrotesk = Space_Grotesk({
+const plexMono = IBM_Plex_Mono({
   subsets: ['latin'],
-  variable: '--font-space-grotesk',
+  weight: ['500'],
+  variable: '--font-plex-mono',
   display: 'swap',
 })
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://nmwstudios.com'),
-  title: 'nmwstudios, sites et applications web',
+  title: 'NMW Studios, sites et applications web',
   description:
     "Je conçois, je développe, je reprends et j'accompagne vos sites et applications web. Le code est à vous, l'hébergement est transférable.",
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="fr" className={`${inter.variable} ${spaceGrotesk.variable}`}>
+    <html lang="fr" className={`${manrope.variable} ${plexMono.variable}`}>
       <body>
+        <div className="ambiance" aria-hidden="true" />
         <header className="haut">
           <Link className="marque" href="/">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/marque.svg" alt="" width={22} height={22} />
-            nmwstudios
+            <img src="/marque.svg" alt="" width={24} height={24} />
+            NMW Studios
           </Link>
           <Menu />
         </header>

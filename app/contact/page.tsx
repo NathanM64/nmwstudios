@@ -3,7 +3,7 @@ import { Ecran } from '@/components/Ecran'
 import { FormulaireContact } from '@/components/FormulaireContact'
 
 export const metadata: Metadata = {
-  title: 'Contact, nmwstudios',
+  title: 'Contact, NMW Studios',
   description: 'Parlons de votre projet. Trois champs suffisent, c’est moi qui vous réponds.',
 }
 

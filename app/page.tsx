@@ -22,8 +22,8 @@ export default function Accueil() {
           </Link>
         </p>
       </div>
-      <div className="situations-cote">
-        <p className="intro">Trois situations que je connais bien.</p>
+      <div className="situations-cote panel">
+        <p className="intro eyebrow">Trois situations que je connais bien</p>
         <ul className="situations">
           <li>Votre site a cinq ans et plus personne ne veut y toucher.</li>
           <li>Votre équipe recopie des données à la main tous les jours.</li>
