@@ -74,8 +74,9 @@ a { color: var(--color-accent); text-underline-offset: 0.2em; }
 .fond { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
 .fond img {
   display: block; width: 100%; height: 100%; object-fit: cover;
-  object-position: var(--fond-position, 50% 50%); opacity: var(--fond-opacite, 0.6);
+  object-position: var(--fond-position, 50% 50%); opacity: 0; transition: opacity 0.6s ease-out;
 }
+.fond[data-pret] img { opacity: var(--fond-opacite, 0.6); }
 .fond::after {
   content: ''; position: absolute; inset: 0;
   background:
@@ -120,11 +121,18 @@ a { color: var(--color-accent); text-underline-offset: 0.2em; }
 }
 .menu .appel::after { display: none; }
 .menu .appel:hover { color: var(--color-accent-foreground); box-shadow: var(--btn-glow-hover); filter: brightness(1.15); }
-.legal {
-  position: fixed; right: var(--gutter); bottom: 1.4rem; z-index: 10;
-  font-size: 0.8rem; color: var(--color-faint); text-decoration: none;
+.pied-cadre {
+  position: fixed; left: var(--gutter); right: var(--gutter); bottom: 1.2rem; z-index: 10;
+  display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; font-size: 0.8rem;
 }
+.legal { color: var(--color-faint); text-decoration: none; }
 .legal:hover { color: var(--color-foreground); }
+.suivant-lien { margin: 0; display: flex; gap: 0.8rem; align-items: baseline; color: var(--color-faint); }
+.suivant-lien .compteur { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.08em; }
+.suivant-lien a { color: var(--color-muted-foreground); text-decoration: none; font-weight: 600; transition: color 0.2s; }
+.suivant-lien a span { color: var(--color-faint); font-weight: 500; }
+.suivant-lien a:hover { color: var(--color-foreground); }
+.menu-bouton { display: none; }
 
 /* Le cadre fixe : la page fait la hauteur de l'écran et ne défile jamais. */
 .cadre { position: fixed; inset: 0; z-index: 1; height: 100svh; overflow: hidden; }
@@ -312,31 +320,47 @@ a.carte:hover { transform: translateY(-3px); background-color: rgba(255, 255, 25
   .ecran.accueil .pied { position: static; margin-top: 1.4rem; }
 }
 
-/* Sous 720 px, l'en-tête et le lien légal reprennent leur place dans le flux : rien ne se
-   superpose au contenu, quelle que soit la hauteur du menu. Les colonnes s'empilent et
-   l'écran défile en lui même, entre les deux. */
+/* Sous 720 px : l'en-tête tient sur une ligne, le menu se replie derrière un bouton, le contenu défile
+   entre l'en-tête et le pied du cadre, avec un fondu qui dit que ça continue. */
 @media (max-width: 720px) {
   .page { position: relative; inset: auto; display: flex; flex-direction: column; height: 100svh; }
-  .haut { position: static; min-height: 0; flex-direction: column; align-items: flex-start; gap: 0.8rem; padding: 1rem var(--gutter) 0.9rem; }
-  .menu { gap: 0.2rem 1rem; }
-  .menu a { font-size: 0.92rem; }
+  .haut {
+    position: relative; z-index: 20; min-height: 0; flex-direction: row; align-items: center; justify-content: space-between;
+    gap: 0.6rem; padding: 0.9rem var(--gutter);
+  }
+  .menu-bouton {
+    display: inline-block; font: inherit; font-size: 0.85rem; font-weight: 600; color: var(--color-foreground);
+    background: rgba(10, 10, 15, 0.4); border: 1px solid var(--color-border-strong); border-radius: 999px; padding: 0.4rem 0.9rem; cursor: pointer;
+  }
+  .menu { display: none; }
+  .menu[data-ouvert] {
+    display: flex; flex-direction: column; align-items: flex-start; gap: 0.2rem;
+    position: absolute; top: 100%; left: 0; right: 0; padding: 0.6rem var(--gutter) 1.1rem;
+    background: #0c0c12; border-bottom: 1px solid var(--color-border);
+  }
+  .menu a { font-size: 1.05rem; padding: 0.55rem 0; }
+  .menu .appel { display: inline-block; margin: 0.6rem 0 0; }
   .cadre { position: relative; inset: auto; height: auto; flex: 1; min-height: 0; }
-  .inner { overflow-y: auto; padding: 1.5rem var(--gutter) 2rem; }
+  .inner {
+    overflow-y: auto; padding: 1.5rem var(--gutter) 4rem;
+    mask-image: linear-gradient(180deg, #000 calc(100% - 3rem), transparent);
+  }
   .colonnes, .colonnes.accueil { grid-template-columns: 1fr; }
-  .ecran.accueil .inner { padding-bottom: 2rem; }
+  .ecran.accueil .inner { padding-bottom: 4rem; }
   .ecran.accueil .pied { position: static; margin-top: 1.2rem; }
   .situations { grid-template-columns: 1fr; }
   .situations li + li, .etapes li + li { border-left: 0; border-top: 1px solid var(--color-border); }
   .entete { grid-template-columns: 1fr; gap: 1rem; }
   .cartes { grid-template-columns: 1fr; grid-template-rows: none; }
+  .carte.ouverte { grid-row: auto; }
   .preuve { grid-template-columns: 1fr; gap: 1.2rem; }
   .etapes { grid-template-columns: 1fr; }
-  .carte.ouverte { grid-row: auto; }
-  .menu .appel { display: none; }
+  .colonnes.contact-ecran { grid-template-columns: 1fr; }
   /* Les retours forcés du titre sont composés pour le bureau. */
   h1 br { display: none; }
   .document { padding: 1.5rem var(--gutter) 2rem; }
   .fond img { --fond-position: 72% 50%; }
   .fond::after { background: linear-gradient(180deg, rgba(10, 10, 15, 0.55) 0%, rgba(10, 10, 15, 0.35) 30%, rgba(10, 10, 15, 0.75) 75%, rgba(10, 10, 15, 0.95) 100%); }
-  .legal { position: static; display: block; padding: 0.7rem var(--gutter); text-align: right; z-index: 1; }
+  .pied-cadre { position: static; padding: 0.7rem var(--gutter) 0.8rem; background: rgba(10, 10, 15, 0.85); font-size: 0.76rem; white-space: nowrap; }
+  .suivant-lien { gap: 0.5rem; }
 }

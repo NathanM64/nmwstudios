@@ -5,6 +5,7 @@ import { IBM_Plex_Mono, Manrope } from 'next/font/google'
 import { Menu } from '@/components/Menu'
 import { Clavier } from '@/components/Clavier'
 import { Fond } from '@/components/Fond'
+import { Suivant } from '@/components/Suivant'
 import './globals.css'
 
 // Les classes next/font vont sur <html> : sur <body>, les variables restent vides en silence.
@@ -49,9 +50,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <main className="cadre">
               <div className="ecran-boite">{children}</div>
             </main>
-            <Link className="legal" href="/mentions-legales">
-              Mentions légales
-            </Link>
+            <div className="pied-cadre">
+              <Suivant />
+              <Link className="legal" href="/mentions-legales">
+                Mentions légales
+              </Link>
+            </div>
           </div>
         </ViewTransition>
         <Clavier />

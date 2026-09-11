@@ -55,8 +55,7 @@ export default function Page() {
         </p>
         <p>
           C’est moi qui réponds, dans la journée. Si une fonctionnalité va coûter cher pour rien, je le
-          dis avant de la chiffrer. Je préviens avant de dépasser, pas après. Vous n’avez pas besoin de
-          savoir ce qu’est un déploiement : c’est mon travail, pas le vôtre.
+          dis avant de la chiffrer. Je préviens avant de dépasser, pas après.
         </p>
         <p className="faits">
           Bègles, près de Bordeaux. À distance pour toute la France. Entrepreneur individuel,{' '}
