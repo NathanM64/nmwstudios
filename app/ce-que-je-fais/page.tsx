@@ -4,7 +4,7 @@ import { OFFRES } from '@/content/offres'
 
 export const metadata: Metadata = {
   title: 'Ce que je fais, NMW Studios',
-  description: 'Sites vitrines, applications, reprise de l’existant, automatisation et hébergement. Le code est à vous.',
+  description: 'Reprise de l’existant, sites vitrines, applications, automatisation et hébergement. Le code est à vous.',
 }
 
 export default function Page() {

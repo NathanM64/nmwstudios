@@ -4,11 +4,11 @@ import { expect, test } from '@playwright/test'
 // sont là, le menu mène quelque part. Pas de test d'animation : ça se regarde.
 const ROUTES: Array<[string, string]> = [
   ['/', 'Vous décidez jusqu’où.'],
-  ['/ce-que-je-fais/', 'Pas de constructeur de pages'],
-  ['/ce-que-je-fais/reprise/', 'Trois conditions : le code source accessible en entier'],
-  ['/ce-que-je-fais/hebergement/', 'sauvegardes quotidiennes'],
+  ['/ce-que-je-fais/', 'Le code source accessible en entier'],
+  ['/ce-que-je-fais/sites/', 'démarre à 1 500 €'],
+  ['/ce-que-je-fais/hebergement/', 'une sauvegarde chaque nuit'],
   ['/comment-je-travaille/', 'Une agence parisienne m’a confié'],
-  ['/qui-je-suis/', 'Je ne reprends pas les sites montés sur un constructeur de pages'],
+  ['/qui-je-suis/', 'Vous êtes seul'],
   ['/contact/', 'Parlons de votre projet.'],
   ['/mentions-legales/', 'Hetzner Online GmbH'],
 ]
@@ -21,7 +21,7 @@ test('chaque route porte son texte dans le HTML servi', async ({ request }) => {
 })
 
 test('chaque écran porte son fond dans le HTML et le fichier est servi', async ({ request }) => {
-  const attendus: Array<[string, string]> = [['/', 'eau'], ['/ce-que-je-fais/reprise/', 'soie'], ['/comment-je-travaille/', 'verre'], ['/qui-je-suis/', 'ardoise'], ['/contact/', 'pluie']]
+  const attendus: Array<[string, string]> = [['/', 'eau'], ['/ce-que-je-fais/sites/', 'soie'], ['/comment-je-travaille/', 'verre'], ['/qui-je-suis/', 'ardoise'], ['/contact/', 'pluie']]
   for (const [route, matiere] of attendus) {
     const html = await (await request.get(route)).text()
     expect(html, route).toContain(`data-matiere="${matiere}"`)
@@ -78,9 +78,11 @@ test('le menu navigue et le retour arrière marche', async ({ page }) => {
   await expect(page.getByRole('heading', { level: 1 })).toContainText('Je conçois')
 })
 
-test('la liste des offres change le détail sans quitter l’écran', async ({ page }) => {
+test('une carte fermée s’ouvre sans quitter l’écran, et l’ancienne se referme', async ({ page }) => {
   await page.goto('/ce-que-je-fais/')
-  await page.getByRole('navigation', { name: 'Offres' }).getByRole('link', { name: 'Reprise et maintenance' }).click()
-  await expect(page).toHaveURL(/\/ce-que-je-fais\/reprise\/$/)
-  await expect(page.locator('.detail h3')).toHaveText('Reprise et maintenance')
+  await expect(page.locator('.carte.ouverte h3')).toHaveText('Reprendre votre site ou votre application')
+  await page.getByRole('navigation', { name: 'Offres' }).getByRole('link', { name: /Un site vitrine/ }).click()
+  await expect(page).toHaveURL(/\/ce-que-je-fais\/sites\/$/)
+  await expect(page.locator('.carte.ouverte h3')).toHaveText('Un site vitrine ou une page de campagne')
+  await expect(page.locator('a.carte')).toHaveCount(4)
 })

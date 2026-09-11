@@ -13,7 +13,7 @@ type Props = { params: Promise<{ offre: string }> }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const offre = offreParSlug((await params).offre)
-  return offre ? { title: `${offre.titre}, NMW Studios`, description: offre.paragraphes[0] } : {}
+  return offre ? { title: `${offre.titre}, NMW Studios`, description: offre.resume } : {}
 }
 
 export default async function Page({ params }: Props) {
