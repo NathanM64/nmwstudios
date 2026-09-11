@@ -20,7 +20,7 @@ const spaceGrotesk = Space_Grotesk({
 })
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://nmwstudios.fr'),
+  metadataBase: new URL('https://nmwstudios.com'),
   title: 'nmwstudios, sites et applications web',
   description:
     "Je conçois, je développe, je reprends et j'accompagne vos sites et applications web. Le code est à vous, l'hébergement est transférable.",
