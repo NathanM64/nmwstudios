@@ -195,12 +195,20 @@ ul, ol { padding: 0; margin: 0; list-style: none; }
   }
 }
 
-/* Sous 720 px, les colonnes s'empilent et l'écran défile en lui même. */
+/* Sous 720 px, l'en-tête et le lien légal reprennent leur place dans le flux : rien ne se
+   superpose au contenu, quelle que soit la hauteur du menu. Les colonnes s'empilent et
+   l'écran défile en lui même, entre les deux. */
 @media (max-width: 720px) {
-  .haut { flex-direction: column; align-items: flex-start; padding: 1.1rem var(--gutter); }
-  .inner { overflow-y: auto; padding-top: 9rem; padding-bottom: 5rem; }
+  body { display: flex; flex-direction: column; height: 100svh; }
+  .haut { position: static; flex-direction: column; align-items: flex-start; gap: 0.8rem; padding: 1.1rem var(--gutter) 0.9rem; }
+  .menu { gap: 0.3rem 1rem; }
+  .menu a { font-size: 0.9rem; }
+  .cadre { position: relative; inset: auto; height: auto; flex: 1; min-height: 0; }
+  .inner { overflow-y: auto; padding: 1.5rem var(--gutter) 2rem; }
   .colonnes, .colonnes.accueil { grid-template-columns: 1fr; margin-block: 0; }
   /* Les retours forcés du titre sont composés pour le bureau. */
   h1 br { display: none; }
   .etapes li { grid-template-columns: 1fr; }
+  .document { padding: 1.5rem var(--gutter) 2rem; }
+  .legal { position: static; display: block; padding: 0.7rem var(--gutter); text-align: right; }
 }
