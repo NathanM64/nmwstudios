@@ -1,5 +1,13 @@
 import Link from 'next/link'
 import { Ecran } from '@/components/Ecran'
+import { hrefOffre, offreParSlug } from '@/content/offres'
+
+const SITUATIONS = [
+  ['Votre site a cinq ans et plus personne ne veut y toucher.', 'Je le reprends, sans repartir de zéro.', hrefOffre(offreParSlug('reprise')!)],
+  ['Votre agence a une maquette validée et personne pour l’intégrer avant la date.', 'Je l’intègre, sous votre nom.', '/comment-je-travaille'],
+  ['Votre équipe recopie des données à la main tous les jours.', 'Je fais disparaître la tâche.', hrefOffre(offreParSlug('automatisation')!)],
+  ['Votre prestataire ne répond plus.', 'Je prends la suite, et je réponds.', hrefOffre(offreParSlug('reprise')!)],
+] as const
 
 export default function Accueil() {
   return (
@@ -10,26 +18,39 @@ export default function Accueil() {
           <br />
           je reprends et j’accompagne.{' '}
           <br />
-          Vous décidez jusqu’où.
+          <span className="client">Vous décidez jusqu’où.</span>
         </h1>
+        <p className="identite">
+          <strong>Nathan Marimbordes</strong>, développeur web indépendant à Bègles. Une agence parisienne
+          me confie son parc applicatif et ses nouveaux projets.
+        </p>
         <p className="lead">
           Sites, applications et outils métier. Je construis, je reprends l’existant, et j’assure la
-          suite si vous le souhaitez. Le code est à vous, l’hébergement est transférable.
+          suite si vous le souhaitez. Le code est à vous.
         </p>
         <p className="actions">
           <Link className="bouton" href="/contact">
             Parler de votre projet
           </Link>
+          <span className="secondaire">
+            ou par email : <a href="mailto:contact@nmwstudios.com">contact@nmwstudios.com</a>. Je réponds
+            dans la journée.
+          </span>
         </p>
       </div>
-      <div className="situations-cote panel">
-        <p className="intro eyebrow">Trois situations que je connais bien</p>
+      <nav className="pied" aria-label="Situations">
+        <p className="eyebrow">Quatre situations que je connais bien</p>
         <ul className="situations">
-          <li>Votre site a cinq ans et plus personne ne veut y toucher.</li>
-          <li>Votre équipe recopie des données à la main tous les jours.</li>
-          <li>Votre prestataire ne répond plus.</li>
+          {SITUATIONS.map(([situation, reponse, href]) => (
+            <li key={situation}>
+              <Link href={href}>
+                <span>{situation}</span>
+                <span className="reponse">{reponse}</span>
+              </Link>
+            </li>
+          ))}
         </ul>
-      </div>
+      </nav>
     </Ecran>
   )
 }

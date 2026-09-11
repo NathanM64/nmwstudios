@@ -13,6 +13,12 @@ export function Menu() {
           {e.titre}
         </Link>
       ))}
+      {/* Le bouton suit le visiteur sur les écrans du milieu ; l'accueil a le sien, le contact est la cible. */}
+      {courant > 0 && courant < ECRANS.length - 1 && (
+        <Link className="appel" href="/contact">
+          Parler de votre projet
+        </Link>
+      )}
     </nav>
   )
 }

@@ -27,7 +27,11 @@ export function Clavier() {
     let cumul = 0
     let dernierPas = 0
     const molette = (ev: WheelEvent) => {
-      if ((ev.target as HTMLElement).closest('.document, textarea')) return
+      const cible = ev.target as HTMLElement
+      if (cible.closest('.document, textarea')) return
+      // Un écran qui a du contenu caché défile en lui même : la molette lui revient.
+      const inner = cible.closest('.inner')
+      if (inner && inner.scrollHeight > inner.clientHeight + 1) return
       const maintenant = performance.now()
       if (maintenant - dernierPas > 200) cumul = 0
       dernierPas = maintenant
