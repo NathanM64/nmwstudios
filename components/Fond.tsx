@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { preload } from 'react-dom'
 import { usePathname } from 'next/navigation'
 import { indexEcran } from '@/content/ecrans'
@@ -34,6 +34,15 @@ export function Fond() {
     if (autre !== m) preload(`/fonds/${autre}.webp`, { as: 'image', imageSrcSet: srcSet(autre), imageSizes: '100vw', fetchPriority: 'low' })
   }
   useEffect(precharger, [])
+  // Chargée avant l'hydratation, l'image n'enverra jamais son événement : on regarde son état au montage.
+  const img = useRef<HTMLImageElement>(null)
+  useEffect(() => {
+    const el = img.current
+    if (m && el?.complete && el.naturalWidth > 0) {
+      chargees.add(m)
+      setEtat((e) => e ?? 'net')
+    }
+  }, [m])
   if (!m) return null
   return (
     <div className="fond" data-matiere={m} data-pret={etat ?? undefined} aria-hidden="true">
@@ -44,6 +53,7 @@ export function Fond() {
         sizes="100vw"
         alt=""
         fetchPriority="high"
+        ref={img}
         onLoad={() => {
           chargees.add(m)
           setEtat((e) => e ?? 'fondu')

@@ -20,6 +20,13 @@ export function Detail({ offre }: { offre: Offre }) {
           ),
         )}
         {offre.prix && <p className="prix">{offre.prix}</p>}
+        {offre.image && (
+          <figure className="apercu">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={offre.image.src} width={offre.image.largeur} height={offre.image.hauteur} alt={offre.image.alt} loading="lazy" />
+            <figcaption>{offre.image.legende}</figcaption>
+          </figure>
+        )}
         <p className="lien">
           <Link href="/contact">{offre.appel}</Link>
         </p>

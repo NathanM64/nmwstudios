@@ -30,6 +30,12 @@ test('chaque écran porte son fond dans le HTML et le fichier est servi', async 
   expect(await (await request.get('/mentions-legales/')).text()).not.toContain('class="fond"')
 })
 
+test('le fond s’affiche au premier chargement, image déjà en cache ou non', async ({ page }) => {
+  await page.goto('/comment-je-travaille/')
+  await expect(page.locator('.fond[data-pret]')).toHaveCount(1)
+  await expect(page.locator('.fond img')).toHaveCSS('opacity', /^0\.[1-9]/)
+})
+
 test('le lien partagé montre une image', async ({ request }) => {
   const html = await (await request.get('/')).text()
   const image = html.match(/property="og:image" content="([^"]+)"/)?.[1]

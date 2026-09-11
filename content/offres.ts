@@ -7,6 +7,7 @@ export type Offre = {
   resume: string
   prix?: string
   blocs: readonly Bloc[]
+  image?: { src: string; largeur: number; hauteur: number; alt: string; legende: string }
   appel: string
 }
 
@@ -48,6 +49,13 @@ export const OFFRES: readonly Offre[] = [
       'Une première version qui tourne, puis des itérations courtes. Backoffice, portail client, outil interne, produit à mettre devant ses premiers utilisateurs.',
       'Vous voyez des versions au fil du chantier, pas une livraison surprise à la fin.',
     ],
+    image: {
+      src: '/demo/dashboard-temps.webp',
+      largeur: 1335,
+      hauteur: 640,
+      alt: 'Vue calendrier du suivi du temps dans mon outil de gestion',
+      legende: 'L’outil avec lequel je suis mon temps et je facture, que j’ai construit pour moi. Données de démonstration.',
+    },
     appel: 'Parler de votre application',
   },
   {
