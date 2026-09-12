@@ -30,6 +30,20 @@ export const metadata: Metadata = {
     "Je conçois, je développe, je reprends et j'accompagne vos sites et applications web. Le code est à vous, l'hébergement est transférable.",
 }
 
+// Ce que Google lit : la même chose que le lecteur, ni plus ni moins.
+const DONNEES = {
+  '@context': 'https://schema.org',
+  '@type': 'ProfessionalService',
+  name: 'NMW Studios',
+  url: 'https://nmwstudios.com/',
+  email: 'contact@nmwstudios.com',
+  founder: { '@type': 'Person', name: 'Nathan Marimbordes', jobTitle: 'Développeur web indépendant' },
+  address: { '@type': 'PostalAddress', addressLocality: 'Bègles', postalCode: '33130', addressCountry: 'FR' },
+  areaServed: 'FR',
+  description:
+    'Sites, applications et outils métier. Je construis, je reprends l’existant, et j’assure la suite si vous le souhaitez.',
+}
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="fr" className={`${manrope.variable} ${plexMono.variable}`}>
@@ -60,6 +74,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           </div>
         </ViewTransition>
         <Clavier />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(DONNEES) }} />
       </body>
     </html>
   )

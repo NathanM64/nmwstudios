@@ -45,6 +45,10 @@ Accroche : « Je conçois, je développe, je reprends et j'accompagne. Vous déc
 - Jamais vendre sur l'IA comme outil de production interne.
 - Export statique servi par Caddy, pas de serveur Node en production.
 
-## v1
+## État
 
-Accueil, contact, mentions légales. Les cinq pages prestation et les démos viennent après.
+Cinq écrans en production depuis le 11/09/2026, refaits le 12/09 : accueil, ce que je fais
+(une route par offre), comment je travaille, qui je suis, contact ; mentions légales en
+document. L'offre applications montre trois vues de mon outil de gestion, données de
+démonstration. Restent à obtenir hors code : un avis Malt, un témoignage anonymisé de
+l'agence. Détail des décisions dans `DESIGN.md`.
