@@ -364,6 +364,12 @@ a.carte:hover .lien { text-decoration: underline; text-underline-offset: 0.2em; 
 ::view-transition-old(page) { animation: 180ms ease-in both page-sort; }
 ::view-transition-new(page) { animation: 320ms ease-out 140ms both page-entre; }
 ::view-transition-group(page) { animation-duration: 0s; }
+/* L'en-tête et le pied restent en place pendant que la page change : photographiés à part, sans animation. */
+.haut { view-transition-name: haut; }
+.pied-cadre { view-transition-name: pied; }
+::view-transition-group(haut), ::view-transition-group(pied) { animation-duration: 0s; }
+::view-transition-old(haut), ::view-transition-old(pied) { display: none; }
+::view-transition-new(haut), ::view-transition-new(pied) { animation: none; opacity: 1; }
 /* Le filet du menu glisse d'un mot à l'autre pendant que la page change. */
 ::view-transition-group(menu-filet) { animation-duration: 420ms; animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1); }
 ::view-transition-old(menu-filet), ::view-transition-new(menu-filet) { animation: none; opacity: 1; }
