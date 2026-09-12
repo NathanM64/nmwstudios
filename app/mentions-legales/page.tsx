@@ -1,7 +1,11 @@
 import type { Metadata } from 'next'
 import { LEGAL } from '@/lib/legal'
 
-export const metadata: Metadata = { title: 'Mentions légales, NMW Studios', robots: { index: false } }
+export const metadata: Metadata = {
+  alternates: { canonical: '/mentions-legales/' },
+  openGraph: { url: '/mentions-legales/' }, title: 'Mentions légales, NMW Studios',
+  description: 'Éditeur, hébergeur et données personnelles du site nmwstudios.com.',
+  robots: { index: false } }
 
 export default function Page() {
   return (

@@ -32,6 +32,7 @@
 	header {
 		X-Content-Type-Options nosniff
 		Referrer-Policy strict-origin-when-cross-origin
+		Permissions-Policy "geolocation=(), camera=(), microphone=()"
 		# Le proxy redirige déjà le HTTP en 301, mais la toute première visite passe en clair.
 		# Pas de `preload` tant que tous les sous-domaines ne sont pas en HTTPS.
 		Strict-Transport-Security "max-age=31536000; includeSubDomains"

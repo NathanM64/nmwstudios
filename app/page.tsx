@@ -1,3 +1,4 @@
+import type { Metadata } from 'next'
 import Link from 'next/link'
 import { Ecran } from '@/components/Ecran'
 import { hrefOffre, offreParSlug } from '@/content/offres'
@@ -9,11 +10,16 @@ const SITUATIONS = [
   ['Votre prestataire ne répond plus.', 'Je prends la suite, et je réponds.', hrefOffre(offreParSlug('reprise')!)],
 ] as const
 
+export const metadata: Metadata = {
+  alternates: { canonical: '/' },
+  openGraph: { url: '/' },
+}
+
 export default function Accueil() {
   return (
     <Ecran classe="accueil">
       <div>
-        <h1>
+        <h1 className="accroche">
           Je conçois, je développe,{' '}
           <br />
           je reprends et j’accompagne.{' '}
@@ -21,11 +27,11 @@ export default function Accueil() {
           <span className="client">Vous décidez jusqu’où.</span>
         </h1>
         <p className="identite">
-          <strong>Nathan Marimbordes</strong>, développeur web indépendant à Bègles. Pour les entreprises
+          <strong>Nathan Marimbordes</strong>, développeur web indépendant à Bordeaux. Pour les entreprises
           en direct, et pour les agences en marque blanche.
         </p>
         <p className="lead">
-          Sites, applications et outils métier. Je construis, je reprends l’existant, et j’assure la
+          Sites vitrines, applications et outils métier. Je construis, je reprends l’existant, et j’assure la
           suite si vous le souhaitez. Le code est à vous.
         </p>
         <p className="actions">

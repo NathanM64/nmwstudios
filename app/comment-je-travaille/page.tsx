@@ -2,9 +2,11 @@ import type { Metadata } from 'next'
 import { Ecran } from '@/components/Ecran'
 
 export const metadata: Metadata = {
-  title: 'Comment je travaille, NMW Studios',
+  alternates: { canonical: '/comment-je-travaille/' },
+  openGraph: { url: '/comment-je-travaille/' },
+  title: 'Comment je travaille, en direct et en marque blanche',
   description:
-    'En marque blanche pour une agence parisienne depuis un an. Cinq étapes, et à chacune quelque chose entre vos mains, avec une date.',
+    'Depuis un an, une agence parisienne me confie ses applications en marque blanche. Cinq étapes, et à chacune quelque chose entre vos mains, avec une date.',
 }
 
 const MISSIONS = [
@@ -27,10 +29,10 @@ export default function Page() {
     <Ecran classe="methode">
       <div className="preuve">
         <div>
-          <h2>
+          <h1>
             <span className="client">Depuis un an,</span> une agence parisienne me confie ses applications et
             ses nouveaux projets.
-          </h2>
+          </h1>
           <p className="lead">
             Je travaille pour elle en marque blanche : ses maquettes, ses délais, son nom devant son
             client. Si vous êtes une agence, c’est la même chose pour vous : vos maquettes, vos délais,

@@ -3,8 +3,11 @@ import { Detail } from '@/components/Detail'
 import { OFFRES } from '@/content/offres'
 
 export const metadata: Metadata = {
-  title: 'Ce que je fais, NMW Studios',
-  description: 'Reprise de l’existant, sites vitrines, applications, automatisation et hébergement. Le code est à vous.',
+  alternates: { canonical: '/ce-que-je-fais/' },
+  openGraph: { url: '/ce-que-je-fais/' },
+  title: 'Ce que je fais : sites, reprise, automatisation. NMW Studios',
+  description:
+    'Reprise de l’existant, sites vitrines, applications, automatisation et hébergement. Cinq façons de travailler ensemble, chacune sur sa page. Le code est à vous.',
 }
 
 export default function Page() {

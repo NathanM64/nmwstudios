@@ -2,9 +2,11 @@ import type { Metadata } from 'next'
 import { Ecran } from '@/components/Ecran'
 
 export const metadata: Metadata = {
-  title: 'Qui je suis, NMW Studios',
+  alternates: { canonical: '/qui-je-suis/' },
+  openGraph: { url: '/qui-je-suis/' },
+  title: 'Nathan Marimbordes, développeur web indépendant à Bordeaux',
   description:
-    'Nathan Marimbordes, développeur web depuis six ans, à mon compte depuis un an à Bègles. Seul, et je le dis.',
+    'Nathan Marimbordes, développeur web depuis six ans, à mon compte depuis un an, à Bordeaux. Je travaille seul, et je le dis.',
 }
 
 const FAQ = [
@@ -14,11 +16,11 @@ const FAQ = [
   ],
   [
     'Vous pouvez reprendre un site fait par une autre agence ?',
-    'Oui, c’est une partie normale de mon métier, même si l’agence n’existe plus. Envoyez-moi l’adresse, je vous écris ce qui tient et ce qui casse avant tout devis. Je ne reprends pas les sites sans code source, montés sur Wix, Squarespace ou un éditeur équivalent.',
+    'Oui, c’est une partie normale de mon métier, même si l’agence n’existe plus. Envoyez-moi l’adresse, je vous écris ce qui tient et ce qui casse avant tout devis, et je vous dis si une refonte vaut mieux qu’une reprise. Je ne reprends pas les sites sans code source, montés sur Wix, Squarespace ou un éditeur équivalent.',
   ],
   [
     'Travaillez-vous en marque blanche pour des agences ?',
-    'Oui. Une agence parisienne me confie aujourd’hui ses applications et ses nouveaux projets. Vos maquettes, vos délais, votre nom devant votre client. Je ne contacte jamais votre client et je ne signe pas mon travail.',
+    'Oui, en freelance. Une agence parisienne me confie aujourd’hui ses applications et ses nouveaux projets. Vos maquettes, vos délais, votre nom devant votre client. Je ne contacte jamais votre client et je ne signe pas mon travail.',
   ],
   [
     'Combien coûte une reprise ?',
@@ -38,7 +40,7 @@ const FAQ = [
   ],
   [
     'À distance ou sur place ?',
-    'À distance, depuis Bègles près de Bordeaux, pour toute la France. On se parle en visio quand c’est utile.',
+    'À distance, depuis Bordeaux, pour toute la France. On se parle en visio quand c’est utile.',
   ],
 ] as const
 
@@ -46,7 +48,7 @@ export default function Page() {
   return (
     <Ecran classe="qui">
       <div>
-        <h2>Nathan Marimbordes.</h2>
+        <h1>Nathan Marimbordes.</h1>
         <p className="lead">
           Développeur web depuis six ans, d’abord en alternance puis en CDI, à mon compte depuis un an.{' '}
           <span className="client">Je travaille seul, et je le dis :</span> si votre projet demande une
@@ -62,7 +64,7 @@ export default function Page() {
           C’est moi qui réponds. Si une fonctionnalité va coûter cher pour rien, je le dis avant de la
           chiffrer. Je préviens avant de dépasser, en budget comme en date, pas après.
         </p>
-        <p className="faits">Bègles, près de Bordeaux. À distance pour toute la France.</p>
+        <p className="faits">Bordeaux. À distance pour toute la France.</p>
       </div>
       {/* name="faq" : le navigateur n'en garde qu'une ouverte, sans JavaScript. */}
       <div className="faq panel">

@@ -11,7 +11,7 @@ const ROUTES: Array<[string, string]> = [
   ['/comment-je-travaille/', 'une agence parisienne me confie'],
   ['/comment-je-travaille/ce-que-je-ne-fais-pas/', 'Les applications mobiles natives'],
   ['/qui-je-suis/', 'Vous êtes seul'],
-  ['/contact/', 'Parlons de votre projet.'],
+  ['/contact/', 'Un message suffit'],
   ['/mentions-legales/', 'Hetzner Online GmbH'],
 ]
 
@@ -41,7 +41,7 @@ test('le fond s’affiche au premier chargement, image déjà en cache ou non', 
 test('sur mobile, les onglets restent en bas du cadre et ne couvrent pas le titre', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 })
   await page.goto('/comment-je-travaille/')
-  const [titre, onglets] = await Promise.all([page.locator('h2').boundingBox(), page.locator('.onglets').boundingBox()])
+  const [titre, onglets] = await Promise.all([page.locator('h1').boundingBox(), page.locator('.onglets').boundingBox()])
   expect(onglets!.y).toBeGreaterThan(titre!.y + titre!.height)
 })
 
@@ -131,10 +131,10 @@ test('le menu navigue et le retour arrière marche', async ({ page }) => {
 
 test('une carte fermée s’ouvre sans quitter l’écran, et l’ancienne se referme', async ({ page }) => {
   await page.goto('/ce-que-je-fais/')
-  await expect(page.locator('.carte.ouverte h3')).toHaveText('Une application, un outil interne, un premier produit')
+  await expect(page.locator('.carte.ouverte h2')).toHaveText('Une application, un outil interne, un premier produit')
   await expect(page.locator('.carrousel .vues img')).toHaveCount(3)
   await page.getByRole('navigation', { name: 'Offres' }).getByRole('link', { name: /Un site vitrine/ }).click()
   await expect(page).toHaveURL(/\/ce-que-je-fais\/sites\/$/)
-  await expect(page.locator('.carte.ouverte h3')).toHaveText('Un site vitrine ou une page de campagne')
+  await expect(page.locator('.carte.ouverte h1')).toHaveText('Un site vitrine ou une page de campagne')
   await expect(page.locator('a.carte')).toHaveCount(4)
 })

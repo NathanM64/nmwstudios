@@ -4,11 +4,13 @@ import type { Offre } from '@/content/offres'
 import { Carrousel } from './Carrousel'
 
 // La carte ouverte. Son nom de transition est celui de sa carte fermée : l'une devient l'autre.
-export function Detail({ offre }: { offre: Offre }) {
+// Sur sa propre route, la carte ouverte porte le h1 de la page.
+export function Detail({ offre, niveau = 'h2' }: { offre: Offre; niveau?: 'h1' | 'h2' }) {
+  const Titre = niveau
   return (
     <ViewTransition name={`offre-${offre.slug}`} default="offre">
       <article className="carte panel ouverte">
-        <h3>{offre.titre}</h3>
+        <Titre>{offre.titre}</Titre>
         {offre.blocs.map((bloc, i) =>
           typeof bloc === 'string' ? (
             <p key={i}>{bloc}</p>

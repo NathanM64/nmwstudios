@@ -13,7 +13,7 @@ export function ListeOffres() {
       {OFFRES.filter((o) => hrefOffre(o) !== chemin).map((o) => (
         <ViewTransition key={o.slug} name={`offre-${o.slug}`} default="offre">
           <Link className="carte panel" href={hrefOffre(o)} transitionTypes={['detail']}>
-            <h3>{o.titre}</h3>
+            <h2>{o.titre}</h2>
             <p>{o.resume}</p>
             {o.prix && <p className="prix">{o.prix}</p>}
             <span className="lien">Voir le détail</span>

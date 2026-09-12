@@ -1,10 +1,14 @@
 import type { Metadata } from 'next'
 import { Ecran } from '@/components/Ecran'
+import { Donnees } from '@/components/Donnees'
+import { filAriane } from '@/lib/donnees'
 
 export const metadata: Metadata = {
-  title: 'Ce que je ne fais pas, NMW Studios',
+  alternates: { canonical: '/comment-je-travaille/ce-que-je-ne-fais-pas/' },
+  openGraph: { url: '/comment-je-travaille/ce-que-je-ne-fais-pas/' },
+  title: 'Ce que je ne fais pas : les limites que je pose. NMW Studios',
   description:
-    'Les sites sans code source, les projets qui demandent une équipe, les applications natives, un prix de maintenance avant d’avoir construit.',
+    'Les sites sans code source, les projets qui demandent une équipe, les applications mobiles natives, un prix de maintenance avant d’avoir construit le projet.',
 }
 
 const REFUS = [
@@ -29,11 +33,12 @@ const REFUS = [
 export default function Page() {
   return (
     <Ecran classe="methode refus-ecran">
+      <Donnees objet={filAriane([['Accueil', '/'], ['Comment je travaille', '/comment-je-travaille/'], ['Ce que je ne fais pas', null]])} />
       <div className="preuve">
         <div>
-          <h2>
+          <h1>
             Ce que je <span className="client">ne fais pas.</span>
-          </h2>
+          </h1>
           <p className="lead">Rien ne rassure autant qu’un prestataire qui pose ses limites. Voici les miennes.</p>
         </div>
       </div>
