@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   openGraph: { url: '/comment-je-travaille/' },
   title: 'Comment je travaille, en direct et en marque blanche',
   description:
-    'Depuis un an, une agence parisienne me confie ses applications en marque blanche. Cinq étapes, et à chacune quelque chose entre vos mains, avec une date.',
+    'Depuis 2025, une agence parisienne me confie ses applications en marque blanche. Cinq étapes, et à chacune quelque chose entre vos mains, avec une date.',
 }
 
 const MISSIONS = [
@@ -30,7 +30,7 @@ export default function Page() {
       <div className="preuve">
         <div>
           <h1>
-            <span className="client">Depuis un an,</span> une agence parisienne me confie ses applications et
+            <span className="client">Depuis 2025,</span> une agence parisienne me confie ses applications et
             ses nouveaux projets.
           </h1>
           <p className="lead">

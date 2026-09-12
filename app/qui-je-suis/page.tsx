@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   openGraph: { url: '/qui-je-suis/' },
   title: 'Nathan Marimbordes, développeur web indépendant à Bordeaux',
   description:
-    'Nathan Marimbordes, développeur web depuis six ans, à mon compte depuis un an, à Bordeaux. Je travaille seul, et je le dis.',
+    'Nathan Marimbordes, développeur web depuis 2020, à mon compte depuis 2025, à Bordeaux. Je travaille seul, et je le dis, et je vous oriente si votre projet demande une équipe.',
 }
 
 const FAQ = [
@@ -50,12 +50,12 @@ export default function Page() {
       <div>
         <h1>Nathan Marimbordes.</h1>
         <p className="lead">
-          Développeur web depuis six ans, d’abord en alternance puis en CDI, à mon compte depuis un an.{' '}
+          Développeur web depuis 2020, d’abord en alternance puis en CDI, à mon compte depuis 2025.{' '}
           <span className="client">Je travaille seul, et je le dis :</span> si votre projet demande une
           équipe de cinq personnes, je vous le dirai et je vous orienterai.
         </p>
         <p>
-          Depuis un an, je construis des applications pour les clients d’une agence, souvent de grands
+          Depuis 2025, je construis des applications pour les clients d’une agence, souvent de grands
           groupes, et je reprends ce que d’autres ont écrit. Mes chantiers durent et se relaient :
           pendant qu’un client relit, un autre avance. J’ai de la place, et je vous dis à partir de
           quand avant de m’engager.

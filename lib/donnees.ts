@@ -14,6 +14,7 @@ export const DONNEES = {
   email: 'contact@nmwstudios.com',
   description:
     'Sites, applications et outils métier. Je construis, je reprends l’existant, et j’assure la suite si vous le souhaitez.',
+  foundingDate: '2025',
   founder: { '@type': 'Person', name: 'Nathan Marimbordes', jobTitle: 'Développeur web indépendant' },
   address: { '@type': 'PostalAddress', addressLocality: 'Bègles', postalCode: '33130', addressCountry: 'FR' },
   areaServed: FRANCE,
