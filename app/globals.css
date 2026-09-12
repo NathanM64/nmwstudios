@@ -274,7 +274,7 @@ a.carte:hover .lien { text-decoration: underline; text-underline-offset: 0.2em; 
 .preuve h2 { max-width: 24ch; margin-bottom: 0.9rem; }
 .preuve .lead { margin-bottom: 0.7rem; font-size: clamp(1.05rem, 1.35vw, 1.2rem); }
 .missions { display: grid; gap: 0.7rem; }
-.missions .panel { padding: 0.9rem 1.1rem 0.9rem 1.2rem; font-size: 0.95rem; line-height: 1.4; font-weight: 500; color: var(--color-foreground); border-left: 2px solid var(--color-accent); }
+.missions .panel { padding: 0.9rem 1.1rem; font-size: 0.95rem; line-height: 1.4; font-weight: 500; color: var(--color-foreground); }
 .missions .panel span { display: block; color: var(--color-muted-foreground); font-size: 0.85rem; font-weight: 300; margin-top: 0.2rem; }
 .etapes {
   counter-reset: etape; margin-top: 0.6rem;
