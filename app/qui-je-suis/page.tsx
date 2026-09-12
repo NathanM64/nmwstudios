@@ -50,7 +50,7 @@ export default function Page() {
       <div>
         <h1>Nathan Marimbordes.</h1>
         <p className="lead">
-          Développeur web depuis 2020, d’abord en alternance puis en CDI, à mon compte depuis 2025.{' '}
+          Développeur web depuis 2020, à mon compte depuis 2025.{' '}
           <span className="client">Je travaille seul, et je le dis :</span> si votre projet demande une
           équipe de cinq personnes, je vous le dirai et je vous orienterai.
         </p>
