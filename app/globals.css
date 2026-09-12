@@ -236,7 +236,21 @@ a.carte:hover { transform: translateY(-3px); background-color: rgba(255, 255, 25
 .carte.ouverte .prix { font-size: 1.15rem; }
 /* Les vues d'un outil réel dans la carte ouverte : elles défilent, un fondu à la fois. */
 .carrousel { margin: 0.2rem 0 0.6rem; }
-.carrousel .vues { position: relative; aspect-ratio: 1650 / 1000; border-radius: var(--radius-md); border: 1px solid var(--color-border); overflow: hidden; background: #0c0c12; }
+.carrousel .vues {
+  display: block; width: 100%; padding: 0; position: relative; aspect-ratio: 1650 / 1000; cursor: zoom-in;
+  border-radius: var(--radius-md); border: 1px solid var(--color-border); overflow: hidden; background: #0c0c12;
+}
+.carrousel .agrandir {
+  position: absolute; right: 0.6rem; bottom: 0.6rem; font: inherit; font-size: 0.75rem; font-weight: 600; color: var(--color-foreground);
+  background: rgba(10, 10, 15, 0.7); border: 1px solid var(--color-border-strong); border-radius: 999px; padding: 0.2rem 0.6rem;
+  opacity: 0; transition: opacity 0.2s;
+}
+.carrousel .vues:hover .agrandir, .carrousel .vues:focus-visible .agrandir { opacity: 1; }
+/* La vue en grand : le plus large possible, sur le canvas. */
+.grand { border: 0; padding: 0; background: transparent; max-width: min(92vw, 1400px); max-height: 92vh; cursor: zoom-out; }
+.grand::backdrop { background: rgba(10, 10, 15, 0.88); backdrop-filter: blur(8px); }
+.grand img { display: block; width: 100%; height: auto; max-height: 84vh; object-fit: contain; border-radius: var(--radius-lg); border: 1px solid var(--color-border-strong); }
+.grand p { margin: 0.7rem 0 0; text-align: center; font-size: 0.9rem; color: var(--color-muted-foreground); max-width: none; }
 .carrousel .vues img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 0.6s ease; }
 .carrousel .vues img[data-active] { opacity: 1; }
 .carrousel .points { display: flex; gap: 0.4rem; margin-top: 0.55rem; }

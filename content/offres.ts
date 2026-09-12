@@ -36,7 +36,7 @@ export const OFFRES: readonly Offre[] = [
     titre: 'Reprendre votre site ou votre application',
     resume: 'Du code que d’autres ont écrit, remis en marche et tenu.',
     blocs: [
-      'Je lis le code que d’autres ont écrit, je le remets en état de marche et je le fais vivre. Reprendre coûte souvent moins cher que refaire, et casse moins de choses.',
+      'Je lis le code que d’autres ont écrit, je le remets en état de marche et je le fais vivre. Une reprise se facture au temps passé, au taux annoncé avant de commencer.',
       'Envoyez-moi l’adresse de votre site. Si vous ne savez pas comment il a été fait, l’adresse suffit, je vous le dis. Les accès viennent après qu’on se soit parlé, en lecture seule quand c’est possible, et je n’en conserve aucun. Je vous écris ce qui tient, ce qui casse, ce que je ferais en premier. Le devis vient après.',
       'Trois choses que je vérifie d’abord :',
       [

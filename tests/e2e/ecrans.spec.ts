@@ -113,7 +113,7 @@ test('le menu navigue et le retour arrière marche', async ({ page }) => {
 test('une carte fermée s’ouvre sans quitter l’écran, et l’ancienne se referme', async ({ page }) => {
   await page.goto('/ce-que-je-fais/')
   await expect(page.locator('.carte.ouverte h3')).toHaveText('Une application, un outil interne, un premier produit')
-  await expect(page.locator('.carrousel img')).toHaveCount(3)
+  await expect(page.locator('.carrousel .vues img')).toHaveCount(3)
   await page.getByRole('navigation', { name: 'Offres' }).getByRole('link', { name: /Un site vitrine/ }).click()
   await expect(page).toHaveURL(/\/ce-que-je-fais\/sites\/$/)
   await expect(page.locator('.carte.ouverte h3')).toHaveText('Un site vitrine ou une page de campagne')

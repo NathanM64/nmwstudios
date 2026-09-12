@@ -21,6 +21,10 @@ const FAQ = [
     'Oui. Une agence parisienne me confie aujourd’hui ses applications et ses nouveaux projets. Vos maquettes, vos délais, votre nom devant votre client. Je ne contacte jamais votre client et je ne signe pas mon travail.',
   ],
   [
+    'Combien coûte une reprise ?',
+    'Au temps passé, au taux annoncé avant de commencer. L’adresse de votre site suffit pour que je vous écrive ce qui tient et ce qui casse ; le devis vient après.',
+  ],
+  [
     'Combien coûte un site ?',
     'Un site vitrine simple, jusqu’à trois pages, démarre à 1 500 €. Un site sur mesure avec une direction graphique et des animations propres se chiffre après cadrage. Les montants sont indicatifs et s’ajustent selon le périmètre et les contenus.',
   ],
@@ -50,7 +54,9 @@ export default function Page() {
         </p>
         <p>
           Depuis un an, je construis des applications pour les clients d’une agence, souvent de grands
-          groupes, et je reprends ce que d’autres ont écrit.
+          groupes, et je reprends ce que d’autres ont écrit. Mes chantiers durent et se relaient :
+          pendant qu’un client relit, un autre avance. J’ai de la place, et je vous dis à partir de
+          quand avant de m’engager.
         </p>
         <p>
           C’est moi qui réponds. Si une fonctionnalité va coûter cher pour rien, je le dis avant de la
