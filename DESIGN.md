@@ -112,10 +112,13 @@ ce qui est structuré (cartes, missions, FAQ, formulaire) ; le titre reste du te
 
 ## Typographie
 
-- **Manrope partout**, titres en 700 (h1) et 600 (h2, h3), interlettrage serré.
-- Les étiquettes (`.eyebrow`) sont en Manrope 600, petites, sans capitales : en mono
-  capitales elles se lisaient comme un libellé de champ, pas comme un titre de bloc. IBM
-  Plex Mono ne reste que pour les numéros (étapes, compteur d'écran).
+- **Manrope partout**, en cinq graisses depuis le 12/09 : titres en 700, intertitres en 500,
+  corps en 300 sur un gris de lecture (`--color-reading`, `#c9c9d3`), les mots à retenir en
+  600 blanc. Nathan trouvait le texte « trop blanc, sans assez de diversité » ; trois
+  variantes montrées sur pièce, celle-ci retenue par moi faute d'avis (« je ne sais pas »).
+- Les étiquettes (`.eyebrow`) sont en Manrope 600, petites, sans capitales, en accent :
+  en mono capitales grises elles se lisaient comme un libellé de champ. IBM Plex Mono ne
+  reste que pour les numéros (étapes, compteur d'écran).
 - Les classes next/font vont sur `<html>`, jamais sur `<body>`, sinon les variables sont
   vides en silence.
 

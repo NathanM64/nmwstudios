@@ -10,6 +10,7 @@
   --color-surface-raised: rgba(255, 255, 255, 0.07);
   --color-foreground: #f4f4f7;
   --color-muted-foreground: #a3a3ae;
+  --color-reading: #c9c9d3;
   --color-faint: #75757f;
   --color-accent: #7aa2ff;
   --color-accent-2: #a878ff;
@@ -169,16 +170,16 @@ a { color: var(--color-accent); text-underline-offset: 0.2em; }
 
 /* Typographie des écrans */
 h1, h2, h3 { color: var(--color-foreground); margin: 0; letter-spacing: -0.02em; }
-h1 { font-size: clamp(2.4rem, 4.4vw, 4rem); font-weight: 700; line-height: 1.02; letter-spacing: -0.03em; margin-bottom: 1.4rem; }
+h1 { font-size: clamp(2.4rem, 4.4vw, 4rem); font-weight: 700; line-height: 1.02; letter-spacing: -0.035em; margin-bottom: 1.4rem; }
 h1 .client { color: var(--color-accent); }
-h2 { font-size: clamp(1.9rem, 3.4vw, 2.9rem); font-weight: 700; line-height: 1.08; max-width: 22ch; text-wrap: balance; margin-bottom: 1.6rem; }
+h2 { font-size: clamp(1.9rem, 3.4vw, 2.9rem); font-weight: 700; line-height: 1.08; letter-spacing: -0.035em; max-width: 22ch; text-wrap: balance; margin-bottom: 1.6rem; }
 h3 { font-size: 1.15rem; font-weight: 600; line-height: 1.3; letter-spacing: -0.014em; }
-p { margin: 0 0 1rem; max-width: 36rem; }
-.lead { font-size: clamp(1.05rem, 1.4vw, 1.25rem); line-height: 1.5; color: var(--color-foreground); }
-.eyebrow { font-size: 0.78rem; line-height: 1.2; font-weight: 600; letter-spacing: 0.04em; color: var(--color-muted-foreground); }
-.identite { color: var(--color-foreground); font-size: 1.05rem; margin-bottom: 0.6rem; max-width: 40rem; }
-.identite strong { font-weight: 600; }
-.actions .secondaire { color: var(--color-muted-foreground); font-size: 0.95rem; }
+p { margin: 0 0 1rem; max-width: 36rem; font-weight: 300; color: var(--color-reading); }
+p strong { font-weight: 600; color: var(--color-foreground); }
+.lead { font-size: clamp(1.15rem, 1.5vw, 1.35rem); line-height: 1.5; font-weight: 300; color: var(--color-reading); }
+.eyebrow { font-size: 0.78rem; line-height: 1.2; font-weight: 600; letter-spacing: 0.04em; color: var(--color-accent); }
+.identite { font-size: 1.05rem; margin-bottom: 0.6rem; max-width: 40rem; }
+.actions .secondaire { color: var(--color-muted-foreground); font-size: 0.95rem; font-weight: 300; }
 .actions .secondaire a { color: var(--color-foreground); text-decoration: underline; text-underline-offset: 0.2em; }
 .actions { margin-top: 1.6rem; display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
 .bouton {
@@ -205,7 +206,7 @@ ul, ol { padding: 0; margin: 0; list-style: none; }
 .situations li + li { border-left: 1px solid var(--color-border); }
 .situations a {
   display: flex; flex-direction: column; gap: 0.45rem; height: 100%; padding: 1rem 1.2rem;
-  color: var(--color-foreground); text-decoration: none; font-size: 0.98rem; line-height: 1.35; font-weight: 500;
+  color: var(--color-reading); text-decoration: none; font-size: 0.98rem; line-height: 1.35; font-weight: 400;
   transition: background-color 0.2s;
 }
 .situations a:hover { background: rgba(255, 255, 255, 0.07); }
@@ -224,15 +225,15 @@ ul, ol { padding: 0; margin: 0; list-style: none; }
   transition: transform 0.25s, background-color 0.25s;
 }
 a.carte:hover { transform: translateY(-3px); background-color: rgba(255, 255, 255, 0.08); }
-.carte h3 { font-size: 1.1rem; margin-bottom: 0.6rem; }
-.carte p { font-size: 0.92rem; color: var(--color-muted-foreground); margin: 0 0 0.6rem; max-width: none; }
+.carte h3 { font-size: 1.1rem; font-weight: 500; margin-bottom: 0.6rem; }
+.carte p { font-size: 0.92rem; font-weight: 300; color: var(--color-muted-foreground); margin: 0 0 0.6rem; max-width: none; }
 .carte .prix { color: var(--color-foreground); font-weight: 600; font-size: 1rem; }
 .carte .lien { margin-top: auto; padding-top: 0.4rem; color: var(--color-accent); font-weight: 600; font-size: 0.9rem; }
 .ecran .carte .lien a { text-decoration: none; }
 .ecran .carte .lien a:hover { text-decoration: underline; }
 .carte.ouverte { grid-row: 1 / 3; border-top-color: var(--color-accent); background-color: rgba(28, 34, 58, 0.78); }
 .carte.ouverte h3 { font-size: clamp(1.2rem, 1.6vw, 1.4rem); }
-.carte.ouverte p { color: var(--color-foreground); font-size: 0.95rem; margin-bottom: 0.5rem; }
+.carte.ouverte p { color: var(--color-reading); font-size: 0.95rem; margin-bottom: 0.5rem; }
 .carte.ouverte .prix { font-size: 1.15rem; }
 /* Les vues d'un outil réel dans la carte ouverte : elles défilent, un fondu à la fois. */
 .carrousel { margin: 0.2rem 0 0.6rem; }
@@ -260,21 +261,21 @@ a.carte:hover { transform: translateY(-3px); background-color: rgba(255, 255, 25
   transition: color 0.2s, border-color 0.2s;
 }
 .carrousel .points button[aria-selected='true'] { color: var(--color-foreground); border-color: var(--color-accent); }
-.carrousel figcaption { margin-bottom: 0.45rem; font-size: 0.82rem; color: var(--color-faint); }
+.carrousel figcaption { margin-bottom: 0.45rem; font-size: 0.82rem; font-weight: 300; color: var(--color-muted-foreground); }
 /* Une carte fermée dit qu'elle s'ouvre. */
 a.carte .lien::after { content: ' ›'; }
 a.carte:hover .lien { text-decoration: underline; text-underline-offset: 0.2em; }
-.carte ul { margin: 0.2rem 0 0.9rem; padding-left: 1rem; list-style: disc; color: var(--color-muted-foreground); font-size: 0.92rem; }
+.carte ul { margin: 0.2rem 0 0.9rem; padding-left: 1rem; list-style: disc; color: var(--color-muted-foreground); font-size: 0.92rem; font-weight: 300; }
 .carte li { margin-bottom: 0.25rem; }
 
 /* Comment je travaille : la preuve en titre, les missions à droite, la frise des étapes en bas. */
 .colonnes.methode { grid-template-columns: 1fr; gap: 1.5rem; max-width: none; }
 .preuve { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 3rem; align-items: start; }
-.preuve h2 { max-width: 24ch; margin-bottom: 1rem; }
-.preuve .lead { margin-bottom: 0.8rem; }
+.preuve h2 { max-width: 24ch; margin-bottom: 0.9rem; }
+.preuve .lead { margin-bottom: 0.7rem; font-size: clamp(1.05rem, 1.35vw, 1.2rem); }
 .missions { display: grid; gap: 0.7rem; }
-.missions .panel { padding: 0.9rem 1.1rem; font-size: 0.95rem; line-height: 1.4; color: var(--color-foreground); }
-.missions .panel span { display: block; color: var(--color-muted-foreground); font-size: 0.85rem; margin-top: 0.2rem; }
+.missions .panel { padding: 0.9rem 1.1rem; font-size: 0.95rem; line-height: 1.4; font-weight: 500; color: var(--color-foreground); }
+.missions .panel span { display: block; color: var(--color-muted-foreground); font-size: 0.85rem; font-weight: 300; margin-top: 0.2rem; }
 .etapes {
   counter-reset: etape; margin-top: 0.6rem;
   display: grid; grid-template-columns: repeat(5, 1fr);
@@ -283,19 +284,19 @@ a.carte:hover .lien { text-decoration: underline; text-underline-offset: 0.2em; 
 }
 .etapes li + li { border-left: 1px solid var(--color-border); }
 .etapes li { padding: 1rem 1.2rem; }
-.etapes h3 { font-size: 1rem; margin-bottom: 0.35rem; display: flex; gap: 0.6rem; align-items: baseline; }
+.etapes h3 { font-size: 1rem; font-weight: 500; margin-bottom: 0.35rem; display: flex; gap: 0.6rem; align-items: baseline; }
 .etapes h3::before { counter-increment: etape; content: counter(etape, decimal-leading-zero); font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.08em; color: var(--color-accent); font-weight: 500; }
-.etapes p { margin: 0; font-size: 0.88rem; color: var(--color-muted-foreground); max-width: none; }
+.etapes p { margin: 0; font-size: 0.88rem; font-weight: 300; color: var(--color-muted-foreground); max-width: none; }
 .etapes p strong { color: var(--color-foreground); font-weight: 500; }
 
 /* Qui je suis : la FAQ dépliable, une question à la fois, un signe qui dit qu'elle s'ouvre. */
-.faits { color: var(--color-muted-foreground); font-size: 0.95rem; }
+.faits { color: var(--color-muted-foreground); font-size: 0.95rem; font-weight: 300; }
 .faits a { color: var(--color-foreground); }
 .qa { border-top: 1px solid var(--color-border); }
 .qa:first-child { border-top: 0; }
 .qa summary {
   list-style: none; cursor: pointer; padding: 0.7rem 1.6rem 0.7rem 0; position: relative; color: var(--color-muted-foreground);
-  font-weight: 600; font-size: 1rem; letter-spacing: -0.01em; line-height: 1.3; transition: color 0.2s;
+  font-weight: 500; font-size: 1rem; letter-spacing: -0.01em; line-height: 1.3; transition: color 0.2s;
 }
 .qa summary::-webkit-details-marker { display: none; }
 .qa summary::after {
@@ -304,7 +305,7 @@ a.carte:hover .lien { text-decoration: underline; text-underline-offset: 0.2em; 
 }
 .qa summary:hover, .qa[open] summary { color: var(--color-foreground); }
 .qa[open] summary::after { transform: rotate(45deg); color: var(--color-accent); }
-.qa p { padding-bottom: 0.9rem; margin: 0; max-width: 32rem; font-size: 0.93rem; color: var(--color-muted-foreground); animation: 240ms ease-out both page-entre; }
+.qa p { padding-bottom: 0.9rem; margin: 0; max-width: 32rem; font-size: 0.93rem; font-weight: 300; color: var(--color-muted-foreground); animation: 240ms ease-out both page-entre; }
 
 /* Contact : les faits à gauche, les champs du dashboard à droite. */
 .colonnes.contact-ecran { grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr); }
@@ -313,6 +314,7 @@ a.carte:hover .lien { text-decoration: underline; text-underline-offset: 0.2em; 
 .contact { max-width: none; }
 .contact .optionnel { color: var(--color-faint); font-weight: 500; }
 .contact.envoye p { margin-bottom: 0.4rem; color: var(--color-muted-foreground); }
+.contact .note { font-weight: 400; }
 .contact.envoye .lead { color: var(--color-foreground); }
 .contact label { display: block; margin-bottom: 1rem; }
 .contact input, .contact textarea {
@@ -332,7 +334,7 @@ a.carte:hover .lien { text-decoration: underline; text-underline-offset: 0.2em; 
 .document { height: 100%; overflow-y: auto; padding: clamp(5.5rem, 14svh, 9rem) var(--gutter) 4rem; }
 .document > * { max-width: 40rem; }
 .document h2 { font-size: 1.3rem; margin: 1.8rem 0 0.6rem; }
-.document p { color: var(--color-muted-foreground); }
+.document p { color: var(--color-muted-foreground); font-weight: 300; }
 
 /* Transitions : la page qui part s'éteint d'abord, celle qui arrive s'allume ensuite, rien ne se superpose ;
    une carte fermée devient la carte ouverte. */

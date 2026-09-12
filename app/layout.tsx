@@ -11,6 +11,7 @@ import './globals.css'
 // Les classes next/font vont sur <html> : sur <body>, les variables restent vides en silence.
 const manrope = Manrope({
   subsets: ['latin'],
+  weight: ['300', '400', '500', '600', '700'],
   variable: '--font-manrope',
   display: 'swap',
 })
