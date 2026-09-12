@@ -38,6 +38,13 @@ test('le fond s’affiche au premier chargement, image déjà en cache ou non', 
   await expect(page.locator('.fond img')).toHaveCSS('opacity', /^0\.[1-9]/)
 })
 
+test('sur mobile, les onglets restent en bas du cadre et ne couvrent pas le titre', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 })
+  await page.goto('/comment-je-travaille/')
+  const [titre, onglets] = await Promise.all([page.locator('h2').boundingBox(), page.locator('.onglets').boundingBox()])
+  expect(onglets!.y).toBeGreaterThan(titre!.y + titre!.height)
+})
+
 test('la mer bouge sur bureau, pas sur mobile', async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 })
   await page.goto('/')

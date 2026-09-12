@@ -420,8 +420,12 @@ a.carte:hover .lien { text-decoration: underline; text-underline-offset: 0.2em; 
   .preuve { grid-template-columns: 1fr; gap: 1.2rem; }
   .etapes { grid-template-columns: 1fr; }
   .colonnes.contact-ecran { grid-template-columns: 1fr; }
-  .onglets { position: static; padding: 0.6rem var(--gutter) 0; background: rgba(10, 10, 15, 0.85); }
-  .ecran.methode .inner { padding-bottom: 4rem; }
+  .onglets {
+    position: absolute; left: 0; right: 0; bottom: 0; padding: 1.6rem var(--gutter) 0.6rem; overflow-x: auto;
+    background: linear-gradient(180deg, rgba(10, 10, 15, 0) 0%, rgba(10, 10, 15, 0.9) 45%);
+  }
+  .onglets a { white-space: nowrap; }
+  .ecran.methode .inner { padding-bottom: 5rem; }
   .refus { grid-template-columns: 1fr; }
   /* Les retours forcés du titre sont composés pour le bureau. */
   h1 br { display: none; }
