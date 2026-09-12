@@ -7,8 +7,8 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       <div className="entete">
         <h2>Je crée, je reprends, j’automatise, j’héberge. Vous choisissez où je commence.</h2>
         <p className="lead">
-          Cinq façons de travailler ensemble. La plus fréquente chez moi : reprendre ce qui existe déjà,
-          parce que tout le marché vend du neuf.
+          Cinq façons de travailler ensemble. Celle que peu de gens proposent : reprendre ce qui existe
+          déjà, au lieu de refaire.
         </p>
       </div>
       <nav className="cartes" aria-label="Offres">

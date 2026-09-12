@@ -14,6 +14,7 @@ export default function Page() {
       <div>
         <h2>Parlons de votre projet.</h2>
         <p className="lead">Un message suffit. Je le lis moi-même et je réponds dans la journée.</p>
+        <p>Des maquettes ou un cahier des charges à joindre ? Par email, en pièce jointe.</p>
         <p className="email">
           <a href="mailto:contact@nmwstudios.com">contact@nmwstudios.com</a>
         </p>

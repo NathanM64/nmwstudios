@@ -12,7 +12,8 @@ export function FormulaireContact() {
     ev.preventDefault()
     const champs = Object.fromEntries(new FormData(ev.currentTarget)) as Record<string, string>
     // Le service ne connaît que trois champs : l'adresse du site ouvre le message.
-    const message = champs.url ? `Site : ${champs.url}\n\n${champs.message}` : champs.message
+    const entete = [champs.url && `Site : ${champs.url}`, champs.telephone && `Téléphone : ${champs.telephone}`].filter(Boolean).join('\n')
+    const message = entete ? `${entete}\n\n${champs.message}` : champs.message
     setEtat('envoi')
     try {
       const reponse = await fetch('/api/contact', {
@@ -55,6 +56,12 @@ export function FormulaireContact() {
           L’adresse de votre site, s’il existe <span className="optionnel">(facultatif)</span>
         </span>
         <input type="url" name="url" autoComplete="url" maxLength={300} placeholder="https://" />
+      </label>
+      <label>
+        <span className="eyebrow">
+          Votre téléphone, si vous préférez qu’on s’appelle <span className="optionnel">(facultatif)</span>
+        </span>
+        <input type="tel" name="telephone" autoComplete="tel" maxLength={40} />
       </label>
       <label>
         <span className="eyebrow">Votre projet, en quelques lignes</span>

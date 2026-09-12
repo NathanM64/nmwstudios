@@ -24,6 +24,7 @@ export function Carrousel({ vues, legende }: { vues: readonly Vue[]; legende: st
       onFocus={() => setPause(true)}
       onBlur={() => setPause(false)}
     >
+      <figcaption>{legende}</figcaption>
       <div className="vues">
         {vues.map((v, n) => (
           // eslint-disable-next-line @next/next/no-img-element
@@ -37,7 +38,6 @@ export function Carrousel({ vues, legende }: { vues: readonly Vue[]; legende: st
           </button>
         ))}
       </div>
-      <figcaption>{legende}</figcaption>
     </figure>
   )
 }

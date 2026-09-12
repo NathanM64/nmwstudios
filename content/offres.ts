@@ -19,7 +19,7 @@ export const OFFRES: readonly Offre[] = [
     titre: 'Une application, un outil interne, un premier produit',
     resume: 'Une première version qui tourne, puis des itérations courtes.',
     blocs: [
-      'Une première version qui tourne, puis des itérations courtes : backoffice, portail client, outil interne, premier produit. Vous voyez des versions au fil du chantier, pas une livraison surprise.',
+      'Une première version qui tourne, puis des versions courtes et régulières : outil interne, espace client, premier produit. Vous voyez le chantier avancer, pas une livraison surprise.',
     ],
     vues: {
       legende: 'Mon outil, construit pour moi. Données de démonstration.',
@@ -37,9 +37,10 @@ export const OFFRES: readonly Offre[] = [
     resume: 'Du code que d’autres ont écrit, remis en marche et tenu.',
     blocs: [
       'Je lis le code que d’autres ont écrit, je le remets en état de marche et je le fais vivre. Reprendre coûte souvent moins cher que refaire, et casse moins de choses.',
-      'Envoyez-moi l’adresse de votre site et les accès que vous avez. Je lis le code et l’hébergement, puis je vous écris ce qui tient, ce qui casse et ce que je ferais en premier. Le devis vient après, pas avant.',
+      'Envoyez-moi l’adresse de votre site. Si vous ne savez pas comment il a été fait, l’adresse suffit, je vous le dis. Les accès viennent après qu’on se soit parlé, en lecture seule quand c’est possible, et je n’en conserve aucun. Je vous écris ce qui tient, ce qui casse, ce que je ferais en premier. Le devis vient après.',
+      'Trois choses que je vérifie d’abord :',
       [
-        'Le code source accessible en entier',
+        'Le code source, accessible en entier',
         'Un projet qui redémarre sur une machine neuve',
         'Un hébergement et un domaine transférables',
       ],
@@ -53,8 +54,8 @@ export const OFFRES: readonly Offre[] = [
     resume: 'Sobre et rapide, que vous pouvez faire évoluer sans moi.',
     prix: 'À partir de 1 500 €, jusqu’à trois pages.',
     blocs: [
-      'Un site sobre et rapide, que vous pouvez faire évoluer sans moi. Pas de constructeur de pages : du code que n’importe quel développeur peut reprendre.',
-      'Un site vitrine simple, jusqu’à trois pages, démarre à 1 500 €. Un site sur mesure avec une direction graphique et des animations propres se chiffre après cadrage. Les montants sont indicatifs et s’ajustent selon le périmètre et les contenus.',
+      'Un site rapide, que vous pouvez faire évoluer sans moi. Pas de constructeur de pages : du code qu’un autre développeur peut reprendre. Vos maquettes, intégrées telles quelles, sous votre nom ; les miennes seulement si vous n’en avez pas.',
+      'Un site sur mesure, avec une direction graphique et des animations propres, se chiffre après cadrage. Les montants sont indicatifs et s’ajustent selon le périmètre et les contenus.',
     ],
     appel: 'Parler de votre site',
   },

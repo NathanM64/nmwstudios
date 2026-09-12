@@ -5,8 +5,8 @@ import { expect, test } from '@playwright/test'
 const ROUTES: Array<[string, string]> = [
   ['/', 'Vous décidez jusqu’où.'],
   ['/ce-que-je-fais/', 'Données de démonstration'],
-  ['/ce-que-je-fais/reprise/', 'Le code source accessible en entier'],
-  ['/ce-que-je-fais/sites/', 'démarre à 1 500 €'],
+  ['/ce-que-je-fais/reprise/', 'Le code source, accessible en entier'],
+  ['/ce-que-je-fais/sites/', 'À partir de 1 500 €'],
   ['/ce-que-je-fais/hebergement/', 'une sauvegarde chaque nuit'],
   ['/comment-je-travaille/', 'une agence parisienne me confie'],
   ['/qui-je-suis/', 'Vous êtes seul'],
@@ -93,10 +93,11 @@ test('le formulaire glisse l’adresse du site dans le message et confirme à la
   await page.getByLabel('Votre nom').fill('Test')
   await page.getByLabel('Votre email').fill('test@example.com')
   await page.getByLabel(/L’adresse de votre site/).fill('https://exemple.fr')
+  await page.getByLabel(/Votre téléphone/).fill('06 00 00 00 00')
   await page.getByLabel('Votre projet, en quelques lignes').fill('Un site à reprendre.')
   await page.getByRole('button', { name: 'Envoyer' }).click()
   await expect(page.getByRole('status')).toContainText('Message envoyé')
-  expect(corps.message).toBe('Site : https://exemple.fr\n\nUn site à reprendre.')
+  expect(corps.message).toBe('Site : https://exemple.fr\nTéléphone : 06 00 00 00 00\n\nUn site à reprendre.')
   await expect(page.locator('form.contact')).toHaveCount(0)
 })
 

@@ -210,6 +210,7 @@ ul, ol { padding: 0; margin: 0; list-style: none; }
 }
 .situations a:hover { background: rgba(255, 255, 255, 0.07); }
 .situations .reponse { margin-top: auto; color: var(--color-accent); font-size: 0.92rem; font-weight: 600; }
+.situations .reponse::after { content: ' ›'; }
 
 /* Ce que je fais : cinq cartes visibles, la carte ouverte occupe deux rangées à gauche. */
 .colonnes.offres { grid-template-columns: 1fr; gap: 1.2rem; max-width: none; }
@@ -231,7 +232,7 @@ a.carte:hover { transform: translateY(-3px); background-color: rgba(255, 255, 25
 .ecran .carte .lien a:hover { text-decoration: underline; }
 .carte.ouverte { grid-row: 1 / 3; border-top-color: var(--color-accent); background-color: rgba(28, 34, 58, 0.78); }
 .carte.ouverte h3 { font-size: clamp(1.2rem, 1.6vw, 1.4rem); }
-.carte.ouverte p { color: var(--color-foreground); font-size: 0.95rem; }
+.carte.ouverte p { color: var(--color-foreground); font-size: 0.95rem; margin-bottom: 0.5rem; }
 .carte.ouverte .prix { font-size: 1.15rem; }
 /* Les vues d'un outil réel dans la carte ouverte : elles défilent, un fondu à la fois. */
 .carrousel { margin: 0.2rem 0 0.6rem; }
@@ -245,7 +246,7 @@ a.carte:hover { transform: translateY(-3px); background-color: rgba(255, 255, 25
   transition: color 0.2s, border-color 0.2s;
 }
 .carrousel .points button[aria-selected='true'] { color: var(--color-foreground); border-color: var(--color-accent); }
-.carrousel figcaption { margin-top: 0.5rem; font-size: 0.82rem; color: var(--color-faint); }
+.carrousel figcaption { margin-bottom: 0.45rem; font-size: 0.82rem; color: var(--color-faint); }
 /* Une carte fermée dit qu'elle s'ouvre. */
 a.carte .lien::after { content: ' ›'; }
 a.carte:hover .lien { text-decoration: underline; text-underline-offset: 0.2em; }
@@ -364,6 +365,7 @@ a.carte:hover .lien { text-decoration: underline; text-underline-offset: 0.2em; 
   }
   .menu a { font-size: 1.05rem; padding: 0.55rem 0; }
   .menu .appel { display: inline-block; margin: 0.6rem 0 0; }
+  h1 { font-size: 1.9rem; }
   .cadre { position: relative; inset: auto; height: auto; flex: 1; min-height: 0; }
   .inner {
     overflow-y: auto; padding: 1.5rem var(--gutter) 4rem;

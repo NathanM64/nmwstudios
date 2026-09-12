@@ -4,7 +4,7 @@ import { Ecran } from '@/components/Ecran'
 export const metadata: Metadata = {
   title: 'Comment je travaille, NMW Studios',
   description:
-    'En marque blanche pour une agence parisienne depuis un an. Cinq étapes, et à chacune quelque chose entre vos mains.',
+    'En marque blanche pour une agence parisienne depuis un an. Cinq étapes, et à chacune quelque chose entre vos mains, avec une date.',
 }
 
 const MISSIONS = [
@@ -15,10 +15,10 @@ const MISSIONS = [
 
 // Chaque étape finit par ce que vous avez en main.
 const ETAPES = [
-  ['Cadrage', 'On écrit ce que le projet doit faire, et ce qu’il ne fera pas.', 'Vous repartez avec un périmètre écrit et un prix.'],
-  ['Conception', 'Vos maquettes ou les miennes, des choix techniques expliqués en français.', 'Des maquettes validées.'],
-  ['Développement', 'Des versions visibles au fil du chantier.', 'Une adresse où voir l’avancement.'],
-  ['Mise en production', 'Sur votre hébergement ou sur le mien.', 'Le projet en ligne, transférable.'],
+  ['Cadrage', 'On écrit ce que le projet doit faire, et ce qu’il ne fera pas.', 'Vous repartez avec un périmètre écrit, un prix et une date.'],
+  ['Conception', 'Vos maquettes, intégrées telles quelles ; les miennes seulement si vous n’en avez pas. Si un élément ne tient pas techniquement, je le dis avant de commencer.', 'La liste des écrans, avec les points signalés.'],
+  ['Développement', 'Des versions visibles au fil du chantier. Si une date glisse, vous le savez avant, pas après.', 'Une adresse où voir l’avancement.'],
+  ['Mise en ligne', 'Sur votre hébergement ou sur le mien.', 'Le projet en ligne, transférable.'],
   ['Suivi', 'Si vous le souhaitez.', 'Sinon, le code et la documentation.'],
 ] as const
 
@@ -28,8 +28,7 @@ export default function Page() {
       <div className="preuve">
         <div>
           <h2>
-            Depuis un an, une agence parisienne me confie l’ensemble de son parc applicatif et ses
-            nouveaux projets.
+            Depuis un an, une agence parisienne me confie ses applications et ses nouveaux projets.
           </h2>
           <p className="lead">
             Je travaille pour elle en marque blanche : ses maquettes, ses délais, son nom devant son
@@ -38,7 +37,7 @@ export default function Page() {
           </p>
           <p>
             Je ne contacte jamais votre client. Je ne signe pas mon travail. Je ne cite ni votre nom ni
-            le sien. Ce que je peux décrire est à droite.
+            le sien, et je ne conserve aucun accès une fois le chantier livré. Ce que je peux décrire :
           </p>
         </div>
         <ul className="missions">
