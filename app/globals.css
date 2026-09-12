@@ -114,7 +114,7 @@ a { color: var(--color-accent); text-underline-offset: 0.2em; }
 .menu a::after { content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 2px; border-radius: 1px; background: transparent; transition: background-color 0.2s; }
 .menu a:hover { color: var(--color-foreground); }
 .menu a[aria-current='page'] { color: var(--color-foreground); }
-.menu a[aria-current='page']::after { background: var(--color-accent); }
+.menu a[aria-current='page']::after { background: var(--color-accent); view-transition-name: menu-filet; }
 .menu .appel {
   background: var(--color-accent); color: var(--color-accent-foreground); font-weight: 600; font-size: 0.9rem;
   padding: 0.55em 1.1em; border-radius: var(--radius-md); box-shadow: var(--btn-glow); margin-left: clamp(0.5rem, 2vw, 1.5rem);
@@ -123,9 +123,12 @@ a { color: var(--color-accent); text-underline-offset: 0.2em; }
 .menu .appel::after { display: none; }
 .menu .appel:hover { color: var(--color-accent-foreground); box-shadow: var(--btn-glow-hover); filter: brightness(1.15); }
 .pied-cadre {
-  position: fixed; left: var(--gutter); right: var(--gutter); bottom: 1.2rem; z-index: 10;
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 10; padding: 2rem var(--gutter) 1.2rem;
   display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; font-size: 0.8rem;
+  background: linear-gradient(180deg, rgba(10, 10, 15, 0) 0%, rgba(10, 10, 15, 0.85) 55%);
+  pointer-events: none;
 }
+.pied-cadre a { pointer-events: auto; }
 .legal { color: var(--color-faint); text-decoration: none; }
 .legal:hover { color: var(--color-foreground); }
 .suivant-lien { margin: 0; display: flex; gap: 0.8rem; align-items: baseline; color: var(--color-faint); }
@@ -321,6 +324,9 @@ a.carte:hover .lien { text-decoration: underline; text-underline-offset: 0.2em; 
 ::view-transition-old(page) { animation: 180ms ease-in both page-sort; }
 ::view-transition-new(page) { animation: 320ms ease-out 140ms both page-entre; }
 ::view-transition-group(page) { animation-duration: 0s; }
+/* Le filet du menu glisse d'un mot à l'autre pendant que la page change. */
+::view-transition-group(menu-filet) { animation-duration: 420ms; animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1); }
+::view-transition-old(menu-filet), ::view-transition-new(menu-filet) { animation: none; opacity: 1; }
 ::view-transition-group(.offre) { animation-duration: 340ms; animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1); }
 ::view-transition-old(.offre), ::view-transition-new(.offre) { animation-duration: 340ms; height: 100%; object-fit: cover; object-position: top; }
 @keyframes page-sort { to { opacity: 0; } }
@@ -379,6 +385,6 @@ a.carte:hover .lien { text-decoration: underline; text-underline-offset: 0.2em; 
   .document { padding: 1.5rem var(--gutter) 2rem; }
   .fond img { --fond-position: 72% 50%; }
   .fond::after { background: linear-gradient(180deg, rgba(10, 10, 15, 0.55) 0%, rgba(10, 10, 15, 0.35) 30%, rgba(10, 10, 15, 0.75) 75%, rgba(10, 10, 15, 0.95) 100%); }
-  .pied-cadre { position: static; padding: 0.7rem var(--gutter) 0.8rem; background: rgba(10, 10, 15, 0.85); font-size: 0.76rem; white-space: nowrap; }
+  .pied-cadre { position: static; padding: 0.7rem var(--gutter) 0.8rem; background: rgba(10, 10, 15, 0.85); font-size: 0.76rem; white-space: nowrap; pointer-events: auto; }
   .suivant-lien { gap: 0.5rem; }
 }
