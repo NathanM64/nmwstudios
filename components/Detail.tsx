@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { ViewTransition } from 'react'
 import type { Offre } from '@/content/offres'
+import { Carrousel } from './Carrousel'
 
 // La carte ouverte. Son nom de transition est celui de sa carte fermée : l'une devient l'autre.
 export function Detail({ offre }: { offre: Offre }) {
@@ -20,13 +21,7 @@ export function Detail({ offre }: { offre: Offre }) {
           ),
         )}
         {offre.prix && <p className="prix">{offre.prix}</p>}
-        {offre.image && (
-          <figure className="apercu">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={offre.image.src} width={offre.image.largeur} height={offre.image.hauteur} alt={offre.image.alt} loading="lazy" />
-            <figcaption>{offre.image.legende}</figcaption>
-          </figure>
-        )}
+        {offre.vues && <Carrousel vues={offre.vues.liste} legende={offre.vues.legende} />}
         <p className="lien">
           <Link href="/contact">{offre.appel}</Link>
         </p>

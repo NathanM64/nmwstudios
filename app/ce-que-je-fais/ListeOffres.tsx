@@ -16,7 +16,7 @@ export function ListeOffres() {
             <h3>{o.titre}</h3>
             <p>{o.resume}</p>
             {o.prix && <p className="prix">{o.prix}</p>}
-            <span className="lien">{o.appel}</span>
+            <span className="lien">Voir le détail</span>
           </Link>
         </ViewTransition>
       ))}

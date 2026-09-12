@@ -4,7 +4,8 @@ import { expect, test } from '@playwright/test'
 // sont là, le menu mène quelque part. Pas de test d'animation : ça se regarde.
 const ROUTES: Array<[string, string]> = [
   ['/', 'Vous décidez jusqu’où.'],
-  ['/ce-que-je-fais/', 'Le code source accessible en entier'],
+  ['/ce-que-je-fais/', 'Données de démonstration'],
+  ['/ce-que-je-fais/reprise/', 'Le code source accessible en entier'],
   ['/ce-que-je-fais/sites/', 'démarre à 1 500 €'],
   ['/ce-que-je-fais/hebergement/', 'une sauvegarde chaque nuit'],
   ['/comment-je-travaille/', 'une agence parisienne me confie'],
@@ -110,7 +111,8 @@ test('le menu navigue et le retour arrière marche', async ({ page }) => {
 
 test('une carte fermée s’ouvre sans quitter l’écran, et l’ancienne se referme', async ({ page }) => {
   await page.goto('/ce-que-je-fais/')
-  await expect(page.locator('.carte.ouverte h3')).toHaveText('Reprendre votre site ou votre application')
+  await expect(page.locator('.carte.ouverte h3')).toHaveText('Une application, un outil interne, un premier produit')
+  await expect(page.locator('.carrousel img')).toHaveCount(3)
   await page.getByRole('navigation', { name: 'Offres' }).getByRole('link', { name: /Un site vitrine/ }).click()
   await expect(page).toHaveURL(/\/ce-que-je-fais\/sites\/$/)
   await expect(page.locator('.carte.ouverte h3')).toHaveText('Un site vitrine ou une page de campagne')

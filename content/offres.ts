@@ -7,13 +7,30 @@ export type Offre = {
   resume: string
   prix?: string
   blocs: readonly Bloc[]
-  image?: { src: string; largeur: number; hauteur: number; alt: string; legende: string }
+  vues?: { legende: string; liste: readonly { src: string; alt: string; titre: string }[] }
   appel: string
 }
 
 // La première offre s'affiche à /ce-que-je-fais, les autres à /ce-que-je-fais/<slug>.
-// La reprise ouvre : c'est ce que le marché ne vend pas, et elle ne porte pas de prix.
+// Les applications ouvrent : c'est la carte qui montre quelque chose.
 export const OFFRES: readonly Offre[] = [
+  {
+    slug: 'applications',
+    titre: 'Une application, un outil interne, un premier produit',
+    resume: 'Une première version qui tourne, puis des itérations courtes.',
+    blocs: [
+      'Une première version qui tourne, puis des itérations courtes : backoffice, portail client, outil interne, premier produit. Vous voyez des versions au fil du chantier, pas une livraison surprise.',
+    ],
+    vues: {
+      legende: 'Mon outil, construit pour moi. Données de démonstration.',
+      liste: [
+        { src: '/demo/temps.webp', alt: 'Le suivi du temps, une semaine en calendrier', titre: 'Temps' },
+        { src: '/demo/compta.webp', alt: 'La comptabilité de la micro-entreprise : chiffre d’affaires, charges, plafond', titre: 'Comptabilité' },
+        { src: '/demo/facture.webp', alt: 'Une facture générée depuis le temps passé', titre: 'Facture' },
+      ],
+    },
+    appel: 'Parler de votre application',
+  },
   {
     slug: 'reprise',
     titre: 'Reprendre votre site ou votre application',
@@ -40,23 +57,6 @@ export const OFFRES: readonly Offre[] = [
       'Un site vitrine simple, jusqu’à trois pages, démarre à 1 500 €. Un site sur mesure avec une direction graphique et des animations propres se chiffre après cadrage. Les montants sont indicatifs et s’ajustent selon le périmètre et les contenus.',
     ],
     appel: 'Parler de votre site',
-  },
-  {
-    slug: 'applications',
-    titre: 'Une application, un outil interne, un premier produit',
-    resume: 'Une première version qui tourne, puis des itérations courtes.',
-    blocs: [
-      'Une première version qui tourne, puis des itérations courtes. Backoffice, portail client, outil interne, produit à mettre devant ses premiers utilisateurs.',
-      'Vous voyez des versions au fil du chantier, pas une livraison surprise à la fin.',
-    ],
-    image: {
-      src: '/demo/dashboard-temps.webp',
-      largeur: 1335,
-      hauteur: 640,
-      alt: 'Vue calendrier du suivi du temps dans mon outil de gestion',
-      legende: 'L’outil avec lequel je suis mon temps et je facture, que j’ai construit pour moi. Données de démonstration.',
-    },
-    appel: 'Parler de votre application',
   },
   {
     slug: 'automatisation',
