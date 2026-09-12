@@ -48,9 +48,9 @@ export default function Page() {
       <div>
         <h2>Nathan Marimbordes.</h2>
         <p className="lead">
-          Développeur web depuis six ans, d’abord en alternance puis en CDI, à mon compte depuis un an.
-          Je travaille seul, et je le dis : si votre projet demande une équipe de cinq personnes, je
-          vous le dirai et je vous orienterai.
+          Développeur web depuis six ans, d’abord en alternance puis en CDI, à mon compte depuis un an.{' '}
+          <span className="client">Je travaille seul, et je le dis :</span> si votre projet demande une
+          équipe de cinq personnes, je vous le dirai et je vous orienterai.
         </p>
         <p>
           Depuis un an, je construis des applications pour les clients d’une agence, souvent de grands

@@ -12,7 +12,9 @@ export default function Page() {
   return (
     <Ecran classe="contact-ecran">
       <div>
-        <h2>Parlons de votre projet.</h2>
+        <h2>
+          Parlons de <span className="client">votre projet.</span>
+        </h2>
         <p className="lead">Un message suffit. Je le lis moi-même et je réponds dans la journée.</p>
         <p>Des maquettes ou un cahier des charges à joindre ? Par email, en pièce jointe.</p>
         <p className="email">

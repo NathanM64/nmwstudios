@@ -171,7 +171,7 @@ a { color: var(--color-accent); text-underline-offset: 0.2em; }
 /* Typographie des écrans */
 h1, h2, h3 { color: var(--color-foreground); margin: 0; letter-spacing: -0.02em; }
 h1 { font-size: clamp(2.4rem, 4.4vw, 4rem); font-weight: 700; line-height: 1.02; letter-spacing: -0.035em; margin-bottom: 1.4rem; }
-h1 .client { color: var(--color-accent); }
+h1 .client, h2 .client, .lead .client { color: var(--color-accent); }
 h2 { font-size: clamp(1.9rem, 3.4vw, 2.9rem); font-weight: 700; line-height: 1.08; letter-spacing: -0.035em; max-width: 22ch; text-wrap: balance; margin-bottom: 1.6rem; }
 h3 { font-size: 1.15rem; font-weight: 600; line-height: 1.3; letter-spacing: -0.014em; }
 p { margin: 0 0 1rem; max-width: 36rem; font-weight: 300; color: var(--color-reading); }
@@ -232,7 +232,7 @@ a.carte:hover { transform: translateY(-3px); background-color: rgba(255, 255, 25
 .ecran .carte .lien a { text-decoration: none; }
 .ecran .carte .lien a:hover { text-decoration: underline; }
 .carte.ouverte { grid-row: 1 / 3; border-top-color: var(--color-accent); background-color: rgba(28, 34, 58, 0.78); }
-.carte.ouverte h3 { font-size: clamp(1.2rem, 1.6vw, 1.4rem); }
+.carte.ouverte h3 { font-size: clamp(1.2rem, 1.6vw, 1.4rem); color: var(--color-accent); }
 .carte.ouverte p { color: var(--color-reading); font-size: 0.95rem; margin-bottom: 0.5rem; }
 .carte.ouverte .prix { font-size: 1.15rem; }
 /* Les vues d'un outil réel dans la carte ouverte : elles défilent, un fondu à la fois. */
@@ -260,7 +260,7 @@ a.carte:hover { transform: translateY(-3px); background-color: rgba(255, 255, 25
   background: rgba(255, 255, 255, 0.04); border: 1px solid var(--color-border); border-radius: 999px; padding: 0.2rem 0.7rem;
   transition: color 0.2s, border-color 0.2s;
 }
-.carrousel .points button[aria-selected='true'] { color: var(--color-foreground); border-color: var(--color-accent); }
+.carrousel .points button[aria-selected='true'] { color: var(--color-accent); border-color: var(--color-accent); }
 .carrousel figcaption { margin-bottom: 0.45rem; font-size: 0.82rem; font-weight: 300; color: var(--color-muted-foreground); }
 /* Une carte fermée dit qu'elle s'ouvre. */
 a.carte .lien::after { content: ' ›'; }
@@ -274,7 +274,7 @@ a.carte:hover .lien { text-decoration: underline; text-underline-offset: 0.2em; 
 .preuve h2 { max-width: 24ch; margin-bottom: 0.9rem; }
 .preuve .lead { margin-bottom: 0.7rem; font-size: clamp(1.05rem, 1.35vw, 1.2rem); }
 .missions { display: grid; gap: 0.7rem; }
-.missions .panel { padding: 0.9rem 1.1rem; font-size: 0.95rem; line-height: 1.4; font-weight: 500; color: var(--color-foreground); }
+.missions .panel { padding: 0.9rem 1.1rem 0.9rem 1.2rem; font-size: 0.95rem; line-height: 1.4; font-weight: 500; color: var(--color-foreground); border-left: 2px solid var(--color-accent); }
 .missions .panel span { display: block; color: var(--color-muted-foreground); font-size: 0.85rem; font-weight: 300; margin-top: 0.2rem; }
 .etapes {
   counter-reset: etape; margin-top: 0.6rem;
@@ -287,7 +287,7 @@ a.carte:hover .lien { text-decoration: underline; text-underline-offset: 0.2em; 
 .etapes h3 { font-size: 1rem; font-weight: 500; margin-bottom: 0.35rem; display: flex; gap: 0.6rem; align-items: baseline; }
 .etapes h3::before { counter-increment: etape; content: counter(etape, decimal-leading-zero); font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.08em; color: var(--color-accent); font-weight: 500; }
 .etapes p { margin: 0; font-size: 0.88rem; font-weight: 300; color: var(--color-muted-foreground); max-width: none; }
-.etapes p strong { color: var(--color-foreground); font-weight: 500; }
+.etapes p strong { color: var(--color-accent); font-weight: 500; }
 
 /* Qui je suis : la FAQ dépliable, une question à la fois, un signe qui dit qu'elle s'ouvre. */
 .faits { color: var(--color-muted-foreground); font-size: 0.95rem; font-weight: 300; }
@@ -303,14 +303,15 @@ a.carte:hover .lien { text-decoration: underline; text-underline-offset: 0.2em; 
   content: '+'; position: absolute; right: 0; top: 0.55rem; font-weight: 500; font-size: 1.2rem; line-height: 1;
   color: var(--color-faint); transition: transform 0.25s, color 0.2s;
 }
-.qa summary:hover, .qa[open] summary { color: var(--color-foreground); }
+.qa summary:hover { color: var(--color-foreground); }
+.qa[open] summary { color: var(--color-accent); }
 .qa[open] summary::after { transform: rotate(45deg); color: var(--color-accent); }
 .qa p { padding-bottom: 0.9rem; margin: 0; max-width: 32rem; font-size: 0.93rem; font-weight: 300; color: var(--color-muted-foreground); animation: 240ms ease-out both page-entre; }
 
 /* Contact : les faits à gauche, les champs du dashboard à droite. */
 .colonnes.contact-ecran { grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr); }
 .email { font-size: clamp(1.2rem, 1.8vw, 1.6rem); font-weight: 600; margin: 0 0 1.2rem; }
-.ecran .email a { color: var(--color-foreground); text-decoration-color: var(--color-accent); text-underline-offset: 0.25em; }
+.ecran .email a { color: var(--color-accent); text-decoration-color: color-mix(in srgb, var(--color-accent) 50%, transparent); text-underline-offset: 0.25em; }
 .contact { max-width: none; }
 .contact .optionnel { color: var(--color-faint); font-weight: 500; }
 .contact.envoye p { margin-bottom: 0.4rem; color: var(--color-muted-foreground); }

@@ -28,7 +28,8 @@ export default function Page() {
       <div className="preuve">
         <div>
           <h2>
-            Depuis un an, une agence parisienne me confie ses applications et ses nouveaux projets.
+            <span className="client">Depuis un an,</span> une agence parisienne me confie ses applications et
+            ses nouveaux projets.
           </h2>
           <p className="lead">
             Je travaille pour elle en marque blanche : ses maquettes, ses délais, son nom devant son
