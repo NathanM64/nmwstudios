@@ -21,8 +21,8 @@ export default function Accueil() {
           <span className="client">Vous décidez jusqu’où.</span>
         </h1>
         <p className="identite">
-          <strong>Nathan Marimbordes</strong>, développeur web indépendant à Bègles. Une agence parisienne
-          me confie ses applications et ses nouveaux projets.
+          <strong>Nathan Marimbordes</strong>, développeur web indépendant à Bègles. Pour les entreprises
+          en direct, et pour les agences en marque blanche.
         </p>
         <p className="lead">
           Sites, applications et outils métier. Je construis, je reprends l’existant, et j’assure la
