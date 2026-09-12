@@ -8,7 +8,7 @@ export const dynamic = 'force-static'
 const MODIFIE = new Date('2026-09-12')
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const chemins = [...ECRANS.map((e) => e.href), ...OFFRES.slice(1).map(hrefOffre)]
+  const chemins = [...ECRANS.map((e) => e.href), ...OFFRES.slice(1).map(hrefOffre), '/comment-je-travaille/ce-que-je-ne-fais-pas']
   return chemins.map((chemin) => ({
     url: `https://nmwstudios.com${chemin === '/' ? '/' : `${chemin}/`}`,
     lastModified: MODIFIE,

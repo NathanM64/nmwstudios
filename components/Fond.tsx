@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, useSyncExternalStore } from 'react'
 import { preload } from 'react-dom'
 import { usePathname } from 'next/navigation'
 import { indexEcran } from '@/content/ecrans'
@@ -25,11 +25,22 @@ function precharger() {
   }
 }
 
+// La mer bouge sur bureau seulement, et pas pour qui préfère moins de mouvement.
+const REQUETE = '(min-width: 721px) and (prefers-reduced-motion: no-preference)'
+const abonner = (cb: () => void) => {
+  const mq = matchMedia(REQUETE)
+  mq.addEventListener('change', cb)
+  return () => mq.removeEventListener('change', cb)
+}
+const usePeutBouger = () => useSyncExternalStore(abonner, () => matchMedia(REQUETE).matches, () => false)
+
 export function Fond() {
   const i = indexEcran(usePathname())
   const m = i >= 0 ? MATIERES[i] : null
   // « net » : l'image était déjà là ; « fondu » : elle vient d'arriver, elle apparaît en douceur.
   const [etat, setEtat] = useState<'net' | 'fondu' | null>(() => (m && chargees.has(m) ? 'net' : null))
+  const bouge = usePeutBouger()
+  const [joue, setJoue] = useState(false)
   for (const autre of MATIERES) {
     if (autre !== m) preload(`/fonds/${autre}.webp`, { as: 'image', imageSrcSet: srcSet(autre), imageSizes: '100vw', fetchPriority: 'low' })
   }
@@ -45,7 +56,7 @@ export function Fond() {
   }, [m])
   if (!m) return null
   return (
-    <div className="fond" data-matiere={m} data-pret={etat ?? undefined} aria-hidden="true">
+    <div className="fond" data-matiere={m} data-pret={etat ?? undefined} data-video={joue || undefined} aria-hidden="true">
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         src={`/fonds/${m}.webp`}
@@ -59,6 +70,9 @@ export function Fond() {
           setEtat((e) => e ?? 'fondu')
         }}
       />
+      {m === 'eau' && bouge && (
+        <video src="/fonds/eau.mp4" autoPlay muted loop playsInline preload="auto" onPlaying={() => setJoue(true)} />
+      )}
     </div>
   )
 }

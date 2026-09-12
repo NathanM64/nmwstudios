@@ -9,6 +9,7 @@ const ROUTES: Array<[string, string]> = [
   ['/ce-que-je-fais/sites/', 'À partir de 1 500 €'],
   ['/ce-que-je-fais/hebergement/', 'une sauvegarde chaque nuit'],
   ['/comment-je-travaille/', 'une agence parisienne me confie'],
+  ['/comment-je-travaille/ce-que-je-ne-fais-pas/', 'Les applications mobiles natives'],
   ['/qui-je-suis/', 'Vous êtes seul'],
   ['/contact/', 'Parlons de votre projet.'],
   ['/mentions-legales/', 'Hetzner Online GmbH'],
@@ -35,6 +36,17 @@ test('le fond s’affiche au premier chargement, image déjà en cache ou non', 
   await page.goto('/comment-je-travaille/')
   await expect(page.locator('.fond[data-pret]')).toHaveCount(1)
   await expect(page.locator('.fond img')).toHaveCSS('opacity', /^0\.[1-9]/)
+})
+
+test('la mer bouge sur bureau, pas sur mobile', async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 })
+  await page.goto('/')
+  await expect(page.locator('.fond video')).toHaveCount(1)
+  await expect(page.locator('.fond[data-video]')).toHaveCount(1, { timeout: 15000 })
+  await page.setViewportSize({ width: 390, height: 844 })
+  await page.goto('/')
+  await page.waitForTimeout(500)
+  await expect(page.locator('.fond video')).toHaveCount(0)
 })
 
 test('le lien partagé montre une image', async ({ request }) => {
