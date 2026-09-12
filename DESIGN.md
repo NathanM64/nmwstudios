@@ -32,7 +32,7 @@ Revue le 2026-09-12 après le diagnostic : un gabarit par écran, plus un seul r
 |---|---|
 | Accueil | titre à l'échelle du cadre, « Vous décidez jusqu'où » en accent, ligne d'identité (nom, métier, ville, l'agence), bouton et email ; en bas du cadre, quatre situations qui sont des portes vers l'offre qui y répond |
 | Ce que je fais | titre en phrase et intro, puis cinq cartes visibles : la carte ouverte occupe deux rangées à gauche, les quatre fermées à droite et disent « Voir le détail » ; une carte fermée devient la carte ouverte (transition partagée). L'offre applications ouvre par défaut : elle montre trois vues de mon outil de gestion en carrousel (temps, comptabilité, PDF de facture), données de démonstration, légendées comme telles |
-| Comment je travaille | la preuve en titre (l'agence, datée), la marque blanche au « vous », les engagements de discrétion ; les trois missions en panneaux à droite ; en bas, la frise des cinq étapes, chacune terminée par ce que le client a en main |
+| Comment je travaille | deux onglets au bas du cadre, chacun sa route. « Comment je travaille » : la preuve en titre (l'agence, datée), la marque blanche au « vous », les engagements de discrétion, les trois missions à droite, la frise des cinq étapes avec ce que le client a en main. « Ce que je ne fais pas » : quatre refus en panneaux (sites sans code source, projets qui demandent une équipe, applications natives, prix de maintenance avant d'avoir construit) |
 | Qui je suis | nom, parcours daté, phrases de relation, ville et renvoi au SIRET ; FAQ dépliable à droite, un signe « + », une question ouverte à la fois |
 | Contact | titre, email en gros, faits d'identité ; formulaire à quatre champs (dont l'adresse du site, facultative), confirmation à la place des champs |
 
@@ -54,7 +54,7 @@ dans `public/fonds/` en 2048 et 1200 px. Pas de métaphore du métier : de la ma
 
 | Écran | Matière |
 |---|---|
-| Accueil | l'eau noire, un seul reflet de lune à droite (choisie par Nathan) |
+| Accueil | l'eau noire, un seul reflet de lune à droite (choisie par Nathan). Sur bureau, elle bouge : une boucle de huit secondes rendue par Veo depuis l'image fixe (modèle économique, 1,20 $), dernière seconde fondue dans la première, H.264 à 1440 px, 2,1 Mo, posée sur l'image une fois qu'elle joue. Image fixe sur mobile et sous `prefers-reduced-motion` |
 | Ce que je fais | la soie anthracite |
 | Comment je travaille | le verre dépoli rétroéclairé |
 | Qui je suis | l'ardoise mouillée |
@@ -125,7 +125,7 @@ ce qui est structuré (cartes, missions, FAQ, formulaire) ; le titre reste du te
 ## Mouvement
 
 - **La transition entre écrans et l'ouverture d'une carte sont les seuls moments animés,
-  plus le carrousel de l'offre applications**, demandé par Nathan le 12/09 : trois vues qui
+  plus la mer de l'accueil et le carrousel de l'offre applications**, demandés par Nathan le 12/09 : trois vues qui
   se relaient toutes les 4,5 s en fondu, arrêtées au survol, au focus et sous
   `prefers-reduced-motion`. Le fond apparaît en fondu au premier chargement seulement ;
   une image déjà en cache s'affiche nette.
