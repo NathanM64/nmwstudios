@@ -31,14 +31,17 @@ Revue le 2026-09-12 après le diagnostic : un gabarit par écran, plus un seul r
 | Écran | Composition |
 |---|---|
 | Accueil | titre à l'échelle du cadre, « Vous décidez jusqu'où » en accent, ligne d'identité (nom, métier, ville, l'agence), bouton et email ; en bas du cadre, quatre situations qui sont des portes vers l'offre qui y répond |
-| Ce que je fais | titre en phrase et intro, puis cinq cartes visibles : la carte ouverte occupe deux rangées à gauche, les quatre fermées à droite ; une carte fermée devient la carte ouverte (transition partagée). La reprise ouvre par défaut. L'offre applications montre une capture de mon outil de suivi du temps |
+| Ce que je fais | titre en phrase et intro, puis cinq cartes visibles : la carte ouverte occupe deux rangées à gauche, les quatre fermées à droite et disent « Voir le détail » ; une carte fermée devient la carte ouverte (transition partagée). L'offre applications ouvre par défaut : elle montre trois vues de mon outil de gestion en carrousel (temps, comptabilité, PDF de facture), données de démonstration, légendées comme telles |
 | Comment je travaille | la preuve en titre (l'agence, datée), la marque blanche au « vous », les engagements de discrétion ; les trois missions en panneaux à droite ; en bas, la frise des cinq étapes, chacune terminée par ce que le client a en main |
 | Qui je suis | nom, parcours daté, phrases de relation, ville et renvoi au SIRET ; FAQ dépliable à droite, un signe « + », une question ouverte à la fois |
 | Contact | titre, email en gros, faits d'identité ; formulaire à quatre champs (dont l'adresse du site, facultative), confirmation à la place des champs |
 
 Tous les écrans s'ancrent sur la même ligne haute : le titre et le panneau ne bougent pas
 d'un écran à l'autre, et un panneau qui change de hauteur ne fait pas sauter le reste.
-Le bouton « Parler de votre projet » est dans la barre sur les cinq écrans, à la même place.
+Le bouton « Parler de votre projet » est dans la barre sur les cinq écrans, à la même place :
+un menu qui bouge d'un écran à l'autre perd le visiteur. Le pied du cadre porte le compteur
+(« 02 / 05 »), l'écran suivant et les mentions légales, sur un voile : ce qui défile passe
+dessous en s'éteignant. Le filet du menu glisse d'un mot à l'autre pendant la transition.
 
 Le texte de chaque écran tient dans le cadre à 1440 × 900 sans rien couper. Sous 720 px de
 haut ou de large, l'écran défile à l'intérieur de lui même et la molette lui revient.
@@ -118,9 +121,11 @@ ce qui est structuré (cartes, missions, FAQ, formulaire) ; le titre reste du te
 
 ## Mouvement
 
-- **La transition entre écrans et l'ouverture d'une carte sont les seuls moments animés.**
-  Rien d'autre ne bouge de soi même. Le fond apparaît en fondu au premier chargement
-  seulement ; une image déjà en cache s'affiche nette.
+- **La transition entre écrans et l'ouverture d'une carte sont les seuls moments animés,
+  plus le carrousel de l'offre applications**, demandé par Nathan le 12/09 : trois vues qui
+  se relaient toutes les 4,5 s en fondu, arrêtées au survol, au focus et sous
+  `prefers-reduced-motion`. Le fond apparaît en fondu au premier chargement seulement ;
+  une image déjà en cache s'affiche nette.
 - **`transform` et `opacity` uniquement.** Jamais `top`, `left` ni `width` animés.
 - Sous `prefers-reduced-motion`, les transitions deviennent des changements immédiats et le
   défilement amorti est désactivé.
