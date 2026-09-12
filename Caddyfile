@@ -21,9 +21,12 @@
 
 	# Deux matchers disjoints, et non une valeur par défaut surchargée : deux directives
 	# `header` qui visent le même champ s'exécutent toutes les deux, la dernière gagne.
+	# Les fonds et les vues de démonstration pèsent lourd et changent rarement : un jour de cache.
 	@immuable path /_next/static/*
-	@datable not path /_next/static/*
+	@medias path /fonds/* /demo/*
+	@datable not path /_next/static/* /fonds/* /demo/*
 	header @immuable Cache-Control "public, max-age=31536000, immutable"
+	header @medias Cache-Control "public, max-age=86400"
 	header @datable Cache-Control "public, max-age=0, must-revalidate"
 
 	header {
