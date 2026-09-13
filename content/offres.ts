@@ -40,14 +40,13 @@ export const OFFRES: readonly Offre[] = [
     meta: 'Je lis le code que d’autres ont écrit, je le remets en état de marche et je le fais vivre. Facturé au temps passé, au taux annoncé avant de commencer.',
     blocs: [
       'Je lis le code que d’autres ont écrit, je le remets en état de marche et je le fais vivre. Une reprise se facture au temps passé, au taux annoncé avant de commencer.',
-      'Envoyez-moi l’adresse de votre site. Si vous ne savez pas comment il a été fait, l’adresse suffit, je vous le dis. Les accès viennent après qu’on se soit parlé, en lecture seule quand c’est possible, et je n’en conserve aucun. Je vous écris ce qui tient, ce qui casse, ce que je ferais en premier. Le devis vient après.',
+      'Envoyez-moi l’adresse de votre site, même si vous ne savez pas comment il a été fait. Je vous écris ce qui tient, ce qui casse, ce que je ferais en premier. Les accès viennent après qu’on se soit parlé, et je n’en conserve aucun. Le devis vient après.',
       'Trois choses que je vérifie d’abord :',
       [
         'Le code source, accessible en entier',
         'Un projet qui redémarre sur une machine neuve',
         'Un hébergement et un domaine transférables',
       ],
-      'Je ne reprends pas les sites sans code source, montés sur Wix, Squarespace ou un éditeur équivalent : ça vous coûterait plus cher que de refaire.',
     ],
     appel: 'Parler de votre existant',
   },

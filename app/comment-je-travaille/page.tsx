@@ -17,10 +17,10 @@ const MISSIONS = [
 
 // Chaque étape finit par ce que vous avez en main.
 const ETAPES = [
-  ['Cadrage', 'On écrit ce que le projet doit faire, et ce qu’il ne fera pas.', 'Vous repartez avec un périmètre écrit, un prix et une date.'],
-  ['Conception', 'Vos maquettes, intégrées telles quelles ; les miennes seulement si vous n’en avez pas. Si un élément ne tient pas techniquement, je le dis avant de commencer.', 'La liste des écrans, avec les points signalés.'],
-  ['Développement', 'Des versions visibles au fil du chantier. Si une date glisse, vous le savez avant, pas après.', 'Une adresse où voir l’avancement.'],
-  ['Mise en ligne', 'Sur votre hébergement ou sur le mien.', 'Le projet en ligne, transférable.'],
+  ['Cadrage', 'Un périmètre écrit, un prix et une date.', 'Ce que le projet fait, et ce qu’il ne fera pas.'],
+  ['Conception', 'La liste des écrans, avec les points signalés.', 'Vos maquettes telles quelles ; les miennes si vous n’en avez pas.'],
+  ['Développement', 'Une adresse où voir l’avancement.', 'Des versions visibles au fil du chantier. Si une date glisse, vous le savez avant.'],
+  ['Mise en ligne', 'Le projet en ligne, transférable.', 'Sur votre hébergement ou sur le mien.'],
   ['Suivi', 'Si vous le souhaitez.', 'Sinon, le code et la documentation.'],
 ] as const
 
@@ -34,13 +34,11 @@ export default function Page() {
             ses nouveaux projets.
           </h1>
           <p className="lead">
-            Je travaille pour elle en marque blanche : ses maquettes, ses délais, son nom devant son
-            client. Si vous êtes une agence, c’est la même chose pour vous : vos maquettes, vos délais,
-            votre nom devant votre client.
+            En marque blanche : vos maquettes, vos délais, votre nom devant votre client.
           </p>
           <p>
-            Je ne contacte jamais votre client. Je ne signe pas mon travail. Je ne cite ni votre nom ni
-            le sien, et je ne conserve aucun accès une fois le chantier livré. Ce que je peux décrire :
+            Je ne contacte jamais votre client, je ne signe pas mon travail, je ne conserve aucun accès
+            une fois le chantier livré. Ce que je peux décrire :
           </p>
         </div>
         <ul className="missions">
@@ -55,11 +53,12 @@ export default function Page() {
       <div>
         <p className="eyebrow">Ce que vous avez en main à chaque étape</p>
         <ol className="etapes">
-          {ETAPES.map(([titre, quoi, livrable]) => (
+          {ETAPES.map(([titre, livrable, comment]) => (
             <li key={titre}>
               <h3>{titre}</h3>
               <p>
-                {quoi} <strong>{livrable}</strong>
+                <strong>{livrable}</strong>
+                <span>{comment}</span>
               </p>
             </li>
           ))}

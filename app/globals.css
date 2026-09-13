@@ -294,7 +294,8 @@ a.carte:hover .lien { text-decoration: underline; text-underline-offset: 0.2em; 
 .etapes h3 { font-size: 1rem; font-weight: 500; margin-bottom: 0.35rem; display: flex; gap: 0.6rem; align-items: baseline; }
 .etapes h3::before { counter-increment: etape; content: counter(etape, decimal-leading-zero); font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.08em; color: var(--color-accent); font-weight: 500; }
 .etapes p { margin: 0; font-size: 0.88rem; font-weight: 300; color: var(--color-muted-foreground); max-width: none; }
-.etapes p strong { color: var(--color-accent); font-weight: 500; }
+.etapes p strong { display: block; color: var(--color-accent); font-weight: 500; margin-bottom: 0.3rem; }
+.etapes p span { font-size: 0.84rem; }
 
 /* Les onglets d'un écran à deux états, au bas du cadre, au-dessus du pied. */
 .onglets { position: fixed; left: var(--gutter); right: var(--gutter); bottom: 3.2rem; z-index: 5; display: flex; gap: 0.5rem; }
