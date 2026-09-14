@@ -27,6 +27,15 @@ const plexMono = IBM_Plex_Mono({
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://nmwstudios.com'),
+  // Des adresses fixes : Google ne rattrape pas un favicon qui change d'empreinte à chaque déploiement.
+  icons: {
+    icon: [
+      { url: '/favicon.ico', sizes: '48x48', type: 'image/x-icon' },
+      { url: '/icon-192.png', sizes: '192x192', type: 'image/png' },
+      { url: '/icon.svg', type: 'image/svg+xml' },
+    ],
+    apple: '/apple-touch-icon.png',
+  },
   title: 'NMW Studios, développeur web indépendant à Bordeaux',
   description:
     'Je conçois, je développe, je reprends et j’accompagne vos sites et applications web, en direct et en marque blanche pour les agences. Le code est à vous.',

@@ -56,6 +56,12 @@ test('la mer bouge sur bureau, pas sur mobile', async ({ page }) => {
   await expect(page.locator('.fond video')).toHaveCount(0)
 })
 
+test('les icônes ont une adresse fixe et répondent', async ({ request }) => {
+  const html = await (await request.get('/')).text()
+  expect(html).toContain('<link rel="icon" href="/favicon.ico"')
+  for (const p of ['/favicon.ico', '/icon-192.png', '/icon.svg', '/apple-touch-icon.png']) expect((await request.get(p)).status(), p).toBe(200)
+})
+
 test('le lien partagé montre une image', async ({ request }) => {
   const html = await (await request.get('/')).text()
   const image = html.match(/property="og:image" content="([^"]+)"/)?.[1]

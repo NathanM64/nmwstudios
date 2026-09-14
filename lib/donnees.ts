@@ -12,6 +12,8 @@ export const DONNEES = {
   name: 'NMW Studios',
   url: `${SITE}/`,
   email: 'contact@nmwstudios.com',
+  logo: `${SITE}/icon-512.png`,
+  image: `${SITE}/opengraph-image.jpg`,
   description:
     'Sites, applications et outils métier. Je construis, je reprends l’existant, et j’assure la suite si vous le souhaitez.',
   foundingDate: '2025',
