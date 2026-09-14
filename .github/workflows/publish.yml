@@ -48,9 +48,11 @@ jobs:
             ghcr.io/nathanm64/nmwstudios:latest
             ghcr.io/nathanm64/nmwstudios:${{ github.sha }}
           # Le cache vit chez GitHub : yarn install et next build ne repartent
-          # pas de zéro à chaque commit.
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          # pas de zéro à chaque commit. Un scope par image : sans lui, les deux
+          # builds partagent le même cache et le contact récupère des couches du
+          # site, publiant une image sans ses propres changements.
+          cache-from: type=gha,scope=site
+          cache-to: type=gha,mode=max,scope=site
 
       # Seconde image, même commit et mêmes tags : l'endpoint du formulaire. Le site
       # est statique et ne peut rien recevoir en POST, d'où un service à part. Les
@@ -62,5 +64,5 @@ jobs:
           tags: |
             ghcr.io/nathanm64/nmwstudios-contact:latest
             ghcr.io/nathanm64/nmwstudios-contact:${{ github.sha }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          cache-from: type=gha,scope=contact
+          cache-to: type=gha,mode=max,scope=contact
