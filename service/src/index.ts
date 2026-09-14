@@ -116,8 +116,32 @@ async function send(enquiry: Enquiry): Promise<boolean> {
   return true
 }
 
+// The site's beacon: a real browser reports opening a page. Bots run no JavaScript,
+// so they never reach here. One JSON line to stdout, which the monitoring agent turns
+// into a visit. Always 204, and never a shape a visitor could notice.
+async function beacon(request: IncomingMessage, response: ServerResponse) {
+  let path: string | null = null
+  let referrer: string | null = null
+  try {
+    const body = await readBody(request)
+    if (typeof body === 'object' && body !== null) {
+      const { p, r } = body as Record<string, unknown>
+      if (typeof p === 'string' && p.startsWith('/') && p.length <= 2048) path = p
+      if (typeof r === 'string' && r !== '' && r.length <= 2048) referrer = r
+    }
+  } catch {
+    // A malformed ping is simply dropped.
+  }
+  if (path) {
+    const host = (request.headers.host ?? '').split(':')[0]
+    console.log(JSON.stringify({ beacon: true, host, path, referrer, ip: clientIp(request) }))
+  }
+  return reply(response, 204)
+}
+
 const server = createServer(async (request, response) => {
   if (request.method === 'GET' && request.url === '/health') return reply(response, 204)
+  if (request.method === 'POST' && request.url === '/beacon') return beacon(request, response)
   if (request.url !== '/contact') return reply(response, 404)
   if (request.method !== 'POST') return reply(response, 405)
 

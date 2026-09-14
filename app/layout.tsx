@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { ViewTransition } from 'react'
 import Link from 'next/link'
 import { IBM_Plex_Mono, Manrope } from 'next/font/google'
+import { Beacon } from '@/components/Beacon'
 import { Menu } from '@/components/Menu'
 import { Clavier } from '@/components/Clavier'
 import { Fond } from '@/components/Fond'
@@ -72,6 +73,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         </ViewTransition>
         <Clavier />
         <Donnees objet={DONNEES} />
+        <Beacon />
       </body>
     </html>
   )
