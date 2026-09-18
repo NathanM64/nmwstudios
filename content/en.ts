@@ -245,7 +245,7 @@ export const EN: Dictionnaire = {
     telephone: 'Phone',
     donnees: 'Personal data',
     donneesTexte:
-      'The contact form sends your name, your email and your message, only so I can reply. Nothing else is collected: no cookie, no audience measurement. To change or delete this data, write to the address above.',
+      'The contact form sends your name, your email and your message, only so I can reply. The site counts its visits (page viewed, country, IP address) without passing them to anyone, and sets a single cookie, the language one, only if you switch languages. To change or delete this data, write to the address above.',
   },
   introuvable: {
     h1: ['This page', 'does not exist.'],

@@ -4,6 +4,18 @@
 	root * /srv
 	encode zstd gzip
 
+	# Un anglophone qui arrive sur l'accueil part sur /en/ : cookie lang=en, ou pas de cookie lang=fr et
+	# un Accept-Language qui commence par en. Seulement sur / : un lien profond s'ouvre dans la langue de
+	# qui l'a partagé. Les moteurs n'envoient pas d'Accept-Language. Un cookie absent n'est pas "" pour
+	# l'expression, d'où la comparaison à "fr" plutôt qu'à la chaîne vide.
+	@anglophone {
+		path /
+		expression `{http.request.cookie.lang} == "en" || ({http.request.cookie.lang} != "fr" && {http.request.header.Accept-Language}.matches("^[Ee][Nn]"))`
+	}
+	redir @anglophone /en/ 302
+	@accueil path /
+	header @accueil Vary "Accept-Language, Cookie"
+
 	# L'export de Next pose la page d'erreur à trois URL réelles, servies en 200 : le contenu
 	# dirait « page introuvable » et le code « tout va bien », ce que Google compte en soft 404.
 	# `route` fige l'ordre, que le tri des directives ne garantirait pas.

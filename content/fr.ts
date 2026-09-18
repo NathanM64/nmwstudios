@@ -248,7 +248,7 @@ export const FR: Dictionnaire = {
     telephone: 'Téléphone',
     donnees: 'Données personnelles',
     donneesTexte:
-      'Le formulaire de contact transmet votre nom, votre email et votre message, uniquement pour vous répondre. Rien d’autre n’est collecté : pas de cookie, pas de mesure d’audience. Pour faire modifier ou supprimer ces données, écrivez à l’adresse ci-dessus.',
+      'Le formulaire de contact transmet votre nom, votre email et votre message, uniquement pour vous répondre. Le site compte ses visites (page vue, pays, adresse IP) sans les céder à personne, et pose un seul cookie, celui de la langue, seulement si vous changez de langue. Pour faire modifier ou supprimer ces données, écrivez à l’adresse ci-dessus.',
   },
   introuvable: {
     h1: ['Cette page', 'n’existe pas.'],
