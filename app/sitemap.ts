@@ -5,11 +5,14 @@ import { SITE } from '@/lib/meta'
 
 export const dynamic = 'force-static'
 
-const LANGUES: Langue[] = ['fr']
+const LANGUES: Langue[] = ['fr', 'en']
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const cles = (Object.keys(DICOS.fr.routes) as CleRoute[]).filter((c) => c !== 'legal' && c !== 'offre:applications')
   const url = (langue: Langue, cle: CleRoute) => `${SITE}${avecBarre(DICOS[langue].routes[cle])}`
-  // Pas de lastmod : une date de build sur toutes les pages serait une fausse fraîcheur.
-  return cles.flatMap((cle) => LANGUES.map((langue) => ({ url: url(langue, cle) })))
+  // Chaque adresse, dans chaque langue, avec ses équivalents. Pas de lastmod : une date de build
+  // sur toutes les pages serait une fausse fraîcheur.
+  return cles.flatMap((cle) =>
+    LANGUES.map((langue) => ({ url: url(langue, cle), alternates: { languages: { fr: url('fr', cle), en: url('en', cle) } } })),
+  )
 }

@@ -1,0 +1,260 @@
+import type { Dictionnaire } from './types'
+
+// Same voice as the French: first person, dry, no sales gloss. Facts unchanged.
+export const EN: Dictionnaire = {
+  langue: 'en',
+  routes: {
+    accueil: '/en',
+    offres: '/en/what-i-do',
+    'offre:applications': '/en/what-i-do',
+    'offre:reprise': '/en/what-i-do/takeover',
+    'offre:sites': '/en/what-i-do/websites',
+    'offre:automatisation': '/en/what-i-do/automation',
+    'offre:hebergement': '/en/what-i-do/hosting',
+    methode: '/en/how-i-work',
+    refus: '/en/how-i-work/what-i-dont-do',
+    qui: '/en/who-i-am',
+    contact: '/en/contact',
+    legal: '/en/legal',
+  },
+  ecrans: [
+    { cle: 'accueil', titre: 'Home' },
+    { cle: 'offres', titre: 'What I do' },
+    { cle: 'methode', titre: 'How I work' },
+    { cle: 'qui', titre: 'Who I am' },
+    { cle: 'contact', titre: 'Contact' },
+  ],
+  chrome: {
+    menu: 'Menu',
+    fermer: 'Close',
+    sections: 'Sections',
+    appel: 'Talk about your project',
+    suivant: 'Next:',
+    retour: 'Back:',
+    legal: 'Legal notice',
+    autreLangue: 'FR',
+    changerLangue: 'Version française',
+  },
+  site: {
+    title: 'NMW Studios, freelance web developer in Bordeaux, France',
+    description:
+      'I design, build, take over and maintain websites and web applications, directly for businesses and white-label for agencies. The code is yours.',
+  },
+  ogAlt: 'NMW Studios. I design, I build, I take over and I follow through. You decide how far. Nathan Marimbordes, freelance web developer in Bordeaux, France.',
+  pages: {
+    offres: {
+      title: 'What I do: websites, takeovers, automation. NMW Studios',
+      description:
+        'Taking over existing code, showcase websites, applications, automation and hosting. Five ways to work together, each on its own page. The code is yours.',
+    },
+    methode: {
+      title: 'How I work: directly for you, or white-label for agencies',
+      description:
+        'Since 2025, a Paris agency has trusted me with its white-label applications. Five steps, and at each one something in your hands, with a date.',
+    },
+    refus: {
+      title: 'What I don’t do: the limits I set. NMW Studios, Bordeaux',
+      description:
+        'Websites without source code, projects that need a team, native mobile apps, and a maintenance price before the project is built.',
+    },
+    qui: {
+      title: 'Nathan Marimbordes, freelance web developer, Bordeaux, France',
+      description:
+        'Nathan Marimbordes, web developer since 2020, freelance since 2025, in Bordeaux, France. I work alone, I say so, and I point you elsewhere if your project needs a team.',
+    },
+    contact: {
+      title: 'Contact, let’s talk about your project. NMW Studios, Bordeaux',
+      description:
+        'One message is enough. I read it myself and reply the same day. Nathan Marimbordes, freelance web developer in Bordeaux, France, working remotely.',
+    },
+    legal: { title: 'Legal notice, NMW Studios', description: 'Publisher, host and personal data of nmwstudios.com.' },
+    introuvable: { title: 'Page not found, NMW Studios', description: 'This page does not exist, or not anymore.' },
+  },
+  accueil: {
+    accroche: ['I design, I build,', 'I take over and I follow through.', 'You decide how far.'],
+    identite: ', freelance web developer in Bordeaux, France. Directly for businesses, and white-label for agencies.',
+    lead: 'Websites, applications and internal tools. I build, I take over what exists, and I keep it running if you want me to. The code is yours.',
+    ouParEmail: 'or by email:',
+    reponds: 'I reply the same day.',
+    eyebrow: 'Four situations I know well',
+    situations: [
+      ['Your website is five years old and nobody wants to touch it.', 'I take it over, without starting from scratch.', 'offre:reprise'],
+      ['Your agency has an approved design and nobody to build it before the deadline.', 'I build it before the deadline, under your name.', 'methode'],
+      ['Your team copies data by hand every day.', 'I make the task disappear.', 'offre:automatisation'],
+      ['Your developer stopped answering.', 'I take over, and I answer.', 'offre:reprise'],
+    ],
+  },
+  offres: {
+    titre: ['Five ways to work together.', 'One that few people offer.'],
+    lead: 'Build, take over, automate, host. And take over what already exists instead of rebuilding: that one is the rarest.',
+    voirDetail: 'See details',
+    liste: [
+      {
+        cle: 'applications',
+        slug: 'applications',
+        titre: 'An application, an internal tool, a first product',
+        resume: 'A first version that runs, then short iterations.',
+        meta: 'A first version that runs, then short, regular releases: internal tool, client portal, first product. You watch the work move forward.',
+        blocs: [
+          'A first version that runs, then short, regular releases: internal tool, client portal, first product. You watch the work move forward, no surprise delivery.',
+        ],
+        vues: {
+          legende: 'My own tool, built for me. Demo data.',
+          liste: [
+            { src: '/demo/temps.webp', alt: 'Time tracking, a week in calendar view', titre: 'Time' },
+            { src: '/demo/compta.webp', alt: 'The micro-enterprise’s accounts: revenue, expenses, ceiling', titre: 'Accounts' },
+            { src: '/demo/facture.webp', alt: 'An invoice generated from time spent', titre: 'Invoice' },
+          ],
+        },
+        appel: 'Talk about your application',
+      },
+      {
+        cle: 'reprise',
+        slug: 'takeover',
+        titre: 'Taking over your website or application',
+        resume: 'Code others wrote, brought back to life and kept running.',
+        meta: 'I read code others wrote, get it working again and keep it alive. Billed by time spent, at a rate agreed before starting.',
+        blocs: [
+          'I read code others wrote, get it working again and keep it alive. A takeover is billed by time spent, at a rate agreed before starting.',
+          'Send me your site’s address, even if you don’t know how it was built. I write back what holds, what breaks, and what I would do first. Access comes after we have talked, and I keep none of it. The quote comes after.',
+          'Three things I check first:',
+          ['The full source code, accessible', 'A project that starts on a fresh machine', 'Hosting and a domain that can be transferred'],
+        ],
+        appel: 'Talk about what you have',
+      },
+      {
+        cle: 'sites',
+        slug: 'websites',
+        titre: 'A showcase website or a campaign page',
+        resume: 'Lean and fast, and you can change it without me.',
+        meta: 'A fast website you can change without me, with no page builder. From €1,500, up to three pages, your designs or mine if you have none.',
+        prix: 'From €1,500, up to three pages.',
+        blocs: [
+          'A fast website you can change without me. No page builder: code another developer can take over. Your designs, built as they are, under your name; mine only if you have none.',
+          'A custom website, with its own art direction and proper animations, is quoted after scoping. Amounts are indicative and adjust to scope and content.',
+        ],
+        appel: 'Talk about your website',
+      },
+      {
+        cle: 'automatisation',
+        slug: 'automation',
+        titre: 'Making a repetitive task disappear',
+        resume: 'What your team redoes by hand every day.',
+        meta: 'Sorting incoming requests, extracting data from documents, reminders and assisted writing in a back office. I measure before and after.',
+        blocs: [
+          'Specific tasks that disappear from your day: automatic sorting of incoming requests, data extraction from documents, reminders and notifications, assisted writing in a back office.',
+          'We measure before and after. If the gain is not there, I tell you.',
+        ],
+        appel: 'Talk about your repetitive tasks',
+      },
+      {
+        cle: 'hebergement',
+        slug: 'hosting',
+        titre: 'Hosting and monitoring your website',
+        resume: 'Hosting, domain, backups, an alert if the site goes down. Transferable.',
+        meta: 'Hosting, domain name, security certificate, nightly backup, an alert if the site stops responding. Transferable the day you decide.',
+        blocs: [
+          'Included: hosting, the domain name, the security certificate, a nightly backup, an alert if the site stops responding, the server’s security updates.',
+          'Not included: any change to content or code, billed by the hour or in a dedicated package.',
+          'Transferable the day you decide.',
+        ],
+        appel: 'Talk about your hosting',
+      },
+    ],
+  },
+  methode: {
+    h1: ['Since 2025,', 'a Paris agency has trusted me with its applications and its new projects.'],
+    lead: 'White-label: your designs, your deadlines, your name in front of your client.',
+    paragraphe: 'I never contact your client, I don’t sign my work, and I keep no access once the project is delivered. What I can describe:',
+    missions: [
+      ['A tablet data-entry application for the field teams of a large group.'],
+      ['The back office of a high-traffic prize draw.', 'Draw, automatic notifications, performance tracking.'],
+      ['Taking over and maintaining a set of existing applications.'],
+    ],
+    eyebrow: 'What you hold at each step',
+    etapes: [
+      ['Scoping', 'A written scope, a price and a date.', 'What the project does, and what it won’t.'],
+      ['Design', 'The list of screens, with the tricky points flagged.', 'Your designs as they are; mine if you have none.'],
+      ['Development', 'An address where you watch progress.', 'Visible versions throughout. If a date slips, you know before.'],
+      ['Launch', 'The project online, transferable.', 'On your hosting or on mine.'],
+      ['Follow-up', 'If you want it.', 'Otherwise, the code and the documentation.'],
+    ],
+    onglets: ['How I work', 'What I don’t do'],
+  },
+  refus: {
+    h1: ['What I', 'don’t do.'],
+    lead: 'Nothing is more reassuring than a contractor who states their limits. Here are mine.',
+    liste: [
+      ['Websites without source code', 'Wix, Squarespace or an equivalent builder: taking them over would cost you more than rebuilding. I tell you at first read.'],
+      ['Projects that need a team', 'I work alone. If your project needs five people, I will say so and point you elsewhere, rather than take it and make you late.'],
+      ['Native mobile apps', 'No custom iOS or Android app. A simple need often works on the web, and I will tell you if that’s the case.'],
+      ['A maintenance price before anything is built', 'Pricing it before knowing the project makes no sense. The scope of hosting, though, is written in black and white.'],
+    ],
+  },
+  qui: {
+    h1: 'Nathan Marimbordes.',
+    lead: ['Web developer since 2020, freelance since 2025.', 'I work alone, and I say so:', 'if your project needs a team, I will tell you and point you elsewhere.'],
+    paragraphe:
+      'My projects run long and take turns: while one client reviews, another moves forward. I have room, and I tell you from when before committing. If a feature will cost a lot for nothing, I say so before pricing it. I warn before going over, not after.',
+    faits: 'Bordeaux, France. Remote, on Paris time.',
+    faq: [
+      ['You work alone. What happens if you are no longer available?', 'The code is delivered and documented, it is yours, in your name, and the hosting can be transferred. Another developer can take over without needing me.'],
+      ['Can you take over a website built by another agency?', 'Yes, even if the agency no longer exists. Send me the address, I write back what holds and what breaks before any quote, and I tell you whether a rebuild beats a takeover.'],
+      ['Do you work white-label for agencies?', 'Yes, as a freelancer. Your designs, your deadlines, your name in front of your client. I never contact your client and I don’t sign my work.'],
+      ['How much does a takeover cost?', 'By time spent, at a rate agreed before starting. The quote comes after the assessment.'],
+      ['How much does a website cost?', 'A simple showcase website, up to three pages, starts at €1,500. A custom website is quoted after scoping, depending on scope and content.'],
+      ['How long until a first version?', 'The date is set at scoping, from what the project must do and what you provide. You see versions before that date.'],
+      ['What happens after delivery?', 'You choose: I keep the project alive, or you leave with the code, the documentation and transferable hosting.'],
+    ],
+  },
+  contact: {
+    h1: ['Let’s talk about', 'your project.'],
+    lead: 'One message is enough. I read it myself and reply the same day.',
+    pieces: 'Designs or a brief to attach? By email, as an attachment.',
+    role: ', freelance web developer.',
+    lieu: 'Bordeaux, France. Remote, on Paris time. Invoices in euros.',
+    statut: 'French sole trader, ',
+    lienLegal: 'registration number and legal notice',
+  },
+  formulaire: {
+    nom: 'Your name',
+    email: 'Your email',
+    emailPlaceholder: 'you@company.com',
+    url: 'Your website’s address, if it exists',
+    telephone: 'Your phone, if you’d rather talk',
+    facultatif: '(optional)',
+    projet: 'Your project, in a few lines',
+    projetPlaceholder: 'What exists already, what’s stuck, and by when.',
+    piege: 'Your website',
+    envoyer: 'Send',
+    envoiEnCours: 'Sending',
+    envoye: 'Message sent.',
+    envoyeDetail: 'I read it myself and reply the same day, to the address you gave.',
+    tropDeMessages: 'Too many messages sent. Try again in ten minutes.',
+    secours: 'The message did not go through. Write directly to contact@nmwstudios.com.',
+  },
+  carrousel: { agrandir: 'Enlarge', agrandirTitre: 'Enlarge:', vues: 'Views' },
+  legal: {
+    h1: 'Legal notice.',
+    editeur: 'Publisher',
+    statut: 'sole trader (entrepreneur individuel, France)',
+    tva: 'VAT not applicable, article 293 B of the French General Tax Code',
+    directeur: 'Publishing director:',
+    contact: 'Contact:',
+    hebergement: 'Hosting',
+    telephone: 'Phone',
+    donnees: 'Personal data',
+    donneesTexte:
+      'The contact form sends your name, your email and your message, only so I can reply. Nothing else is collected: no cookie, no audience measurement. To change or delete this data, write to the address above.',
+  },
+  introuvable: {
+    h1: ['This page', 'does not exist.'],
+    lead: 'Or not anymore. This site in English:',
+    bouton: 'Home',
+  },
+  donnees: {
+    description: 'Websites, applications and internal tools. I build, I take over what exists, and I keep it running if you want me to.',
+    jobTitle: 'Freelance web developer',
+    catalogue: 'Services',
+  },
+}

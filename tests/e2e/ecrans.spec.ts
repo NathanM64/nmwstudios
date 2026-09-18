@@ -15,11 +15,47 @@ const ROUTES: Array<[string, string]> = [
   ['/mentions-legales/', 'Hetzner Online GmbH'],
 ]
 
+const ROUTES_EN: Array<[string, string]> = [
+  ['/en/', 'You decide how far.'],
+  ['/en/what-i-do/', 'Demo data'],
+  ['/en/what-i-do/takeover/', 'The full source code, accessible'],
+  ['/en/what-i-do/websites/', 'From €1,500'],
+  ['/en/what-i-do/hosting/', 'a nightly backup'],
+  ['/en/how-i-work/', 'a Paris agency has trusted me'],
+  ['/en/how-i-work/what-i-dont-do/', 'Native mobile apps'],
+  ['/en/who-i-am/', 'You work alone'],
+  ['/en/contact/', 'One message is enough'],
+  ['/en/legal/', 'Hetzner Online GmbH'],
+]
+
 test('chaque route porte son texte dans le HTML servi', async ({ request }) => {
   for (const [route, extrait] of ROUTES) {
     const html = await (await request.get(route)).text()
     expect(html, route).toContain(extrait)
   }
+})
+
+test('la version anglaise porte son texte, sa langue et ses équivalents', async ({ request }) => {
+  for (const [route, extrait] of ROUTES_EN) {
+    const html = await (await request.get(route)).text()
+    expect(html, route).toContain(extrait)
+    expect(html, route).toContain('<html lang="en"')
+  }
+  const accueil = await (await request.get('/')).text()
+  expect(accueil).toContain('hrefLang="en" href="https://nmwstudios.com/en/"')
+  expect(accueil).toContain('hrefLang="x-default" href="https://nmwstudios.com/"')
+  const reprise = await (await request.get('/en/what-i-do/takeover/')).text()
+  expect(reprise).toContain('hrefLang="fr" href="https://nmwstudios.com/ce-que-je-fais/reprise/"')
+  expect(reprise).toContain('rel="canonical" href="https://nmwstudios.com/en/what-i-do/takeover/"')
+})
+
+test('le lien de langue mène à la même page dans l’autre langue', async ({ page }) => {
+  await page.goto('/ce-que-je-fais/reprise/')
+  await page.locator('.menu .langue').click()
+  await expect(page).toHaveURL(/\/en\/what-i-do\/takeover\/$/)
+  await expect(page.locator('.carte.ouverte h1')).toHaveText('Taking over your website or application')
+  await page.locator('.menu .langue').click()
+  await expect(page).toHaveURL(/\/ce-que-je-fais\/reprise\/$/)
 })
 
 test('chaque écran porte son fond dans le HTML et le fichier est servi', async ({ request }) => {
@@ -71,7 +107,7 @@ test('le lien partagé montre une image', async ({ request }) => {
 
 test('rien ne déborde du cadre à 1440 × 900', async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 })
-  for (const [route] of ROUTES) {
+  for (const [route] of [...ROUTES, ...ROUTES_EN]) {
     await page.goto(route)
     const mesure = await page.evaluate(() => {
       const inner = document.querySelector('.inner, .document') as HTMLElement
@@ -83,7 +119,7 @@ test('rien ne déborde du cadre à 1440 × 900', async ({ page }) => {
 
 test('sous 720 px, rien ne déborde en largeur et l’écran défile en lui même', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 })
-  for (const [route] of ROUTES) {
+  for (const [route] of [...ROUTES, ...ROUTES_EN]) {
     await page.goto(route)
     const large = await page.evaluate(() => document.documentElement.scrollWidth > innerWidth)
     expect(large, route).toBe(false)

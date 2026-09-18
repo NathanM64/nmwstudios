@@ -129,6 +129,8 @@ a { color: var(--color-accent); text-underline-offset: 0.2em; }
 }
 .menu .appel::after { display: none; }
 .menu .appel:hover { color: var(--color-accent-foreground); box-shadow: var(--btn-glow-hover); filter: brightness(1.15); }
+.menu .langue { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.08em; color: var(--color-faint); }
+.menu .langue:hover { color: var(--color-foreground); }
 .pied-cadre {
   position: fixed; left: 0; right: 0; bottom: 0; z-index: 10; padding: 2rem var(--gutter) 1.2rem;
   display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; font-size: 0.8rem;

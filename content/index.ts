@@ -1,7 +1,8 @@
 import { FR } from './fr'
+import { EN } from './en'
 import type { CleRoute, Dictionnaire, Langue, Offre } from './types'
 
-export const DICOS: Record<Langue, Dictionnaire> = { fr: FR, en: FR }
+export const DICOS: Record<Langue, Dictionnaire> = { fr: FR, en: EN }
 export const dico = (langue: Langue) => DICOS[langue]
 
 // usePathname garde parfois la barre finale de trailingSlash : on compare sans elle.
