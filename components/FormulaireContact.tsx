@@ -1,17 +1,18 @@
 'use client'
 
 import { useState, type FormEvent } from 'react'
+import type { Dictionnaire } from '@/content/types'
 
 type Etat = 'repos' | 'envoi' | 'envoye' | { erreur: string }
-const SECOURS = 'L’envoi a échoué. Écrivez-moi directement à contact@nmwstudios.com.'
 
-export function FormulaireContact() {
+export function FormulaireContact({ t }: { t: Dictionnaire['formulaire'] }) {
   const [etat, setEtat] = useState<Etat>('repos')
 
   async function envoyer(ev: FormEvent<HTMLFormElement>) {
     ev.preventDefault()
     const champs = Object.fromEntries(new FormData(ev.currentTarget)) as Record<string, string>
-    // Le service ne connaît que trois champs : l'adresse du site ouvre le message.
+    // Le service ne connaît que trois champs : l'adresse du site ouvre le message. Ces deux lignes
+    // sont pour Nathan, elles restent en français.
     const entete = [champs.url && `Site : ${champs.url}`, champs.telephone && `Téléphone : ${champs.telephone}`].filter(Boolean).join('\n')
     const message = entete ? `${entete}\n\n${champs.message}` : champs.message
     setEtat('envoi')
@@ -25,18 +26,18 @@ export function FormulaireContact() {
         setEtat('envoye')
         return
       }
-      const corps = (await reponse.json().catch(() => ({}))) as { error?: string }
-      setEtat({ erreur: corps.error ?? SECOURS })
+      // Le service répond en français : le message vient d'ici, dans la langue de la page.
+      setEtat({ erreur: reponse.status === 429 ? t.tropDeMessages : t.secours })
     } catch {
-      setEtat({ erreur: SECOURS })
+      setEtat({ erreur: t.secours })
     }
   }
 
   if (etat === 'envoye') {
     return (
       <div className="contact panel envoye" role="status">
-        <p className="lead">Message envoyé.</p>
-        <p>Je le lis moi-même et je vous réponds dans la journée, à l’adresse que vous avez donnée.</p>
+        <p className="lead">{t.envoye}</p>
+        <p>{t.envoyeDetail}</p>
       </div>
     )
   }
@@ -44,43 +45,37 @@ export function FormulaireContact() {
   return (
     <form className="contact panel" onSubmit={envoyer}>
       <label>
-        <span className="eyebrow">Votre nom</span>
+        <span className="eyebrow">{t.nom}</span>
         <input type="text" name="nom" autoComplete="name" required maxLength={120} />
       </label>
       <label>
-        <span className="eyebrow">Votre email</span>
-        <input type="email" name="email" autoComplete="email" required maxLength={200} placeholder="vous@entreprise.fr" />
+        <span className="eyebrow">{t.email}</span>
+        <input type="email" name="email" autoComplete="email" required maxLength={200} placeholder={t.emailPlaceholder} />
       </label>
       <label>
         <span className="eyebrow">
-          L’adresse de votre site, s’il existe <span className="optionnel">(facultatif)</span>
+          {t.url} <span className="optionnel">{t.facultatif}</span>
         </span>
         <input type="url" name="url" autoComplete="url" maxLength={300} placeholder="https://" />
       </label>
       <label>
         <span className="eyebrow">
-          Votre téléphone, si vous préférez qu’on s’appelle <span className="optionnel">(facultatif)</span>
+          {t.telephone} <span className="optionnel">{t.facultatif}</span>
         </span>
         <input type="tel" name="telephone" autoComplete="tel" maxLength={40} />
       </label>
       <label>
-        <span className="eyebrow">Votre projet, en quelques lignes</span>
-        <textarea
-          name="message"
-          rows={4}
-          required
-          maxLength={5000}
-          placeholder="Ce qui existe déjà, ce qui coince, et pour quand."
-        />
+        <span className="eyebrow">{t.projet}</span>
+        <textarea name="message" rows={4} required maxLength={5000} placeholder={t.projetPlaceholder} />
       </label>
       {/* Le piège à robots : un humain ne le voit pas, un robot le remplit. */}
       <label className="piege" aria-hidden="true">
-        Votre site
+        {t.piege}
         <input type="text" name="site" tabIndex={-1} autoComplete="off" />
       </label>
       <p className="actions">
         <button className="bouton" type="submit" disabled={etat === 'envoi'}>
-          {etat === 'envoi' ? 'Envoi en cours' : 'Envoyer'}
+          {etat === 'envoi' ? t.envoiEnCours : t.envoyer}
         </button>
         {typeof etat === 'object' && (
           <span className="note" role="alert">

@@ -139,7 +139,7 @@ test('une carte fermée s’ouvre sans quitter l’écran, et l’ancienne se re
   await page.goto('/ce-que-je-fais/')
   await expect(page.locator('.carte.ouverte h2')).toHaveText('Une application, un outil interne, un premier produit')
   await expect(page.locator('.carrousel .vues img')).toHaveCount(3)
-  await page.getByRole('navigation', { name: 'Offres' }).getByRole('link', { name: /Un site vitrine/ }).click()
+  await page.getByRole('navigation', { name: 'Ce que je fais' }).getByRole('link', { name: /Un site vitrine/ }).click()
   await expect(page).toHaveURL(/\/ce-que-je-fais\/sites\/$/)
   await expect(page.locator('.carte.ouverte h1')).toHaveText('Un site vitrine ou une page de campagne')
   await expect(page.locator('a.carte')).toHaveCount(4)

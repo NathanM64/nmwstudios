@@ -2,25 +2,27 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { ECRANS, indexEcran } from '@/content/ecrans'
+import { dico, indexEcran, langueDuChemin } from '@/content'
 
 // Le pied du cadre : où l'on est, et l'écran d'après.
 export function Suivant() {
-  const i = indexEcran(usePathname())
+  const pathname = usePathname()
+  const t = dico(langueDuChemin(pathname))
+  const i = indexEcran(pathname)
   if (i < 0) return null
-  const suivant = ECRANS[i + 1]
+  const suivant = t.ecrans[i + 1]
   return (
     <p className="suivant-lien">
       <span className="compteur">
-        {String(i + 1).padStart(2, '0')} / {String(ECRANS.length).padStart(2, '0')}
+        {String(i + 1).padStart(2, '0')} / {String(t.ecrans.length).padStart(2, '0')}
       </span>
       {suivant ? (
-        <Link href={suivant.href}>
-          <span>Suivant :</span> {suivant.titre}
+        <Link href={t.routes[suivant.cle]}>
+          <span>{t.chrome.suivant}</span> {suivant.titre}
         </Link>
       ) : (
-        <Link href="/">
-          <span>Retour :</span> Accueil
+        <Link href={t.routes.accueil}>
+          <span>{t.chrome.retour}</span> {t.ecrans[0].titre}
         </Link>
       )}
     </p>

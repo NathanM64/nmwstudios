@@ -1,11 +1,15 @@
 import type { MetadataRoute } from 'next'
-import { ECRANS } from '@/content/ecrans'
-import { OFFRES, hrefOffre } from '@/content/offres'
+import { DICOS, avecBarre } from '@/content'
+import type { CleRoute, Langue } from '@/content/types'
+import { SITE } from '@/lib/meta'
 
 export const dynamic = 'force-static'
 
+const LANGUES: Langue[] = ['fr']
+
 export default function sitemap(): MetadataRoute.Sitemap {
-  const chemins = [...ECRANS.map((e) => e.href), ...OFFRES.slice(1).map(hrefOffre), '/comment-je-travaille/ce-que-je-ne-fais-pas']
+  const cles = (Object.keys(DICOS.fr.routes) as CleRoute[]).filter((c) => c !== 'legal' && c !== 'offre:applications')
+  const url = (langue: Langue, cle: CleRoute) => `${SITE}${avecBarre(DICOS[langue].routes[cle])}`
   // Pas de lastmod : une date de build sur toutes les pages serait une fausse fraîcheur.
-  return chemins.map((chemin) => ({ url: `https://nmwstudios.com${chemin === '/' ? '/' : `${chemin}/`}` }))
+  return cles.flatMap((cle) => LANGUES.map((langue) => ({ url: url(langue, cle) })))
 }

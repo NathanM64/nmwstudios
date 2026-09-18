@@ -2,7 +2,7 @@
 
 import { useEffect } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
-import { ECRANS, indexEcran } from '@/content/ecrans'
+import { dico, indexEcran, langueDuChemin } from '@/content'
 
 // Le menu est le moyen de navigation ; flèches et molette passent à l'écran voisin.
 // Le seuil et le délai évitent qu'une inertie de pavé tactile saute deux écrans.
@@ -15,13 +15,14 @@ export function Clavier() {
   const pathname = usePathname()
 
   useEffect(() => {
+    const t = dico(langueDuChemin(pathname))
     const i = indexEcran(pathname)
     if (i < 0) return
     const aller = (j: number) => {
-      const cible = ECRANS[j]
+      const cible = t.ecrans[j]
       if (!cible || performance.now() - dernierSaut < DELAI) return
       dernierSaut = performance.now()
-      router.push(cible.href)
+      router.push(t.routes[cible.cle])
     }
 
     let cumul = 0

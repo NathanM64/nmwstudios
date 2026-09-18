@@ -1,45 +1,45 @@
-import { OFFRES, hrefOffre } from '@/content/offres'
+import { avecBarre, hrefOffre } from '@/content'
+import type { Dictionnaire } from '@/content/types'
+import { SITE } from './meta'
 
-const SITE = 'https://nmwstudios.com'
 const ID = `${SITE}/#organisation`
 const FRANCE = { '@type': 'Country', name: 'France' }
 
 // Ce que Google lit : la même chose que le lecteur, ni plus ni moins. Un seul prix, celui du site vitrine.
-export const DONNEES = {
+// La zone servie reste la France côté français ; l'anglais s'adresse à tout le monde.
+export const donnees = (t: Dictionnaire) => ({
   '@context': 'https://schema.org',
   '@type': 'ProfessionalService',
   '@id': ID,
   name: 'NMW Studios',
-  url: `${SITE}/`,
+  url: `${SITE}${avecBarre(t.routes.accueil)}`,
+  inLanguage: t.langue,
   email: 'contact@nmwstudios.com',
   logo: `${SITE}/icon-512.png`,
   image: `${SITE}/opengraph-image.jpg`,
-  description:
-    'Sites, applications et outils métier. Je construis, je reprends l’existant, et j’assure la suite si vous le souhaitez.',
+  description: t.donnees.description,
   foundingDate: '2025',
-  founder: { '@type': 'Person', name: 'Nathan Marimbordes', jobTitle: 'Développeur web indépendant' },
+  founder: { '@type': 'Person', name: 'Nathan Marimbordes', jobTitle: t.donnees.jobTitle },
   address: { '@type': 'PostalAddress', addressLocality: 'Bègles', postalCode: '33130', addressCountry: 'FR' },
-  areaServed: FRANCE,
+  ...(t.langue === 'fr' ? { areaServed: FRANCE } : {}),
   hasOfferCatalog: {
     '@type': 'OfferCatalog',
-    name: 'Prestations',
-    itemListElement: OFFRES.map((o) => ({
+    name: t.donnees.catalogue,
+    itemListElement: t.offres.liste.map((o) => ({
       '@type': 'Offer',
-      url: `${SITE}${hrefOffre(o)}/`,
-      ...(o.slug === 'sites'
-        ? { priceSpecification: { '@type': 'UnitPriceSpecification', priceCurrency: 'EUR', minPrice: 1500 } }
-        : {}),
+      url: `${SITE}${avecBarre(hrefOffre(t, o))}`,
+      ...(o.cle === 'sites' ? { priceSpecification: { '@type': 'UnitPriceSpecification', priceCurrency: 'EUR', minPrice: 1500 } } : {}),
       itemOffered: {
         '@type': 'Service',
         name: o.titre,
         description: o.resume,
-        url: `${SITE}${hrefOffre(o)}/`,
+        url: `${SITE}${avecBarre(hrefOffre(t, o))}`,
         provider: { '@id': ID },
-        areaServed: FRANCE,
+        ...(t.langue === 'fr' ? { areaServed: FRANCE } : {}),
       },
     })),
   },
-}
+})
 
 // Le fil d'Ariane d'une sous-route : la page courante n'a pas de lien, comme le veut Google.
 export const filAriane = (etapes: readonly [string, string | null][]) => ({
@@ -49,6 +49,6 @@ export const filAriane = (etapes: readonly [string, string | null][]) => ({
     '@type': 'ListItem',
     position: i + 1,
     name,
-    ...(chemin ? { item: `${SITE}${chemin}` } : {}),
+    ...(chemin ? { item: `${SITE}${avecBarre(chemin)}` } : {}),
   })),
 })

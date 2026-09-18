@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState, useSyncExternalStore } from 'react'
 import { preload } from 'react-dom'
 import { usePathname } from 'next/navigation'
-import { indexEcran } from '@/content/ecrans'
+import { indexEcran } from '@/content'
 
 // Une matière par écran, dans l'ordre du menu. Rien derrière les documents.
 const MATIERES = ['eau', 'soie', 'verre', 'ardoise', 'pluie'] as const

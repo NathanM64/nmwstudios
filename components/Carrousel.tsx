@@ -1,12 +1,13 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
+import type { Vue } from '@/content/types'
 
-export type Vue = { src: string; alt: string; titre: string }
+type Textes = { agrandir: string; agrandirTitre: string; vues: string }
 
 // Trois vues qui se relaient lentement. Le survol, le clavier et prefers-reduced-motion les arrêtent.
 // Un clic ouvre la vue en grand.
-export function Carrousel({ vues, legende }: { vues: readonly Vue[]; legende: string }) {
+export function Carrousel({ vues, legende, textes }: { vues: readonly Vue[]; legende: string; textes: Textes }) {
   const [i, setI] = useState(0)
   const [pause, setPause] = useState(false)
   const dialog = useRef<HTMLDialogElement>(null)
@@ -36,14 +37,14 @@ export function Carrousel({ vues, legende }: { vues: readonly Vue[]; legende: st
       onBlur={() => setPause(false)}
     >
       <figcaption>{legende}</figcaption>
-      <button type="button" className="vues" onClick={ouvrir} aria-label={`Agrandir : ${vues[i].titre}`}>
+      <button type="button" className="vues" onClick={ouvrir} aria-label={`${textes.agrandirTitre} ${vues[i].titre}`}>
         {vues.map((v, n) => (
           // eslint-disable-next-line @next/next/no-img-element
           <img key={v.src} src={v.src} alt={v.alt} width={1650} height={1000} loading="lazy" data-active={n === i || undefined} />
         ))}
-        <span className="agrandir">Agrandir</span>
+        <span className="agrandir">{textes.agrandir}</span>
       </button>
-      <div className="points" role="tablist" aria-label="Vues">
+      <div className="points" role="tablist" aria-label={textes.vues}>
         {vues.map((v, n) => (
           <button key={v.src} type="button" role="tab" aria-selected={n === i} onClick={() => setI(n)}>
             {v.titre}
