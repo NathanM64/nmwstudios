@@ -52,3 +52,8 @@ Cinq écrans en production depuis le 11/09/2026, refaits le 12/09 : accueil, ce 
 document. L'offre applications montre trois vues de mon outil de gestion, données de
 démonstration. Restent à obtenir hors code : un avis Malt, un témoignage anonymisé de
 l'agence. Détail des décisions dans `DESIGN.md`.
+
+Version anglaise sous `/en/` depuis le 18/09/2026, pour le monde entier : tout le texte vit
+dans `content/fr.ts` et `content/en.ts`, les écrans n'en portent aucun. Caddy envoie sur
+`/en/` un visiteur qui arrive sur `/` avec un navigateur en anglais ; le lien FR / EN du menu
+pose un cookie `lang` qui fixe le choix. Rien d'autre ne redirige.
