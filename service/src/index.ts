@@ -116,9 +116,9 @@ async function send(enquiry: Enquiry): Promise<boolean> {
   return true
 }
 
-// The site's beacon: a real browser reports opening a page. Bots run no JavaScript,
-// so they never reach here. One JSON line to stdout, which the monitoring agent turns
-// into a visit. Always 204, and never a shape a visitor could notice.
+// The site's beacon: a browser reports opening a page. Most bots run no JavaScript and
+// never reach here, but search engines that render in Chrome can. One JSON line to stdout,
+// which the monitoring agent turns into a visit. Always 204, never a shape a visitor could notice.
 async function beacon(request: IncomingMessage, response: ServerResponse) {
   let path: string | null = null
   let referrer: string | null = null

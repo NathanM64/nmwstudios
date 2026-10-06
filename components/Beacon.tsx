@@ -2,9 +2,9 @@
 import { usePathname } from 'next/navigation'
 import { useEffect } from 'react'
 
-// One ping per page, sent by the browser itself. A robot runs no JavaScript, so it
-// never counts. sendBeacon fires without blocking and survives the page being left;
-// usePathname makes it fire again on each client-side navigation.
+// One ping per page, sent by the browser itself. Most robots run no JavaScript and never
+// count, but search engines that render pages in Chrome can. sendBeacon fires without
+// blocking and survives the page being left; usePathname fires it again on each navigation.
 export function Beacon() {
   const pathname = usePathname()
   useEffect(() => {
