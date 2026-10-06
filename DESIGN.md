@@ -30,11 +30,11 @@ Revue le 2026-09-12 après le diagnostic : un gabarit par écran, plus un seul r
 
 | Écran | Composition |
 |---|---|
-| Accueil | titre à l'échelle du cadre, « Vous décidez jusqu'où » en accent, ligne d'identité (nom, métier, ville, l'agence), bouton et email ; en bas du cadre, quatre situations qui sont des portes vers l'offre qui y répond |
+| Accueil | titre à l'échelle du cadre, « Vous décidez jusqu'où » en accent, ligne d'identité (nom, métier, ville, et pour qui : les entreprises en direct, les agences en marque blanche), bouton et email ; en bas du cadre, quatre situations qui sont des portes vers l'offre qui y répond |
 | Ce que je fais | titre en phrase et intro, puis cinq cartes visibles : la carte ouverte occupe deux rangées à gauche, les quatre fermées à droite et disent « Voir le détail » ; une carte fermée devient la carte ouverte (transition partagée). L'offre applications ouvre par défaut : elle montre trois vues de mon outil de gestion en carrousel (temps, comptabilité, PDF de facture), données de démonstration, légendées comme telles |
 | Comment je travaille | deux onglets au bas du cadre, chacun sa route. « Comment je travaille » : la preuve en titre (l'agence, datée), la marque blanche au « vous », les engagements de discrétion, les trois missions à droite, la frise des cinq étapes avec ce que le client a en main. « Ce que je ne fais pas » : quatre refus en panneaux (sites sans code source, projets qui demandent une équipe, applications natives, prix de maintenance avant d'avoir construit) |
-| Qui je suis | nom, parcours daté, phrases de relation, ville et renvoi au SIRET ; FAQ dépliable à droite, un signe « + », une question ouverte à la fois |
-| Contact | titre, email en gros, faits d'identité ; formulaire à quatre champs (dont l'adresse du site, facultative), confirmation à la place des champs |
+| Qui je suis | nom, deux années (développeur depuis 2020, à son compte depuis 2025), phrases de relation, ville ; FAQ de sept questions à droite, un signe « + », une question ouverte à la fois |
+| Contact | titre, email en gros, faits d'identité et renvoi au SIRET ; formulaire à cinq champs (dont deux facultatifs : l'adresse du site et le téléphone), confirmation à la place des champs |
 
 Tous les écrans s'ancrent sur la même ligne haute : le titre et le panneau ne bougent pas
 d'un écran à l'autre, et un panneau qui change de hauteur ne fait pas sauter le reste.
@@ -69,22 +69,30 @@ deux cellules se lit comme un espace. Les cinq fonds sont préchargés dès le p
 ## Ce que le principe impose
 
 - **Une route par écran et par offre, générée statiquement** : `/`, `/ce-que-je-fais`
-  (la reprise), `/ce-que-je-fais/<offre>`, `/comment-je-travaille`, `/qui-je-suis`,
-  `/contact`, et `/mentions-legales` en document classique. Le texte est dans le HTML de sa route, jamais
-  injecté après coup. Voir §15 de la spec.
+  (les applications, ouvertes par défaut), `/ce-que-je-fais/<offre>`, `/comment-je-travaille`,
+  `/comment-je-travaille/ce-que-je-ne-fais-pas`, `/qui-je-suis`, `/contact`, et
+  `/mentions-legales` en document classique. Le même arbre existe en anglais sous `/en/`, avec
+  ses propres slugs. Le texte est dans le HTML de sa route, jamais injecté après coup.
 - **Les transitions passent par l'API View Transitions**, via `<ViewTransition>` de React
   dans Next 16. Sans support navigateur, l'écran change sans animation et tout fonctionne.
   L'historique et le partage d'URL sont natifs, puisque chaque écran est une route.
-  **Toute la page est photographiée d'un bloc** (un seul nom, `page`) : un élément nommé
-  seul est photographié sans ce qu'il y a derrière lui, donc un panneau de verre y perd son
-  flou et un fond nommé passe au-dessus de l'en-tête. La page qui part s'éteint d'abord,
-  celle qui arrive s'allume ensuite : un fondu croisé laisse l'ancienne page transparaître.
-  Seules les cartes d'offre ont leur propre nom, pour se transformer l'une en l'autre, et
-  elles n'ont pas de flou de fond pour cette raison.
+  **La page est photographiée d'un bloc** (nom `page`) : un élément nommé seul est
+  photographié sans ce qu'il y a derrière lui, donc un panneau de verre y perd son flou et un
+  fond nommé passe au-dessus de l'en-tête. La page qui part s'éteint d'abord, celle qui
+  arrive s'allume ensuite : un fondu croisé laisse l'ancienne page transparaître.
+  Quatre exceptions ont leur propre nom : l'en-tête (`haut`) et le pied (`pied`), photographiés
+  à part pour rester en place pendant que la page change ; le filet du menu (`menu-filet`),
+  qui glisse d'un mot à l'autre ; les cartes d'offre (`offre-*`), qui se transforment l'une
+  en l'autre et n'ont pas de flou de fond pour cette raison. D'une carte à l'autre, la page
+  ne fond pas.
 - **Aucun écran ne déborde en silence.** Un contenu qui ne tient pas se raccourcit, ou son
   écran défile à l'intérieur de lui même. Jamais de débordement caché.
-- **Le cadre fixe ne vaut que pour ces cinq écrans.** Les mentions légales et, plus tard,
-  les pages prestation restent des documents classiques qui défilent.
+- **Le cadre fixe vaut pour les cinq écrans et leurs sous-routes.** Les mentions légales
+  restent un document classique qui défile.
+- **Deux langues, une seule coque.** Tout le texte vit dans `content/fr.ts` et
+  `content/en.ts`. Le lien de langue (EN ou FR) est le dernier élément du menu, en mono comme
+  le compteur, et mène à l'écran équivalent. La page introuvable est unique et bilingue
+  (`app/global-not-found.tsx`).
 
 ## Thème : « Verre », repris du dashboard
 
@@ -114,24 +122,27 @@ ce qui est structuré (cartes, missions, FAQ, formulaire) ; le titre reste du te
 
 - **Manrope partout**, en cinq graisses depuis le 12/09 : titres en 700, intertitres en 500,
   corps en 300 sur un gris de lecture (`--color-reading`, `#c9c9d3`), les mots à retenir en
-  600 blanc. Nathan trouvait le texte « trop blanc, sans assez de diversité » ; trois
-  variantes montrées sur pièce, celle-ci retenue par moi faute d'avis (« je ne sais pas »).
+  600 blanc. Le texte paraissait trop blanc et trop uniforme ; trois variantes montrées sur
+  pièce, celle-ci retenue faute de préférence exprimée.
 - Les étiquettes (`.eyebrow`) sont en Manrope 600, petites, sans capitales, en accent :
   en mono capitales grises elles se lisaient comme un libellé de champ. IBM Plex Mono ne
-  reste que pour les numéros (étapes, compteur d'écran).
+  reste que pour les numéros (étapes, compteur d'écran) et le lien de langue.
 - Les classes next/font vont sur `<html>`, jamais sur `<body>`, sinon les variables sont
   vides en silence.
 
 ## Mouvement
 
-- **La transition entre écrans et l'ouverture d'une carte sont les seuls moments animés,
+- **La transition entre écrans et l'ouverture d'une carte sont les seuls mouvements de page,
   plus la mer de l'accueil et le carrousel de l'offre applications**, demandés par Nathan le 12/09 : trois vues qui
   se relaient toutes les 4,5 s en fondu, arrêtées au survol, au focus et sous
   `prefers-reduced-motion`. Le fond apparaît en fondu au premier chargement seulement ;
-  une image déjà en cache s'affiche nette.
+  une image déjà en cache s'affiche nette. Restent de petits retours d'interaction : la
+  réponse de FAQ qui apparaît en fondu, le « + » qui tourne, la carte fermée qui se soulève
+  au survol.
 - **`transform` et `opacity` uniquement.** Jamais `top`, `left` ni `width` animés.
-- Sous `prefers-reduced-motion`, les transitions deviennent des changements immédiats et le
-  défilement amorti est désactivé.
+- Sous `prefers-reduced-motion`, les transitions de page, le fondu du fond et celui des
+  réponses de FAQ deviennent immédiats, les cartes ne se soulèvent plus, la mer et le
+  carrousel restent immobiles.
 - Sur mobile, la hauteur se mesure en `svh`, jamais en `vh`, à cause de la barre du
   navigateur. L'en-tête tient sur une ligne avec un bouton Menu, le contenu défile entre
   l'en-tête et le pied du cadre (compteur, écran suivant, mentions légales) avec un fondu

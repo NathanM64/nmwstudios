@@ -1,7 +1,8 @@
 # nmwstudios
 
 Site vitrine de Nathan Marimbordes, micro-entreprise de développement web.
-Contexte complet : `docs/superpowers/specs/2026-09-07-site-vitrine-design.md` (hors git).
+Contexte : `docs/superpowers/specs/2026-09-07-site-vitrine-design.md` (hors git), en partie
+dépassée ; `DESIGN.md` fait foi pour l'interface.
 
 ## Ce qu'on vend
 
@@ -20,7 +21,8 @@ Deux publics, aucune segmentation visible sur le site :
 
 ## Voix
 
-Marque nmwstudios, texte à la première personne du singulier, nom en clair, **aucune photo**.
+Marque NMW Studios (le dépôt et le domaine s'écrivent nmwstudios), texte à la première
+personne du singulier, nom en clair, **aucune photo**.
 Jamais de « nous » d'équipe fictive.
 
 Accroche : « Je conçois, je développe, je reprends et j'accompagne. Vous décidez jusqu'où. »
@@ -43,15 +45,15 @@ Accroche : « Je conçois, je développe, je reprends et j'accompagne. Vous déc
 - Un seul prix affiché : site vitrine simple jusqu'à trois pages à partir de 1 500 €.
   Rien sur la maintenance ni l'hébergement.
 - Jamais vendre sur l'IA comme outil de production interne.
-- Export statique servi par Caddy, pas de serveur Node en production.
+- Le site est un export statique servi par Caddy, sans Node. Seul `service/` (formulaire de
+  contact et compteur de visites) tourne sous Node, dans sa propre image.
 
 ## État
 
-Cinq écrans en production depuis le 11/09/2026, refaits le 12/09 : accueil, ce que je fais
-(une route par offre), comment je travaille, qui je suis, contact ; mentions légales en
-document. L'offre applications montre trois vues de mon outil de gestion, données de
-démonstration. Restent à obtenir hors code : un avis Malt, un témoignage anonymisé de
-l'agence. Détail des décisions dans `DESIGN.md`.
+Cinq écrans en production depuis le 11/09/2026, refaits le 12/09, mentions légales en
+document ; détail des écrans et des décisions dans `DESIGN.md`. Restent à obtenir hors
+code : un avis Malt, un témoignage anonymisé de l'agence. Aucune démo n'est publiée en
+source ouverte à ce jour : l'outil montré dans l'offre applications est privé.
 
 Version anglaise sous `/en/` depuis le 18/09/2026, pour le monde entier : tout le texte vit
 dans `content/fr.ts` et `content/en.ts`, les écrans n'en portent aucun. Caddy envoie sur
