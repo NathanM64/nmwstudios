@@ -257,9 +257,9 @@ a.carte:hover { transform: translateY(-3px); background-color: rgba(255, 255, 25
 }
 .carrousel .vues:hover .agrandir, .carrousel .vues:focus-visible .agrandir { opacity: 1; }
 /* La vue en grand : le plus large possible, sur le canvas. */
-.grand { border: 0; padding: 0; background: transparent; max-width: min(92vw, 1400px); max-height: 92vh; cursor: zoom-out; }
+.grand { border: 0; padding: 0; background: transparent; max-width: min(92vw, 1400px); max-height: 92svh; cursor: zoom-out; }
 .grand::backdrop { background: rgba(10, 10, 15, 0.88); backdrop-filter: blur(8px); }
-.grand img { display: block; width: 100%; height: auto; max-height: 84vh; object-fit: contain; border-radius: var(--radius-lg); border: 1px solid var(--color-border-strong); }
+.grand img { display: block; width: 100%; height: auto; max-height: 84svh; object-fit: contain; border-radius: var(--radius-lg); border: 1px solid var(--color-border-strong); }
 .grand p { margin: 0.7rem 0 0; text-align: center; font-size: 0.9rem; color: var(--color-muted-foreground); max-width: none; }
 .carrousel .vues img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 0.6s ease; }
 .carrousel .vues img[data-active] { opacity: 1; }
@@ -384,6 +384,10 @@ a.carte:hover .lien { text-decoration: underline; text-underline-offset: 0.2em; 
   ::view-transition-old(*), ::view-transition-new(*), ::view-transition-group(*) {
     animation-duration: 0s !important; animation-delay: 0s !important;
   }
+  /* Le fond, les réponses de FAQ et les cartes ne bougent plus non plus. */
+  .fond[data-pret='fondu'] img { transition: none; }
+  .qa p { animation: none; }
+  a.carte:hover { transform: none; }
 }
 
 /* Fenêtre basse (portable avec la barre du navigateur) : la bande rentre dans le flux, l'écran défile en lui même. */
