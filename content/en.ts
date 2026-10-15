@@ -197,6 +197,7 @@ export const EN: Dictionnaire = {
     paragraphe:
       'My projects run long and take turns: while one client reviews, another moves forward. I have room, and I tell you from when before committing. If a feature will cost a lot for nothing, I say so before pricing it. I warn before going over, not after.',
     faits: 'Bordeaux, France. Remote, on Paris time.',
+    produit: { avant: 'I also build ', nom: 'Zveltia', apres: ', the tool I invoice my own clients with (in French).', href: 'https://zveltia.com/' },
     faq: [
       ['You work alone. What happens if you are no longer available?', 'The code is delivered and documented, it is yours, in your name, and the hosting can be transferred. Another developer can take over without needing me.'],
       ['Can you take over a website built by another agency?', 'Yes, even if the agency no longer exists. Send me the address, I write back what holds and what breaks before any quote, and I tell you whether a rebuild beats a takeover.'],

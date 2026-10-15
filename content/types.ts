@@ -78,6 +78,8 @@ export type Dictionnaire = {
     lead: readonly [string, string, string]
     paragraphe: string
     faits: string
+    // Le produit edite a cote : une phrase, le nom en lien vers son site.
+    produit: { avant: string; nom: string; apres: string; href: string }
     faq: readonly Question[]
   }
   contact: {

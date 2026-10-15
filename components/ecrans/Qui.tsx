@@ -12,6 +12,11 @@ export function Qui({ t }: { t: Dictionnaire }) {
         </p>
         <p>{q.paragraphe}</p>
         <p className="faits">{q.faits}</p>
+        <p className="faits">
+          {q.produit.avant}
+          <a href={q.produit.href}>{q.produit.nom}</a>
+          {q.produit.apres}
+        </p>
       </div>
       {/* name="faq" : le navigateur n'en garde qu'une ouverte, sans JavaScript. */}
       <div className="faq panel">

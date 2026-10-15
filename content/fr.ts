@@ -200,6 +200,7 @@ export const FR: Dictionnaire = {
     paragraphe:
       'Mes chantiers durent et se relaient : pendant qu’un client relit, un autre avance. J’ai de la place, et je vous dis à partir de quand avant de m’engager. Si une fonctionnalité va coûter cher pour rien, je le dis avant de la chiffrer. Je préviens avant de dépasser, pas après.',
     faits: 'Bordeaux. À distance pour toute la France.',
+    produit: { avant: 'Je développe aussi ', nom: 'Zveltia', apres: ', l’outil avec lequel je facture mes propres clients.', href: 'https://zveltia.com/' },
     faq: [
       ['Vous êtes seul, que se passe-t-il si vous n’êtes plus disponible ?', 'Le code est livré et documenté, il est chez vous, à votre nom, et l’hébergement est transférable. Un autre développeur peut reprendre sans avoir besoin de moi.'],
       ['Vous pouvez reprendre un site fait par une autre agence ?', 'Oui, même si l’agence n’existe plus. Envoyez-moi l’adresse, je vous écris ce qui tient et ce qui casse avant tout devis, et je vous dis si une refonte vaut mieux qu’une reprise.'],

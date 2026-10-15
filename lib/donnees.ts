@@ -21,6 +21,8 @@ export const donnees = (t: Dictionnaire) => ({
   foundingDate: '2025',
   founder: { '@type': 'Person', name: 'Nathan Marimbordes', jobTitle: t.donnees.jobTitle },
   address: { '@type': 'PostalAddress', addressLocality: 'Bègles', postalCode: '33130', addressCountry: 'FR' },
+  // Le logiciel edite a cote, declare sur zveltia.com avec ce meme editeur : le lien vaut dans les deux sens.
+  owns: { '@type': ['SoftwareApplication', 'Product'], '@id': 'https://zveltia.com/#app', name: 'Zveltia', url: 'https://zveltia.com/' },
   ...(t.langue === 'fr' ? { areaServed: FRANCE } : {}),
   hasOfferCatalog: {
     '@type': 'OfferCatalog',
