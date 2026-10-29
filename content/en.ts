@@ -36,16 +36,16 @@ export const EN: Dictionnaire = {
     changerLangue: 'Version française',
   },
   site: {
-    title: 'NMW Studios, freelance web developer in Bordeaux, France',
+    title: 'Website design and development in Bordeaux, NMW Studios',
     description:
-      'I design, build, take over and maintain websites and web applications, directly for businesses and white-label for agencies. The code is yours.',
+      'Website design and development, custom software and simple mobile apps. The work of a web agency with a single contact. Free quote within 24 hours.',
   },
   ogAlt: 'NMW Studios. I design, I build, I take over and I follow through. You decide how far. Nathan Marimbordes, freelance web developer in Bordeaux, France.',
   pages: {
     offres: {
-      title: 'What I do: websites, takeovers, automation. NMW Studios',
+      title: 'Websites, custom software and mobile apps. NMW Studios',
       description:
-        'Taking over existing code, showcase websites, applications, automation and hosting. Five ways to work together, each on its own page. The code is yours.',
+        'Showcase websites, custom software and simple mobile apps, taking over existing code, automation and hosting. Five ways to work together. The code is yours.',
     },
     methode: {
       title: 'How I work: directly for you, or white-label for agencies',
@@ -55,7 +55,7 @@ export const EN: Dictionnaire = {
     refus: {
       title: 'What I don’t do: the limits I set. NMW Studios, Bordeaux',
       description:
-        'Websites without source code, projects that need a team, native mobile apps, and a maintenance price before the project is built.',
+        'Websites without source code, projects that need a team, and a maintenance price before the project is built. The limits, stated before we start.',
     },
     qui: {
       title: 'Nathan Marimbordes, freelance web developer, Bordeaux, France',
@@ -65,17 +65,18 @@ export const EN: Dictionnaire = {
     contact: {
       title: 'Contact, let’s talk about your project. NMW Studios, Bordeaux',
       description:
-        'One message is enough. I read it myself and reply the same day. Nathan Marimbordes, freelance web developer in Bordeaux, France, working remotely.',
+        'One message is enough: I reply the same day, free quote within 24 hours. Nathan Marimbordes, freelance web developer in Bordeaux, France, working remotely.',
     },
     legal: { title: 'Legal notice, NMW Studios', description: 'Publisher, host and personal data of nmwstudios.com.' },
     introuvable: { title: 'Page not found, NMW Studios', description: 'This page does not exist, or not anymore.' },
   },
   accueil: {
+    titre: 'Website and application development, from Bordeaux, France',
     accroche: ['I design, I build,', 'I take over and I follow through.', 'You decide how far.'],
     identite: ', freelance web developer in Bordeaux, France. Directly for businesses, and white-label for agencies.',
-    lead: 'Websites, applications and internal tools. I build, I take over what exists, and I keep it running if you want me to. The code is yours.',
+    lead: 'Showcase websites, custom software, simple mobile apps. The work of a web agency, with a single contact. The code is yours.',
     ouParEmail: 'or by email:',
-    reponds: 'I reply the same day.',
+    reponds: 'I reply the same day. Free quote within 24 hours.',
     eyebrow: 'Four situations I know well',
     situations: [
       ['Your website is five years old and nobody wants to touch it.', 'I take it over, without starting from scratch.', 'offre:reprise'],
@@ -92,11 +93,11 @@ export const EN: Dictionnaire = {
       {
         cle: 'applications',
         slug: 'applications',
-        titre: 'An application, an internal tool, a first product',
-        resume: 'A first version that runs, then short iterations.',
-        meta: 'A first version that runs, then short, regular releases: internal tool, client portal, first product. You watch the work move forward.',
+        titre: 'Custom software, online or on mobile',
+        resume: 'Client portal, internal tool, simple mobile app.',
+        meta: 'Custom software and simple mobile apps: client portal, business tool, online booking. A first version fast, then short, regular releases.',
         blocs: [
-          'A first version that runs, then short, regular releases: internal tool, client portal, first product. You watch the work move forward, no surprise delivery.',
+          'An online tool where your clients or your team get work done: client portal, online booking, business tool. Or a simple mobile app, on iPhone and Android. A first version fast, then regular releases.',
         ],
         vues: {
           legende: 'My own tool, built for me. Demo data.',
@@ -125,12 +126,12 @@ export const EN: Dictionnaire = {
       {
         cle: 'sites',
         slug: 'websites',
-        titre: 'A showcase website or a campaign page',
-        resume: 'Lean and fast, and you can change it without me.',
-        meta: 'A fast website you can change without me, with no page builder. From €1,500, up to three pages, your designs or mine if you have none.',
+        titre: 'Building your showcase website or campaign page',
+        resume: 'Fast, readable on a phone, and you can change it without me.',
+        meta: 'Showcase website design and development: fast, readable on a phone, built for Google. From €1,500, up to three pages. Free quote within 24 hours.',
         prix: 'From €1,500, up to three pages.',
         blocs: [
-          'A fast website you can change without me. No page builder: code another developer can take over. Your designs, built as they are, under your name; mine only if you have none.',
+          'A fast website, readable on a phone, built from the start to be read well by Google. No page builder: code another developer can take over. Your designs, built as they are, under your name; mine only if you have none.',
           'A custom website, with its own art direction and proper animations, is quoted after scoping. Amounts are indicative and adjust to scope and content.',
         ],
         appel: 'Talk about your website',
@@ -156,7 +157,7 @@ export const EN: Dictionnaire = {
         blocs: [
           'Included: hosting, the domain name, the security certificate, a nightly backup, an alert if the site stops responding, the server’s security updates.',
           'Not included: any change to content or code, billed by the hour or in a dedicated package.',
-          'Transferable the day you decide.',
+          'If the site goes down, the alert comes to me: I often know before you do. Transferable the day you decide.',
         ],
         appel: 'Talk about your hosting',
       },
@@ -177,7 +178,7 @@ export const EN: Dictionnaire = {
       ['Design', 'The list of screens, with the tricky points flagged.', 'Your designs as they are; mine if you have none.'],
       ['Development', 'An address where you watch progress.', 'Visible versions throughout. If a date slips, you know before.'],
       ['Launch', 'The project online, transferable.', 'On your hosting or on mine.'],
-      ['Follow-up', 'If you want it.', 'Otherwise, the code and the documentation.'],
+      ['Follow-up', 'If you want it, a reply the same day.', 'Otherwise, the code and the documentation.'],
     ],
     onglets: ['How I work', 'What I don’t do'],
   },
@@ -187,7 +188,6 @@ export const EN: Dictionnaire = {
     liste: [
       ['Websites without source code', 'Wix, Squarespace or an equivalent builder: taking them over would cost you more than rebuilding. I tell you at first read.'],
       ['Projects that need a team', 'I work alone. If your project needs five people, I will say so and point you elsewhere, rather than take it and make you late.'],
-      ['Native mobile apps', 'No custom iOS or Android app. A simple need often works on the web, and I will tell you if that’s the case.'],
       ['A maintenance price before anything is built', 'Pricing it before knowing the project makes no sense. The scope of hosting, though, is written in black and white.'],
     ],
   },
@@ -199,18 +199,20 @@ export const EN: Dictionnaire = {
     faits: 'Bordeaux, France. Remote, on Paris time.',
     produit: { avant: 'I also build ', nom: 'Zveltia', apres: ', the tool I invoice my own clients with (in French).', href: 'https://zveltia.com/' },
     faq: [
+      ['Why a freelancer rather than a web agency?', 'You talk to the person who writes the code: no middleman, a reply the same day, a free quote within 24 hours. If your project needs a team, I tell you.'],
+      ['What if something breaks after launch?', 'You write to me, I reply the same day and tell you when it will be fixed. On hosting I manage, an alert warns me as soon as the site stops responding.'],
       ['You work alone. What happens if you are no longer available?', 'The code is delivered and documented, it is yours, in your name, and the hosting can be transferred. Another developer can take over without needing me.'],
       ['Can you take over a website built by another agency?', 'Yes, even if the agency no longer exists. Send me the address, I write back what holds and what breaks before any quote, and I tell you whether a rebuild beats a takeover.'],
       ['Do you work white-label for agencies?', 'Yes, as a freelancer. Your designs, your deadlines, your name in front of your client. I never contact your client and I don’t sign my work.'],
       ['How much does a takeover cost?', 'By time spent, at a rate agreed before starting. The quote comes after the assessment.'],
-      ['How much does a website cost?', 'A simple showcase website, up to three pages, starts at €1,500. A custom website is quoted after scoping, depending on scope and content.'],
+      ['How much does a website cost?', 'A simple showcase website, up to three pages, starts at €1,500. A custom website is quoted after scoping. The quote is free, within 24 hours of our first exchange.'],
       ['How long until a first version?', 'The date is set at scoping, from what the project must do and what you provide. You see versions before that date.'],
       ['What happens after delivery?', 'You choose: I keep the project alive, or you leave with the code, the documentation and transferable hosting.'],
     ],
   },
   contact: {
     h1: ['Let’s talk about', 'your project.'],
-    lead: 'One message is enough. I read it myself and reply the same day.',
+    lead: 'One message is enough. I read it myself and reply the same day. The quote is free, within 24 hours of our first exchange.',
     pieces: 'Designs or a brief to attach? By email, as an attachment.',
     role: ', freelance web developer.',
     lieu: 'Bordeaux, France. Remote, on Paris time. Invoices in euros.',
@@ -254,7 +256,7 @@ export const EN: Dictionnaire = {
     bouton: 'Home',
   },
   donnees: {
-    description: 'Websites, applications and internal tools. I build, I take over what exists, and I keep it running if you want me to.',
+    description: 'Website design and development, custom software and simple mobile apps. I build, I take over what exists, and I keep it running if you want me to.',
     jobTitle: 'Freelance web developer',
     catalogue: 'Services',
   },

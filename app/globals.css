@@ -178,9 +178,10 @@ a { color: var(--color-accent); text-underline-offset: 0.2em; }
 
 /* Typographie des écrans */
 h1, h2, h3 { color: var(--color-foreground); margin: 0; letter-spacing: -0.02em; }
-h1.accroche { font-size: clamp(2.4rem, 4.4vw, 4rem); font-weight: 700; line-height: 1.02; letter-spacing: -0.035em; margin-bottom: 1.4rem; }
-h1 .client, h2 .client, .lead .client { color: var(--color-accent); }
-h1:not(.accroche), h2:not(.carte h2), .comme-titre { font-size: clamp(1.9rem, 3.4vw, 2.9rem); font-weight: 700; line-height: 1.08; letter-spacing: -0.035em; max-width: 22ch; text-wrap: balance; margin-bottom: 1.6rem; color: var(--color-foreground); }
+h1.surtitre { font-size: 0.95rem; line-height: 1.3; font-weight: 600; letter-spacing: 0.01em; color: var(--color-accent); margin-bottom: 0.9rem; max-width: none; }
+.accroche { font-size: clamp(2.4rem, 4.4vw, 4rem); font-weight: 700; line-height: 1.02; letter-spacing: -0.035em; margin-bottom: 1.4rem; max-width: none; color: var(--color-foreground); }
+h1 .client, .accroche .client, h2 .client, .lead .client { color: var(--color-accent); }
+h1:not(.surtitre), h2:not(.carte h2), .comme-titre { font-size: clamp(1.9rem, 3.4vw, 2.9rem); font-weight: 700; line-height: 1.08; letter-spacing: -0.035em; max-width: 22ch; text-wrap: balance; margin-bottom: 1.6rem; color: var(--color-foreground); }
 .comme-titre { margin-top: 0; }
 h3 { font-size: 1.15rem; font-weight: 600; line-height: 1.3; letter-spacing: -0.014em; }
 p { margin: 0 0 1rem; max-width: 36rem; font-weight: 300; color: var(--color-reading); }
@@ -190,7 +191,7 @@ p strong { font-weight: 600; color: var(--color-foreground); }
 .identite { font-size: 1.05rem; margin-bottom: 0.6rem; max-width: 40rem; }
 .actions .secondaire { color: var(--color-muted-foreground); font-size: 0.95rem; font-weight: 300; }
 .actions .secondaire a { color: var(--color-foreground); text-decoration: underline; text-underline-offset: 0.2em; }
-.actions { margin-top: 1.6rem; display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
+.actions { max-width: 46rem; margin-top: 1.6rem; display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
 .bouton {
   display: inline-block; background: var(--color-accent); color: var(--color-accent-foreground);
   font: inherit; font-weight: 600; font-size: 0.95rem; padding: 0.7em 1.35em; border-radius: var(--radius-md);
@@ -392,7 +393,7 @@ a.carte:hover .lien { text-decoration: underline; text-underline-offset: 0.2em; 
 
 /* Fenêtre basse (portable avec la barre du navigateur) : la bande rentre dans le flux, l'écran défile en lui même. */
 @media (max-height: 720px) {
-  h1.accroche { font-size: clamp(2rem, 3.6vw, 3rem); }
+  .accroche { font-size: clamp(2rem, 3.6vw, 3rem); }
   .ecran.accueil .inner { padding-bottom: 3rem; }
   .ecran.accueil .pied { position: static; margin-top: 1.4rem; }
 }
@@ -417,7 +418,7 @@ a.carte:hover .lien { text-decoration: underline; text-underline-offset: 0.2em; 
   }
   .menu a { font-size: 1.05rem; padding: 0.55rem 0; }
   .menu .appel { display: inline-block; margin: 0.6rem 0 0; }
-  h1.accroche { font-size: 1.9rem; }
+  .accroche { font-size: 1.9rem; }
   .cadre { position: relative; inset: auto; height: auto; flex: 1; min-height: 0; }
   .inner {
     overflow-y: auto; padding: 1.5rem var(--gutter) 4rem;
@@ -442,7 +443,7 @@ a.carte:hover .lien { text-decoration: underline; text-underline-offset: 0.2em; 
   .ecran.methode .inner { padding-bottom: 5rem; }
   .refus { grid-template-columns: 1fr; }
   /* Les retours forcés du titre sont composés pour le bureau. */
-  h1.accroche br { display: none; }
+  .accroche br { display: none; }
   .document { padding: 1.5rem var(--gutter) 2rem; }
   .fond img { --fond-position: 72% 50%; }
   .fond::after { background: linear-gradient(180deg, rgba(10, 10, 15, 0.55) 0%, rgba(10, 10, 15, 0.35) 30%, rgba(10, 10, 15, 0.75) 75%, rgba(10, 10, 15, 0.95) 100%); }

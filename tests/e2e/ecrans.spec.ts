@@ -9,7 +9,7 @@ const ROUTES: Array<[string, string]> = [
   ['/ce-que-je-fais/sites/', 'À partir de 1 500 €'],
   ['/ce-que-je-fais/hebergement/', 'une sauvegarde chaque nuit'],
   ['/comment-je-travaille/', 'une agence parisienne me confie'],
-  ['/comment-je-travaille/ce-que-je-ne-fais-pas/', 'Les applications mobiles natives'],
+  ['/comment-je-travaille/ce-que-je-ne-fais-pas/', 'Les projets qui demandent une équipe'],
   ['/qui-je-suis/', 'Vous êtes seul'],
   ['/contact/', 'Un message suffit'],
   ['/mentions-legales/', 'Hetzner Online GmbH'],
@@ -22,7 +22,7 @@ const ROUTES_EN: Array<[string, string]> = [
   ['/en/what-i-do/websites/', 'From €1,500'],
   ['/en/what-i-do/hosting/', 'a nightly backup'],
   ['/en/how-i-work/', 'a Paris agency has trusted me'],
-  ['/en/how-i-work/what-i-dont-do/', 'Native mobile apps'],
+  ['/en/how-i-work/what-i-dont-do/', 'Projects that need a team'],
   ['/en/who-i-am/', 'You work alone'],
   ['/en/contact/', 'One message is enough'],
   ['/en/legal/', 'Hetzner Online GmbH'],
@@ -168,15 +168,15 @@ test('le menu navigue et le retour arrière marche', async ({ page }) => {
   await expect(page).toHaveURL(/\/contact\/$/)
   await page.goBack()
   await expect(page).toHaveURL(/\/$/)
-  await expect(page.getByRole('heading', { level: 1 })).toContainText('Je conçois')
+  await expect(page.getByRole('heading', { level: 1 })).toContainText('Création de site')
 })
 
 test('une carte fermée s’ouvre sans quitter l’écran, et l’ancienne se referme', async ({ page }) => {
   await page.goto('/ce-que-je-fais/')
-  await expect(page.locator('.carte.ouverte h2')).toHaveText('Une application, un outil interne, un premier produit')
+  await expect(page.locator('.carte.ouverte h2')).toHaveText('Un logiciel sur mesure, en ligne ou sur mobile')
   await expect(page.locator('.carrousel .vues img')).toHaveCount(3)
-  await page.getByRole('navigation', { name: 'Ce que je fais' }).getByRole('link', { name: /Un site vitrine/ }).click()
+  await page.getByRole('navigation', { name: 'Ce que je fais' }).getByRole('link', { name: /Création de site vitrine/ }).click()
   await expect(page).toHaveURL(/\/ce-que-je-fais\/sites\/$/)
-  await expect(page.locator('.carte.ouverte h1')).toHaveText('Un site vitrine ou une page de campagne')
+  await expect(page.locator('.carte.ouverte h1')).toHaveText('Création de site vitrine ou de page de campagne')
   await expect(page.locator('a.carte')).toHaveCount(4)
 })

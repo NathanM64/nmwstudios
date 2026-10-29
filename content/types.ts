@@ -45,6 +45,8 @@ export type Dictionnaire = {
   ogAlt: string
   pages: Record<'offres' | 'methode' | 'refus' | 'qui' | 'contact' | 'legal' | 'introuvable', Page>
   accueil: {
+    // Le h1 porte les mots qu'on cherche ; l'accroche, en dessous, porte la voix.
+    titre: string
     accroche: readonly [string, string, string]
     identite: string
     lead: string

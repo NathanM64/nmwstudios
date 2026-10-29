@@ -7,13 +7,14 @@ export function Accueil({ t }: { t: Dictionnaire }) {
   return (
     <Ecran classe="accueil">
       <div>
-        <h1 className="accroche">
+        <h1 className="surtitre">{a.titre}</h1>
+        <p className="accroche">
           {a.accroche[0]}{' '}
           <br />
           {a.accroche[1]}{' '}
           <br />
           <span className="client">{a.accroche[2]}</span>
-        </h1>
+        </p>
         <p className="identite">
           <strong>Nathan Marimbordes</strong>
           {a.identite}

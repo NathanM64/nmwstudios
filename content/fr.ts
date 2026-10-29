@@ -36,16 +36,16 @@ export const FR: Dictionnaire = {
     changerLangue: 'English version',
   },
   site: {
-    title: 'NMW Studios, développeur web indépendant à Bordeaux',
+    title: 'Création de site internet à Bordeaux, NMW Studios',
     description:
-      'Je conçois, je développe, je reprends et j’accompagne vos sites et applications web, en direct et en marque blanche pour les agences. Le code est à vous.',
+      'Création de site internet, d’applications web et mobiles à Bordeaux. Le travail d’une agence web avec un seul interlocuteur. Devis gratuit sous 24 h.',
   },
   ogAlt: 'NMW Studios. Je conçois, je développe, je reprends et j’accompagne. Vous décidez jusqu’où. Nathan Marimbordes, développeur web indépendant à Bordeaux.',
   pages: {
     offres: {
-      title: 'Ce que je fais : sites, reprise, automatisation. NMW Studios',
+      title: 'Création de site, applications web et mobiles. NMW Studios',
       description:
-        'Reprise de l’existant, sites vitrines, applications, automatisation et hébergement. Cinq façons de travailler ensemble, chacune sur sa page. Le code est à vous.',
+        'Création de site vitrine, logiciels sur mesure et applications mobiles, reprise de l’existant, automatisation et hébergement, à Bordeaux. Le code est à vous.',
     },
     methode: {
       title: 'Comment je travaille, en direct et en marque blanche',
@@ -55,7 +55,7 @@ export const FR: Dictionnaire = {
     refus: {
       title: 'Ce que je ne fais pas : les limites que je pose. NMW Studios',
       description:
-        'Les sites sans code source, les projets qui demandent une équipe, les applications mobiles natives, un prix de maintenance avant d’avoir construit le projet.',
+        'Les sites sans code source, les projets qui demandent une équipe, un prix de maintenance avant d’avoir construit le projet. Les limites, dites avant de commencer.',
     },
     qui: {
       title: 'Nathan Marimbordes, développeur web indépendant à Bordeaux',
@@ -65,17 +65,18 @@ export const FR: Dictionnaire = {
     contact: {
       title: 'Contact, parlons de votre projet, NMW Studios à Bordeaux',
       description:
-        'Un message suffit, je le lis moi-même et je réponds dans la journée. Nathan Marimbordes, développeur web indépendant, à Bordeaux.',
+        'Un message suffit : je réponds dans la journée, devis gratuit sous 24 h. Nathan Marimbordes, développeur web indépendant, création de site à Bordeaux.',
     },
     legal: { title: 'Mentions légales, NMW Studios', description: 'Éditeur, hébergeur et données personnelles du site nmwstudios.com.' },
     introuvable: { title: 'Page introuvable, NMW Studios', description: 'Cette page n’existe pas ou n’existe plus.' },
   },
   accueil: {
+    titre: 'Création de site internet et d’applications à Bordeaux',
     accroche: ['Je conçois, je développe,', 'je reprends et j’accompagne.', 'Vous décidez jusqu’où.'],
     identite: ', développeur web indépendant à Bordeaux. Pour les entreprises en direct, et pour les agences en marque blanche.',
-    lead: 'Sites vitrines, applications et outils métier. Je construis, je reprends l’existant, et j’assure la suite si vous le souhaitez. Le code est à vous.',
+    lead: 'Sites vitrines, logiciels sur mesure, applications mobiles simples. Le travail d’une agence web, avec un seul interlocuteur. Le code est à vous.',
     ouParEmail: 'ou par email :',
-    reponds: 'Je réponds dans la journée.',
+    reponds: 'Je réponds dans la journée. Devis gratuit sous 24 h.',
     eyebrow: 'Quatre situations que je connais bien',
     situations: [
       ['Votre site a cinq ans et plus personne ne veut y toucher.', 'Je le reprends, sans repartir de zéro.', 'offre:reprise'],
@@ -94,11 +95,11 @@ export const FR: Dictionnaire = {
       {
         cle: 'applications',
         slug: 'applications',
-        titre: 'Une application, un outil interne, un premier produit',
-        resume: 'Une première version qui tourne, puis des itérations courtes.',
-        meta: 'Une première version qui tourne, puis des versions courtes et régulières : outil interne, espace client, premier produit. Vous voyez le chantier avancer.',
+        titre: 'Un logiciel sur mesure, en ligne ou sur mobile',
+        resume: 'Espace client, outil interne, application mobile simple.',
+        meta: 'Logiciel sur mesure et application mobile simple : espace client, outil métier, prise de rendez-vous. Une première version vite, puis des versions régulières.',
         blocs: [
-          'Une première version qui tourne, puis des versions courtes et régulières : outil interne, espace client, premier produit. Vous voyez le chantier avancer, pas une livraison surprise.',
+          'Un outil en ligne où vos clients ou votre équipe travaillent : espace client, prise de rendez-vous, outil métier. Ou une application mobile simple, sur iPhone et Android. Une première version vite, puis des versions régulières.',
         ],
         vues: {
           legende: 'Mon outil, construit pour moi. Données de démonstration.',
@@ -127,12 +128,12 @@ export const FR: Dictionnaire = {
       {
         cle: 'sites',
         slug: 'sites',
-        titre: 'Un site vitrine ou une page de campagne',
-        resume: 'Sobre et rapide, que vous pouvez faire évoluer sans moi.',
-        meta: 'Un site rapide, que vous pouvez faire évoluer sans moi, sans constructeur de pages. À partir de 1 500 €, jusqu’à trois pages, vos maquettes ou les miennes si vous n’en avez pas.',
+        titre: 'Création de site vitrine ou de page de campagne',
+        resume: 'Rapide, lisible sur téléphone, que vous pouvez faire évoluer sans moi.',
+        meta: 'Création de site vitrine à Bordeaux : rapide, lisible sur téléphone, construit pour Google. À partir de 1 500 €, jusqu’à trois pages. Devis gratuit sous 24 h.',
         prix: 'À partir de 1 500 €, jusqu’à trois pages.',
         blocs: [
-          'Un site rapide, que vous pouvez faire évoluer sans moi. Pas de constructeur de pages : du code qu’un autre développeur peut reprendre. Vos maquettes, intégrées telles quelles, sous votre nom ; les miennes seulement si vous n’en avez pas.',
+          'Un site rapide, lisible sur téléphone, construit dès le départ pour être bien lu par Google. Pas de constructeur de pages : du code qu’un autre développeur peut reprendre. Vos maquettes, intégrées telles quelles, sous votre nom ; les miennes seulement si vous n’en avez pas.',
           'Un site sur mesure, avec une direction graphique et des animations propres, se chiffre après cadrage. Les montants sont indicatifs et s’ajustent selon le périmètre et les contenus.',
         ],
         appel: 'Parler de votre site',
@@ -158,7 +159,7 @@ export const FR: Dictionnaire = {
         blocs: [
           'Inclus : l’hébergement, le nom de domaine, le certificat de sécurité, une sauvegarde chaque nuit, une alerte si le site ne répond plus, les mises à jour de sécurité du serveur.',
           'Non inclus : toute modification de contenu ou de code, facturée à l’heure ou dans un forfait dédié.',
-          'Transférable le jour où vous le décidez.',
+          'Si le site tombe, l’alerte arrive chez moi : je suis souvent au courant avant vous. Transférable le jour où vous le décidez.',
         ],
         appel: 'Parler de votre hébergement',
       },
@@ -180,7 +181,7 @@ export const FR: Dictionnaire = {
       ['Conception', 'La liste des écrans, avec les points signalés.', 'Vos maquettes telles quelles ; les miennes si vous n’en avez pas.'],
       ['Développement', 'Une adresse où voir l’avancement.', 'Des versions visibles au fil du chantier. Si une date glisse, vous le savez avant.'],
       ['Mise en ligne', 'Le projet en ligne, transférable.', 'Sur votre hébergement ou sur le mien.'],
-      ['Suivi', 'Si vous le souhaitez.', 'Sinon, le code et la documentation.'],
+      ['Suivi', 'Si vous le souhaitez, une réponse dans la journée.', 'Sinon, le code et la documentation.'],
     ],
     onglets: ['Comment je travaille', 'Ce que je ne fais pas'],
   },
@@ -190,7 +191,6 @@ export const FR: Dictionnaire = {
     liste: [
       ['Les sites sans code source', 'Wix, Squarespace ou un éditeur équivalent : les reprendre vous coûterait plus cher que de refaire. Je vous le dis à la première lecture.'],
       ['Les projets qui demandent une équipe', 'Je travaille seul. Si votre projet demande cinq personnes, je vous le dirai et je vous orienterai, au lieu de le prendre et de vous mettre en retard.'],
-      ['Les applications mobiles natives', 'Pas d’application iOS ou Android sur mesure. Un besoin simple passe souvent par le web, et je vous dirai si c’est le cas.'],
       ['Un prix de maintenance avant d’avoir construit', 'Le chiffrer avant de connaître le projet n’a pas de sens. Le périmètre de l’hébergement, lui, est écrit noir sur blanc.'],
     ],
   },
@@ -202,18 +202,20 @@ export const FR: Dictionnaire = {
     faits: 'Bordeaux. À distance pour toute la France.',
     produit: { avant: 'Je développe aussi ', nom: 'Zveltia', apres: ', l’outil avec lequel je facture mes propres clients.', href: 'https://zveltia.com/' },
     faq: [
+      ['Pourquoi un indépendant plutôt qu’une agence web ?', 'Vous parlez à celui qui écrit le code : pas d’intermédiaire, une réponse dans la journée, un devis gratuit sous 24 h. Si votre projet demande une équipe, je vous le dis.'],
+      ['Et si quelque chose casse après la mise en ligne ?', 'Vous m’écrivez, je réponds dans la journée et je vous dis quand ce sera réparé. Sur l’hébergement que je gère, une alerte me prévient dès que le site ne répond plus.'],
       ['Vous êtes seul, que se passe-t-il si vous n’êtes plus disponible ?', 'Le code est livré et documenté, il est chez vous, à votre nom, et l’hébergement est transférable. Un autre développeur peut reprendre sans avoir besoin de moi.'],
       ['Vous pouvez reprendre un site fait par une autre agence ?', 'Oui, même si l’agence n’existe plus. Envoyez-moi l’adresse, je vous écris ce qui tient et ce qui casse avant tout devis, et je vous dis si une refonte vaut mieux qu’une reprise.'],
       ['Travaillez-vous en marque blanche pour des agences ?', 'Oui, en freelance. Vos maquettes, vos délais, votre nom devant votre client. Je ne contacte jamais votre client et je ne signe pas mon travail.'],
       ['Combien coûte une reprise ?', 'Au temps passé, au taux annoncé avant de commencer. Le devis vient après l’état des lieux.'],
-      ['Combien coûte un site ?', 'Un site vitrine simple, jusqu’à trois pages, démarre à 1 500 €. Un site sur mesure se chiffre après cadrage, selon le périmètre et les contenus.'],
+      ['Combien coûte la création d’un site ?', 'Un site vitrine simple, jusqu’à trois pages, démarre à 1 500 €. Un site sur mesure se chiffre après cadrage. Le devis est gratuit, sous 24 h après notre premier échange.'],
       ['Combien de temps pour une première version ?', 'La date se fixe au cadrage, à partir de ce que le projet doit faire et de ce que vous fournissez. Vous voyez des versions avant cette date.'],
       ['Que se passe-t-il après la livraison ?', 'Vous choisissez : je continue à faire vivre le projet, ou vous repartez avec le code, la documentation et un hébergement transférable.'],
     ],
   },
   contact: {
     h1: ['Parlons de', 'votre projet.'],
-    lead: 'Un message suffit. Je le lis moi-même et je réponds dans la journée.',
+    lead: 'Un message suffit. Je le lis moi-même et je réponds dans la journée. Le devis est gratuit, sous 24 h après notre premier échange.',
     pieces: 'Des maquettes ou un cahier des charges à joindre ? Par email, en pièce jointe.',
     role: ', développeur web indépendant.',
     lieu: 'Bordeaux. À distance pour toute la France.',
@@ -257,7 +259,7 @@ export const FR: Dictionnaire = {
     bouton: 'Retour à l’accueil',
   },
   donnees: {
-    description: 'Sites, applications et outils métier. Je construis, je reprends l’existant, et j’assure la suite si vous le souhaitez.',
+    description: 'Création de site internet, de logiciels sur mesure et d’applications mobiles à Bordeaux. Je construis, je reprends l’existant, et j’assure la suite si vous le souhaitez.',
     jobTitle: 'Développeur web indépendant',
     catalogue: 'Prestations',
   },
