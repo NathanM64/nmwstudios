@@ -2,7 +2,7 @@ import Link from 'next/link'
 import type { Dictionnaire } from '@/content/types'
 import { Ecran } from '@/components/Ecran'
 import { FormulaireContact } from '@/components/FormulaireContact'
-import { LINKEDIN } from '@/lib/meta'
+import { BEGLES, LINKEDIN } from '@/lib/meta'
 
 export function Contact({ t }: { t: Dictionnaire }) {
   const c = t.contact
@@ -21,7 +21,15 @@ export function Contact({ t }: { t: Dictionnaire }) {
           <strong>Nathan Marimbordes</strong>
           {c.role}
           <br />
-          {c.lieu}
+          {c.local ? (
+            <>
+              {c.local[0]}
+              <Link href={BEGLES}>{c.local[1]}</Link>
+              {c.local[2]}
+            </>
+          ) : (
+            c.lieu
+          )}
           <br />
           {c.statut}
           <Link href={t.routes.legal}>{c.lienLegal}</Link>.

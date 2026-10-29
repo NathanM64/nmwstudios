@@ -37,9 +37,9 @@ export const FR: Dictionnaire = {
     changerLangue: 'English version',
   },
   site: {
-    title: 'Création de site internet à Bordeaux, NMW Studios',
+    title: 'Création de site internet à Bordeaux et Bègles, NMW Studios',
     description:
-      'Création de site internet, d’applications web et mobiles à Bordeaux. Le travail d’une agence web avec un seul interlocuteur. Réponse sous 24 h, devis gratuit.',
+      'Création de site internet, d’applications web et mobiles à Bordeaux et Bègles. Le travail d’une agence web avec un seul interlocuteur. Réponse sous 24 h, devis gratuit.',
   },
   ogAlt: 'NMW Studios. Je conçois, je développe, je reprends et j’accompagne. Vous décidez jusqu’où. Nathan Marimbordes, développeur web indépendant à Bordeaux.',
   pages: {
@@ -66,13 +66,13 @@ export const FR: Dictionnaire = {
     contact: {
       title: 'Contact, parlons de votre projet, NMW Studios à Bordeaux',
       description:
-        'Un message suffit : je réponds sous 24 h maximum, devis gratuit. Nathan Marimbordes, développeur web indépendant, création de site à Bordeaux.',
+        'Un message suffit : je réponds sous 24 h maximum, devis gratuit. Nathan Marimbordes, développeur web indépendant, création de site à Bordeaux et Bègles.',
     },
     legal: { title: 'Mentions légales, NMW Studios', description: 'Éditeur, hébergeur et données personnelles du site nmwstudios.com.' },
     introuvable: { title: 'Page introuvable, NMW Studios', description: 'Cette page n’existe pas ou n’existe plus.' },
   },
   accueil: {
-    titre: 'Création de site internet et d’applications à Bordeaux',
+    titre: 'Création de site internet et d’applications à Bordeaux et Bègles',
     accroche: ['Je conçois, je développe,', 'je reprends et j’accompagne.', 'Vous décidez jusqu’où.'],
     identite: ', développeur web indépendant à Bordeaux. Pour les entreprises en direct, et pour les agences en marque blanche.',
     lead: 'Sites vitrines, logiciels sur mesure, applications mobiles simples. Le travail d’une agence web, avec un seul interlocuteur. Le code est à vous.',
@@ -200,7 +200,7 @@ export const FR: Dictionnaire = {
     lead: ['Développeur web depuis 2020, à mon compte depuis 2025.', 'Je travaille seul, et je le dis :', 'si votre projet demande une équipe, je vous le dirai et je vous orienterai.'],
     paragraphe:
       'Mes chantiers durent et se relaient : pendant qu’un client relit, un autre avance. J’ai de la place, et je vous dis à partir de quand avant de m’engager. Si une fonctionnalité va coûter cher pour rien, je le dis avant de la chiffrer. Je préviens avant de dépasser, pas après.',
-    faits: 'Bordeaux. À distance pour toute la France.',
+    faits: 'Bordeaux et Bègles. À distance pour toute la France.',
     produit: { avant: 'Je développe aussi ', nom: 'Zveltia', apres: ', l’outil avec lequel je facture mes propres clients.', href: 'https://zveltia.com/' },
     faq: [
       ['Pourquoi un indépendant plutôt qu’une agence web ?', 'Vous parlez à celui qui écrit le code : pas d’intermédiaire, une réponse sous 24 h, et la même personne du devis jusqu’au suivi. Si votre projet demande une équipe, je vous le dis.'],
@@ -219,7 +219,8 @@ export const FR: Dictionnaire = {
     lead: 'Un message suffit. Je le lis moi-même et je réponds sous 24 h maximum. Le devis est gratuit.',
     pieces: 'Des maquettes ou un cahier des charges à joindre ? Par email, en pièce jointe.',
     role: ', développeur web indépendant.',
-    lieu: 'Bordeaux. À distance pour toute la France.',
+    lieu: 'Bordeaux et Bègles. À distance pour toute la France.',
+    local: ['Bordeaux et ', 'Bègles', '. À distance pour toute la France.'],
     statut: 'Entrepreneur individuel, ',
     lienLegal: 'SIRET et mentions légales',
     surLinkedin: 'NMW Studios est aussi sur ',
@@ -254,6 +255,24 @@ export const FR: Dictionnaire = {
     donnees: 'Données personnelles',
     donneesTexte:
       'Le formulaire de contact transmet votre nom, votre email et votre message, uniquement pour vous répondre. Le site compte ses visites (page vue, pays, adresse IP) sans les céder à personne, et pose un seul cookie, celui de la langue, seulement si vous changez de langue. Pour faire modifier ou supprimer ces données, écrivez à l’adresse ci-dessus.',
+  },
+  // La page locale, hors menu : celle que trouve « création de site internet Bègles ».
+  begles: {
+    title: 'Création de site internet à Bègles, NMW Studios',
+    description:
+      'Création de site internet à Bègles : sites vitrines, logiciels sur mesure et applications mobiles. Un développeur installé à Bègles, réponse sous 24 h.',
+    h1: 'Création de site internet à Bègles.',
+    lead: 'Je suis Nathan Marimbordes, développeur web installé à Bègles, rue Jane Goodall. Je crée les sites et les applications des entreprises de Bègles, de Bordeaux et de la métropole.',
+    paragraphe: 'Vous parlez directement à la personne qui écrit le code : je réponds sous 24 h maximum, et le devis est gratuit.',
+    sousTitre: 'Ce que je fais',
+    liste: [
+      ['Un site vitrine', ', à partir de 1 500 €, jusqu’à trois pages.', 'offre:sites'],
+      ['Un logiciel sur mesure', ' : espace client, prise de rendez-vous, outil métier, ou une application mobile simple.', 'offre:applications'],
+      ['La reprise de votre site', ', même fait par une autre agence.', 'offre:reprise'],
+      ['L’hébergement et la surveillance', ' de votre site, transférables quand vous le décidez.', 'offre:hebergement'],
+    ],
+    sousTitre2: 'Un indépendant plutôt qu’une agence web',
+    paragraphe2: 'Le travail d’une agence web, avec un seul interlocuteur. Le code est à vous et l’hébergement est transférable : vous ne restez jamais bloqué avec moi. En direct pour les entreprises, en marque blanche pour les agences.',
   },
   introuvable: {
     h1: ['Cette page', 'n’existe pas.'],

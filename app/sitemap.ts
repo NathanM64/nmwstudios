@@ -1,7 +1,7 @@
 import type { MetadataRoute } from 'next'
 import { DICOS, avecBarre } from '@/content'
 import type { CleRoute, Langue } from '@/content/types'
-import { SITE } from '@/lib/meta'
+import { BEGLES, SITE } from '@/lib/meta'
 
 export const dynamic = 'force-static'
 
@@ -12,7 +12,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const url = (langue: Langue, cle: CleRoute) => `${SITE}${avecBarre(DICOS[langue].routes[cle])}`
   // Chaque adresse, dans chaque langue, avec ses équivalents. Pas de lastmod : une date de build
   // sur toutes les pages serait une fausse fraîcheur.
-  return cles.flatMap((cle) =>
-    LANGUES.map((langue) => ({ url: url(langue, cle), alternates: { languages: { fr: url('fr', cle), en: url('en', cle) } } })),
-  )
+  return [
+    ...cles.flatMap((cle) =>
+      LANGUES.map((langue) => ({ url: url(langue, cle), alternates: { languages: { fr: url('fr', cle), en: url('en', cle) } } })),
+    ),
+    { url: `${SITE}${BEGLES}` },
+  ]
 }

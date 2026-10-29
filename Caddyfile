@@ -13,6 +13,11 @@
 		expression `{http.request.cookie.lang} == "en" || ({http.request.cookie.lang} != "fr" && {http.request.header.Accept-Language}.matches("^[Ee][Nn]"))`
 	}
 	redir @anglophone /en/ 302
+	# Les adresses de l'ancien site, encore indexées : chacune vers la page qui l'a remplacée.
+	redir /a-propos /qui-je-suis/ 301
+	redir /a-propos/ /qui-je-suis/ 301
+	redir /projet-complet /comment-je-travaille/ 301
+	redir /projet-complet/ /comment-je-travaille/ 301
 	@accueil path /
 	header @accueil Vary "Accept-Language, Cookie"
 

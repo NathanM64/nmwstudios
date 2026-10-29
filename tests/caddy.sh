@@ -16,6 +16,9 @@ attendu() {
   if [[ "$obtenu" == "$code"* ]]; then echo "ok  $nom"; else echo "KO  $nom : attendu « $code », obtenu « $obtenu »"; echec=1; fi
 }
 attendu 200 "sans en-tête : le français" "$B/"
+attendu "301 $B/qui-je-suis/" "ancienne page /a-propos" "$B/a-propos"
+attendu "301 $B/comment-je-travaille/" "ancienne page /projet-complet/" "$B/projet-complet/"
+attendu 200 "page locale Bègles" "$B/creation-site-internet-begles/"
 attendu "302 $B/en/" "en-US : vers /en/" -H 'Accept-Language: en-US,en;q=0.9,fr;q=0.8' "$B/"
 attendu 200 "en-US avec cookie lang=fr : le français" -H 'Accept-Language: en-US' -H 'Cookie: lang=fr' "$B/"
 attendu "302 $B/en/" "fr-FR avec cookie lang=en : vers /en/" -H 'Accept-Language: fr-FR' -H 'Cookie: lang=en' "$B/"

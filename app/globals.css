@@ -363,6 +363,14 @@ a.carte:hover .lien { text-decoration: underline; text-underline-offset: 0.2em; 
 .document > * { max-width: 40rem; }
 .document h2 { font-size: 1.3rem; margin: 1.8rem 0 0.6rem; }
 .document p { color: var(--color-muted-foreground); font-weight: 300; }
+.local .panel { padding: 1.6rem 1.8rem; }
+.local .panel h2 { font-size: 1.05rem; font-weight: 600; letter-spacing: -0.01em; max-width: none; margin: 0 0 0.8rem; }
+.local .panel h2 + ul, .local .panel ul + h2 { margin-top: 0; }
+.local .panel ul { margin: 0 0 1.6rem; padding-left: 1.1rem; color: var(--color-reading); font-weight: 300; line-height: 1.55; }
+.local .panel li { margin-bottom: 0.55rem; }
+.local .panel li a { color: var(--color-foreground); font-weight: 600; text-decoration: none; }
+.local .panel li a:hover { text-decoration: underline; }
+.local .panel p { margin: 0; }
 
 /* Transitions : la page qui part s'éteint d'abord, celle qui arrive s'allume ensuite, rien ne se superpose ;
    une carte fermée devient la carte ouverte. */

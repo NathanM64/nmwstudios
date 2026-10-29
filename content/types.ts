@@ -91,6 +91,8 @@ export type Dictionnaire = {
     pieces: string
     role: string
     lieu: string
+    // Le lieu avec un lien vers la page locale, en français seulement : [avant, lien, après].
+    local?: readonly [string, string, string]
     statut: string
     lienLegal: string
     surLinkedin: string
@@ -124,6 +126,17 @@ export type Dictionnaire = {
     telephone: string
     donnees: string
     donneesTexte: string
+  }
+  begles?: {
+    title: string
+    description: string
+    h1: string
+    lead: string
+    paragraphe: string
+    sousTitre: string
+    liste: readonly (readonly [string, string, CleRoute])[]
+    sousTitre2: string
+    paragraphe2: string
   }
   introuvable: { h1: readonly [string, string]; lead: string; bouton: string }
   donnees: { description: string; jobTitle: string; catalogue: string }

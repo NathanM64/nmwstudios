@@ -3,6 +3,8 @@ import { DICOS, avecBarre, offreParSlug } from '@/content'
 import type { CleRoute, Dictionnaire, Langue, Page } from '@/content/types'
 
 export const SITE = 'https://nmwstudios.com'
+// La page locale, hors du système de routes : elle n'existe qu'en français.
+export const BEGLES = '/creation-site-internet-begles/'
 export const LINKEDIN = 'https://www.linkedin.com/company/nmw-studios/'
 
 // Une adresse fixe dans public/, déclarée page par page : posée en fichier à la racine, l'image

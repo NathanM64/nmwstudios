@@ -4,6 +4,7 @@ import { LINKEDIN, SITE } from './meta'
 
 const ID = `${SITE}/#organisation`
 const FRANCE = { '@type': 'Country', name: 'France' }
+const ZONE = [{ '@type': 'City', name: 'Bègles' }, { '@type': 'City', name: 'Bordeaux' }, FRANCE]
 
 // Ce que Google lit : la même chose que le lecteur, ni plus ni moins. Un seul prix, celui du site vitrine.
 // La zone servie reste la France côté français ; l'anglais s'adresse à tout le monde.
@@ -24,7 +25,7 @@ export const donnees = (t: Dictionnaire) => ({
   address: { '@type': 'PostalAddress', addressLocality: 'Bègles', postalCode: '33130', addressCountry: 'FR' },
   // Le logiciel edite a cote, declare sur zveltia.com avec ce meme editeur : le lien vaut dans les deux sens.
   owns: { '@type': ['SoftwareApplication', 'Product'], '@id': 'https://zveltia.com/#app', name: 'Zveltia', url: 'https://zveltia.com/' },
-  ...(t.langue === 'fr' ? { areaServed: FRANCE } : {}),
+  ...(t.langue === 'fr' ? { areaServed: ZONE } : {}),
   hasOfferCatalog: {
     '@type': 'OfferCatalog',
     name: t.donnees.catalogue,
