@@ -38,7 +38,7 @@ export const EN: Dictionnaire = {
   site: {
     title: 'Website design and development in Bordeaux, NMW Studios',
     description:
-      'Website design and development, custom software and simple mobile apps. The work of a web agency with a single contact. Free quote within 24 hours.',
+      'Website design and development, custom software and simple mobile apps. The work of a web agency with a single contact. Reply within 24 hours, free quote.',
   },
   ogAlt: 'NMW Studios. I design, I build, I take over and I follow through. You decide how far. Nathan Marimbordes, freelance web developer in Bordeaux, France.',
   pages: {
@@ -65,7 +65,7 @@ export const EN: Dictionnaire = {
     contact: {
       title: 'Contact, let’s talk about your project. NMW Studios, Bordeaux',
       description:
-        'One message is enough: I reply the same day, free quote within 24 hours. Nathan Marimbordes, freelance web developer in Bordeaux, France, working remotely.',
+        'One message is enough: I reply within 24 hours at most, free quote. Nathan Marimbordes, freelance web developer in Bordeaux, France, working remotely.',
     },
     legal: { title: 'Legal notice, NMW Studios', description: 'Publisher, host and personal data of nmwstudios.com.' },
     introuvable: { title: 'Page not found, NMW Studios', description: 'This page does not exist, or not anymore.' },
@@ -76,7 +76,7 @@ export const EN: Dictionnaire = {
     identite: ', freelance web developer in Bordeaux, France. Directly for businesses, and white-label for agencies.',
     lead: 'Showcase websites, custom software, simple mobile apps. The work of a web agency, with a single contact. The code is yours.',
     ouParEmail: 'or by email:',
-    reponds: 'I reply the same day. Free quote within 24 hours.',
+    reponds: 'I reply within 24 hours at most. Free quote.',
     eyebrow: 'Four situations I know well',
     situations: [
       ['Your website is five years old and nobody wants to touch it.', 'I take it over, without starting from scratch.', 'offre:reprise'],
@@ -128,7 +128,7 @@ export const EN: Dictionnaire = {
         slug: 'websites',
         titre: 'Building your showcase website or campaign page',
         resume: 'Fast, readable on a phone, and you can change it without me.',
-        meta: 'Showcase website design and development: fast, readable on a phone, built for Google. From €1,500, up to three pages. Free quote within 24 hours.',
+        meta: 'Showcase website design and development: fast, readable on a phone, built for Google. From €1,500, up to three pages. Reply within 24 hours, free quote.',
         prix: 'From €1,500, up to three pages.',
         blocs: [
           'A fast website, readable on a phone, built from the start to be read well by Google. No page builder: code another developer can take over. Your designs, built as they are, under your name; mine only if you have none.',
@@ -199,20 +199,20 @@ export const EN: Dictionnaire = {
     faits: 'Bordeaux, France. Remote, on Paris time.',
     produit: { avant: 'I also build ', nom: 'Zveltia', apres: ', the tool I invoice my own clients with (in French).', href: 'https://zveltia.com/' },
     faq: [
-      ['Why a freelancer rather than a web agency?', 'You talk to the person who writes the code: no middleman, a reply the same day, a free quote within 24 hours. If your project needs a team, I tell you.'],
+      ['Why a freelancer rather than a web agency?', 'You talk to the person who writes the code: no middleman, a reply within 24 hours, and the same person from quote to follow-up. If your project needs a team, I tell you.'],
       ['What if something breaks after launch?', 'You write to me, I reply the same day and tell you when it will be fixed. On hosting I manage, an alert warns me as soon as the site stops responding.'],
       ['You work alone. What happens if you are no longer available?', 'The code is delivered and documented, it is yours, in your name, and the hosting can be transferred. Another developer can take over without needing me.'],
       ['Can you take over a website built by another agency?', 'Yes, even if the agency no longer exists. Send me the address, I write back what holds and what breaks before any quote, and I tell you whether a rebuild beats a takeover.'],
       ['Do you work white-label for agencies?', 'Yes, as a freelancer. Your designs, your deadlines, your name in front of your client. I never contact your client and I don’t sign my work.'],
       ['How much does a takeover cost?', 'By time spent, at a rate agreed before starting. The quote comes after the assessment.'],
-      ['How much does a website cost?', 'A simple showcase website, up to three pages, starts at €1,500. A custom website is quoted after scoping. The quote is free, within 24 hours of our first exchange.'],
+      ['How much does a website cost?', 'A simple showcase website, up to three pages, starts at €1,500. A custom website is quoted after scoping. The quote is free.'],
       ['How long until a first version?', 'The date is set at scoping, from what the project must do and what you provide. You see versions before that date.'],
       ['What happens after delivery?', 'You choose: I keep the project alive, or you leave with the code, the documentation and transferable hosting.'],
     ],
   },
   contact: {
     h1: ['Let’s talk about', 'your project.'],
-    lead: 'One message is enough. I read it myself and reply the same day. The quote is free, within 24 hours of our first exchange.',
+    lead: 'One message is enough. I read it myself and reply within 24 hours at most. The quote is free.',
     pieces: 'Designs or a brief to attach? By email, as an attachment.',
     role: ', freelance web developer.',
     lieu: 'Bordeaux, France. Remote, on Paris time. Invoices in euros.',
@@ -232,7 +232,7 @@ export const EN: Dictionnaire = {
     envoyer: 'Send',
     envoiEnCours: 'Sending',
     envoye: 'Message sent.',
-    envoyeDetail: 'I read it myself and reply the same day, to the address you gave.',
+    envoyeDetail: 'I read it myself and reply within 24 hours at most, to the address you gave.',
     tropDeMessages: 'Too many messages sent. Try again in ten minutes.',
     secours: 'The message did not go through. Write directly to contact@nmwstudios.com.',
   },

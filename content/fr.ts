@@ -38,7 +38,7 @@ export const FR: Dictionnaire = {
   site: {
     title: 'Création de site internet à Bordeaux, NMW Studios',
     description:
-      'Création de site internet, d’applications web et mobiles à Bordeaux. Le travail d’une agence web avec un seul interlocuteur. Devis gratuit sous 24 h.',
+      'Création de site internet, d’applications web et mobiles à Bordeaux. Le travail d’une agence web avec un seul interlocuteur. Réponse sous 24 h, devis gratuit.',
   },
   ogAlt: 'NMW Studios. Je conçois, je développe, je reprends et j’accompagne. Vous décidez jusqu’où. Nathan Marimbordes, développeur web indépendant à Bordeaux.',
   pages: {
@@ -65,7 +65,7 @@ export const FR: Dictionnaire = {
     contact: {
       title: 'Contact, parlons de votre projet, NMW Studios à Bordeaux',
       description:
-        'Un message suffit : je réponds dans la journée, devis gratuit sous 24 h. Nathan Marimbordes, développeur web indépendant, création de site à Bordeaux.',
+        'Un message suffit : je réponds sous 24 h maximum, devis gratuit. Nathan Marimbordes, développeur web indépendant, création de site à Bordeaux.',
     },
     legal: { title: 'Mentions légales, NMW Studios', description: 'Éditeur, hébergeur et données personnelles du site nmwstudios.com.' },
     introuvable: { title: 'Page introuvable, NMW Studios', description: 'Cette page n’existe pas ou n’existe plus.' },
@@ -76,7 +76,7 @@ export const FR: Dictionnaire = {
     identite: ', développeur web indépendant à Bordeaux. Pour les entreprises en direct, et pour les agences en marque blanche.',
     lead: 'Sites vitrines, logiciels sur mesure, applications mobiles simples. Le travail d’une agence web, avec un seul interlocuteur. Le code est à vous.',
     ouParEmail: 'ou par email :',
-    reponds: 'Je réponds dans la journée. Devis gratuit sous 24 h.',
+    reponds: 'Je réponds sous 24 h maximum. Devis gratuit.',
     eyebrow: 'Quatre situations que je connais bien',
     situations: [
       ['Votre site a cinq ans et plus personne ne veut y toucher.', 'Je le reprends, sans repartir de zéro.', 'offre:reprise'],
@@ -130,7 +130,7 @@ export const FR: Dictionnaire = {
         slug: 'sites',
         titre: 'Création de site vitrine ou de page de campagne',
         resume: 'Rapide, lisible sur téléphone, que vous pouvez faire évoluer sans moi.',
-        meta: 'Création de site vitrine à Bordeaux : rapide, lisible sur téléphone, construit pour Google. À partir de 1 500 €, jusqu’à trois pages. Devis gratuit sous 24 h.',
+        meta: 'Création de site vitrine à Bordeaux : rapide, lisible sur téléphone, construit pour Google. À partir de 1 500 €, jusqu’à trois pages. Réponse sous 24 h, devis gratuit.',
         prix: 'À partir de 1 500 €, jusqu’à trois pages.',
         blocs: [
           'Un site rapide, lisible sur téléphone, construit dès le départ pour être bien lu par Google. Pas de constructeur de pages : du code qu’un autre développeur peut reprendre. Vos maquettes, intégrées telles quelles, sous votre nom ; les miennes seulement si vous n’en avez pas.',
@@ -202,20 +202,20 @@ export const FR: Dictionnaire = {
     faits: 'Bordeaux. À distance pour toute la France.',
     produit: { avant: 'Je développe aussi ', nom: 'Zveltia', apres: ', l’outil avec lequel je facture mes propres clients.', href: 'https://zveltia.com/' },
     faq: [
-      ['Pourquoi un indépendant plutôt qu’une agence web ?', 'Vous parlez à celui qui écrit le code : pas d’intermédiaire, une réponse dans la journée, un devis gratuit sous 24 h. Si votre projet demande une équipe, je vous le dis.'],
+      ['Pourquoi un indépendant plutôt qu’une agence web ?', 'Vous parlez à celui qui écrit le code : pas d’intermédiaire, une réponse sous 24 h, et la même personne du devis jusqu’au suivi. Si votre projet demande une équipe, je vous le dis.'],
       ['Et si quelque chose casse après la mise en ligne ?', 'Vous m’écrivez, je réponds dans la journée et je vous dis quand ce sera réparé. Sur l’hébergement que je gère, une alerte me prévient dès que le site ne répond plus.'],
       ['Vous êtes seul, que se passe-t-il si vous n’êtes plus disponible ?', 'Le code est livré et documenté, il est chez vous, à votre nom, et l’hébergement est transférable. Un autre développeur peut reprendre sans avoir besoin de moi.'],
       ['Vous pouvez reprendre un site fait par une autre agence ?', 'Oui, même si l’agence n’existe plus. Envoyez-moi l’adresse, je vous écris ce qui tient et ce qui casse avant tout devis, et je vous dis si une refonte vaut mieux qu’une reprise.'],
       ['Travaillez-vous en marque blanche pour des agences ?', 'Oui, en freelance. Vos maquettes, vos délais, votre nom devant votre client. Je ne contacte jamais votre client et je ne signe pas mon travail.'],
       ['Combien coûte une reprise ?', 'Au temps passé, au taux annoncé avant de commencer. Le devis vient après l’état des lieux.'],
-      ['Combien coûte la création d’un site ?', 'Un site vitrine simple, jusqu’à trois pages, démarre à 1 500 €. Un site sur mesure se chiffre après cadrage. Le devis est gratuit, sous 24 h après notre premier échange.'],
+      ['Combien coûte la création d’un site ?', 'Un site vitrine simple, jusqu’à trois pages, démarre à 1 500 €. Un site sur mesure se chiffre après cadrage. Le devis est gratuit.'],
       ['Combien de temps pour une première version ?', 'La date se fixe au cadrage, à partir de ce que le projet doit faire et de ce que vous fournissez. Vous voyez des versions avant cette date.'],
       ['Que se passe-t-il après la livraison ?', 'Vous choisissez : je continue à faire vivre le projet, ou vous repartez avec le code, la documentation et un hébergement transférable.'],
     ],
   },
   contact: {
     h1: ['Parlons de', 'votre projet.'],
-    lead: 'Un message suffit. Je le lis moi-même et je réponds dans la journée. Le devis est gratuit, sous 24 h après notre premier échange.',
+    lead: 'Un message suffit. Je le lis moi-même et je réponds sous 24 h maximum. Le devis est gratuit.',
     pieces: 'Des maquettes ou un cahier des charges à joindre ? Par email, en pièce jointe.',
     role: ', développeur web indépendant.',
     lieu: 'Bordeaux. À distance pour toute la France.',
@@ -235,7 +235,7 @@ export const FR: Dictionnaire = {
     envoyer: 'Envoyer',
     envoiEnCours: 'Envoi en cours',
     envoye: 'Message envoyé.',
-    envoyeDetail: 'Je le lis moi-même et je vous réponds dans la journée, à l’adresse que vous avez donnée.',
+    envoyeDetail: 'Je le lis moi-même et je vous réponds sous 24 h maximum, à l’adresse que vous avez donnée.',
     tropDeMessages: 'Trop de messages envoyés. Réessayez dans dix minutes.',
     secours: 'L’envoi a échoué. Écrivez-moi directement à contact@nmwstudios.com.',
   },
