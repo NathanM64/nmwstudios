@@ -2,6 +2,7 @@ import Link from 'next/link'
 import type { Dictionnaire } from '@/content/types'
 import { Ecran } from '@/components/Ecran'
 import { FormulaireContact } from '@/components/FormulaireContact'
+import { LINKEDIN } from '@/lib/meta'
 
 export function Contact({ t }: { t: Dictionnaire }) {
   const c = t.contact
@@ -24,6 +25,12 @@ export function Contact({ t }: { t: Dictionnaire }) {
           <br />
           {c.statut}
           <Link href={t.routes.legal}>{c.lienLegal}</Link>.
+          <br />
+          {c.surLinkedin}
+          <a href={LINKEDIN} target="_blank" rel="noopener" aria-label={t.chrome.linkedin}>
+            LinkedIn
+          </a>
+          .
         </p>
       </div>
       <FormulaireContact t={t.formulaire} />

@@ -32,6 +32,7 @@ export const FR: Dictionnaire = {
     suivant: 'Suivant :',
     retour: 'Retour :',
     legal: 'Mentions légales',
+    linkedin: 'NMW Studios sur LinkedIn (nouvel onglet)',
     autreLangue: 'EN',
     changerLangue: 'English version',
   },
@@ -221,6 +222,7 @@ export const FR: Dictionnaire = {
     lieu: 'Bordeaux. À distance pour toute la France.',
     statut: 'Entrepreneur individuel, ',
     lienLegal: 'SIRET et mentions légales',
+    surLinkedin: 'NMW Studios est aussi sur ',
   },
   formulaire: {
     nom: 'Votre nom',

@@ -3,6 +3,7 @@ import { DICOS, avecBarre, offreParSlug } from '@/content'
 import type { CleRoute, Dictionnaire, Langue, Page } from '@/content/types'
 
 export const SITE = 'https://nmwstudios.com'
+export const LINKEDIN = 'https://www.linkedin.com/company/nmw-studios/'
 
 // Une adresse fixe dans public/, déclarée page par page : posée en fichier à la racine, l'image
 // n'atteignait que l'accueil, chaque page qui fixe son og:url perdant l'héritage.

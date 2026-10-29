@@ -32,6 +32,7 @@ export const EN: Dictionnaire = {
     suivant: 'Next:',
     retour: 'Back:',
     legal: 'Legal notice',
+    linkedin: 'NMW Studios on LinkedIn (new tab)',
     autreLangue: 'FR',
     changerLangue: 'Version française',
   },
@@ -218,6 +219,7 @@ export const EN: Dictionnaire = {
     lieu: 'Bordeaux, France. Remote, on Paris time. Invoices in euros.',
     statut: 'French sole trader, ',
     lienLegal: 'registration number and legal notice',
+    surLinkedin: 'NMW Studios is also on ',
   },
   formulaire: {
     nom: 'Your name',

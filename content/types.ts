@@ -37,6 +37,7 @@ export type Dictionnaire = {
     suivant: string
     retour: string
     legal: string
+    linkedin: string
     autreLangue: string
     changerLangue: string
   }
@@ -92,6 +93,7 @@ export type Dictionnaire = {
     lieu: string
     statut: string
     lienLegal: string
+    surLinkedin: string
   }
   formulaire: {
     nom: string

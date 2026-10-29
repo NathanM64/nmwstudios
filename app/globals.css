@@ -138,8 +138,9 @@ a { color: var(--color-accent); text-underline-offset: 0.2em; }
   pointer-events: none;
 }
 .pied-cadre a { pointer-events: auto; }
-.legal { color: var(--color-faint); text-decoration: none; }
-.legal:hover { color: var(--color-foreground); }
+.pied-liens { display: flex; gap: 1.2rem; }
+.pied-liens a { color: var(--color-faint); text-decoration: none; }
+.pied-liens a:hover { color: var(--color-foreground); }
 .suivant-lien { margin: 0; display: flex; gap: 0.8rem; align-items: baseline; color: var(--color-faint); }
 .suivant-lien .compteur { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.08em; }
 .suivant-lien a { color: var(--color-muted-foreground); text-decoration: none; font-weight: 600; transition: color 0.2s; }
@@ -449,4 +450,6 @@ a.carte:hover .lien { text-decoration: underline; text-underline-offset: 0.2em; 
   .fond::after { background: linear-gradient(180deg, rgba(10, 10, 15, 0.55) 0%, rgba(10, 10, 15, 0.35) 30%, rgba(10, 10, 15, 0.75) 75%, rgba(10, 10, 15, 0.95) 100%); }
   .pied-cadre { position: static; padding: 0.7rem var(--gutter) 0.8rem; background: rgba(10, 10, 15, 0.85); font-size: 0.76rem; white-space: nowrap; pointer-events: auto; }
   .suivant-lien { gap: 0.5rem; }
+  /* Trop serré à côté de l'écran suivant : sur téléphone, LinkedIn reste sur l'écran Contact. */
+  .pied-liens .linkedin { display: none; }
 }
