@@ -18,6 +18,11 @@
 	redir /a-propos/ /qui-je-suis/ 301
 	redir /projet-complet /comment-je-travaille/ 301
 	redir /projet-complet/ /comment-je-travaille/ 301
+	redir /services /ce-que-je-fais/ 301
+	redir /tarifs /ce-que-je-fais/sites/ 301
+	redir /renfort* /comment-je-travaille/ 301
+	redir /projets/* /ce-que-je-fais/ 301
+	redir /notre-outil https://zveltia.com/ 301
 	@accueil path /
 	header @accueil Vary "Accept-Language, Cookie"
 
