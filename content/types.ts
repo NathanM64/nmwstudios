@@ -4,6 +4,19 @@ export type CleOffre = 'applications' | 'reprise' | 'sites' | 'automatisation' |
 // Une clé stable par adresse : c'est par elle qu'on passe d'une langue à l'autre.
 export type CleRoute = CleEcran | 'refus' | 'legal' | `offre:${CleOffre}`
 
+// Page hors menu, en français seulement, pour une recherche locale précise.
+export type PageLocale = {
+  title: string
+  description: string
+  h1: string
+  lead: string
+  paragraphe: string
+  sousTitre: string
+  liste: readonly (readonly [string, string, CleRoute])[]
+  sousTitre2: string
+  paragraphe2: string
+}
+
 // Un bloc est un paragraphe, ou une liste.
 export type Bloc = string | readonly string[]
 export type Vue = { src: string; alt: string; titre: string }
@@ -91,8 +104,8 @@ export type Dictionnaire = {
     pieces: string
     role: string
     lieu: string
-    // Le lieu avec un lien vers la page locale, en français seulement : [avant, lien, après].
-    local?: readonly [string, string, string]
+    // Le lieu avec un lien vers chaque page locale, en français seulement : [avant, Bordeaux, entre, Bègles, après].
+    local?: readonly [string, string, string, string, string]
     statut: string
     lienLegal: string
     surLinkedin: string
@@ -127,17 +140,8 @@ export type Dictionnaire = {
     donnees: string
     donneesTexte: string
   }
-  begles?: {
-    title: string
-    description: string
-    h1: string
-    lead: string
-    paragraphe: string
-    sousTitre: string
-    liste: readonly (readonly [string, string, CleRoute])[]
-    sousTitre2: string
-    paragraphe2: string
-  }
+  begles?: PageLocale
+  agenceWeb?: PageLocale
   introuvable: { h1: readonly [string, string]; lead: string; bouton: string }
   donnees: { description: string; jobTitle: string; catalogue: string }
 }

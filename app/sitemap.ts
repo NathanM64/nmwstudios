@@ -1,7 +1,7 @@
 import type { MetadataRoute } from 'next'
 import { DICOS, avecBarre } from '@/content'
 import type { CleRoute, Langue } from '@/content/types'
-import { BEGLES, SITE } from '@/lib/meta'
+import { AGENCE_WEB, BEGLES, SITE } from '@/lib/meta'
 
 export const dynamic = 'force-static'
 
@@ -17,5 +17,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
       LANGUES.map((langue) => ({ url: url(langue, cle), alternates: { languages: { fr: url('fr', cle), en: url('en', cle) } } })),
     ),
     { url: `${SITE}${BEGLES}` },
+    { url: `${SITE}${AGENCE_WEB}` },
   ]
 }

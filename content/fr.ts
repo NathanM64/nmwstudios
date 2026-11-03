@@ -220,7 +220,7 @@ export const FR: Dictionnaire = {
     pieces: 'Des maquettes ou un cahier des charges à joindre ? Par email, en pièce jointe.',
     role: ', développeur web indépendant.',
     lieu: 'Bordeaux et Bègles. À distance pour toute la France.',
-    local: ['Bordeaux et ', 'Bègles', '. À distance pour toute la France.'],
+    local: ['', 'Bordeaux', ' et ', 'Bègles', '. À distance pour toute la France.'],
     statut: 'Entrepreneur individuel, ',
     lienLegal: 'SIRET et mentions légales',
     surLinkedin: 'NMW Studios est aussi sur ',
@@ -273,6 +273,25 @@ export const FR: Dictionnaire = {
     ],
     sousTitre2: 'Un indépendant plutôt qu’une agence web',
     paragraphe2: 'Le travail d’une agence web, avec un seul interlocuteur. Le code est à vous et l’hébergement est transférable : vous ne restez jamais bloqué avec moi. En direct pour les entreprises, en marque blanche pour les agences.',
+  },
+  // La page locale, hors menu : celle que trouve « agence web Bordeaux ».
+  agenceWeb: {
+    title: 'Agence web à Bordeaux, un seul interlocuteur, NMW Studios',
+    description:
+      'Agence web à Bordeaux et Bègles : sites vitrines, logiciels sur mesure, reprise de sites existants. Le travail d’une agence, avec un seul interlocuteur.',
+    h1: 'Agence web à Bordeaux, avec un seul interlocuteur.',
+    lead: 'NMW Studios, c’est moi : Nathan Marimbordes, développeur web à Bordeaux et Bègles. Ce qu’on attend d’une agence web, je le fais seul, du devis au suivi.',
+    paragraphe: 'Pas de commercial ni de chef de projet entre nous : vous parlez à la personne qui écrit le code. Je réponds sous 24 h maximum, et le devis est gratuit.',
+    sousTitre: 'Ce que je fais',
+    liste: [
+      ['Un site vitrine', ', à partir de 1 500 €, jusqu’à trois pages.', 'offre:sites'],
+      ['Un logiciel sur mesure', ' : espace client, prise de rendez-vous, outil métier, ou une application mobile simple.', 'offre:applications'],
+      ['La reprise de votre site', ', même fait par une autre agence, même si elle n’existe plus.', 'offre:reprise'],
+      ['L’automatisation', ' des tâches que votre équipe refait à la main chaque jour.', 'offre:automatisation'],
+      ['L’hébergement et la surveillance', ' de votre site, transférables quand vous le décidez.', 'offre:hebergement'],
+    ],
+    sousTitre2: 'Ce qui change avec une agence d’une personne',
+    paragraphe2: 'Je travaille seul, et je le dis : si votre projet demande une équipe, je vous le dirai et je vous orienterai. Le code est à vous et l’hébergement est transférable : vous ne restez jamais bloqué avec moi. Agences, je travaille aussi en marque blanche, sous votre nom.',
   },
   introuvable: {
     h1: ['Cette page', 'n’existe pas.'],

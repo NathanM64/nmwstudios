@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { Begles } from '@/components/ecrans/Begles'
+import { Locale } from '@/components/ecrans/Locale'
 import { FR } from '@/content/fr'
 import { BEGLES } from '@/lib/meta'
 
@@ -12,5 +12,5 @@ export const metadata: Metadata = {
 }
 
 export default function Page() {
-  return <Begles t={FR} />
+  return <Locale t={FR} b={FR.begles!} />
 }

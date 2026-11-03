@@ -2,7 +2,7 @@ import Link from 'next/link'
 import type { Dictionnaire } from '@/content/types'
 import { Ecran } from '@/components/Ecran'
 import { FormulaireContact } from '@/components/FormulaireContact'
-import { BEGLES, LINKEDIN } from '@/lib/meta'
+import { AGENCE_WEB, BEGLES, LINKEDIN } from '@/lib/meta'
 
 export function Contact({ t }: { t: Dictionnaire }) {
   const c = t.contact
@@ -24,8 +24,10 @@ export function Contact({ t }: { t: Dictionnaire }) {
           {c.local ? (
             <>
               {c.local[0]}
-              <Link href={BEGLES}>{c.local[1]}</Link>
+              <Link href={AGENCE_WEB}>{c.local[1]}</Link>
               {c.local[2]}
+              <Link href={BEGLES}>{c.local[3]}</Link>
+              {c.local[4]}
             </>
           ) : (
             c.lieu

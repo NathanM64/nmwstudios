@@ -1,11 +1,9 @@
 import Link from 'next/link'
-import type { Dictionnaire } from '@/content/types'
+import type { Dictionnaire, PageLocale } from '@/content/types'
 import { Ecran } from '@/components/Ecran'
 
-// La page locale, hors menu : un écran du cadre comme les autres, la liste des offres dans un panneau.
-export function Begles({ t }: { t: Dictionnaire }) {
-  const b = t.begles
-  if (!b) return null
+// Une page locale, hors menu : un écran du cadre comme les autres, la liste des offres dans un panneau.
+export function Locale({ t, b }: { t: Dictionnaire; b: PageLocale }) {
   return (
     <Ecran classe="local">
       <div>
