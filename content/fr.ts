@@ -35,6 +35,7 @@ export const FR: Dictionnaire = {
     retour: 'Retour :',
     legal: 'Mentions légales',
     linkedin: 'NMW Studios sur LinkedIn (nouvel onglet)',
+    instagram: 'NMW Studios sur Instagram (nouvel onglet)',
     autreLangue: 'EN',
     changerLangue: 'English version',
   },
@@ -132,6 +133,7 @@ export const FR: Dictionnaire = {
           ['Le code source, accessible en entier', 'Un projet qui redémarre sur une machine neuve', 'Un hébergement et un domaine transférables'],
         ],
         appel: 'Parler de votre existant',
+        local: ['Reprise de site internet à Bordeaux', '/reprise-site-internet-bordeaux/'],
       },
       {
         cle: 'sites',
@@ -273,6 +275,7 @@ export const FR: Dictionnaire = {
     statut: 'Entrepreneur individuel, ',
     lienLegal: 'SIRET et mentions légales',
     surLinkedin: 'NMW Studios est aussi sur ',
+    et: ' et ',
   },
   formulaire: {
     nom: 'Votre nom',
@@ -341,6 +344,23 @@ export const FR: Dictionnaire = {
     ],
     sousTitre2: 'Ce qui change avec une agence d’une personne',
     paragraphe2: 'Je travaille seul, et je le dis : si votre projet demande une équipe, je vous le dirai et je vous orienterai. Le code est à vous et l’hébergement est transférable : vous ne restez jamais bloqué avec moi. Agences, je travaille aussi en marque blanche, sous votre nom.',
+  },
+  reprise: {
+    title: 'Reprise de site internet à Bordeaux, NMW Studios',
+    description:
+      'Reprise de site internet à Bordeaux et Bègles : je lis le code que d’autres ont écrit, je le remets en marche et je le fais vivre. État des lieux avant tout devis.',
+    h1: 'Reprise de site internet à Bordeaux.',
+    lead: 'Votre prestataire ne répond plus, ou l’agence qui a fait votre site a fermé. Je reprends les sites et les applications que d’autres ont écrits, à Bordeaux, à Bègles et à distance.',
+    paragraphe: 'Envoyez-moi l’adresse de votre site, même sans savoir comment il a été fait. Je vous écris ce qui tient, ce qui casse et ce que je ferais en premier, avant tout devis.',
+    sousTitre: 'Ce qui vient avec une reprise',
+    liste: [
+      ['La reprise et la maintenance', ' : je lis le code, je le remets en état de marche et je le fais vivre.', 'offre:reprise'],
+      ['L’hébergement et la surveillance', ', avec une sauvegarde chaque nuit et une alerte si le site ne répond plus.', 'offre:hebergement'],
+      ['Ce que je ne reprends pas', ' : un site fait sur Wix ou Squarespace coûte plus cher à reprendre qu’à refaire.', 'refus'],
+      ['Un site à refaire', ', quand c’est la meilleure réponse : à partir de 1 500 € pour un site vitrine simple.', 'offre:sites'],
+    ],
+    sousTitre2: 'Ce que je vérifie avant de chiffrer',
+    paragraphe2: 'Le code source, accessible en entier. Un projet qui redémarre sur une machine neuve. Un hébergement et un nom de domaine transférables. S’il manque l’un des trois, je vous le dis avant tout devis. Une reprise se facture au temps passé, au taux annoncé avant de commencer.',
   },
   introuvable: {
     h1: ['Cette page', 'n’existe pas.'],

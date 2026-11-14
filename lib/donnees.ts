@@ -1,6 +1,6 @@
 import { avecBarre, hrefOffre } from '@/content'
 import type { Dictionnaire } from '@/content/types'
-import { LINKEDIN, SITE } from './meta'
+import { INSTAGRAM, LINKEDIN, SITE } from './meta'
 
 const ID = `${SITE}/#organisation`
 const FRANCE = { '@type': 'Country', name: 'France' }
@@ -16,7 +16,7 @@ export const donnees = (t: Dictionnaire) => ({
   url: `${SITE}${avecBarre(t.routes.accueil)}`,
   inLanguage: t.langue,
   email: 'contact@nmwstudios.com',
-  sameAs: [LINKEDIN],
+  sameAs: [LINKEDIN, INSTAGRAM],
   logo: `${SITE}/icon-512.png`,
   image: `${SITE}/opengraph-image.jpg`,
   description: t.donnees.description,

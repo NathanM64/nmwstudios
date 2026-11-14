@@ -2,7 +2,7 @@ import Link from 'next/link'
 import type { Dictionnaire } from '@/content/types'
 import { Ecran } from '@/components/Ecran'
 import { FormulaireContact } from '@/components/FormulaireContact'
-import { AGENCE_WEB, BEGLES, LINKEDIN } from '@/lib/meta'
+import { AGENCE_WEB, BEGLES, INSTAGRAM, LINKEDIN } from '@/lib/meta'
 
 export function Contact({ t }: { t: Dictionnaire }) {
   const c = t.contact
@@ -39,6 +39,10 @@ export function Contact({ t }: { t: Dictionnaire }) {
           {c.surLinkedin}
           <a href={LINKEDIN} target="_blank" rel="noopener" aria-label={t.chrome.linkedin}>
             LinkedIn
+          </a>
+          {c.et}
+          <a href={INSTAGRAM} target="_blank" rel="noopener" aria-label={t.chrome.instagram}>
+            Instagram
           </a>
           .
         </p>

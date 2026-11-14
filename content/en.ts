@@ -35,6 +35,7 @@ export const EN: Dictionnaire = {
     retour: 'Back:',
     legal: 'Legal notice',
     linkedin: 'NMW Studios on LinkedIn (new tab)',
+    instagram: 'NMW Studios on Instagram (new tab)',
     autreLangue: 'FR',
     changerLangue: 'Version française',
   },
@@ -269,6 +270,7 @@ export const EN: Dictionnaire = {
     statut: 'French sole trader, ',
     lienLegal: 'registration number and legal notice',
     surLinkedin: 'NMW Studios is also on ',
+    et: ' and ',
   },
   formulaire: {
     nom: 'Your name',

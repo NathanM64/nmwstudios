@@ -242,6 +242,7 @@ a.carte:hover { transform: translateY(-3px); background-color: rgba(255, 255, 25
 .carte .prix { color: var(--color-foreground); font-weight: 600; font-size: 1rem; }
 .carte .lien { margin-top: auto; padding-top: 0.4rem; color: var(--color-accent); font-weight: 600; font-size: 0.9rem; }
 .ecran .carte .lien a { text-decoration: none; }
+.carte .lien.local { margin-top: 0; padding-top: 0.15rem; font-weight: 400; color: var(--color-muted-foreground); }
 .ecran .carte .lien a:hover { text-decoration: underline; }
 .carte.ouverte { grid-row: 1 / 3; border-top-color: var(--color-accent); background-color: rgba(28, 34, 58, 0.78); }
 .carte.ouverte h1, .carte.ouverte h2 { font-size: clamp(1.2rem, 1.6vw, 1.4rem); color: var(--color-accent); }
@@ -492,5 +493,5 @@ a.carte:hover .lien { text-decoration: underline; text-underline-offset: 0.2em; 
   .pied-cadre { position: static; padding: 0.7rem var(--gutter) 0.8rem; background: rgba(10, 10, 15, 0.85); font-size: 0.76rem; white-space: nowrap; pointer-events: auto; }
   .suivant-lien { gap: 0.5rem; }
   /* Trop serré à côté de l'écran suivant : sur téléphone, LinkedIn reste sur l'écran Contact. */
-  .pied-liens .linkedin { display: none; }
+  .pied-liens .reseau { display: none; }
 }

@@ -4,7 +4,7 @@ import Link from 'next/link'
 import type { Dictionnaire } from '@/content/types'
 import { manrope, plexMono } from '@/lib/polices'
 import { donnees } from '@/lib/donnees'
-import { LINKEDIN } from '@/lib/meta'
+import { INSTAGRAM, LINKEDIN } from '@/lib/meta'
 import { Beacon } from './Beacon'
 import { Menu } from './Menu'
 import { Clavier } from './Clavier'
@@ -38,8 +38,11 @@ export function Coque({ t, children }: { t: Dictionnaire; children: ReactNode })
             <div className="pied-cadre">
               <Suivant />
               <span className="pied-liens">
-                <a className="linkedin" href={LINKEDIN} target="_blank" rel="noopener" aria-label={t.chrome.linkedin}>
+                <a className="reseau" href={LINKEDIN} target="_blank" rel="noopener" aria-label={t.chrome.linkedin}>
                   LinkedIn
+                </a>
+                <a className="reseau" href={INSTAGRAM} target="_blank" rel="noopener" aria-label={t.chrome.instagram}>
+                  Instagram
                 </a>
                 <Link href={t.routes.legal}>
                   {t.chrome.legal}

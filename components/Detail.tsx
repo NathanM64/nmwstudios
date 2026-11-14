@@ -27,6 +27,11 @@ export function Detail({ t, offre, niveau = 'h2' }: { t: Dictionnaire; offre: Of
         <p className="lien">
           <Link href={t.routes.contact}>{offre.appel}</Link>
         </p>
+        {offre.local && (
+          <p className="lien local">
+            <Link href={offre.local[1]}>{offre.local[0]}</Link>
+          </p>
+        )}
       </article>
     </ViewTransition>
   )

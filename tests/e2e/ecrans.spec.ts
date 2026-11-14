@@ -12,6 +12,7 @@ const ROUTES: Array<[string, string]> = [
   ['/comment-je-travaille/', 'une agence parisienne me confie'],
   ['/comment-je-travaille/ce-que-je-ne-fais-pas/', 'Les projets qui demandent une équipe'],
   ['/qui-je-suis/', 'Vous êtes seul'],
+  ['/reprise-site-internet-bordeaux/', 'Ce que je vérifie avant de chiffrer'],
   ['/contact/', 'Un message suffit'],
   ['/mentions-legales/', 'Hetzner Online GmbH'],
 ]

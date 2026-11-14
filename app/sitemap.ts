@@ -1,7 +1,7 @@
 import type { MetadataRoute } from 'next'
 import { DICOS, avecBarre } from '@/content'
 import type { CleRoute, Langue } from '@/content/types'
-import { AGENCE_WEB, BEGLES, SITE } from '@/lib/meta'
+import { AGENCE_WEB, BEGLES, REPRISE, SITE } from '@/lib/meta'
 
 export const dynamic = 'force-static'
 
@@ -18,5 +18,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ),
     { url: `${SITE}${BEGLES}` },
     { url: `${SITE}${AGENCE_WEB}` },
+    { url: `${SITE}${REPRISE}` },
   ]
 }

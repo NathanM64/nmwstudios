@@ -30,6 +30,8 @@ export type Offre = {
   blocs: readonly Bloc[]
   vues?: { legende: string; liste: readonly Vue[] }
   appel: string
+  // La page locale de cette offre, en français seulement : [texte du lien, adresse].
+  local?: readonly [string, string]
 }
 export type Page = { title: string; description: string }
 // [situation, réponse, où elle mène]
@@ -60,6 +62,7 @@ export type Dictionnaire = {
     retour: string
     legal: string
     linkedin: string
+    instagram: string
     autreLangue: string
     changerLangue: string
   }
@@ -122,6 +125,7 @@ export type Dictionnaire = {
     statut: string
     lienLegal: string
     surLinkedin: string
+    et: string
   }
   formulaire: {
     nom: string
@@ -155,6 +159,7 @@ export type Dictionnaire = {
   }
   begles?: PageLocale
   agenceWeb?: PageLocale
+  reprise?: PageLocale
   introuvable: { h1: readonly [string, string]; lead: string; bouton: string }
   donnees: { description: string; jobTitle: string; catalogue: string }
 }
