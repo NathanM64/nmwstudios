@@ -10,7 +10,7 @@ export const sansBarre = (chemin: string) => chemin.replace(/\/+$/, '') || '/'
 export const avecBarre = (chemin: string) => (chemin === '/' ? '/' : `${chemin}/`)
 export const langueDuChemin = (chemin: string): Langue => (chemin === '/en' || chemin.startsWith('/en/') ? 'en' : 'fr')
 
-// L'écran courant dans l'ordre du menu, ou -1 hors des cinq écrans (mentions légales, 404).
+// L'écran courant dans l'ordre du menu, ou -1 hors des écrans du menu (mentions légales, 404).
 export function indexEcran(pathname: string): number {
   const chemin = sansBarre(pathname)
   const t = dico(langueDuChemin(chemin))

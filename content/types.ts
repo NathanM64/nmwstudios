@@ -1,5 +1,5 @@
 export type Langue = 'fr' | 'en'
-export type CleEcran = 'accueil' | 'offres' | 'methode' | 'qui' | 'contact'
+export type CleEcran = 'accueil' | 'offres' | 'realisations' | 'methode' | 'qui' | 'contact'
 export type CleOffre = 'applications' | 'reprise' | 'sites' | 'automatisation' | 'hebergement'
 // Une clé stable par adresse : c'est par elle qu'on passe d'une langue à l'autre.
 export type CleRoute = CleEcran | 'refus' | 'legal' | `offre:${CleOffre}`
@@ -37,6 +37,15 @@ export type Situation = readonly [string, string, CleRoute]
 export type Question = readonly [string, string]
 export type Etape = readonly [string, string, string]
 export type Mission = readonly [string] | readonly [string, string]
+export type Realisation = {
+  nom: string
+  nature: string
+  besoin: string
+  faits: readonly string[]
+  vues: readonly Vue[]
+  href: string
+  lien: string
+}
 
 export type Dictionnaire = {
   langue: Langue
@@ -57,7 +66,7 @@ export type Dictionnaire = {
   site: Page
   // Le texte alternatif de l'image partagée (OG), la même dans chaque langue.
   ogAlt: string
-  pages: Record<'offres' | 'methode' | 'refus' | 'qui' | 'contact' | 'legal' | 'introuvable', Page>
+  pages: Record<'offres' | 'realisations' | 'methode' | 'refus' | 'qui' | 'contact' | 'legal' | 'introuvable', Page>
   accueil: {
     // Le h1 porte les mots qu'on cherche ; l'accroche, en dessous, porte la voix.
     titre: string
@@ -74,6 +83,12 @@ export type Dictionnaire = {
     lead: string
     voirDetail: string
     liste: readonly Offre[]
+  }
+  realisations: {
+    h1: readonly [string, string]
+    lead: string
+    legende: string
+    liste: readonly Realisation[]
   }
   methode: {
     h1: readonly [string, string]
@@ -94,8 +109,6 @@ export type Dictionnaire = {
     lead: readonly [string, string, string]
     paragraphe: string
     faits: string
-    // Le produit edite a cote : une phrase, le nom en lien vers son site.
-    produit: { avant: string; nom: string; apres: string; href: string }
     faq: readonly Question[]
   }
   contact: {

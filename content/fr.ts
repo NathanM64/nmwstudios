@@ -10,6 +10,7 @@ export const FR: Dictionnaire = {
     'offre:sites': '/ce-que-je-fais/sites',
     'offre:automatisation': '/ce-que-je-fais/automatisation',
     'offre:hebergement': '/ce-que-je-fais/hebergement',
+    realisations: '/realisations',
     methode: '/comment-je-travaille',
     refus: '/comment-je-travaille/ce-que-je-ne-fais-pas',
     qui: '/qui-je-suis',
@@ -20,6 +21,7 @@ export const FR: Dictionnaire = {
   ecrans: [
     { cle: 'accueil', titre: 'Accueil' },
     { cle: 'offres', titre: 'Ce que je fais' },
+    { cle: 'realisations', titre: 'Réalisations' },
     { cle: 'methode', titre: 'Comment je travaille' },
     { cle: 'qui', titre: 'Qui je suis' },
     { cle: 'contact', titre: 'Contact' },
@@ -47,6 +49,11 @@ export const FR: Dictionnaire = {
       title: 'Création de site, applications web et mobiles. NMW Studios',
       description:
         'Création de site vitrine, logiciels sur mesure et applications mobiles, reprise de l’existant, automatisation et hébergement, à Bordeaux. Le code est à vous.',
+    },
+    realisations: {
+      title: 'Réalisations : deux logiciels sur mesure en ligne. NMW Studios',
+      description:
+        'Zveltia, un logiciel de facturation, et Lachesia, un planning d’équipe en roulement. Deux logiciels conçus, développés et hébergés par NMW Studios, à Bordeaux.',
     },
     methode: {
       title: 'Comment je travaille, en direct et en marque blanche',
@@ -166,6 +173,49 @@ export const FR: Dictionnaire = {
       },
     ],
   },
+  realisations: {
+    h1: ['Deux logiciels en ligne,', 'que vous pouvez ouvrir.'],
+    lead: 'Ce que je fais pour mes clients reste confidentiel. Ces deux logiciels sont publics : je les ai conçus, développés, et je les héberge. Ils montrent ce que je livre.',
+    legende: 'Données de démonstration',
+    liste: [
+      {
+        nom: 'Zveltia',
+        nature: 'Facturation et suivi du temps pour indépendants',
+        besoin: 'Le temps passé devient une facture, et la facture part au format électronique exigé en 2027.',
+        faits: [
+          'Devis, factures, chrono et comptabilité de micro-entreprise',
+          'Facture électronique Factur-X, envoyée et reçue par une plateforme agréée',
+          'Hébergé en Allemagne, sauvegardes chiffrées dans l’Union européenne',
+        ],
+        vues: [
+          { src: '/realisations/zveltia-1.webp', titre: 'Aperçu', alt: 'Le logo de Zveltia et son écran d’accueil : le montant encaissé du mois, ce qui reste à encaisser et à facturer.' },
+          { src: '/realisations/zveltia-2.webp', titre: 'Temps à facturer', alt: 'Le temps passé pour trois clients, converti en jours au tarif de chacun, prêt à devenir un brouillon de facture.' },
+          { src: '/realisations/zveltia-3.webp', titre: 'Comptabilité', alt: 'La comptabilité de l’année : ce qui est encaissé, les charges Urssaf, les dépenses et ce qui reste, mois par mois.' },
+          { src: '/realisations/zveltia-4.webp', titre: 'Facture et portail', alt: 'Une facture en PDF, et le portail où le client retrouve ses devis et ses factures sur son téléphone.' },
+        ],
+        href: 'https://zveltia.com/',
+        lien: 'Ouvrir zveltia.com',
+      },
+      {
+        nom: 'Lachesia',
+        nature: 'Planning en roulement, sur écran, papier et téléphone',
+        besoin: 'Le roulement se pose une fois, et la feuille affichée au mur renvoie toujours à la version à jour.',
+        faits: [
+          'Modèles jour et nuit, 12 h, 3x8, 2x8, ou vos propres semaines',
+          'Feuille imprimée datée, avec un QR code vers la version à jour',
+          'Connexion par lien ou code reçu par mail, sans mot de passe',
+        ],
+        vues: [
+          { src: '/realisations/lachesia-1.webp', titre: 'Aperçu', alt: 'Le logo de Lachesia, avec la grille de l’équipe à l’écran, la feuille imprimée et le planning d’une personne sur son téléphone.' },
+          { src: '/realisations/lachesia-2.webp', titre: 'Planning d’équipe', alt: 'La grille d’une équipe : les jours, les nuits et les repos du mois, des congés et une formation marqués d’un point.' },
+          { src: '/realisations/lachesia-3.webp', titre: 'Feuilles imprimées', alt: 'La feuille de l’équipe et celle d’une personne, datées, avec un QR code vers la version à jour.' },
+          { src: '/realisations/lachesia-4.webp', titre: 'Sur le téléphone', alt: 'Trois écrans de téléphone : le planning de la semaine d’une personne, la grille de l’équipe, et la page ouverte par le QR code.' },
+        ],
+        href: 'https://lachesia.com/',
+        lien: 'Ouvrir lachesia.com',
+      },
+    ],
+  },
   methode: {
     h1: ['Depuis 2025,', 'une agence parisienne me confie ses applications et ses nouveaux projets.'],
     lead: 'En marque blanche : vos maquettes, vos délais, votre nom devant votre client.',
@@ -201,7 +251,6 @@ export const FR: Dictionnaire = {
     paragraphe:
       'Mes chantiers durent et se relaient : pendant qu’un client relit, un autre avance. J’ai de la place, et je vous dis à partir de quand avant de m’engager. Si une fonctionnalité va coûter cher pour rien, je le dis avant de la chiffrer. Je préviens avant de dépasser, pas après.',
     faits: 'Bordeaux et Bègles. À distance pour toute la France.',
-    produit: { avant: 'Je développe aussi ', nom: 'Zveltia', apres: ', l’outil avec lequel je facture mes propres clients.', href: 'https://zveltia.com/' },
     faq: [
       ['Pourquoi un indépendant plutôt qu’une agence web ?', 'Vous parlez à celui qui écrit le code : pas d’intermédiaire, une réponse sous 24 h, et la même personne du devis jusqu’au suivi. Si votre projet demande une équipe, je vous le dis.'],
       ['Et si quelque chose casse après la mise en ligne ?', 'Vous m’écrivez, je réponds dans la journée et je vous dis quand ce sera réparé. Sur l’hébergement que je gère, une alerte me prévient dès que le site ne répond plus.'],
@@ -295,7 +344,7 @@ export const FR: Dictionnaire = {
   },
   introuvable: {
     h1: ['Cette page', 'n’existe pas.'],
-    lead: 'Ou elle n’existe plus. Les cinq écrans du site sont dans le menu.',
+    lead: 'Ou elle n’existe plus. Les écrans du site sont dans le menu.',
     bouton: 'Retour à l’accueil',
   },
   donnees: {

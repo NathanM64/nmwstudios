@@ -6,9 +6,9 @@ d'un personnage qui se réparait au fil du scroll. Cette direction et tous ses f
 
 ## Le principe : un cadre fixe, un menu nommé
 
-La page fait exactement la hauteur de l'écran et ne défile jamais. Cinq écrans, atteints par
-un menu toujours visible en haut à droite : Accueil, Ce que je fais, Comment je travaille,
-Qui je suis, Contact. On clique, l'écran se transforme sur place. Le visiteur choisit où il
+La page fait exactement la hauteur de l'écran et ne défile jamais. Six écrans, atteints par
+un menu toujours visible en haut à droite : Accueil, Ce que je fais, Réalisations, Comment je
+travaille, Qui je suis, Contact. Le sixième, Réalisations, date du 2026-11-14. On clique, l'écran se transforme sur place. Le visiteur choisit où il
 va, il ne fait rien défiler.
 
 Forme validée sur maquette le 2026-09-11, après deux formes rejetées le même jour :
@@ -32,15 +32,16 @@ Revue le 2026-09-12 après le diagnostic : un gabarit par écran, plus un seul r
 |---|---|
 | Accueil | titre à l'échelle du cadre, « Vous décidez jusqu'où » en accent, ligne d'identité (nom, métier, ville, et pour qui : les entreprises en direct, les agences en marque blanche), bouton et email ; en bas du cadre, quatre situations qui sont des portes vers l'offre qui y répond |
 | Ce que je fais | titre en phrase et intro, puis cinq cartes visibles : la carte ouverte occupe deux rangées à gauche, les quatre fermées à droite et disent « Voir le détail » ; une carte fermée devient la carte ouverte (transition partagée). L'offre applications ouvre par défaut : elle montre trois vues de mon outil de gestion en carrousel (temps, comptabilité, PDF de facture), données de démonstration, légendées comme telles |
+| Réalisations | titre et intro sur une ligne, puis deux cartes côte à côte, une par logiciel public (Zveltia, Lachesia). Chaque carte ouvre sur une couverture aux couleurs de la marque, logo en grand et nom, suivie de trois vues en carrousel qui ne défile pas seul (deux carrousels côte à côte se disputeraient l'œil) ; dessous, ce que le logiciel fait en une phrase, trois faits, le lien vers son site en bas de carte. Jamais de prix ni d'appel à s'abonner : ce sont des preuves, pas des offres. Les visuels sont composés en 1600 × 696 dans `public/realisations/` |
 | Comment je travaille | deux onglets au bas du cadre, chacun sa route. « Comment je travaille » : la preuve en titre (l'agence, datée), la marque blanche au « vous », les engagements de discrétion, les trois missions à droite, la frise des cinq étapes avec ce que le client a en main. « Ce que je ne fais pas » : quatre refus en panneaux (sites sans code source, projets qui demandent une équipe, applications natives, prix de maintenance avant d'avoir construit) |
 | Qui je suis | nom, deux années (développeur depuis 2020, à son compte depuis 2025), phrases de relation, ville ; FAQ de sept questions à droite, un signe « + », une question ouverte à la fois |
 | Contact | titre, email en gros, faits d'identité et renvoi au SIRET ; formulaire à cinq champs (dont deux facultatifs : l'adresse du site et le téléphone), confirmation à la place des champs |
 
 Tous les écrans s'ancrent sur la même ligne haute : le titre et le panneau ne bougent pas
 d'un écran à l'autre, et un panneau qui change de hauteur ne fait pas sauter le reste.
-Le bouton « Parler de votre projet » est dans la barre sur les cinq écrans, à la même place :
+Le bouton « Parler de votre projet » est dans la barre sur les six écrans, à la même place :
 un menu qui bouge d'un écran à l'autre perd le visiteur. Le pied du cadre porte le compteur
-(« 02 / 05 »), l'écran suivant et les mentions légales, sur un voile : ce qui défile passe
+(« 02 / 06 »), l'écran suivant et les mentions légales, sur un voile : ce qui défile passe
 dessous en s'éteignant. Le filet du menu glisse d'un mot à l'autre pendant la transition.
 
 Le texte de chaque écran tient dans le cadre à 1440 × 900 sans rien couper. Sous 720 px de
@@ -48,7 +49,7 @@ haut ou de large, l'écran défile à l'intérieur de lui même et la molette lu
 
 ## Une matière et une lumière par écran
 
-Cinq photographies plein cadre, très sombres, générées le 2026-09-12 (`tools/gen.mjs`,
+Six photographies plein cadre, très sombres, générées le 2026-09-12 (`tools/gen.mjs`,
 sources et essais dans `docs/maquettes/2026-09-12-matiere/`, hors git), converties en WebP
 dans `public/fonds/` en 2048 et 1200 px. Pas de métaphore du métier : de la matière.
 
@@ -56,6 +57,7 @@ dans `public/fonds/` en 2048 et 1200 px. Pas de métaphore du métier : de la ma
 |---|---|
 | Accueil | l'eau noire, un seul reflet de lune à droite (choisie par Nathan). Sur bureau, elle bouge : une boucle de huit secondes rendue par Veo depuis l'image fixe (modèle économique, 1,20 $), dernière seconde fondue dans la première, H.264 à 1440 px, 2,1 Mo, posée sur l'image une fois qu'elle joue. Image fixe sur mobile et sous `prefers-reduced-motion` |
 | Ce que je fais | la soie anthracite |
+| Réalisations | la volute d'encre dans l'eau noire, agrandie depuis l'essai de 1376 px du 2026-09-12 : à refaire en 2K |
 | Comment je travaille | le verre dépoli rétroéclairé |
 | Qui je suis | l'ardoise mouillée |
 | Contact | la vitre de pluie, lumières en bokeh |
@@ -64,7 +66,7 @@ L'image est voilée à gauche pour le titre et en haut pour la barre. Les pannea
 posent une base sombre (`rgba(10,10,15,.42)`) sous la surface blanche, sinon un panneau sur
 une zone claire devient illisible. Une bande de cellules (situations, étapes) porte un seul
 flou pour tout le conteneur, jamais un flou par cellule : sinon la marche de luminosité entre
-deux cellules se lit comme un espace. Les cinq fonds sont préchargés dès le premier écran.
+deux cellules se lit comme un espace. Les six fonds sont préchargés dès le premier écran.
 
 ## Ce que le principe impose
 
@@ -87,7 +89,7 @@ deux cellules se lit comme un espace. Les cinq fonds sont préchargés dès le p
   ne fond pas.
 - **Aucun écran ne déborde en silence.** Un contenu qui ne tient pas se raccourcit, ou son
   écran défile à l'intérieur de lui même. Jamais de débordement caché.
-- **Le cadre fixe vaut pour les cinq écrans et leurs sous-routes.** Les mentions légales
+- **Le cadre fixe vaut pour les six écrans et leurs sous-routes.** Les mentions légales
   restent un document classique qui défile.
 - **Deux langues, une seule coque.** Tout le texte vit dans `content/fr.ts` et
   `content/en.ts`. Le lien de langue (EN ou FR) est le dernier élément du menu, en mono comme

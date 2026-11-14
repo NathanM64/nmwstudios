@@ -8,6 +8,7 @@ const ROUTES: Array<[string, string]> = [
   ['/ce-que-je-fais/reprise/', 'Le code source, accessible en entier'],
   ['/ce-que-je-fais/sites/', 'À partir de 1 500 €'],
   ['/ce-que-je-fais/hebergement/', 'une sauvegarde chaque nuit'],
+  ['/realisations/', 'que vous pouvez ouvrir.'],
   ['/comment-je-travaille/', 'une agence parisienne me confie'],
   ['/comment-je-travaille/ce-que-je-ne-fais-pas/', 'Les projets qui demandent une équipe'],
   ['/qui-je-suis/', 'Vous êtes seul'],
@@ -21,6 +22,7 @@ const ROUTES_EN: Array<[string, string]> = [
   ['/en/what-i-do/takeover/', 'The full source code, accessible'],
   ['/en/what-i-do/websites/', 'From €1,500'],
   ['/en/what-i-do/hosting/', 'a nightly backup'],
+  ['/en/work/', 'you can open.'],
   ['/en/how-i-work/', 'a Paris agency has trusted me'],
   ['/en/how-i-work/what-i-dont-do/', 'Projects that need a team'],
   ['/en/who-i-am/', 'You work alone'],
@@ -59,7 +61,7 @@ test('le lien de langue mène à la même page dans l’autre langue', async ({ 
 })
 
 test('chaque écran porte son fond dans le HTML et le fichier est servi', async ({ request }) => {
-  const attendus: Array<[string, string]> = [['/', 'eau'], ['/ce-que-je-fais/sites/', 'soie'], ['/comment-je-travaille/', 'verre'], ['/qui-je-suis/', 'ardoise'], ['/contact/', 'pluie']]
+  const attendus: Array<[string, string]> = [['/', 'eau'], ['/ce-que-je-fais/sites/', 'soie'], ['/realisations/', 'encre'], ['/comment-je-travaille/', 'verre'], ['/qui-je-suis/', 'ardoise'], ['/contact/', 'pluie']]
   for (const [route, matiere] of attendus) {
     const html = await (await request.get(route)).text()
     expect(html, route).toContain(`data-matiere="${matiere}"`)
@@ -169,6 +171,27 @@ test('le menu navigue et le retour arrière marche', async ({ page }) => {
   await page.goBack()
   await expect(page).toHaveURL(/\/$/)
   await expect(page.getByRole('heading', { level: 1 })).toContainText('Création de site')
+})
+
+test('une réalisation montre ses vues, sans défiler seule, et s’ouvre en grand', async ({ page }) => {
+  await page.goto('/realisations/')
+  const lachesia = page.locator('.ouvrages > li').nth(1)
+  await expect(lachesia.locator('.vues img')).toHaveCount(4)
+  await expect(lachesia.locator('.vues img[data-active]')).toHaveAttribute('src', '/realisations/lachesia-1.webp')
+  await lachesia.getByRole('tab', { name: 'Feuilles imprimées' }).click()
+  await expect(lachesia.locator('.vues img[data-active]')).toHaveAttribute('src', '/realisations/lachesia-3.webp')
+  await lachesia.locator('.vues').click()
+  await expect(lachesia.locator('dialog[open] img')).toHaveAttribute('src', '/realisations/lachesia-3.webp')
+  await expect(lachesia.getByRole('link', { name: 'Ouvrir lachesia.com' })).toHaveAttribute('href', 'https://lachesia.com/')
+})
+
+test('le menu tient sur une ligne du portable au grand écran', async ({ page }) => {
+  for (const largeur of [1024, 1180, 1440]) {
+    await page.setViewportSize({ width: largeur, height: 800 })
+    await page.goto('/realisations/')
+    const hauteur = await page.evaluate(() => document.querySelector('.haut')!.getBoundingClientRect().height)
+    expect(hauteur, `${largeur} px`).toBeLessThan(80)
+  }
 })
 
 test('une carte fermée s’ouvre sans quitter l’écran, et l’ancienne se referme', async ({ page }) => {

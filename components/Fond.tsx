@@ -6,7 +6,7 @@ import { usePathname } from 'next/navigation'
 import { indexEcran } from '@/content'
 
 // Une matière par écran, dans l'ordre du menu. Rien derrière les documents.
-const MATIERES = ['eau', 'soie', 'verre', 'ardoise', 'pluie'] as const
+const MATIERES = ['eau', 'soie', 'encre', 'verre', 'ardoise', 'pluie'] as const
 type Matiere = (typeof MATIERES)[number]
 
 const srcSet = (m: string) => `/fonds/${m}-1200.webp 1200w, /fonds/${m}.webp 2048w`

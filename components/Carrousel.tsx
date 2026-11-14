@@ -5,18 +5,18 @@ import type { Vue } from '@/content/types'
 
 type Textes = { agrandir: string; agrandirTitre: string; vues: string }
 
-// Trois vues qui se relaient lentement. Le survol, le clavier et prefers-reduced-motion les arrêtent.
+// Des vues qui se relaient lentement, sauf si on le leur interdit. Le survol, le clavier et prefers-reduced-motion les arrêtent.
 // Un clic ouvre la vue en grand.
-export function Carrousel({ vues, legende, textes }: { vues: readonly Vue[]; legende: string; textes: Textes }) {
+export function Carrousel({ vues, legende, textes, defile = true }: { vues: readonly Vue[]; legende: string; textes: Textes; defile?: boolean }) {
   const [i, setI] = useState(0)
   const [pause, setPause] = useState(false)
   const dialog = useRef<HTMLDialogElement>(null)
 
   useEffect(() => {
-    if (pause || matchMedia('(prefers-reduced-motion: reduce)').matches) return
+    if (!defile || pause || matchMedia('(prefers-reduced-motion: reduce)').matches) return
     const t = setInterval(() => setI((n) => (n + 1) % vues.length), 4500)
     return () => clearInterval(t)
-  }, [pause, vues.length])
+  }, [defile, pause, vues.length])
 
   const ouvrir = () => {
     setPause(true)

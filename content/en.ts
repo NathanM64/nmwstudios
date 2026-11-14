@@ -11,6 +11,7 @@ export const EN: Dictionnaire = {
     'offre:sites': '/en/what-i-do/websites',
     'offre:automatisation': '/en/what-i-do/automation',
     'offre:hebergement': '/en/what-i-do/hosting',
+    realisations: '/en/work',
     methode: '/en/how-i-work',
     refus: '/en/how-i-work/what-i-dont-do',
     qui: '/en/who-i-am',
@@ -20,6 +21,7 @@ export const EN: Dictionnaire = {
   ecrans: [
     { cle: 'accueil', titre: 'Home' },
     { cle: 'offres', titre: 'What I do' },
+    { cle: 'realisations', titre: 'Work' },
     { cle: 'methode', titre: 'How I work' },
     { cle: 'qui', titre: 'Who I am' },
     { cle: 'contact', titre: 'Contact' },
@@ -47,6 +49,11 @@ export const EN: Dictionnaire = {
       title: 'Websites, custom software and mobile apps. NMW Studios',
       description:
         'Showcase websites, custom software and simple mobile apps, taking over existing code, automation and hosting. Five ways to work together. The code is yours.',
+    },
+    realisations: {
+      title: 'Work: two custom products, live. NMW Studios',
+      description:
+        'Zveltia, invoicing software, and Lachesia, rota planning for shift teams. Two products designed, built and hosted by NMW Studios, in Bordeaux.',
     },
     methode: {
       title: 'How I work: directly for you, or white-label for agencies',
@@ -164,6 +171,49 @@ export const EN: Dictionnaire = {
       },
     ],
   },
+  realisations: {
+    h1: ['Two live products', 'you can open.'],
+    lead: 'What I build for clients stays confidential. These two products are public: I designed them, built them, and I host them. They show what I deliver.',
+    legende: 'Demo data',
+    liste: [
+      {
+        nom: 'Zveltia',
+        nature: 'Invoicing and time tracking for freelancers',
+        besoin: 'Tracked time becomes an invoice, and the invoice leaves in the electronic format France requires from 2027.',
+        faits: [
+          'Quotes, invoices, a timer and sole-trader bookkeeping',
+          'Factur-X e-invoices, sent and received through an accredited platform',
+          'Hosted in Germany, encrypted backups kept in the European Union',
+        ],
+        vues: [
+          { src: '/realisations/zveltia-1.webp', titre: 'Overview', alt: 'The Zveltia logo and its home screen: money collected this month, what is left to collect and to invoice.' },
+          { src: '/realisations/zveltia-2.webp', titre: 'Time to invoice', alt: 'Time spent for three clients, converted into days at each client’s rate, ready to become a draft invoice.' },
+          { src: '/realisations/zveltia-3.webp', titre: 'Bookkeeping', alt: 'The year’s books: money collected, social charges, expenses and what is left, month by month.' },
+          { src: '/realisations/zveltia-4.webp', titre: 'Invoice and portal', alt: 'A PDF invoice, and the portal where the client finds quotes and invoices on a phone.' },
+        ],
+        href: 'https://zveltia.com/',
+        lien: 'Open zveltia.com',
+      },
+      {
+        nom: 'Lachesia',
+        nature: 'Shift rota on screen, on paper and on the phone',
+        besoin: 'The rota is set once, and the sheet on the wall always points to the current version.',
+        faits: [
+          'Day and night, 12-hour, 3x8 and 2x8 templates, or your own weeks',
+          'A dated printed sheet with a QR code to the current version',
+          'Sign-in by emailed link or code, no password',
+        ],
+        vues: [
+          { src: '/realisations/lachesia-1.webp', titre: 'Overview', alt: 'The Lachesia logo, with the team grid on screen, the printed sheet and one person’s rota on a phone.' },
+          { src: '/realisations/lachesia-2.webp', titre: 'Team rota', alt: 'A team grid: the days, nights and rest days of the month, with leave and a training day marked with a dot.' },
+          { src: '/realisations/lachesia-3.webp', titre: 'Printed sheets', alt: 'The team sheet and one person’s sheet, dated, with a QR code to the current version.' },
+          { src: '/realisations/lachesia-4.webp', titre: 'On the phone', alt: 'Three phone screens: one person’s week, the team grid, and the page the QR code opens.' },
+        ],
+        href: 'https://lachesia.com/',
+        lien: 'Open lachesia.com',
+      },
+    ],
+  },
   methode: {
     h1: ['Since 2025,', 'a Paris agency has trusted me with its applications and its new projects.'],
     lead: 'White-label: your designs, your deadlines, your name in front of your client.',
@@ -198,7 +248,6 @@ export const EN: Dictionnaire = {
     paragraphe:
       'My projects run long and take turns: while one client reviews, another moves forward. I have room, and I tell you from when before committing. If a feature will cost a lot for nothing, I say so before pricing it. I warn before going over, not after.',
     faits: 'Bordeaux, France. Remote, on Paris time.',
-    produit: { avant: 'I also build ', nom: 'Zveltia', apres: ', the tool I invoice my own clients with (in French).', href: 'https://zveltia.com/' },
     faq: [
       ['Why a freelancer rather than a web agency?', 'You talk to the person who writes the code: no middleman, a reply within 24 hours, and the same person from quote to follow-up. If your project needs a team, I tell you.'],
       ['What if something breaks after launch?', 'You write to me, I reply the same day and tell you when it will be fixed. On hosting I manage, an alert warns me as soon as the site stops responding.'],

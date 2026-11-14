@@ -93,6 +93,7 @@ a { color: var(--color-accent); text-underline-offset: 0.2em; }
 }
 .fond[data-matiere='eau'] { --fond-opacite: 0.9; --fond-position: 80% 50%; }
 .fond[data-matiere='soie'] { --fond-opacite: 0.55; --fond-position: 70% 50%; }
+.fond[data-matiere='encre'] { --fond-opacite: 0.55; --fond-position: 70% 50%; }
 .fond[data-matiere='verre'] { --fond-opacite: 0.6; --fond-position: 75% 50%; }
 .fond[data-matiere='ardoise'] { --fond-opacite: 0.45; --fond-position: 70% 50%; }
 .fond[data-matiere='pluie'] { --fond-opacite: 0.7; --fond-position: 65% 50%; }
@@ -316,6 +317,24 @@ a.carte:hover .lien { text-decoration: underline; text-underline-offset: 0.2em; 
 .refus h3 { font-size: 1.05rem; font-weight: 500; margin-bottom: 0.4rem; }
 .refus p { margin: 0; font-size: 0.93rem; max-width: none; }
 
+/* Réalisations : deux logiciels publics, la capture au-dessus, les faits en dessous. */
+.colonnes.realisations { grid-template-columns: 1fr; gap: 1.3rem; max-width: none; }
+.ecran.realisations .inner { padding-bottom: 4.2rem; }
+.ouvrages { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+.ouvrages .panel { padding: 0; overflow: hidden; display: flex; flex-direction: column; }
+.ouvrages .carrousel { margin: 0; }
+.ouvrages .carrousel figcaption { display: none; }
+.ouvrages .carrousel .vues { aspect-ratio: 1600 / 696; border: 0; border-bottom: 1px solid var(--color-border); border-radius: 0; }
+.ouvrages .carrousel .points { flex-wrap: wrap; margin: 0; padding: 0.7rem 1.3rem 0; }
+.ouvrages .texte { flex: 1; display: flex; flex-direction: column; padding: 0.8rem 1.3rem 1.1rem; }
+.ouvrages .panel h2 { font-size: 1.2rem; font-weight: 600; line-height: 1.3; letter-spacing: -0.014em; max-width: none; margin-bottom: 0.35rem; }
+.ouvrages h2 span { font-size: 0.9rem; font-weight: 300; letter-spacing: 0; color: var(--color-muted-foreground); margin-left: 0.35rem; }
+.ouvrages p { margin: 0 0 0.6rem; font-size: 0.95rem; max-width: none; }
+.ouvrages .texte ul { display: grid; gap: 0.2rem; margin-bottom: 0.8rem; }
+.ouvrages .texte li { position: relative; padding-left: 0.9rem; font-size: 0.86rem; font-weight: 300; color: var(--color-muted-foreground); }
+.ouvrages .texte li::before { content: ''; position: absolute; left: 0; top: 0.62em; width: 4px; height: 4px; border-radius: 50%; background: var(--color-accent); }
+.ouvrages a { margin-top: auto; align-self: flex-start; font-size: 0.9rem; font-weight: 600; color: var(--color-accent); text-decoration: underline; text-underline-offset: 0.2em; }
+
 /* Qui je suis : la FAQ dépliable, une question à la fois, un signe qui dit qu'elle s'ouvre. */
 .faits { color: var(--color-muted-foreground); font-size: 0.95rem; font-weight: 300; }
 .faits a { color: var(--color-foreground); }
@@ -400,6 +419,18 @@ a.carte:hover .lien { text-decoration: underline; text-underline-offset: 0.2em; 
   a.carte:hover { transform: none; }
 }
 
+/* Six mots au menu : sur un portable ou une tablette couchée, l'en-tête se resserre pour tenir sur une ligne. */
+@media (min-width: 721px) and (max-width: 1360px) {
+  .marque { white-space: nowrap; }
+  .menu { column-gap: clamp(0.6rem, 1.3vw, 1.1rem); }
+  .menu a { font-size: 0.9rem; }
+  .menu .appel { font-size: 0.82rem; margin-left: 0.3rem; }
+}
+@media (min-width: 721px) and (max-width: 1100px) {
+  .menu { column-gap: 0.6rem; }
+  .menu a { font-size: 0.84rem; }
+}
+
 /* Fenêtre basse (portable avec la barre du navigateur) : la bande rentre dans le flux, l'écran défile en lui même. */
 @media (max-height: 720px) {
   .accroche { font-size: clamp(2rem, 3.6vw, 3rem); }
@@ -451,6 +482,8 @@ a.carte:hover .lien { text-decoration: underline; text-underline-offset: 0.2em; 
   .onglets a { white-space: nowrap; }
   .ecran.methode .inner { padding-bottom: 5rem; }
   .refus { grid-template-columns: 1fr; }
+  .ouvrages { grid-template-columns: 1fr; }
+  .ouvrages h2 span { display: block; margin-left: 0; }
   /* Les retours forcés du titre sont composés pour le bureau. */
   .accroche br { display: none; }
   .document { padding: 1.5rem var(--gutter) 2rem; }

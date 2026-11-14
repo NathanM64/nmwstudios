@@ -41,7 +41,8 @@ Accroche : « Je conçois, je développe, je reprends et j'accompagne. Vous déc
 ## Contraintes
 
 - **Aucune référence client publiable.** Ni nom d'agence, ni nom de client final, ni capture.
-  La preuve passe par les avis Malt, une démo en source ouverte, un témoignage anonymisé.
+  La preuve passe par l'écran Réalisations (Zveltia et Lachesia, montrés comme des travaux
+  livrés, sans prix ni appel à s'abonner), les avis Malt, un témoignage anonymisé.
 - Un seul prix affiché : site vitrine simple jusqu'à trois pages à partir de 1 500 €.
   Rien sur la maintenance ni l'hébergement.
 - Jamais vendre sur l'IA comme outil de production interne.
@@ -50,7 +51,8 @@ Accroche : « Je conçois, je développe, je reprends et j'accompagne. Vous déc
 
 ## État
 
-Cinq écrans en production depuis le 11/09/2026, refaits le 12/09, mentions légales en
+Cinq écrans en production depuis le 11/09/2026, refaits le 12/09, un sixième, Réalisations,
+ajouté le 14/11/2026, mentions légales en
 document ; détail des écrans et des décisions dans `DESIGN.md`. Restent à obtenir hors
 code : un avis Malt, un témoignage anonymisé de l'agence. Aucune démo n'est publiée en
 source ouverte à ce jour : l'outil montré dans l'offre applications est privé.
