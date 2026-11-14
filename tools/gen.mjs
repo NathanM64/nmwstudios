@@ -99,10 +99,7 @@ async function genImage(a) {
   const parts = [{ text: a.prompt }];
   for (const p of a.ref) parts.push({ inlineData: { mimeType: mimeOf(p), data: b64(p) } });
 
-  // Les modèles gemini-3 image ne sont pas ouverts sur ce projet Vertex : ils passent par AI Studio.
-  const studio = /^gemini-3/.test(model) && process.env.GEMINI_API_KEY;
-  const url = studio ? `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent` : endpoint(model, a.location);
-  const j = await call(url, {
+  const j = await call(endpoint(model, a.location), {
     contents: [{ role: "user", parts }],
     generationConfig: {
       responseModalities: ["IMAGE"],
