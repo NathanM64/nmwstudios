@@ -57,7 +57,7 @@ dans `public/fonds/` en 2048 et 1200 px. Pas de métaphore du métier : de la ma
 |---|---|
 | Accueil | l'eau noire, un seul reflet de lune à droite (choisie par Nathan). Sur bureau, elle bouge : une boucle de huit secondes rendue par Veo depuis l'image fixe (modèle économique, 1,20 $), dernière seconde fondue dans la première, H.264 à 1440 px, 2,1 Mo, posée sur l'image une fois qu'elle joue. Image fixe sur mobile et sous `prefers-reduced-motion` |
 | Ce que je fais | la soie anthracite |
-| Réalisations | la volute d'encre dans l'eau noire, agrandie depuis l'essai de 1376 px du 2026-09-12 : à refaire en 2K |
+| Réalisations | la volute d'encre dans l'eau noire, sixième essai du 2026-09-12, reprise en 2K le 2026-11-14 |
 | Comment je travaille | le verre dépoli rétroéclairé |
 | Qui je suis | l'ardoise mouillée |
 | Contact | la vitre de pluie, lumières en bokeh |
