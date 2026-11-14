@@ -2,7 +2,7 @@ import type { Dictionnaire } from '@/content/types'
 import { Ecran } from '@/components/Ecran'
 import { Carrousel } from '@/components/Carrousel'
 import { Donnees } from '@/components/Donnees'
-import { filAriane } from '@/lib/donnees'
+import { filAriane, realisations } from '@/lib/donnees'
 
 export function Realisations({ t }: { t: Dictionnaire }) {
   const r = t.realisations
@@ -10,6 +10,7 @@ export function Realisations({ t }: { t: Dictionnaire }) {
   return (
     <Ecran classe="realisations">
       <Donnees objet={filAriane([[t.ecrans[0].titre, t.routes.accueil], [titre, null]])} />
+      <Donnees objet={realisations(t)} />
       <div className="preuve">
         <h1>
           {r.h1[0]} <span className="client">{r.h1[1]}</span>

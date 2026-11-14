@@ -23,11 +23,6 @@ export const donnees = (t: Dictionnaire) => ({
   foundingDate: '2025',
   founder: { '@type': 'Person', name: 'Nathan Marimbordes', jobTitle: t.donnees.jobTitle },
   address: { '@type': 'PostalAddress', addressLocality: 'Bègles', postalCode: '33130', addressCountry: 'FR' },
-  // Le logiciel edite a cote, declare sur zveltia.com avec ce meme editeur : le lien vaut dans les deux sens.
-  owns: { '@type': ['SoftwareApplication', 'Product'], '@id': 'https://zveltia.com/#app', name: 'Zveltia', url: 'https://zveltia.com/',
-    // Google refuse un Product sans offre : le prix mensuel, le même que sur zveltia.com.
-    offers: { '@type': 'Offer', price: '12', priceCurrency: 'EUR', url: 'https://zveltia.com/' },
-  },
   ...(t.langue === 'fr' ? { areaServed: ZONE } : {}),
   hasOfferCatalog: {
     '@type': 'OfferCatalog',
@@ -46,6 +41,17 @@ export const donnees = (t: Dictionnaire) => ({
       },
     })),
   },
+})
+
+// Des réalisations, pas des produits à vendre : un type sans prix ni avis exigés par Google.
+export const realisations = (t: Dictionnaire) => ({
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  itemListElement: t.realisations.liste.map((o, i) => ({
+    '@type': 'ListItem',
+    position: i + 1,
+    item: { '@type': 'CreativeWork', name: o.nom, description: o.nature, url: o.href, creator: { '@id': ID } },
+  })),
 })
 
 // Le fil d'Ariane d'une sous-route : la page courante n'a pas de lien, comme le veut Google.
